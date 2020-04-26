@@ -1,39 +1,44 @@
 #include <Arduino.h>
 #include <Wire.h>
-
+#include <OneWire.h>
 #include <DallasTemperature.h>
 #include <PCF8574.h>
 
 
 class Temp {
 public:
+	Temp() : onewire(this->pin), sensors(&(this->onewire)), temp(0.0)
+	{ }
+
+	void init() {
+		sensors.begin();
+	};
+
+	float getTemp() const {
+		return temp;
+	}
+
+	void loadTemp() {
+		sensors.requestTemperatures(); // Send the command to get temperatures
+		float tempC = sensors.getTempCByIndex(0);
+		// Check if reading was successful
+		if(tempC != DEVICE_DISCONNECTED_C)
+			temp = tempC;
+		};
 
 private:
   const uint8_t pin = 4;
   const uint8_t precision = 0;
-
-
-
   OneWire onewire;
+  DallasTemperature sensors;
+
+  float temp;
 };
-
-
-
-#define DBG
-// Data wire is plugged into port 2 on the Arduino
-#define ONE_WIRE_BUS 4
-#define TEMPERATURE_PRECISION 9 // Lower resolution
-
-// Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
-OneWire oneWire(ONE_WIRE_BUS);
-
 
 PCF8574 expWejscia(0x20);
 PCF8574 expLedy(0x25);
 PCF8574 expOczka(0x26);
 PCF8574 expPozostale(0x27);
-
-
 
 inline uint8_t lo(bool val) { return val ? LOW : HIGH; }
 inline uint8_t ho(bool val) { return val ? HIGH : LOW; }
@@ -41,79 +46,18 @@ inline uint8_t ho(bool val) { return val ? HIGH : LOW; }
 inline bool li(uint8_t val) { return val == LOW; }
 inline bool hi(uint8_t val) { return val == HIGH; }
 
-//#define READBAL(nameB, expW, pin, mask) bal_##nameB = (bal_##nameB << 1) | (expW.digitalRead(pin) == HIGH ? 1 : 0); \
-//                                  nameB = checkValue(nameB, bal_##nameB, mask);
-
+#define DBG 1
 class WejscieValue {
-private:
-  bool value, prevvalue;
-  uint8_t mask;
-  unsigned long timeChange;
+
 
 public:
-    WejscieValue() : value(false), prevvalue(false), mask(0), timeChange(0)
+    WejscieValue() : value(false), prevvalue(false), timeChange(0)
     { }
 
-    //adresobiektu, nr pinu do odczytania, czy stan high to jedynka logiczna
-    void read(PCF8574 * addr, uint8_t pin, uint8_t checkmask, bool h ) {
-        prevvalue = value;
-        uint8_t pmask = mask;
-        mask = mask << 1;
-        bool p = 0;
-        uint8_t rv = addr->digitalRead(pin);
-        if (h)
-          p = hi(rv);
-        else
-          p = li(rv);
-
-        mask |= p ? 1 : 0;
-#ifdef DBG
-
-           bool pr = false;
-           if (addr == &expWejscia) {
-             if (pin > 5) {
-               char * text[] = { "jad_up", "jad_down", "kuch_b_up", "kuch_b_down", "kuch_a_up", "kuch_a_down", "wieczor", "noc" };
-               Serial.print(pin);
-               Serial.print(" [");
-               Serial.print(text[pin]);
-               pr = true;
-             }
-           } else if (addr == &expLedy){
-             if (pin > 4) {
-               char * text[] = { "-", "-", "-", "-", "-", "drzwi_otwarte", "ruch_kuch", "ruch_drzwi" };
-               Serial.print(pin);
-               Serial.print(" [");
-               Serial.print(text[pin]);
-               pr = true;
-             }
-           }
-           if (pr) {
-
-
-             Serial.print("] rv= ");
-             Serial.print(rv);
-             Serial.print(" p=");
-             Serial.print(p ? "yes" : "no");
-             //Serial.print(" pmask=");
-             //Serial.print(pmask, HEX);
-             //Serial.print(" mask=");
-             //Serial.print(mask, HEX);
-             Serial.print(" val=");
-           }
-#endif
-        if ((mask & checkmask) == checkmask) {
-          value = true;
-          mask = 0x00;
-        } else if ((mask & checkmask) == 0x00) {
-          value = false;
-        }
-        if (value && !prevvalue) //zalacznie na 1
-          timeChange = millis();
-#ifdef DBG
-        if (pr)
-          Serial.println(value?"true":"false");
-#endif
-    }
+	const WejscieValue & operator=(bool value) {
+		this->value = value;
+		return (*this);
+	}
 
     inline bool czyZmiana() const {
       return value != prevvalue;
@@ -126,19 +70,78 @@ public:
     inline bool getVal() const {
       return value;
     }
+
+	operator bool() { return value; }
+
+private:
+  	bool value, prevvalue;
+  	unsigned long timeChange;
 };
 
 
 class Wejscia
 {
+public:
+	Wejscia() { }
+
+	void init() {
+
+		expWejscia.pinMode(0, INPUT_PULLUP); //jadalnia up
+		expWejscia.pinMode(1, INPUT_PULLUP); //jadalnia down
+		expWejscia.pinMode(2, INPUT_PULLUP); //kuchnia B up
+		expWejscia.pinMode(3, INPUT_PULLUP); //kuchnia B down
+		expWejscia.pinMode(4, INPUT_PULLUP); //kuchnia A up
+		expWejscia.pinMode(5, INPUT_PULLUP); //kuchnia A down
+		expWejscia.pinMode(6, INPUT); //noc?
+		expWejscia.pinMode(7, INPUT); //wieczor
+		expWejscia.begin();
+
+		expLedy.pinMode(5, INPUT_PULLUP); //kontaktron
+		expLedy.pinMode(6, INPUT); //ruch kuchnia
+		expLedy.pinMode(7, INPUT); //ruch drzwi
+
+	};
+
+	void readTest() {
+		static unsigned int num = 0;
+		++num;
+		Serial.print(num);
+		Serial.print(". ");
+		auto d1 = expWejscia.digitalReadAll();
+		auto d2 = expLedy.digitalReadAll();
+		Serial.print(d1.p7, 2);
+		Serial.print(d1.p6, 2);
+		Serial.print(d1.p5, 2);
+		Serial.print(d1.p4, 2);
+		Serial.print(d1.p3, 2);
+		Serial.print(d1.p2, 2);
+		Serial.print(d1.p1, 2);
+		Serial.print(d1.p0, 2);
+		Serial.print("|");
+		Serial.print(d2.p7, 2);
+		Serial.print(d2.p6, 2);
+		Serial.println(d2.p5, 2);
+
+		kl_jad_up = d1.p0;
+		kl_jad_down = d1.p1;
+		kl_kuch_b_up = d1.p2;
+		kl_kuch_b_down = d1.p3;
+		kl_kuch_a_up = d1.p4;
+		kl_kuch_a_down = d1.p5;
+		noc = d1.p6;
+		wieczor = d1.p7;
+		drzwi_otw = d2.p5;
+		ruch_kuch = d2.p6;
+		ruch_drzwi = d2.p7;
+    }
+
+
 private:
   WejscieValue wieczor, drzwi_otw, noc, ruch_kuch, ruch_drzwi;
   WejscieValue kl_kuch_a_up, kl_kuch_a_down, kl_kuch_b_up, kl_kuch_b_down, kl_jad_up, kl_jad_down;
 
 
 public:
-  Wejscia()
-  {}
 
     inline bool czyWieczor() const {
       return wieczor.getVal();
@@ -177,22 +180,6 @@ public:
     }
 
 
-    void read() {
-
-      wieczor.read(   &expWejscia,  6, 0x0f, false);
-      noc.read(       &expWejscia,  7, 0x0f, false);
-      drzwi_otw.read( &expLedy,     5, 0xff, true);
-      ruch_kuch.read( &expLedy,     6, 0x0f, false);
-      ruch_drzwi.read(&expLedy,     7, 0x0f, false);
-
-      kl_kuch_a_up.read(  &expWejscia, 4, 0x0f, false);
-      kl_kuch_a_down.read(&expWejscia, 5, 0x0f, false);
-      kl_kuch_b_up.read(  &expWejscia, 2, 0x0f, false);
-      kl_kuch_b_down.read(&expWejscia, 3, 0x0f, false);
-      kl_jad_up.read(     &expWejscia, 0, 0x0f, false);
-      kl_jad_down.read(   &expWejscia, 1, 0x0f, false);
-    }
-
 
 
 };
@@ -206,6 +193,13 @@ private:
 public:
   Podswietlenie() : kuchnia(false), jadalnia(false), szafa(true)
   { }
+
+  void init() {
+	  expPozostale.pinMode(2, OUTPUT, ho(false)); //podswietlenie szafki
+	  expPozostale.pinMode(5, OUTPUT, ho(false)); //podwietlenie kuchnia
+	  expPozostale.pinMode(6, OUTPUT, ho(false)); //podwietlenie jadalnie
+  }
+
 
   void zapalKuchnia(bool on) {
     if (on == kuchnia)
@@ -228,15 +222,13 @@ public:
     setPrzekaz();
   }
 
-  void init() {
-    setPrzekaz();
-  }
+
 
 protected:
     void setPrzekaz() {
       expPozostale.digitalWrite(2, ho(szafa));
-      expPozostale.digitalWrite(6, ho(jadalnia));
-      expPozostale.digitalWrite(5, ho(kuchnia));
+      expPozostale.digitalWrite(6, lo(jadalnia));
+      expPozostale.digitalWrite(5, lo(kuchnia));
     }
 };
 
@@ -251,6 +243,15 @@ private:
 public:
     SwiatloLED(): m_sufit1(false), m_sufit2(false), m_drzwi1(false), m_drzwi2(false)
     { }
+
+	void init() {
+		expLedy.pinMode(0, OUTPUT, lo(false)); //glownyc wlacznik
+		expLedy.pinMode(1, OUTPUT, lo(false)); //sufit 1
+		expLedy.pinMode(2, OUTPUT, lo(false)); //sufit 2
+		expLedy.pinMode(3, OUTPUT, lo(false)); //drzwi 1
+		expLedy.pinMode(4, OUTPUT, lo(false)); //drzwi 2
+
+	}
 
    void sufit1(bool on) {
         if (m_sufit1 != on) {
@@ -282,10 +283,6 @@ public:
 
      bool czyZapalone() {
        return  m_sufit1 || m_sufit2 || m_drzwi1 || m_drzwi2;
-     }
-
-     void init() {
-       ustaw_przekaz();
      }
 
 protected:
@@ -321,7 +318,11 @@ public :
     {}
 
     void init() {
-      setPrzekaz();
+    	for (uint8_t p = 0; p < 8; ++p) {
+			expOczka.pinMode(p, OUTPUT, ho(false));
+		}
+		expOczka.begin();
+		expPozostale.pinMode(3, OUTPUT, ho(false));
     }
 
     void up() {
@@ -445,15 +446,17 @@ SwiatloSufit swSufit;
 
 class SwiatloJadalnia
 {
-private:
-  uint8_t level;
-  static constexpr uint8_t maxSw = 3;
-  bool sw[maxSw] = { false, false, false };
-  static constexpr uint8_t mapPins[3] = { 1,  0,  4 };
+
 
 public:
-  SwiatloJadalnia() : level(0)
-  { }
+  	SwiatloJadalnia() : level(0)
+  	{ }
+
+  	void init() {
+    	expPozostale.pinMode(0, OUTPUT, ho(false));
+		expPozostale.pinMode(1, OUTPUT, ho(false));
+		expPozostale.pinMode(4, OUTPUT, ho(false));
+  	}
 
   void rotate() {
     bool tmp = sw[0];
@@ -463,9 +466,7 @@ public:
     setPrzekaz();
   }
 
-  void init() {
-    setPrzekaz();
-  }
+
 
   void up() {
     for (uint8_t id = 0 ; id < maxSw; ++id) {
@@ -500,6 +501,12 @@ protected:
       expPozostale.digitalWrite(mapPins[id], sw[id]);
     }
   }
+
+private:
+  	uint8_t level;
+  	static constexpr uint8_t maxSw = 3;
+  	bool sw[maxSw] = { false, false, false };
+  	static constexpr uint8_t mapPins[3] = { 1,  0,  4 };
 };
 SwiatloJadalnia swJadalnia;
 
@@ -629,34 +636,16 @@ bool zapalSzafa() {
 }
 
 void setup() {
-  // put your setup code here, to run once:
-  for (int i = 0; i < 8; ++i) {
-    expOczka.pinMode(i, OUTPUT, LOW);
-    expPozostale.pinMode(i, OUTPUT, LOW);
-  }
-  expOczka.begin();
-  expPozostale.begin();
+	 swSufit.init();
+	 //expOczka.begin(); -- w srodku jest funkcja begin
 
-  for (int i = 0; i < 8; ++i) {
-    if (i < 5) {
-      expLedy.pinMode(i, OUTPUT, i ? HIGH : LOW);
-    } else if ( i == 5){
-      expLedy.pinMode(i, INPUT); //kontaktron
-    } else {
-      expLedy.pinMode(i, INPUT);
-    }
-  }
-  expLedy.begin();
+	 swJadalnia.init();
+     swPod.init();
+	 expPozostale.begin();
 
-
-  for (int i = 0; i < 8; ++i)
-    //expWejscia.pinMode(i, i < 6 ? INPUT : INPUT_PULLUP);
-    expWejscia.pinMode(i, INPUT);
-  expWejscia.begin();
-  swLED.init();
-  swSufit.init();
-  swJadalnia.init();
-  swPod.init();
+	 swLED.init();
+	 w.init();
+	 expLedy.begin();
 
 
   //swPod.zapalKuchnia(true);
@@ -665,10 +654,12 @@ void setup() {
 
 unsigned int id = 0;
 void loop() {
-  // put your main code here, to run repeatedly:
-  id++;
-  Serial.println(id, DEC);
-  w.read();
+
+  	Serial.println(id, DEC);
+  	w.readTest();
+
+	//
+
 #if 0
   //ledy na otwartymi drzwiami w dzien
   swLED.drzwi1(zapalLedDrzwiDzien());
