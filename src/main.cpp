@@ -22,36 +22,9 @@ PCF8574 expPozostale(0x27);
 Wejscia w;
 Podswietlenie swPod;
 SwiatloLED swLED;
-
 SwiatloSufit swSufit;
-
-
 SwiatloJadalnia swJadalnia;
 
-class PseudoTimer {
-private:
-  unsigned long tik;
-
-public:
-  PseudoTimer() : tik(0) { }
-  void tiktok() {
-    constexpr unsigned int min5 = 20*60*5;
-    constexpr unsigned long min30 = 20*60*30;
-    ++tik;
-    if (tik % min5 == 0) {//5 min
-      swSufit.rotate();
-      swJadalnia.rotate();
-    }
-
-    if (tik % min30 == 0) {////30 min
-      swSufit.down();
-      swJadalnia.down();
-      tik = 0;
-    }
-  }
-};
-
-PseudoTimer psT;
 
 bool zapalOswietlenieJadalnia() {
 #ifdef DBG
@@ -170,108 +143,16 @@ void setup() {
   //swPod.zapalJadalnia(true);
 }
 
-unsigned int id = 0;
+unsigned long t = 0;
 void loop() {
 
-  	Serial.println(id, DEC);
+
+	t = millis();
   	w.readTest();
+	swJadalnia.zapal(w);
+	swSufit.zapal(w, swLED, swJadalnia.czyZapalone());
+	swLED.zapal(w, swSufit.czyZapalone());
+	swPod.zapal(w, swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
+delay(500);
 
-	//
-
-#if 0
-  //ledy na otwartymi drzwiami w dzien
-  swLED.drzwi1(zapalLedDrzwiDzien());
-
-  //ledy na otwartymi drzwiami w nocy
-  swLED.drzwi2(zapalLedDrzwiNoc());
-
-  //zapal swiatlo w jadalni
-  if (w.czyklJadUp()) {
-    swJadalnia.up();
-  }
-
-  //zgas swiatlo w jadalni
-  if (w.czyklJadDown()) {
-    swJadalnia.down();
-  }
-
-  //zapal swiatlo w kuchni
-  // jezeli noc to najper zapal ledy na gorze
-  if (w.czyklKuchDown() || w.czyklKuchUp()) {
-#ifdef DBG
-    Serial.print("Klawisz kuchnia nacisniety");
-#endif
-    if (w.czyNoc()) {
-#ifdef DBG
-      Serial.print(" Noc = true|");
-      Serial.print(" sufit = ");
-      Serial.print(swSufit.czyZapalone() ? "tak" : "nie");
-      Serial.print("| ledy ");
-      Serial.print(swSufit.czyZapalone() ? "tak" : "nie");
-#endif
-      if (swSufit.czyZapalone() || swLED.czyZapalone()) {
-#ifdef DBG
-        Serial.print("| gasze ledy ");
-#endif
-        swLED.sufit1(false);
-        swLED.sufit2(false);
-
-        if (w.czyklKuchDown()) {
-#ifdef DBG
-          Serial.println("| swSufit down");
-#endif
-          swSufit.down();
-        } else if (w.czyklKuchUp()) {
-#ifdef DBG
-          Serial.println("| swSufit up");
-#endif
-          swSufit.up();
-        }
-
-      } else {
-#ifdef DBG
-        Serial.print("| zalaczam ledy ");
-#endif
-        swLED.sufit1(true);
-        swLED.sufit2(true);
-      }
-    } else {
-#ifdef DBG
-      Serial.print(" Noc = false");
-#endif
-      if (w.czyklKuchDown()) {
-#ifdef DBG
-        Serial.println(" swSufit down");
-#endif
-        swSufit.down();
-      } else if (w.czyklKuchUp()) {
-#ifdef DBG
-        Serial.println(" swSufit up");
-#endif
-        swSufit.up();
-      }
-    }
-
-  }
-
-  //podwietlanie wlacznika jadalnia
-  swPod.zapalJadalnia(zapalOswietlenieJadalnia());
-
-  //podwietlanie wlacznika kuchnia
-  swPod.zapalKuchnia(zapalOswietlenieKuchnia());
-
-  swPod.zapalSzafa(zapalSzafa())  ;
-
-  psT.tiktok();
-#ifdef DBG
-  Serial.println("---\n");
-#endif
-
-  //delay(5000);
-  delay(50);
-#else
-Serial.println("\n\n\---\n");
-
-delay(2000);
-#endif
 }

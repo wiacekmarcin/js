@@ -28,27 +28,52 @@ void SwiatloLED::zapalSufit1(bool on) {
 	 }
   }
 
-  void SwiatloLED::zapalSufit2(bool on) {
-	 if (m_sufit2 != on) {
-	   m_sufit2 = on;
-	   ustaw_przekaz();
-	 }
-  }
+void SwiatloLED::zapalSufit2(bool on) {
+ 	if (m_sufit2 != on) {
+   		m_sufit2 = on;
+   		ustaw_przekaz();
+ 	}
+}
 
-  void SwiatloLED::zapalDrzwi1(bool on) {
-	 if (m_drzwi1 != on) {
-	   m_drzwi1 = on;
-	   ustaw_przekaz();
-	 }
-  }
+void SwiatloLED::zapalDrzwi1(bool on) {
+	if (m_drzwi1 != on) {
+   		m_drzwi1 = on;
+   		ustaw_przekaz();
+ 	}
+}
 
-  void SwiatloLED::zapalDrzwi2(bool on) {
-	 if (m_drzwi2 != on) {
-	   m_drzwi2 = on;
-	   ustaw_przekaz();
-	 }
-  }
+void SwiatloLED::zapalDrzwi2(bool on) {
+	if (m_drzwi2 != on) {
+   		m_drzwi2 = on;
+   		ustaw_przekaz();
+ 	}
+}
 
-  bool SwiatloLED::czyZapalone() const {
+bool SwiatloLED::czyZapalone() const {
 	return  m_sufit1 || m_sufit2 || m_drzwi1 || m_drzwi2;
-  }
+}
+
+bool SwiatloLED::czyZapalonySufit() const {
+	return  m_sufit1 || m_sufit2;
+}
+
+void SwiatloLED::zapal(const Wejscia & w, bool s)
+{
+	if (s)
+		return;
+
+	if (! w.czyDrzwiOtwarte())
+		return;
+
+	if (w.czyRuchDrzwi(20000)) {
+		if (w.czyNoc()) {
+			zapalDrzwi1(true);
+		} else {
+			zapalDrzwi2(true);
+		}
+	} else if (m_drzwi1 || m_drzwi2) {
+		zapalDrzwi1(false);
+		zapalDrzwi2(false);
+	}
+
+}

@@ -2,8 +2,7 @@
 #define _MW_SWIATLO_LED
 
 #include "wejscia.h"
-#include "swiatlosufit.h"
-#include "swiatlojadalnia.h"
+
 class SwiatloLED
 {
 
@@ -21,7 +20,9 @@ public:
 
     bool czyZapalone() const;
 
-	void zapal(const Wejscia & w, const SwiatloSufit &s, const SwiatloJadalnia & j);
+	bool czyZapalonySufit() const;
+
+	void zapal(const Wejscia & w, bool s);
 
 protected:
 

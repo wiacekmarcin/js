@@ -11,13 +11,21 @@ void SwiatloJadalnia::init() {
 }
 
 void SwiatloJadalnia::rotate() {
-#if 0
+	if (!rotationinProgress && (millis() - timeRotate < czasRotacji))
+		return;
+
+	if (rotationinProgress && (millis() - timeRotate < 500)) {
+		setPrzekaz(false, true);
+		rotationinProgress = false;
+		return;
+	}
+
   	bool tmp = sw[0];
   	sw[0] = sw[1];
   	sw[1] = sw[2];
   	sw[2] = tmp;
-  	setPrzekaz();
-#endif
+  	setPrzekaz(true, false);
+	rotationinProgress = true;
 }
 
 void SwiatloJadalnia::up() {
@@ -40,6 +48,13 @@ void SwiatloJadalnia::down() {
 	}
 }
 
+void SwiatloJadalnia::off() {
+	for (uint8_t id = 0 ; id < maxSw; ++id) {
+ 		sw[id] = false;
+	}
+	setPrzekaz();
+}
+
 bool SwiatloJadalnia::czyZapalone() const {
 	for (uint8_t id = 0 ; id < maxSw; ++id)
   		if (sw[id])
@@ -47,13 +62,35 @@ bool SwiatloJadalnia::czyZapalone() const {
 	return false;
 }
 
-void SwiatloJadalnia::setPrzekaz() {
+void SwiatloJadalnia::setPrzekaz(bool on = true, bool off = true) {
   	for (uint8_t id = 0 ; id < maxSw; ++id) {
-		expPozostale.digitalWrite(mapPins[id], sw[id]);
+		if (on && sw[id])
+			expPozostale.digitalWrite(id, ho(true));
+		else if (off && !sw[id])
+			expPozostale.digitalWrite(id, ho(false));
   	}
 }
 
 void SwiatloJadalnia::zapal(const Wejscia & w)
 {
+	bool klup = w.czyklJadUp();
+	bool kldown = w.czyklJadDown();
+	if (!klup && !kldown)
+		return;
+
+	else {
+		if (millis() - timeChange < czasReakcji)
+			return;
+	}
+
+	if (!czyZapalone() && (klup || kldown))
+		up();
+
+	if (klup && kldown)
+		off();
+	else if (klup)
+		up();
+	else
+		down();
 
 }
