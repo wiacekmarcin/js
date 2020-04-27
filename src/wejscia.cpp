@@ -4,7 +4,7 @@
 
 extern PCF8574 expWejscia;
 extern PCF8574 expLedy;
-
+#include "main.h"
 
 void Wejscia::init() {
 
@@ -24,13 +24,17 @@ void Wejscia::init() {
 
 };
 
-void Wejscia::readTest() {
+void Wejscia::read() {
+#ifdef DBG
 	static unsigned int num = 0;
 	++num;
+
 	Serial.print(num);
 	Serial.print(". ");
+#endif
 	auto d1 = expWejscia.digitalReadAll();
 	auto d2 = expLedy.digitalReadAll();
+#ifdef DBG
 	Serial.print(d1.p7, 2);
 	Serial.print(d1.p6, 2);
 	Serial.print(d1.p5, 2);
@@ -43,18 +47,19 @@ void Wejscia::readTest() {
 	Serial.print(d2.p7, 2);
 	Serial.print(d2.p6, 2);
 	Serial.println(d2.p5, 2);
+#endif
 
-	kl_jad_up = d1.p0;
-	kl_jad_down = d1.p1;
-	kl_kuch_b_up = d1.p2;
-	kl_kuch_b_down = d1.p3;
-	kl_kuch_a_up = d1.p4;
-	kl_kuch_a_down = d1.p5;
-	noc = d1.p6;
-	wieczor = d1.p7;
-	drzwi_otw = d2.p5;
-	ruch_kuch = d2.p6;
-	ruch_drzwi = d2.p7;
+	kl_jad_up = li(d1.p0);
+	kl_jad_down = li(d1.p1);
+	kl_kuch_b_up = li(d1.p2);
+	kl_kuch_b_down = li(d1.p3);
+	kl_kuch_a_up = li(d1.p4);
+	kl_kuch_a_down = li(d1.p5);
+	noc = hi(d1.p6);
+	wieczor = hi(d1.p7);
+	drzwi_otw = hi(d2.p5);
+	ruch_kuch = hi(d2.p6);
+	ruch_drzwi = hi(d2.p7);
 }
 
 

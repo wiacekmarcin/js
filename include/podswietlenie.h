@@ -24,7 +24,7 @@ public:
 
 	void zapal(const Wejscia & w, bool s, bool j, bool l );
 
-
+	bool czySzafaZapalona() { return szafa; }
 protected:
     void setPrzekaz();
 

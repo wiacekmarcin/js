@@ -16,16 +16,11 @@ void SwiatloSufit::init() {
 }
 
 void SwiatloSufit::up() {
-  if (level >= maxLevel)
-	return;
   setLevel(level + 1);
   setPrzekaz();
 }
 
 void SwiatloSufit::down() {
-  if (level == 0)
-	return;
-
   setLevel(level - 1);
   setPrzekaz();
 }
@@ -98,7 +93,7 @@ void SwiatloSufit::setPrzekaz(bool on, bool off) {
 	}
 }
 
-void SwiatloSufit::setLevel(uint8_t lev) {
+void SwiatloSufit::setLevel(int8_t lev) {
 #ifdef DBG
   Serial.print("SetLevel ");
   Serial.println(level);
@@ -150,16 +145,23 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia) {
 	bool klup = w.czyklKuchUp();
 	bool kldown = w.czyklKuchDown();
 	bool czynoc = w.czyNoc();
-
+#ifdef DBG
+	Serial.print("millis()");
+	Serial.print(" Zapal");
+#endif
 	if (!klup && !kldown)
 		return;
 	else {
 		if (millis() - timeChange < czasReakcji)
 			return;
 	}
+	timeChange = millis();
 
 	if (!czyZapalone() && !led.czyZapalonySufit() && !jadalnia && (klup || kldown) && czynoc)
 	{
+#ifdef DBG
+	Serial.println("Zapal ledy");
+#endif
 		led.zapalSufit1(true);
 		led.zapalSufit2(true);
 		return; //zapal ledy
@@ -167,12 +169,18 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia) {
 
 	if (!czyZapalone() && led.czyZapalonySufit() && (klup || kldown)) {
 		if ((klup && kldown) || kldown) {
+#ifdef DBG
+			Serial.println("Zgas ledy");
+#endif
 			led.zapalSufit1(false);
 			led.zapalSufit2(false);
 			return; //wylacz ledy
 		}
 
 		if (klup) {
+#ifdef DBG
+			Serial.println("Zgas ledy i up");
+#endif
 			led.zapalSufit1(false);
 			led.zapalSufit2(false);
 			up();
@@ -180,10 +188,21 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia) {
 		}
 	}
 
-	if (klup && kldown)
+	if (klup && kldown) {
+#ifdef DBG
+		Serial.println("off");
+#endif
 		off();
-	else if (klup)
+	}
+	else if (klup) {
+#ifdef DBG
+		Serial.println("up");
+#endif
 		up();
-	else
+	} else {
+#ifdef DBG
+		Serial.println("down");
+#endif
 		down();
+	}
 }

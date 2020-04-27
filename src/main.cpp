@@ -25,106 +25,34 @@ SwiatloLED swLED;
 SwiatloSufit swSufit;
 SwiatloJadalnia swJadalnia;
 
-
-bool zapalOswietlenieJadalnia() {
-#ifdef DBG
-  Serial.print("zapalOswietlenieJadalnia wieczor=");
-  Serial.print(w.czyWieczor() ? "tak" : "nie");
-  Serial.print(" sufit czyZapalone=");
-  Serial.print(swSufit.czyZapalone() ? "tak" : "nie");
-  Serial.print(" led czyZapalone=");
-  Serial.print(swLED.czyZapalone() ? "tak" : "nie");
-  Serial.print(" wynik=");
-  Serial.println((w.czyWieczor() && !swJadalnia.czyZapalone() && !swSufit.czyZapalone() && !swLED.czyZapalone()) ? "tak" : "nie");
-#endif
-    if (!w.czyWieczor())
-      return false;
-    if (swJadalnia.czyZapalone() || swSufit.czyZapalone() || swLED.czyZapalone())
-      return false;
-    return true;
+void printW(const Wejscia &w) {
+	Serial.println("JAD UP | JAD DOWN | KUCH A UP | KUCH A DOWN | KUCH B UP | KUCH B DOWN | WIE | NOC | RUCH_KUCH | RUCH_DRZWI | DRZWI_OTW");
+	Serial.print  ("     ");
+	Serial.print (w.czyklJadUp(), DEC);
+	Serial.print ("|        ");
+	Serial.print (w.czyklJadDown(), DEC);
+	Serial.print ("|          ");
+	Serial.print (w.czyklKuchAUp(), DEC);
+	Serial.print ("|            ");
+	Serial.print (w.czyklKuchADown(), DEC);
+	Serial.print ("|          ");
+	Serial.print (w.czyklKuchBUp(), DEC);
+	Serial.print ("|            ");
+	Serial.print (w.czyklKuchBDown(), DEC);
+	Serial.print ("|    ");
+	Serial.print(w.czyWieczor());
+	Serial.print ("|    ");
+	Serial.print(w.czyNoc());
+	Serial.print ("|          ");
+	Serial.print(w.czyRuchKuchnia(2000));
+	Serial.print ("|           ");
+	Serial.print(w.czyRuchDrzwi(2000));
+	Serial.print ("|          ");
+	Serial.println(w.czyDrzwiOtwarte());
 }
 
-bool zapalOswietlenieKuchnia() {
-#ifdef DBG
-  Serial.print("zapalOswietlenieKuchnia wieczor=");
-  Serial.print(w.czyWieczor() ? "tak" : "nie");
-  Serial.print(" sufit czyZapalone=");
-  Serial.print(swSufit.czyZapalone() ? "tak" : "nie");
-  Serial.print(" led czyZapalone=");
-  Serial.print(swLED.czyZapalone() ? "tak" : "nie");
-  Serial.print(" wynik=");
-  Serial.println((w.czyWieczor() && !swSufit.czyZapalone() && !swLED.czyZapalone()) ? "tak" : "nie");
-#endif
 
-  if (!w.czyWieczor())
-    return false;
-  if (swSufit.czyZapalone() || swLED.czyZapalone())
-    return false;
-  return true;
-}
 
-bool zapalLedDrzwiDzien() {
-#ifdef DBG
-  Serial.print("zapalLedDrzwiDzien noc=");
-  Serial.print(w.czyNoc() ? "tak" : "nie");
-  Serial.print(" czyDrzwiOtwarte=");
-  Serial.print(w.czyDrzwiOtwarte() ? "tak" : "nie");
-  Serial.print(" czyRuch=");
-  Serial.print(w.czyRuchDrzwi(5*60) ? "tak" : "nie");
-  Serial.print(" wynik=");
-  Serial.println(!w.czyNoc() && w.czyRuchDrzwi(5*60) && w.czyDrzwiOtwarte() ? "tak" : "nie");
-#endif
-
-  if (!w.czyDrzwiOtwarte())
-      return false;
-
-  if (w.czyNoc())
-      return false;
-
-  if (w.czyRuchDrzwi(5*60))
-      return true;
-
-  return false;
-
-}
-
-bool zapalLedDrzwiNoc() {
-#ifdef DBG
-  Serial.print("zapalLedDrzwiNoc noc=");
-  Serial.print(w.czyNoc() ? "tak" : "nie");
-  Serial.print(" czyDrzwiOtwarte=");
-  Serial.print(w.czyDrzwiOtwarte() ? "tak" : "nie");
-  Serial.print(" czyRuch=");
-  Serial.print(w.czyRuchDrzwi(5*60) ? "tak" : "nie");
-  Serial.print(" wynik=");
-  Serial.println(w.czyNoc() && w.czyRuchDrzwi(5*60) && w.czyDrzwiOtwarte() ? "tak" : "nie");
-
-#endif
-  if (!w.czyDrzwiOtwarte())
-      return false;
-
-  if (!w.czyNoc())
-      return false;
-
-  if (w.czyRuchDrzwi(5*60))
-      return true;
-  return false;
-}
-
-bool zapalSzafa() {
-#ifdef DBG
-  Serial.print("ZapalSzafa noc=");
-  Serial.print(w.czyNoc() ? "tak" : "nie");
-  Serial.print(" czyRuch=");
-  Serial.print(w.czyRuchKuchnia(10*60) ? "tak" : "nie");
-  Serial.print(" wynik=");
-  Serial.println(w.czyNoc() && w.czyRuchKuchnia(10*60) ? "tak" : "nie");
-
-#endif
-  if (w.czyNoc() && w.czyRuchKuchnia(10*60))
-    return false;
-  return true;
-}
 
 void setup() {
 	 swSufit.init();
@@ -138,21 +66,49 @@ void setup() {
 	 w.init();
 	 expLedy.begin();
 
-
-  //swPod.zapalKuchnia(true);
-  //swPod.zapalJadalnia(true);
+	 Serial.begin(57600);
 }
 
 unsigned long t = 0;
+
+unsigned long mss = 0;
+
+bool prev = false;
 void loop() {
 
 
 	t = millis();
-  	w.readTest();
-	swJadalnia.zapal(w);
-	swSufit.zapal(w, swLED, swJadalnia.czyZapalone());
-	swLED.zapal(w, swSufit.czyZapalone());
+#ifdef DBG
+	Serial.print("READ");
+#endif
+  	w.read();
+#ifdef DBG
+	printW(w);
+#endif
+	if (w.czyklJadUp() && w.czyklJadDown() && w.czyklKuchBUp() && w.czyklKuchBDown()) {
+		if (millis() - mss > 2000) {
+#ifdef DBG
+			Serial.println("wlacz ledy");
+#endif
+			prev = !prev;
+			swLED.zapalSufit1(prev);
+			swLED.zapalSufit2(prev);
+		}
+		mss = millis();
+	}
+	else {
+		swJadalnia.zapal(w);
+
+		swSufit.zapal(w, swLED, swJadalnia.czyZapalone());
+		swLED.zapal(w, swSufit.czyZapalone());
+/*
 	swPod.zapal(w, swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
-delay(500);
+	*/
+#ifdef DBG
+		Serial.print("CZAS TRWANIA");
+		Serial.println(millis() - t, DEC);
+#endif
+	}
+	delay(100 - (millis() - t));
 
 }

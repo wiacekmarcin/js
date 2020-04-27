@@ -40,9 +40,14 @@ void Podswietlenie::setPrzekaz() {
 
 void Podswietlenie::zapal(const Wejscia & w, bool sufit, bool jadalnia, bool led)
 {
-	bool szafa = true;
+	if (!w.czyNoc() && !czySzafaZapalona()) {
+		zapalSzafa(true);
+	}
 
-	zapalSzafa(szafa);
+	if (w.czyNoc() && w.czyRuchKuchnia(10*60))
+		zapalSzafa(true);
+	else
+		zapalSzafa(false);
 
 	if (!w.czyWieczor()) {
 		zapalJadalnia(false);
