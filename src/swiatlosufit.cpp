@@ -37,33 +37,42 @@ bool SwiatloSufit::czyZapalone() const {
 }
 
 void SwiatloSufit::rotate() {
+	//Serial.println("rotate");
+	//Serial.println(millis() - timeRotate, DEC);
 	if (level == 0 || level == 4)
 		return;
 
-	if (!rotationinProgress && (millis() - timeRotate < czasRotacji))
-		return;
+	if (!rotationinProgress && (millis() - timeRotate > czasRotacji)) {
+		//Serial.print("rotate 2 progress=");
+		//Serial.print(" timeRotate =");
+		//Serial.println(millis() - timeRotate);
+		timeRotate = millis();
 
-	if (rotationinProgress && (millis() - timeRotate < 500)) {
-		setPrzekaz(false, true);
+		bool tmp;
+		tmp = led[0];
+		led[0] = led[1];
+		led[1] = led[2];
+		led[2] = led[3];
+		led[3] = tmp;
+
+		tmp = led[4];
+		led[4] = led[5];
+		led[5] = led[6];
+		led[6] = led[7];
+		led[7] = led[8];
+		led[8] = tmp;
+		setPrzekaz(true, false  );
+		rotationinProgress = true;
+	} else if (rotationinProgress && (millis() - timeRotate > czasOffsetu)) {
+		//Serial.print("rotate 3 progress=");
+		//Serial.print(rotationinProgress);
+		//Serial.print(" timeRotate =");
+		//Serial.println(millis() - timeRotate);
+
 		rotationinProgress = false;
-		return;
+		setPrzekaz(false, true);
 	}
 
-  	bool tmp;
-  	tmp = led[0];
-  	led[0] = led[1];
-  	led[1] = led[2];
-  	led[2] = led[3];
-  	led[3] = tmp;
-
-  	tmp = led[4];
-  	led[4] = led[5];
-  	led[5] = led[6];
-  	led[6] = led[7];
-  	led[7] = led[8];
-  	led[8] = tmp;
-  	setPrzekaz(true, false);
-	rotationinProgress = true;
 }
 
 void SwiatloSufit::set(uint8_t pin, bool on) {

@@ -14,11 +14,6 @@ PCF8574 expOczka(0x26);
 PCF8574 expPozostale(0x27);
 
 
-
-#define DBG 1
-
-
-
 Wejscia w;
 Podswietlenie swPod;
 SwiatloLED swLED;
@@ -109,6 +104,8 @@ void loop() {
 		Serial.println(millis() - t, DEC);
 #endif
 	}
+
+	swSufit.rotate();
 	delay(100 - (millis() - t));
 
 }
