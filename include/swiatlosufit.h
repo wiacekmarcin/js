@@ -29,7 +29,7 @@ protected:
 
 	void setPrzekaz(bool on = true, bool off = true);
 
-	void setLevel(uint8_t level);
+	void setLevel(int8_t level);
 
 private:
     static constexpr uint8_t maxLed = 9; //0  1  2  3  4  5  6  7  8

@@ -39,7 +39,7 @@ public:
 
 	void init();
 
-	void readTest();
+	void read();
 
     bool czyWieczor() const;
 
@@ -58,6 +58,14 @@ public:
     bool czyklJadUp() const;
 
     bool czyklJadDown() const;
+
+	bool czyklKuchAUp() const { return kl_kuch_a_up; }
+
+	bool czyklKuchBUp() const { return kl_kuch_b_up; }
+
+	bool czyklKuchADown() const { return kl_kuch_a_down; }
+
+	bool czyklKuchBDown() const { return kl_kuch_b_down; }
 
 private:
   WejscieValue wieczor, drzwi_otw, noc, ruch_kuch, ruch_drzwi;
