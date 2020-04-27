@@ -70,12 +70,12 @@ bool Wejscia::czyNoc() const {
   return noc;
 }
 
-bool Wejscia::czyRuchKuchnia(unsigned long timeins) const {
-  return ruch_kuch.czasOdZmiany() < timeins;
+bool Wejscia::czyRuchKuchnia(unsigned long timeinms) const {
+  return ruch_kuch.czasOdZmiany()  < timeinms;
 }
 
-bool Wejscia::czyRuchDrzwi(unsigned long timeins) const {
-  return ruch_drzwi.czasOdZmiany() < timeins;
+bool Wejscia::czyRuchDrzwi(unsigned long timeinms) const {
+  return ruch_drzwi.czasOdZmiany() < timeinms;
 }
 
 bool Wejscia::czyklKuchUp() const {

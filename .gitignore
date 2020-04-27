@@ -90,3 +90,5 @@ Makefile
 FullScreanApp
 .qmake.stash
 
+.clang_complete
+.gcc-flags.json

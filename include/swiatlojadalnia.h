@@ -9,7 +9,7 @@ class SwiatloJadalnia
 
 
 public:
-  	SwiatloJadalnia() : level(0)
+  	SwiatloJadalnia() :timeChange(0), timeRotate(0), rotationinProgress(false)
   	{ }
 
   	void init();
@@ -20,19 +20,26 @@ public:
 
   	void down();
 
+	void off();
+
   	bool czyZapalone() const;
 
 	void zapal(const Wejscia & w);
 
+
 protected:
-  	void setPrzekaz();
+  	void setPrzekaz(bool on = true, bool off = true);
 
 
 private:
-  	uint8_t level;
   	static constexpr uint8_t maxSw = 3;
   	bool sw[maxSw] = { false, false, false };
   	static constexpr uint8_t mapPins[3] = { 1,  0,  4 };
+	static constexpr unsigned int czasReakcji = 500;
+	unsigned long timeChange;
+	static constexpr unsigned int czasRotacji = 15000;
+	unsigned long timeRotate;
+	bool rotationinProgress;
 };
 
 #endif

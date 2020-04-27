@@ -38,7 +38,7 @@ void Podswietlenie::setPrzekaz() {
   expPozostale.digitalWrite(5, lo(kuchnia));
 }
 
-void Podswietlenie::zapal(const Wejscia & w, const SwiatloSufit &s, const SwiatloLED & l, const SwiatloJadalnia & j)
+void Podswietlenie::zapal(const Wejscia & w, bool sufit, bool jadalnia, bool led)
 {
 	bool szafa = true;
 
@@ -48,7 +48,7 @@ void Podswietlenie::zapal(const Wejscia & w, const SwiatloSufit &s, const Swiatl
 		zapalJadalnia(false);
 		zapalKuchnia(false);
 	} else {
-		zapalKuchnia(!s.czyZapalone() && !l.czyZapalone());
-		zapalJadalnia(!s.czyZapalone() && !l.czyZapalone() && !j.czyZapalone());
+		zapalKuchnia(!sufit && !led);
+		zapalJadalnia(!sufit && !led && !jadalnia);
 	}
 }

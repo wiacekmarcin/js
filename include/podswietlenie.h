@@ -22,7 +22,7 @@ public:
 
   	void zapalSzafa(const bool on);
 
-	void zapal(const Wejscia & w, const SwiatloSufit &s, const SwiatloLED & l, const SwiatloJadalnia & j);
+	void zapal(const Wejscia & w, bool s, bool j, bool l );
 
 
 protected:
