@@ -7,7 +7,7 @@
 class SwiatloSufit
 {
 public:
-	SwiatloSufit() : level(0), timeChange(0), rotationinProgress(0)
+	SwiatloSufit() : level(0), timeChange(0), rotationinProgress(0), rotationId(0)
     {}
 
 	void init();
@@ -46,9 +46,11 @@ private:
 	static constexpr unsigned int czasReakcji = 1000;
 	unsigned long timeChange;
 	static constexpr unsigned long czasRotacji = 900000;
-	static constexpr unsigned int czasOffsetu = 250;
+	static constexpr unsigned int czasOffsetu = 400;
 	unsigned long timeRotate;
 	bool rotationinProgress;
+
+	uint8_t rotationId;
 
 public :
 

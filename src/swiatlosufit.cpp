@@ -39,6 +39,7 @@ bool SwiatloSufit::czyZapalone() const {
 void SwiatloSufit::rotate() {
 	//Serial.println("rotate");
 	//Serial.println(millis() - timeRotate, DEC);
+	rotationId = (rotationId + 1) % 4;
 	if (level == 0 || level == 4)
 		return;
 
@@ -103,6 +104,7 @@ void SwiatloSufit::setPrzekaz(bool on, bool off) {
 }
 
 void SwiatloSufit::setLevel(int8_t lev) {
+	uint8_t cid = 0;
 #ifdef DBG
   Serial.print("SetLevel ");
   Serial.println(level);
@@ -123,19 +125,25 @@ void SwiatloSufit::setLevel(int8_t lev) {
 
 	case 1:
 		for (uint8_t id = 0; id < maxLed; ++id) {
-			led[id] = id == 0 || id == 4 ? true : false;
+			cid = id + rotationId;
+			cid = (cid < 4) ? (cid % 4) : (((cid -4 ) % 5) + 4);
+			led[id] = cid == 0 || cid == 4 ? true : false;
 		}
 		break;
 
 	case 2:
 		for (uint8_t id = 0; id < maxLed; ++id) {
-			led[id] = id == 0 || id == 3 || id == 4 || id == 7 ? true : false;
+			cid = id + rotationId;
+			cid = (cid < 4) ? (cid % 4) : (((cid -4 ) % 5) + 4);
+			led[id] = cid == 0 || cid == 3 || cid == 4 || cid == 7 ? true : false;
 		}
 		break;
 
 	case 3:
 		for (uint8_t id = 0; id < maxLed; ++id) {
-			led[id] = id == 1 || id == 5 || id == 9 ? false : true;
+			cid = id + rotationId;
+			cid = (cid < 4) ? (cid % 4) : (((cid -4 ) % 5) + 4);
+			led[id] = cid == 1 || cid == 5 || cid == 9 ? false : true;
 		}
 		break;
 
