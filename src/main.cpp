@@ -61,6 +61,7 @@ void setup() {
 	 w.init();
 	 expLedy.begin();
 
+	 swPod.zapalSzafa(true);
 	 Serial.begin(57600);
 }
 
@@ -96,9 +97,9 @@ void loop() {
 
 		swSufit.zapal(w, swLED, swJadalnia.czyZapalone());
 		swLED.zapal(w, swSufit.czyZapalone());
-/*
+
 	swPod.zapal(w, swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
-	*/
+	
 #ifdef DBG
 		Serial.print("CZAS TRWANIA");
 		Serial.println(millis() - t, DEC);

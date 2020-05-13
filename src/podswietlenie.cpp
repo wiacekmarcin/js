@@ -6,7 +6,7 @@ extern PCF8574 expPozostale;
 
 
 void Podswietlenie::init() {
-	expPozostale.pinMode(2, OUTPUT, ho(false)); //podswietlenie szafki
+	expPozostale.pinMode(2, OUTPUT, ho(true)); //podswietlenie szafki
 	expPozostale.pinMode(5, OUTPUT, ho(false)); //podwietlenie kuchnia
 	expPozostale.pinMode(6, OUTPUT, ho(false)); //podwietlenie jadalnie
 }
