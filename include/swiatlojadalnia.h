@@ -1,5 +1,5 @@
-#ifndef _MW_JADALNIA_H
-#define _MW_JADALNIA_H
+#ifndef MW_JADALNIA_H
+#define MW_JADALNIA_H
 #include <Arduino.h>
 
 #include "wejscia.h"

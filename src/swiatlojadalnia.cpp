@@ -62,7 +62,7 @@ bool SwiatloJadalnia::czyZapalone() const {
 	return false;
 }
 
-void SwiatloJadalnia::setPrzekaz(bool on = true, bool off = true) {
+void SwiatloJadalnia::setPrzekaz(bool on, bool off) {
   	for (uint8_t id = 0 ; id < maxSw; ++id) {
 		if (on && sw[id])
 			expPozostale.digitalWrite(id, ho(true));

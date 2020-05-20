@@ -34,12 +34,13 @@ void Podswietlenie::zapalSzafa(const bool on) {
 
 void Podswietlenie::setPrzekaz() {
   expPozostale.digitalWrite(2, ho(szafa));
-  expPozostale.digitalWrite(6, lo(jadalnia));
-  expPozostale.digitalWrite(5, lo(kuchnia));
+  expPozostale.digitalWrite(6, ho(jadalnia));
+  expPozostale.digitalWrite(5, ho(kuchnia));
 }
 
 void Podswietlenie::zapal(const Wejscia & w, bool sufit, bool jadalnia, bool led)
 {
+	/*
 	if (!w.czyNoc() && !czySzafaZapalona()) {
 		zapalSzafa(true);
 	}
@@ -48,11 +49,13 @@ void Podswietlenie::zapal(const Wejscia & w, bool sufit, bool jadalnia, bool led
 		zapalSzafa(true);
 	else
 		zapalSzafa(false);
+	*/
 
+/*
 	if (!w.czyWieczor()) {
 		zapalJadalnia(false);
 		zapalKuchnia(false);
-	} else {
+	} else */ {
 		zapalKuchnia(!sufit && !led);
 		zapalJadalnia(!sufit && !led && !jadalnia);
 	}

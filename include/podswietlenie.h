@@ -1,5 +1,5 @@
-#ifndef _MW_PODSW_H
-#define _MW_PODSW_H
+#ifndef MW_PODSW_H
+#define MW_PODSW_H
 
 #include "wejscia.h"
 #include "swiatloled.h"

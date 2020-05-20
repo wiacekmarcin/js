@@ -15,18 +15,49 @@ void SwiatloSufit::init() {
 	expPozostale.pinMode(3, OUTPUT, ho(false));
 }
 
+void SwiatloSufit::updown(bool up) {
+	uint8_t lid = 0;
+  	for (uint8_t id = 0; id < nrPodzial; ++id) {
+	  	lid = (id + rotationId) % nrPodzial;
+		if (led[lid] != up) {
+			led[lid] = up;
+			break;
+		}
+	}
+
+	for (uint8_t id = 0; id < maxLed - nrPodzial; ++id) {
+		lid = (id + rotationId) % (maxLed - nrPodzial) + nrPodzial;
+		if (led[lid] != up) {
+			led[lid] = up;
+			break;
+		}
+	}
+}
+
 void SwiatloSufit::up() {
-  setLevel(level + 1);
-  setPrzekaz();
+  	updown(true);
+	level = level < maxLevel ? level + 1 : level;
+	if (level == maxLevel)
+		setLevel(level);
+  	setPrzekaz();
 }
 
 void SwiatloSufit::down() {
-  setLevel(level - 1);
-  setPrzekaz();
+  	updown(false);
+	level = level > 0 ? level - 1 : 0;
+	if (level == 0)
+		setLevel(level);
+	setPrzekaz();
 }
 
 void  SwiatloSufit::off() {
 	setLevel(0);
+	setPrzekaz();
+}
+
+void  SwiatloSufit::on() {
+	setLevel(4);
+	setPrzekaz();
 }
 
 bool SwiatloSufit::czyZapalone() const {
@@ -40,7 +71,7 @@ void SwiatloSufit::rotate() {
 	//Serial.println("rotate");
 	//Serial.println(millis() - timeRotate, DEC);
 	rotationId = (rotationId + 1) % 4;
-	if (level == 0 || level == 4)
+	if (level == 0 || level == maxLevel)
 		return;
 
 	if (!rotationinProgress && (millis() - timeRotate > czasRotacji)) {
@@ -62,7 +93,7 @@ void SwiatloSufit::rotate() {
 		led[6] = led[7];
 		led[7] = led[8];
 		led[8] = tmp;
-		setPrzekaz(true, false  );
+		setPrzekaz(true, false);
 		rotationinProgress = true;
 	} else if (rotationinProgress && (millis() - timeRotate > czasOffsetu)) {
 		//Serial.print("rotate 3 progress=");
@@ -104,7 +135,6 @@ void SwiatloSufit::setPrzekaz(bool on, bool off) {
 }
 
 void SwiatloSufit::setLevel(int8_t lev) {
-	uint8_t cid = 0;
 #ifdef DBG
   Serial.print("SetLevel ");
   Serial.println(level);
@@ -115,6 +145,7 @@ void SwiatloSufit::setLevel(int8_t lev) {
 		level = 0;
 	else
 		level = lev;
+
 	switch(level) {
 	case 0 :
 	default:
@@ -125,26 +156,26 @@ void SwiatloSufit::setLevel(int8_t lev) {
 
 	case 1:
 		for (uint8_t id = 0; id < maxLed; ++id) {
-			cid = id + rotationId;
-			cid = (cid < 4) ? (cid % 4) : (((cid -4 ) % 5) + 4);
-			led[id] = cid == 0 || cid == 4 ? true : false;
-		}
-		break;
+	    	led[id] = false;
+	    }
+		updown(true);
+	    break;
 
 	case 2:
 		for (uint8_t id = 0; id < maxLed; ++id) {
-			cid = id + rotationId;
-			cid = (cid < 4) ? (cid % 4) : (((cid -4 ) % 5) + 4);
-			led[id] = cid == 0 || cid == 3 || cid == 4 || cid == 7 ? true : false;
-		}
-		break;
+	    	led[id] = false;
+	    }
+		updown(true);
+		updown(true);
+	    break;
 
 	case 3:
 		for (uint8_t id = 0; id < maxLed; ++id) {
-			cid = id + rotationId;
-			cid = (cid < 4) ? (cid % 4) : (((cid -4 ) % 5) + 4);
-			led[id] = cid == 1 || cid == 5 || cid == 9 ? false : true;
-		}
+	    	led[id] = false;
+	    }
+		updown(true);
+		updown(true);
+		updown(true);
 		break;
 
 	case 4:
@@ -194,7 +225,7 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia) {
 			return; //wylacz ledy
 		}
 
-		if (klup) {
+		if (klup || (!czyZapalone() && kldown)) {
 #ifdef DBG
 			Serial.println("Zgas ledy i up");
 #endif

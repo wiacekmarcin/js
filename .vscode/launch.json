@@ -1,0 +1,44 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "platformio-debug",
+      "request": "launch",
+      "name": "PIO Debug",
+      "executable": "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/.pio/build/sparkfun_promicro16/firmware.elf",
+      "toolchainBinDir": "/home/marcin/.platformio/packages/toolchain-atmelavr/bin",
+      "preLaunchTask": {
+        "type": "PlatformIO",
+        "task": "Pre-Debug"
+      },
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "platformio-debug",
+      "request": "launch",
+      "name": "PIO Debug (skip Pre-Debug)",
+      "executable": "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/.pio/build/sparkfun_promicro16/firmware.elf",
+      "toolchainBinDir": "/home/marcin/.platformio/packages/toolchain-atmelavr/bin",
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": false,
+      "cwd": "/home/marcin/devel/mieszkanie",
+      "program": "/home/marcin/devel/mieszkanie/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
