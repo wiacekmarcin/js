@@ -1,5 +1,5 @@
-#ifndef _MW_SWIATLO_SUFIT_H
-#define _MW_SWIATLO_SUFIT_H
+#ifndef MW_SWIATLO_SUFIT_H
+#define MW_SWIATLO_SUFIT_H
 #include <Arduino.h>
 #include "wejscia.h"
 #include "swiatloled.h"
@@ -7,7 +7,7 @@
 class SwiatloSufit
 {
 public:
-	SwiatloSufit() : level(0), timeChange(0), rotationinProgress(0), rotationId(0)
+	SwiatloSufit() : level(0), timeChange(0), timeRotate(0), rotationinProgress(0), rotationId(0)
     {}
 
 	void init();
@@ -18,6 +18,8 @@ public:
 
 	void off();
 
+	void on();
+
 	bool czyZapalone() const;
 
 	void rotate();
@@ -25,6 +27,8 @@ public:
 	void zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia);
 
 protected:
+	void updown(bool up);
+
 	void set(uint8_t pin, bool on);
 
 	void setPrzekaz(bool on = true, bool off = true);
@@ -51,6 +55,7 @@ private:
 	bool rotationinProgress;
 
 	uint8_t rotationId;
+	static constexpr uint8_t nrPodzial = 4;
 
 public :
 

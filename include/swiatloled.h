@@ -1,5 +1,5 @@
-#ifndef _MW_SWIATLO_LED
-#define _MW_SWIATLO_LED
+#ifndef MW_SWIATLO_LED
+#define MW_SWIATLO_LED
 
 #include "wejscia.h"
 

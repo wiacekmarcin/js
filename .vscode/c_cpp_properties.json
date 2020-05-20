@@ -1,0 +1,67 @@
+{
+    "configurations": [
+        {
+            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/include",
+                "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/src",
+                "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/lib/Arduino-Temperature-Control-Library-master",
+                "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/lib/OneWire",
+                "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/lib/PCF8574_library-master",
+                "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                "/home/marcin/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "/home/marcin/.platformio/packages/framework-arduino-avr/variants/sparkfun_promicro",
+                "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                "/home/marcin/.platformio/packages/tool-unity",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/include",
+                    "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/src",
+                    "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/lib/Arduino-Temperature-Control-Library-master",
+                    "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/lib/OneWire",
+                    "/home/marcin/Documents/PlatformIO/Projects/Kuchnia/lib/PCF8574_library-master",
+                    "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                    "/home/marcin/.platformio/packages/framework-arduino-avr/cores/arduino",
+                    "/home/marcin/.platformio/packages/framework-arduino-avr/variants/sparkfun_promicro",
+                    "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                    "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                    "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                    "/home/marcin/.platformio/packages/tool-unity",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=40303",
+                "ARDUINO_AVR_PROMICRO16",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "USB_VID=0x1B4F",
+                "USB_PID=0x9206",
+                "USB_PRODUCT=\"SparkFun Pro Micro\"",
+                "USB_MANUFACTURER=\"SparkFun\"",
+                "__AVR_ATmega32U4__",
+                ""
+            ],
+            "intelliSenseMode": "clang-x64",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "compilerPath": "/home/marcin/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=atmega32u4",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

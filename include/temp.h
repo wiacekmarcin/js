@@ -1,5 +1,5 @@
-#ifndef _MW_TEMP_H
-#define _MW_TEMP_H
+#ifndef MW_TEMP_H
+#define MW_TEMP_H
 #include <OneWire.h>
 #include <DallasTemperature.h>
 

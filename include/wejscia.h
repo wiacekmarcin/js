@@ -1,5 +1,5 @@
-#ifndef _MW_WEJSCIA
-#define _MW_WEJSCIA
+#ifndef MW_WEJSCIA
+#define MW_WEJSCIA
 
 #include <Arduino.h>
 
