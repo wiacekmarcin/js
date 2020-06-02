@@ -6,19 +6,23 @@ extern PCF8574 expLedy;
 
 void SwiatloLED::init()
 {
-	expLedy.pinMode(0, OUTPUT, lo(false));
-	expLedy.pinMode(1, OUTPUT, lo(false));
-	expLedy.pinMode(2, OUTPUT, lo(false));
-	expLedy.pinMode(3, OUTPUT, lo(false));
-	expLedy.pinMode(4, OUTPUT, lo(false));
+	m_sufit1 = false;
+	m_sufit2 = false;
+	m_drzwi1 = false;
+	m_drzwi2 = false;
+	expLedy.pinMode(ALL, OUTPUT, lo(false));
+	expLedy.pinMode(SUFIT1, OUTPUT, lo(false));
+	expLedy.pinMode(SUFIT2, OUTPUT, lo(false));
+	expLedy.pinMode(DRZWI1, OUTPUT, lo(false));
+	expLedy.pinMode(DRZWI2, OUTPUT, lo(false));
 }
 
 void SwiatloLED::ustaw_przekaz() {
-	expLedy.digitalWrite(1, lo(m_sufit1)); //ustawiane sygnałem LOW
-	expLedy.digitalWrite(2, lo(m_sufit2));
-	expLedy.digitalWrite(3, lo(m_drzwi1));
-	expLedy.digitalWrite(4, lo(m_drzwi2));
-	expLedy.digitalWrite(0, lo(m_sufit1 || m_sufit2 || m_drzwi1 || m_drzwi2));
+	expLedy.digitalWrite(SUFIT1, lo(m_sufit1)); //ustawiane sygnałem LOW
+	expLedy.digitalWrite(SUFIT2, lo(m_sufit2));
+	expLedy.digitalWrite(DRZWI1, lo(m_drzwi1));
+	expLedy.digitalWrite(DRZWI2, lo(m_drzwi2));
+	expLedy.digitalWrite(ALL, lo(m_sufit1 || m_sufit2 || m_drzwi1 || m_drzwi2));
 }
 
 void SwiatloLED::zapalSufit1(bool on) {

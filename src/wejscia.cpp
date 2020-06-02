@@ -76,11 +76,11 @@ bool Wejscia::czyNoc() const {
 }
 
 bool Wejscia::czyRuchKuchnia(unsigned long timeinms) const {
-  return ruch_kuch.czasOdZmiany()  < timeinms;
+  return ruch_kuch.getValue() || ruch_kuch.czasOdZmiany()  < timeinms;
 }
 
 bool Wejscia::czyRuchDrzwi(unsigned long timeinms) const {
-  return ruch_drzwi.czasOdZmiany() < timeinms;
+  return ruch.drzwi.getVal() || ruch_drzwi.czasOdZmiany() < timeinms;
 }
 
 bool Wejscia::czyklKuchUp() const {
@@ -92,9 +92,43 @@ bool Wejscia::czyklKuchDown() const {
 }
 
 bool Wejscia::czyklJadUp() const {
-  return kl_jad_up;
+  return kl_jad_up.getVal();
 }
 
 bool Wejscia::czyklJadDown() const {
-  return kl_jad_down;
+  return kl_jad_down.getVal();
+}
+
+bool Wejscia::czyklKuch() const {
+	return kl_kuch_a_up.getVal() || kl_kuch_b_up.getVal() || kl_kuch_a_down.getVal() || kl_kuch_b_down.getVal();
+}
+
+bool Wejscia::czyklJadalnia() const {
+	return kl_jad_up.getVal() || kl_jad_down.getVal();
+}
+
+
+bool Wejscia::czyklKuchAUp() const { 
+	return kl_kuch_a_up.getVal(); 
+}
+
+bool Wejscia::czyklKuchBUp() const { 
+	return kl_kuch_b_up.getVal(); 
+}
+
+bool Wejscia::czyklKuchADown() const { 
+	return kl_kuch_a_down.getVal(); 
+}
+
+bool Wejscia::czyklKuchBDown() const { 
+	return kl_kuch_b_down.getVal(); 
+}
+
+bool Wejscia::czyklKuchDouble() const {
+	return (kl_kuch_a_down.getVal() && kl_kuch_a_up.getVal()) || (kl_kuch_b_down.getVal() && kl_kuch_b_up.getVal());
+}
+
+void Wejscia::setRuch()
+{
+
 }

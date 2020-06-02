@@ -61,10 +61,17 @@ void  SwiatloSufit::on() {
 }
 
 bool SwiatloSufit::czyZapalone() const {
-  for (uint8_t id = 0 ; id < maxLed; ++id)
-	if (led[id])
-	  return true;
-  return false;
+  	for (uint8_t id = 0 ; id < maxLed; ++id)
+		if (led[id])
+	  		return true;
+  	return false;
+}
+
+bool SwiatloSufit::czyWszystkie() const {
+	for (uint8_t id = 0 ; id < maxLed; ++id)
+		if (!led[id])
+		  	return false;
+  	return false;
 }
 
 void SwiatloSufit::rotate() {
@@ -193,64 +200,55 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia) {
 	bool klup = w.czyklKuchUp();
 	bool kldown = w.czyklKuchDown();
 	bool czynoc = w.czyNoc();
-#ifdef DBG
-	Serial.print("millis()");
-	Serial.print(" Zapal");
-#endif
+	bool kl = w.czyklKuch();
+	//bool czywiecz = w.czyWieczor();
+	bool swLed = led.czyZapalonySufit();
+	bool swSuf = czyZapalone();
+    bool dlkl = w.czyklKuchDouble();
+	
+	//nie nacisnieto zadnego klawisza
 	if (!klup && !kldown)
 		return;
-	else {
-		if (millis() - timeChange < czasReakcji)
-			return;
-	}
+	else if (millis() - timeChange < czasReakcji) //zbyt wczesna reakcja
+		return;
+	
 	timeChange = millis();
 
-	if (!czyZapalone() && !led.czyZapalonySufit() && !jadalnia && (klup || kldown) && czynoc)
-	{
-#ifdef DBG
-	Serial.println("Zapal ledy");
-#endif
-		led.zapalSufit1(true);
-		led.zapalSufit2(true);
-		return; //zapal ledy
-	}
 
-	if (!czyZapalone() && led.czyZapalonySufit() && (klup || kldown)) {
-		if ((klup && kldown) || kldown) {
-#ifdef DBG
-			Serial.println("Zgas ledy");
-#endif
-			led.zapalSufit1(false);
-			led.zapalSufit2(false);
-			return; //wylacz ledy
-		}
-
-		if (klup || (!czyZapalone() && kldown)) {
-#ifdef DBG
-			Serial.println("Zgas ledy i up");
-#endif
-			led.zapalSufit1(false);
-			led.zapalSufit2(false);
-			up();
-			return;
-		}
-	}
-
-	if (klup && kldown) {
-#ifdef DBG
-		Serial.println("off");
-#endif
+	//podwojne nacisniecie swiatlo wylaczone
+	if (dlkl && !swSuf) {
+		on();
+	} 
+	
+	//podwojne nacisniecie i wszystkie swiatlo zapalone
+	else if (dlkl && czyWszystkie()) {
 		off();
+		led.zapalSufit(false);
 	}
-	else if (klup) {
-#ifdef DBG
-		Serial.println("up");
-#endif
+
+	//dowolne nacisniecie swiatlo wylaczone i jest noc
+	else if (kl && !swLed && !swSuf && czynoc) {
+		led.zapalSufit(true);
+	}
+
+	//dowolne nacisniecie swiatlo wylaczone i jest dzien
+	else if (kl && !swLed && !swSuf && !czynoc) {
 		up();
-	} else {
-#ifdef DBG
-		Serial.println("down");
-#endif
+	}
+
+	//nacisiniecie klawisza up jak jest noc i swieca ledy
+	else if (klup && !swSuf && !swLed) {
+		led.zapalSufit(false);
+		up();
+	}
+
+	//nacisiniecie klawisza up 
+	else if (klup) {
+		up();
+	}
+
+	//nacisniecie klawisza down
+	else if (kldown) {
 		down();
 	}
 }
