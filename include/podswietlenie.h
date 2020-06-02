@@ -1,10 +1,6 @@
 #ifndef MW_PODSW_H
 #define MW_PODSW_H
 
-#include "wejscia.h"
-#include "swiatloled.h"
-#include "swiatlosufit.h"
-#include "swiatlojadalnia.h"
 
 class Podswietlenie {
 
@@ -22,7 +18,7 @@ public:
 
   	void zapalSzafa(const bool on);
 
-	void zapal(const Wejscia & w, bool s, bool j, bool l );
+	void zapal(bool w, bool s, bool j, bool l );
 
 	bool czySzafaZapalona() { return szafa; }
 protected:

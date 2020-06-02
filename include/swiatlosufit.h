@@ -49,7 +49,7 @@ private:
     static constexpr uint8_t maxLevel = 4;
     bool led[maxLed] = { false, false, false, false, false, false, false, false, false};
 
-	static constexpr unsigned int czasReakcji = 1000;
+	static constexpr unsigned int czasReakcji = 500;
 	unsigned long timeChange;
 	static constexpr unsigned long czasRotacji = 900000;
 	static constexpr unsigned int czasOffsetu = 400;

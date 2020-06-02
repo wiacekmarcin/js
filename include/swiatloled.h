@@ -11,11 +11,9 @@ public:
     SwiatloLED(): m_sufit1(false), m_sufit2(false), m_drzwi1(false), m_drzwi2(false)
     { }
 
-	constexpr uint8_t ALL 4;
-	constexpr uint8_t SUFIT1 0;
-	constexpr uint8_t SUFIT2 1;
-	constexpr uint8_t DRZWI1 2;
-	constexpr uint8_t DRZWI2 3;
+	static constexpr unsigned long czasSwiecenieLED = 1ul*1000*60*5;
+
+	
 	void init();
 
    	void zapalSufit1(bool on);
@@ -34,6 +32,13 @@ public:
 protected:
 
     void ustaw_przekaz();
+
+	static constexpr uint8_t ALL = 4;
+	static constexpr uint8_t SUFIT1 = 0;
+	static constexpr uint8_t SUFIT2 = 1;
+	static constexpr uint8_t DRZWI1 = 2;
+	static constexpr uint8_t DRZWI2 = 3;
+
 private:
 	bool m_sufit1, m_sufit2, m_drzwi1, m_drzwi2;
 };

@@ -38,25 +38,9 @@ void Podswietlenie::setPrzekaz() {
   expPozostale.digitalWrite(5, ho(kuchnia));
 }
 
-void Podswietlenie::zapal(const Wejscia & w, bool sufit, bool jadalnia, bool led)
+void Podswietlenie::zapal(bool wieczor, bool sufit, bool jadalnia, bool led)
 {
-	/*
-	if (!w.czyNoc() && !czySzafaZapalona()) {
-		zapalSzafa(true);
-	}
+	zapalKuchnia(wieczor && !sufit && !led);
+	zapalJadalnia(wieczor && !sufit && !led && !jadalnia);
 
-	if (w.czyNoc() && w.czyRuchKuchnia(10*60))
-		zapalSzafa(true);
-	else
-		zapalSzafa(false);
-	*/
-
-/*
-	if (!w.czyWieczor()) {
-		zapalJadalnia(false);
-		zapalKuchnia(false);
-	} else */ {
-		zapalKuchnia(!sufit && !led);
-		zapalJadalnia(!sufit && !led && !jadalnia);
-	}
 }

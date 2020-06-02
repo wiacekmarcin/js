@@ -73,45 +73,26 @@ void SwiatloJadalnia::setPrzekaz(bool on, bool off) {
 
 void SwiatloJadalnia::zapal(const Wejscia & w)
 {
-#ifdef DBG
-	Serial.print(millis(), DEC);
-	Serial.println(" Zapal 1");
-#endif
+
 	bool klup = w.czyklJadUp();
 	bool kldown = w.czyklJadDown();
+
 	if (!klup && !kldown)
 		return;
 	else {
-#ifdef DBG
-		Serial.print("Klawisz od jadalni wcisniety");
-		Serial.print("ile ms temu ");
-		Serial.println(millis() - timeChange);
-#endif
-		if (millis() - timeChange < czasReakcji)
+		if (millis() - timeChange < czasReakcji) {
 			return;
+		}
 	}
+
 	timeChange = millis();
 	if (!czyZapalone() && (klup || kldown)) {
-#ifdef DBG
-		Serial.print("up");
-#endif
 		up();
- 	} else if (klup && kldown) {
-#ifdef DBG
-		Serial.print("off");
-#endif
+ 	} else if (czyZapalone() && klup && kldown) {
 		off();
-	}
-	else if (klup) {
-#ifdef DBG
-		Serial.print("up");
-#endif
+	} else if (klup) {
 		up();
-	}
-	else {
-#ifdef DBG
-		Serial.print("down");
-#endif
+	} else if (kldown) {
 		down();
 	}
 }

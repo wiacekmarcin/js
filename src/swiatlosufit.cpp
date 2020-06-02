@@ -75,16 +75,11 @@ bool SwiatloSufit::czyWszystkie() const {
 }
 
 void SwiatloSufit::rotate() {
-	//Serial.println("rotate");
-	//Serial.println(millis() - timeRotate, DEC);
 	rotationId = (rotationId + 1) % 4;
 	if (level == 0 || level == maxLevel)
 		return;
 
 	if (!rotationinProgress && (millis() - timeRotate > czasRotacji)) {
-		//Serial.print("rotate 2 progress=");
-		//Serial.print(" timeRotate =");
-		//Serial.println(millis() - timeRotate);
 		timeRotate = millis();
 
 		bool tmp;
@@ -103,11 +98,6 @@ void SwiatloSufit::rotate() {
 		setPrzekaz(true, false);
 		rotationinProgress = true;
 	} else if (rotationinProgress && (millis() - timeRotate > czasOffsetu)) {
-		//Serial.print("rotate 3 progress=");
-		//Serial.print(rotationinProgress);
-		//Serial.print(" timeRotate =");
-		//Serial.println(millis() - timeRotate);
-
 		rotationinProgress = false;
 		setPrzekaz(false, true);
 	}
@@ -119,12 +109,6 @@ void SwiatloSufit::set(uint8_t pin, bool on) {
     	return;
 
   	uint8_t p = SwiatloSufit::mapPins[pin];
-#ifdef DBG
-  	Serial.print("Lampa ");
-  	Serial.print(p);
-  	Serial.print(" setting on");
-  	Serial.println(on ? "true": "false");
-#endif
   	if (p < 8) {
     	expOczka.digitalWrite( p, ho(on)); //piny są odwrócone najpierw P3, na koniec P0
   	} else {
@@ -142,10 +126,6 @@ void SwiatloSufit::setPrzekaz(bool on, bool off) {
 }
 
 void SwiatloSufit::setLevel(int8_t lev) {
-#ifdef DBG
-  Serial.print("SetLevel ");
-  Serial.println(level);
-#endif
 	if (lev > maxLevel)
 		level = maxLevel;
 	else if (lev < 0)
@@ -194,61 +174,89 @@ void SwiatloSufit::setLevel(int8_t lev) {
 }
 
 void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia) {
-	//if (!czyRuchKuchnia)
+	uint8_t mask = 0x00;
+	mask = (mask << 1 ) | w.czyNoc();
+	mask = (mask << 1 ) | (led.czyZapalonySufit() || jadalnia);
+	mask = (mask << 1 ) | czyZapalone();
+	mask = (mask << 1 ) | w.czyklKuchBUp(); 
+	mask = (mask << 1 ) | w.czyklKuchBDown();
+	mask = (mask << 1 ) | w.czyklKuchAUp();
+	mask = (mask << 1 ) | w.czyklKuchADown();
 
+	constexpr uint8_t NOC 		= 0x40;
+	constexpr uint8_t ZAPLED 	= 0x20;
+	constexpr uint8_t ZAPSUF 	= 0x10;
 
-	bool klup = w.czyklKuchUp();
-	bool kldown = w.czyklKuchDown();
-	bool czynoc = w.czyNoc();
-	bool kl = w.czyklKuch();
-	//bool czywiecz = w.czyWieczor();
-	bool swLed = led.czyZapalonySufit();
-	bool swSuf = czyZapalone();
-    bool dlkl = w.czyklKuchDouble();
-	
-	//nie nacisnieto zadnego klawisza
-	if (!klup && !kldown)
+	constexpr uint8_t KLBUP 	= 0x08;
+	constexpr uint8_t KLBDN 	= 0x04;
+	constexpr uint8_t KLAUP 	= 0x02;
+	constexpr uint8_t KLADN 	= 0x01;
+
+	if ((mask & 0x0f) == 0x00) { //nie nacisnieto zadnego klawisza 
+		return ;
+	}
+		
+	else if (millis() - timeChange < czasReakcji) { //zbyt wczesna reakcja
 		return;
-	else if (millis() - timeChange < czasReakcji) //zbyt wczesna reakcja
-		return;
+	}
 	
 	timeChange = millis();
 
+	switch(mask) {
+		default:
+			break;
+		//noc
+		case NOC | KLBUP:
+		case NOC | KLBDN:
+		case NOC | KLAUP:
+		case NOC | KLADN:
+			led.zapalSufit(true);
+			break;
+		
+		// noc i zapalone ledy
+		case NOC | ZAPLED | KLBUP:
+		case NOC | ZAPLED | KLAUP:
+			led.zapalSufit(false);
+			up();
+			break;
+		
+		case NOC | ZAPLED | KLBDN:
+		case NOC | ZAPLED | KLADN:
+			led.zapalSufit(false);
+			break;
 
-	//podwojne nacisniecie swiatlo wylaczone
-	if (dlkl && !swSuf) {
-		on();
-	} 
-	
-	//podwojne nacisniecie i wszystkie swiatlo zapalone
-	else if (dlkl && czyWszystkie()) {
-		off();
-		led.zapalSufit(false);
-	}
+		
+		//dwa nacisniete klawisze swiatlo wylaczone
+		case NOC | KLBUP | KLBDN:
+		case NOC | KLAUP | KLADN:
+		case KLBUP | KLBDN:
+		case KLAUP | KLADN:
+			on();
+			break;
 
-	//dowolne nacisniecie swiatlo wylaczone i jest noc
-	else if (kl && !swLed && !swSuf && czynoc) {
-		led.zapalSufit(true);
-	}
+		//dwa nacisniete klawisze swiatlo wlaczone
+		case NOC | ZAPSUF | KLBUP | KLBDN :
+		case NOC | ZAPSUF | KLAUP | KLADN:
+		case ZAPSUF | KLBUP | KLBDN:
+		case ZAPSUF | KLAUP | KLADN:
+			off();
+			break;
 
-	//dowolne nacisniecie swiatlo wylaczone i jest dzien
-	else if (kl && !swLed && !swSuf && !czynoc) {
-		up();
-	}
+		//nie zapalone swiatlo
+		case KLBUP:
+		case KLBDN:
+		case KLAUP:
+		case KLADN:
+		case ZAPSUF | KLBUP:
+		case ZAPSUF | KLAUP:
+			up();
+			break;
 
-	//nacisiniecie klawisza up jak jest noc i swieca ledy
-	else if (klup && !swSuf && !swLed) {
-		led.zapalSufit(false);
-		up();
-	}
+		case ZAPSUF | KLBDN:
+		case ZAPSUF | KLADN:
+			down();
+			break;
 
-	//nacisiniecie klawisza up 
-	else if (klup) {
-		up();
-	}
-
-	//nacisniecie klawisza down
-	else if (kldown) {
-		down();
 	}
 }
+
