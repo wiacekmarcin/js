@@ -47,5 +47,7 @@
         "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
         "/home/marcin/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
         "/home/marcin/.platformio/packages/tool-unity",
-        "/home/marcin/arduino-1.8.12/hardware/arduino/avr/cores/arduino"]
+        "/home/marcin/arduino-1.8.12/hardware/arduino/avr/cores/arduino"
+    ],
+    "C_Cpp.errorSquiggles": "Disabled"
 }

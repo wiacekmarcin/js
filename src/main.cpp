@@ -20,31 +20,48 @@ SwiatloLED swLED;
 SwiatloSufit swSufit;
 SwiatloJadalnia swJadalnia;
 
-static long maskawejsc = 0x00;
-static long prevmaskawejsc = 0x00;
-void printW(const long & t, const Wejscia &w) 
-{
-	maskawejsc = 0x00;
-	maskawejsc |= w.czyDrzwiOtwarte() << 1;
-	maskawejsc |= w.czyklJadDown() << 2;
-	maskawejsc |= w.czyklJadUp() << 3;
-	maskawejsc |= w.czyklKuchADown() << 4;
-	maskawejsc |= w.czyklKuchAUp() << 5;
-	maskawejsc |= w.czyklKuchBDown() << 6;
-	maskawejsc |= w.czyklKuchUp() << 7;
-	maskawejsc |= w.czyNoc() << 8;
-	maskawejsc |= w.czyRuchDrzwi(1) << 9;
-	maskawejsc |= w.czyRuchKuchnia(1) << 10;
-	maskawejsc |= w.czyWieczor() << 11;
+bool change(unsigned int timeinsKuchnia, unsigned int timeimsDrzwi) {
+	static unsigned long prevmaskawejsc = 0x00;
+	unsigned long maskawejsc = 0x00;
 
-	if (prevmaskawejsc != maskawejsc)
+	maskawejsc |= w.czyklJadDown() << 1;
+	maskawejsc |= w.czyklJadUp() << 2;
+	maskawejsc |= w.czyklKuchADown() << 3;
+	maskawejsc |= w.czyklKuchAUp() << 4;
+	maskawejsc |= w.czyklKuchBDown() << 5;
+	maskawejsc |= w.czyklKuchUp() << 6;
+	maskawejsc |= w.czyDrzwiOtwarte() << 7;
+	maskawejsc |= w.czyNoc() << 8;
+	maskawejsc |= w.czyWieczor() << 9;
+	maskawejsc |= w.czyRuchDrzwi(1000*timeinsDrzwi) << 10;
+	maskawejsc |= w.czyRuchKuchnia(1000*timeinsKuchnia) << 11;
+	
+
+	if (prevmaskawejsc == maskawejsc)
+		return false;
+
+	if (maskawejsc & 0x3f) { // jaki kolwiek klawsz to znaczy jest ruch w kuchni 
+		w.setRuch();
+	}
+	prevmaskawejsc = maskawejsc;
+	return true;
+}
+
+void printW(const long & t, const Wejscia &w, bool force = false) 
+{
+	
+
+	if (force || prevmaskawejsc != maskawejsc)
 	{
-		prevmaskawejsc = maskawejsc;
 		Serial.println(t, DEC);
-		Serial.println("JAD UP | JAD DOWN | KUCH A UP | KUCH A DOWN | KUCH B UP | KUCH B DOWN | WIE | NOC | RUCH_KUCH | RUCH_DRZWI | DRZWI_OTW");
-		Serial.print  ("     ");
+		Serial.print(prevmaskawejsc, BIN);
+		Serial.print(" => ");
+		Serial.println(maskawejsc, BIN);
+		prevmaskawejsc = maskawejsc;
+		Serial.println("JAD UP | JAD DOWN | KUCH A UP | KUCH A DOWN | KUCH B UP | KUCH B DOWN | DRZWI_OTW | WIE | NOC | | RUCH_DRZWI | RUCH_KUCH ");
+		Serial.print  ("      ");
 		Serial.print (w.czyklJadUp(), DEC);
-		Serial.print ("|        ");
+		Serial.print ("|         ");
 		Serial.print (w.czyklJadDown(), DEC);
 		Serial.print ("|          ");
 		Serial.print (w.czyklKuchAUp(), DEC);
@@ -55,20 +72,23 @@ void printW(const long & t, const Wejscia &w)
 		Serial.print ("|            ");
 		Serial.print (w.czyklKuchBDown(), DEC);
 		Serial.print ("|    ");
+		Serial.println(w.czyDrzwiOtwarte());
+		Serial.print ("|    ");
 		Serial.print(w.czyWieczor());
 		Serial.print ("|    ");
 		Serial.print(w.czyNoc());
 		Serial.print ("|          ");
+		Serial.print(w.czyRuchDrzwi(2000));
+		Serial.print ("|         ");
 		Serial.print(w.czyRuchKuchnia(2000));
 		Serial.print ("|           ");
-		Serial.print(w.czyRuchDrzwi(2000));
-		Serial.print ("|          ");
-		Serial.println(w.czyDrzwiOtwarte());
+		
+		
 		Serial.println('-');
 	}
 }
 
-
+unsigned long t = 0;
 
 
 void setup() {
@@ -85,9 +105,14 @@ void setup() {
 
 	 swPod.zapalSzafa(true);
 	 Serial.begin(38400);
+
+	t = millis();
+
+	w.read();
+	printW(t, w, true);
 }
 
-unsigned long t = 0;
+
 
 unsigned long mss = 0;
 
@@ -96,12 +121,44 @@ void loop() {
 
 
 	t = millis();
-#ifdef DBG
-	Serial.print("READ");
-#endif
-  	w.read();
+
+	w.read();
 	printW(t, w);
 
+	if (Serial.available() > 0) {
+		uint8_t inc = Serial.read();
+		if (inc == 'a') {
+			Serial.print(inc, DEC);
+			Serial.print(" ");
+			printW(t, w, true);	
+		}
+	}
+	if (!change(30*60, 5*60)) {
+		delay(100);
+		return;
+	}
+	
+	if (Serial.available() > 0) {
+		 else if (inc == '0') {
+			swSufit.up();
+		} else if (inc == '1')
+		{
+			expLedy.digitalWrite(1, lo(true));
+			//expLedy.digitalWrite(2, lo(true));
+			//expLedy.digitalWrite(3, lo(true));
+			expLedy.digitalWrite(4, lo(true));
+			expLedy.digitalWrite(0, lo(true));
+		} else if (inc == '2')
+		{
+			expLedy.digitalWrite(1, ho(true));
+			expLedy.digitalWrite(2, ho(true));
+			expLedy.digitalWrite(3, ho(true));
+			expLedy.digitalWrite(4, ho(true));
+			expLedy.digitalWrite(0, ho(true));
+		}
+  	}
+  	
+	return;
 
 	if (w.czyklJadUp() && w.czyklJadDown() && w.czyklKuchBUp() && w.czyklKuchBDown()) {
 		if (millis() - mss > 2000) {

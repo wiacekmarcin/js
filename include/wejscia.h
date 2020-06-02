@@ -5,25 +5,32 @@
 
 class WejscieValue {
 public:
-    WejscieValue() : value(false), prevvalue(false), timeChange(0)
-    { }
+  WejscieValue() : value(false), prevvalue(false), timeChange(0)
+  { }
 
 	const WejscieValue & operator=(const bool value) {
+    if (value != this->Value)
+      timeChange = millis();
 		this->value = value;
 		return (*this);
 	}
 
-    inline bool czyZmiana() const {
-      return value != prevvalue;
-    }
+  inline bool czyZmiana() const {
+    return value != prevvalue;
+  }
 
-    inline unsigned int czasOdZmiany() const {
-      return (millis() - timeChange); //w sekundach
-    }
+  inline unsigned int czasOdZmiany() const {
+    return (millis() - timeChange); //w sekundach
+  }
 
-    inline bool getVal() const {
-      return value;
-    }
+  inline bool getVal() const {
+    return value;
+  }
+
+  inline void setRuch() {
+    timeChange = millis();
+    value = false;
+  }
 
 	operator bool() const { return value; }
 
@@ -41,31 +48,39 @@ public:
 
 	void read();
 
-    bool czyWieczor() const;
+  bool czyWieczor() const;
 
-    bool czyDrzwiOtwarte() const;
+  bool czyDrzwiOtwarte() const;
 
-    bool czyNoc() const;
+  bool czyNoc() const;
 
-    bool czyRuchKuchnia(unsigned long timeins) const;
+  bool czyRuchKuchnia(unsigned long timeins) const;
 
-    bool czyRuchDrzwi(unsigned long timeins) const;
+  bool czyRuchDrzwi(unsigned long timeins) const;
 
-    bool czyklKuchUp() const;
+  bool czyklKuchUp() const;
 
-    bool czyklKuchDown() const;
+  bool czyklKuchDown() const;
 
-    bool czyklJadUp() const;
+  bool czyklJadUp() const;
 
-    bool czyklJadDown() const;
+  bool czyklJadDown() const;
 
-	bool czyklKuchAUp() const { return kl_kuch_a_up; }
+  bool czyklKuch() const;
 
-	bool czyklKuchBUp() const { return kl_kuch_b_up; }
+  bool czyklJadalnia() const;
+  
+  bool czyklKuchAUp() const;
 
-	bool czyklKuchADown() const { return kl_kuch_a_down; }
+  bool czyklKuchBUp() const;
 
-	bool czyklKuchBDown() const { return kl_kuch_b_down; }
+  bool czyklKuchADown() const;
+
+  bool czyklKuchBDown() const;
+
+  bool czyklKuchDouble() const;
+
+  void setRuch();
 
 private:
   WejscieValue wieczor, drzwi_otw, noc, ruch_kuch, ruch_drzwi;

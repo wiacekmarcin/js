@@ -22,6 +22,8 @@ public:
 
 	bool czyZapalone() const;
 
+	bool czyWszystkie() const;
+
 	void rotate();
 
 	void zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia);
