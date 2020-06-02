@@ -20,7 +20,7 @@ SwiatloLED swLED;
 SwiatloSufit swSufit;
 SwiatloJadalnia swJadalnia;
 
-bool change(unsigned int timeinsKuchnia, unsigned int timeimsDrzwi) {
+bool change(unsigned long timeinsKuchnia, unsigned long timeimsDrzwi) {
 	static unsigned long prevmaskawejsc = 0x00;
 	unsigned long maskawejsc = 0x00;
 
@@ -33,7 +33,7 @@ bool change(unsigned int timeinsKuchnia, unsigned int timeimsDrzwi) {
 	maskawejsc |= w.czyDrzwiOtwarte() << 7;
 	maskawejsc |= w.czyNoc() << 8;
 	maskawejsc |= w.czyWieczor() << 9;
-	maskawejsc |= w.czyRuchDrzwi(1000*timeinsDrzwi) << 10;
+	maskawejsc |= w.czyRuchDrzwi(SwiatloLED::czasSwiecenieLED) << 10;
 	maskawejsc |= w.czyRuchKuchnia(1000*timeinsKuchnia) << 11;
 	
 
@@ -49,43 +49,31 @@ bool change(unsigned int timeinsKuchnia, unsigned int timeimsDrzwi) {
 
 void printW(const long & t, const Wejscia &w, bool force = false) 
 {
-	
-
-	if (force || prevmaskawejsc != maskawejsc)
-	{
-		Serial.println(t, DEC);
-		Serial.print(prevmaskawejsc, BIN);
-		Serial.print(" => ");
-		Serial.println(maskawejsc, BIN);
-		prevmaskawejsc = maskawejsc;
-		Serial.println("JAD UP | JAD DOWN | KUCH A UP | KUCH A DOWN | KUCH B UP | KUCH B DOWN | DRZWI_OTW | WIE | NOC | | RUCH_DRZWI | RUCH_KUCH ");
-		Serial.print  ("      ");
-		Serial.print (w.czyklJadUp(), DEC);
-		Serial.print ("|         ");
-		Serial.print (w.czyklJadDown(), DEC);
-		Serial.print ("|          ");
-		Serial.print (w.czyklKuchAUp(), DEC);
-		Serial.print ("|            ");
-		Serial.print (w.czyklKuchADown(), DEC);
-		Serial.print ("|          ");
-		Serial.print (w.czyklKuchBUp(), DEC);
-		Serial.print ("|            ");
-		Serial.print (w.czyklKuchBDown(), DEC);
-		Serial.print ("|    ");
-		Serial.println(w.czyDrzwiOtwarte());
-		Serial.print ("|    ");
-		Serial.print(w.czyWieczor());
-		Serial.print ("|    ");
-		Serial.print(w.czyNoc());
-		Serial.print ("|          ");
-		Serial.print(w.czyRuchDrzwi(2000));
-		Serial.print ("|         ");
-		Serial.print(w.czyRuchKuchnia(2000));
-		Serial.print ("|           ");
-		
-		
-		Serial.println('-');
-	}
+	Serial.println(t);
+	Serial.println("JAD UP | JAD DOWN | KUCH A UP | KUCH A DOWN | KUCH B UP | KUCH B DOWN | DRZWI_OTW | WIE | NOC | RUCH_DRZWI | RUCH_KUCH ");
+	Serial.print  ("      ");
+	Serial.print (w.czyklJadUp(), DEC);
+	Serial.print ("|         ");
+	Serial.print (w.czyklJadDown(), DEC);
+	Serial.print ("|          ");
+	Serial.print (w.czyklKuchAUp(), DEC);
+	Serial.print ("|            ");
+	Serial.print (w.czyklKuchADown(), DEC);
+	Serial.print ("|          ");
+	Serial.print (w.czyklKuchBUp(), DEC);
+	Serial.print ("|            ");
+	Serial.print (w.czyklKuchBDown(), DEC);
+	Serial.print ("|          ");
+	Serial.print (w.czyDrzwiOtwarte());
+	Serial.print ("|    ");
+	Serial.print (w.czyWieczor());
+	Serial.print ("|    ");
+	Serial.print (w.czyNoc());
+	Serial.print ("|          ");
+	Serial.print (w.czyRuchDrzwi(2000));
+	Serial.print ("|         ");
+	Serial.println (w.czyRuchKuchnia(2000));
+	Serial.println('-');
 }
 
 unsigned long t = 0;
@@ -120,11 +108,6 @@ bool prev = false;
 void loop() {
 
 
-	t = millis();
-
-	w.read();
-	printW(t, w);
-
 	if (Serial.available() > 0) {
 		uint8_t inc = Serial.read();
 		if (inc == 'a') {
@@ -133,57 +116,20 @@ void loop() {
 			printW(t, w, true);	
 		}
 	}
+	w.read();
+	t = millis();
 	if (!change(30*60, 5*60)) {
 		delay(100);
 		return;
 	}
-	
-	if (Serial.available() > 0) {
-		 else if (inc == '0') {
-			swSufit.up();
-		} else if (inc == '1')
-		{
-			expLedy.digitalWrite(1, lo(true));
-			//expLedy.digitalWrite(2, lo(true));
-			//expLedy.digitalWrite(3, lo(true));
-			expLedy.digitalWrite(4, lo(true));
-			expLedy.digitalWrite(0, lo(true));
-		} else if (inc == '2')
-		{
-			expLedy.digitalWrite(1, ho(true));
-			expLedy.digitalWrite(2, ho(true));
-			expLedy.digitalWrite(3, ho(true));
-			expLedy.digitalWrite(4, ho(true));
-			expLedy.digitalWrite(0, ho(true));
-		}
-  	}
-  	
-	return;
-
-	if (w.czyklJadUp() && w.czyklJadDown() && w.czyklKuchBUp() && w.czyklKuchBDown()) {
-		if (millis() - mss > 2000) {
 #ifdef DBG
-			Serial.println("wlacz ledy");
-#endif
-			prev = !prev;
-			swLED.zapalSufit1(prev);
-			swLED.zapalSufit2(prev);
-		}
-		mss = millis();
-	}
-	else {
-		swJadalnia.zapal(w);
-
-		swSufit.zapal(w, swLED, swJadalnia.czyZapalone());
-		swLED.zapal(w, swSufit.czyZapalone());
-
-	swPod.zapal(w, swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
+	printW(t, w);
+#endif	
+	swJadalnia.zapal(w);
+	swSufit.zapal(w, swLED, swJadalnia.czyZapalone());
+	swLED.zapal(w, swSufit.czyZapalone());
+	swPod.zapal(w.czyWieczor(), swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
 	
-#ifdef DBG
-		Serial.print("CZAS TRWANIA");
-		Serial.println(millis() - t, DEC);
-#endif
-	}
 
 	swSufit.rotate();
 	delay(100 - (millis() - t));

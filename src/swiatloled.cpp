@@ -63,19 +63,39 @@ bool SwiatloLED::czyZapalonySufit() const {
 
 void SwiatloLED::zapal(const Wejscia & w, bool s)
 {
-	if (s)
-		return;
+	//rzeczy zwiazane z ledami od sufitu przeniesione do swiatlosufit
 
-	if (! w.czyDrzwiOtwarte())
+	if (s) {
+		zapalDrzwi1(false);
+		zapalDrzwi2(false);
 		return;
+	}
 
-	if (w.czyRuchDrzwi(20000)) {
-		if (w.czyNoc()) {
-			zapalDrzwi1(true);
-		} else {
-			zapalDrzwi2(true);
+	if (! w.czyDrzwiOtwarte()) {
+		zapalDrzwi1(false);
+		zapalDrzwi2(false);
+		return;
+	}
+
+	if (w.czyRuchDrzwi(czasSwiecenieLED)) {
+		uint8_t ch = (w.czyNoc() << 1) | w.czyWieczor();
+		switch(ch) {
+			default:
+			case 0:
+				zapalDrzwi1(true);
+				zapalDrzwi2(true);
+				break;
+			case 1:
+				zapalDrzwi1(true);
+				zapalDrzwi2(false);
+				break;
+			case 2:
+			case 3:
+				zapalDrzwi1(false);
+				zapalDrzwi2(true);
+				break;
 		}
-	} else if (m_drzwi1 || m_drzwi2) {
+	} else {
 		zapalDrzwi1(false);
 		zapalDrzwi2(false);
 	}

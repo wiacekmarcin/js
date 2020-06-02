@@ -76,11 +76,11 @@ bool Wejscia::czyNoc() const {
 }
 
 bool Wejscia::czyRuchKuchnia(unsigned long timeinms) const {
-  return ruch_kuch.getValue() || ruch_kuch.czasOdZmiany()  < timeinms;
+  return ruch_kuch.getVal() || ruch_kuch.czasOdZmiany()  < timeinms;
 }
 
 bool Wejscia::czyRuchDrzwi(unsigned long timeinms) const {
-  return ruch.drzwi.getVal() || ruch_drzwi.czasOdZmiany() < timeinms;
+  return ruch_drzwi.getVal() || ruch_drzwi.czasOdZmiany() < timeinms;
 }
 
 bool Wejscia::czyklKuchUp() const {

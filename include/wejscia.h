@@ -9,7 +9,7 @@ public:
   { }
 
 	const WejscieValue & operator=(const bool value) {
-    if (value != this->Value)
+    if (value != this->value)
       timeChange = millis();
 		this->value = value;
 		return (*this);
