@@ -24,10 +24,12 @@ public:
     bool czyZapalone() const;
 
 	bool czyZapalonySufit() const;
+	bool czyZapalonySufit1() const;
+	bool czyZapalonySufit2() const;
 
 	void zapal(const Wejscia & w, bool s);
 
-	inline void zapalSufit(bool on) { zapalSufit1(on); zapalSufit2(on); }
+	inline void zapalSufit(bool on1, bool on2 = false) { zapalSufit1(on1); zapalSufit2(on2); }
 
 protected:
 

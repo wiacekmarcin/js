@@ -61,6 +61,15 @@ bool SwiatloLED::czyZapalonySufit() const {
 	return  m_sufit1 || m_sufit2;
 }
 
+bool SwiatloLED::czyZapalonySufit1() const {
+	return  m_sufit1;
+}
+
+bool SwiatloLED::czyZapalonySufit2() const {
+	return  m_sufit2;
+}
+
+
 void SwiatloLED::zapal(const Wejscia & w, bool s)
 {
 	//rzeczy zwiazane z ledami od sufitu przeniesione do swiatlosufit
