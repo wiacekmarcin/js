@@ -173,24 +173,238 @@ void SwiatloSufit::setLevel(int8_t lev) {
   	}
 }
 
-void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia) {
+bool SwiatloSufit::ZapalWieczor(uint8_t maska, SwiatloLED & led)
+{
+
+	switch(maska) {
+		
+		//klawisz up
+		case KLBUP:
+		case KLBUP | ZAPSUF:
+		case KLAUP:
+		case KLAUP | ZAPSUF:
+		case KLBDN:
+		case KLADN:
+		 	if (level == maxLevel) {
+			 	led.zapalSufit(maska & (KLBUP | ZAPSUF), maska & (KLAUP | ZAPSUF));
+				off();
+			} else {
+				up();
+			}
+		 	return true;
+		
+		
+		case KLBDN | ZAPSUF:
+		case KLADN | ZAPSUF:
+		 	down();
+		 	return true;
+
+		case KLADN | KLAUP:
+		case KLBDN | KLBUP:
+			on();
+			return true;
+
+		case KLADN | KLAUP | ZAPSUF:
+		case KLBDN | KLBUP | ZAPSUF:
+			off();
+			return true;
+
+		case KLAUP | ZAPLED1:
+		case KLAUP | ZAPLED2:
+		case KLBUP | ZAPLED1:
+		case KLBUP | ZAPLED2:
+			led.zapalSufit(true, true);
+			return true;
+
+		case KLBDN | ZAPLED1 | ZAPLED2:
+			led.zapalSufit(false, true);
+			return true;
+		
+		case KLADN | ZAPLED1 | ZAPLED2:
+			led.zapalSufit(true, false);
+			return true;
+
+		case KLADN | KLAUP | ZAPLED1 | ZAPLED2:
+		case KLBDN | KLBUP | ZAPLED1 | ZAPLED2:
+			led.zapalSufit(false, false);
+			return true;
+
+		case KLBDN | ZAPLED2:
+		case KLBDN | ZAPLED1:
+		case KLADN | ZAPLED1:
+		case KLADN | ZAPLED2:
+			led.zapalSufit(false, false);
+			return true;
+		
+		
+		default:
+			break;
+	}
+	return false;
+}
+
+bool SwiatloSufit::ZapalWieczoriNoc(uint8_t maska, SwiatloLED & led)
+{
+
+	switch(maska) {
+		
+		//klawisz up w nocy wieczorem zapla najpierw ledy
+		case KLBUP:
+		case KLBDN:
+			led.zapalSufit(true, false);
+			return true;
+
+		case KLAUP:
+		case KLADN:
+		 	led.zapalSufit(false, true);
+		 	return true;
+		
+		case KLBDN | KLBUP:
+		case KLADN | KLAUP:
+			led.zapalSufit(true, true);
+			return true;
+
+		case KLBDN | KLBUP | ZAPLED1 | ZAPLED2:
+		case KLADN | KLAUP | ZAPLED1 | ZAPLED2:
+			led.zapalSufit(false, false);
+			return true;
+
+		// drugie ledy mozna zalaczyc drugim klawiszem
+		case KLBUP | ZAPLED2:
+		case KLBDN | ZAPLED2:
+		case KLADN | ZAPLED1:
+		case KLAUP | ZAPLED1:
+			led.zapalSufit(true, true);
+			return true;
+
+		case KLBDN | ZAPLED1:
+			led.zapalSufit(false, false);
+			return true;
+
+		case KLADN | ZAPLED2:
+			led.zapalSufit(false, false);
+			return true;
+
+
+		case KLBUP | ZAPLED1:
+		case KLAUP | ZAPLED2:
+		case KLBUP | ZAPLED1 | ZAPLED2:
+		case KLAUP | ZAPLED2 | ZAPLED1:
+			led.zapalSufit(false, false);
+			up();
+			return true;
+
+		case KLBDN | ZAPLED1 | ZAPLED2:
+			led.zapalSufit(false, true);
+			return true;
+
+		case KLADN | ZAPLED2 | ZAPLED1:
+			led.zapalSufit(true, false);
+			return true;
+
+		case KLBDN | ZAPSUF:
+		case KLADN | ZAPSUF:
+		 	down();
+			return true;
+
+		case KLBUP | ZAPSUF:
+		case KLAUP | ZAPSUF:
+		 	up();
+			return true;
+			
+		case KLADN | KLAUP | ZAPSUF:
+		case KLBDN | KLBUP | ZAPSUF:
+			off();
+			return true;
+
+			
+		default:
+			break;
+	}
+	return false;
+}
+
+bool SwiatloSufit::ZapalDzien(uint8_t maska, SwiatloLED & led)
+{
+	if ((maska & ZAPLED2) | (maska & ZAPLED1)) {
+		led.zapalSufit(false, false); //jak juz jest dzien a swieca ledy zgas i zapal
+		up(); //swiatlo
+	}
+
+	switch(maska) {
+		
+		//klawisz up
+		case KLBUP:
+		case KLBUP | ZAPSUF:
+		case KLAUP:
+		case KLAUP | ZAPSUF:
+		 	up();
+		 	return true;
+		
+		case KLBDN:
+		case KLBDN | ZAPSUF:
+		case KLADN:
+		case KLADN | ZAPSUF:
+		 	down();
+		 	return true;
+
+		case KLADN | KLAUP:
+		case KLBDN | KLBUP:
+			on();
+			return true;
+
+		case KLADN | KLAUP | ZAPSUF:
+		case KLBDN | KLBUP | ZAPSUF:
+			off();
+			return true;
+
+		default:
+			break;
+	}
+	return false;
+}
+
+bool SwiatloSufit::ZapalNoc(uint8_t maska, SwiatloLED & led)
+{
+	return ZapalDzien(maska, led);
+}
+
+
+void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led) {
+	/**
+	 * KUCHNIA
+	 * 
+	 *    X               X               X        |       X   
+	 *                                             |
+	 *      --- LED2 ----                           
+	 *                                             L
+	 *    X               X                X       E       X
+	 *                                             D
+	 *                                             1
+	 *    * *                                        
+	 *    ----------------------------------       |       X
+	 * Jada  Kuchnia              Kuchnia B | *
+	 * lnia  A                              |
+	 *                                      | *
+	 *                                      | * Właczniki salon
+	 *                                        
+	 * */
+
+	bool czyNoc = w.czyNoc();
+	bool czyWieczor = w.czyWieczor();
+
 	uint8_t mask = 0x00;
-	mask = (mask << 1 ) | w.czyNoc();
-	mask = (mask << 1 ) | (led.czyZapalonySufit() || jadalnia);
+	mask = (mask << 1 ) | led.czyZapalonySufit2();
+	mask = (mask << 1 ) | led.czyZapalonySufit1();
 	mask = (mask << 1 ) | czyZapalone();
 	mask = (mask << 1 ) | w.czyklKuchBUp(); 
 	mask = (mask << 1 ) | w.czyklKuchBDown();
 	mask = (mask << 1 ) | w.czyklKuchAUp();
 	mask = (mask << 1 ) | w.czyklKuchADown();
 
-	constexpr uint8_t NOC 		= 0x40;
-	constexpr uint8_t ZAPLED 	= 0x20;
-	constexpr uint8_t ZAPSUF 	= 0x10;
 
-	constexpr uint8_t KLBUP 	= 0x08;
-	constexpr uint8_t KLBDN 	= 0x04;
-	constexpr uint8_t KLAUP 	= 0x02;
-	constexpr uint8_t KLADN 	= 0x01;
+
+
 
 	if ((mask & 0x0f) == 0x00) { //nie nacisnieto zadnego klawisza 
 		return ;
@@ -201,62 +415,42 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia) {
 	}
 	
 	timeChange = millis();
+	bool ret = true;
 
-	switch(mask) {
-		default:
-			break;
-		//noc
-		case NOC | KLBUP:
-		case NOC | KLBDN:
-		case NOC | KLAUP:
-		case NOC | KLADN:
-			led.zapalSufit(true);
-			break;
-		
-		// noc i zapalone ledy
-		case NOC | ZAPLED | KLBUP:
-		case NOC | ZAPLED | KLAUP:
-			led.zapalSufit(false);
-			up();
-			break;
-		
-		case NOC | ZAPLED | KLBDN:
-		case NOC | ZAPLED | KLADN:
-			led.zapalSufit(false);
-			break;
+	if (czyNoc && czyWieczor) {
+		ret = ZapalWieczoriNoc(mask, led);
+	} else if (czyWieczor) {
+		ret = ZapalWieczor(mask, led);
+	} else if (czyNoc) {
+		ret = ZapalNoc(mask, led);
+	} else {
+		ret = ZapalDzien(mask, led);
+	}
 
-		
-		//dwa nacisniete klawisze swiatlo wylaczone
-		case NOC | KLBUP | KLBDN:
-		case NOC | KLAUP | KLADN:
-		case KLBUP | KLBDN:
-		case KLAUP | KLADN:
-			on();
-			break;
+	if (!ret) {
+		Serial.println("Nie znaleziona akcja ");
+		Serial.println("noc wie le2 le1 zap bup bdn aup adn");
+		Serial.print(czyNoc ? "  1" : "  0");
+		Serial.print(" ");
+		Serial.print(czyWieczor ? "  1" : "  0");
+		Serial.print(" ");
+		Serial.print(mask & ZAPLED2 ? "  1" : "  0");
+		Serial.print(" ");
+		Serial.print(mask & ZAPLED1 ?  "  1" : "  0");
+		Serial.print(" ");
+		Serial.print(mask & ZAPSUF ? "  1" : "  0");
+		Serial.print(" ");
+		Serial.print(mask & KLBUP ? "  1" : "  0");
+		Serial.print(" ");
+		Serial.print(mask & KLBDN ? "  1" : "  0");
+		Serial.print(" ");
+		Serial.print(mask & KLAUP ? "  1" : "  0");
+		Serial.print(" ");
+		Serial.println(mask & KLADN ? "  1" : "  0");
 
-		//dwa nacisniete klawisze swiatlo wlaczone
-		case NOC | ZAPSUF | KLBUP | KLBDN :
-		case NOC | ZAPSUF | KLAUP | KLADN:
-		case ZAPSUF | KLBUP | KLBDN:
-		case ZAPSUF | KLAUP | KLADN:
-			off();
-			break;
-
-		//nie zapalone swiatlo
-		case KLBUP:
-		case KLBDN:
-		case KLAUP:
-		case KLADN:
-		case ZAPSUF | KLBUP:
-		case ZAPSUF | KLAUP:
-			up();
-			break;
-
-		case ZAPSUF | KLBDN:
-		case ZAPSUF | KLADN:
-			down();
-			break;
-
+	} else {
+		Serial.println("OK");
 	}
 }
+
 

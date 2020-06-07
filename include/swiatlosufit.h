@@ -26,7 +26,7 @@ public:
 
 	void rotate();
 
-	void zapal(const Wejscia & w, SwiatloLED & led, bool jadalnia);
+	void zapal(const Wejscia & w, SwiatloLED & led);
 
 protected:
 	void updown(bool up);
@@ -37,6 +37,10 @@ protected:
 
 	void setLevel(int8_t level);
 
+	bool ZapalDzien(uint8_t maska, SwiatloLED & led);
+	bool ZapalNoc(uint8_t maska, SwiatloLED & led);
+	bool ZapalWieczor(uint8_t maska, SwiatloLED & led);
+	bool ZapalWieczoriNoc(uint8_t maska, SwiatloLED & led);
 private:
     static constexpr uint8_t maxLed = 9; //0  1  2  3  4  5  6  7  8
 
@@ -58,6 +62,16 @@ private:
 
 	uint8_t rotationId;
 	static constexpr uint8_t nrPodzial = 4;
+
+
+	static constexpr uint8_t ZAPLED2 	= 0x40;
+	static constexpr uint8_t ZAPLED1 	= 0x20;
+	static constexpr uint8_t ZAPSUF 	= 0x10;
+
+	static constexpr uint8_t KLBUP 	= 0x08;
+	static constexpr uint8_t KLBDN 	= 0x04;
+	static constexpr uint8_t KLAUP 	= 0x02;
+	static constexpr uint8_t KLADN 	= 0x01;
 
 public :
 

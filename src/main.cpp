@@ -97,7 +97,7 @@ void setup() {
 	t = millis();
 
 	w.read();
-	printW(t, w, true);
+	//printW(t, w, true);
 }
 
 
@@ -126,7 +126,7 @@ void loop() {
 	printW(t, w);
 #endif	
 	swJadalnia.zapal(w);
-	swSufit.zapal(w, swLED, swJadalnia.czyZapalone());
+	swSufit.zapal(w, swLED);
 	swLED.zapal(w, swSufit.czyZapalone());
 	swPod.zapal(w.czyWieczor(), swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
 	
