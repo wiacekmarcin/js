@@ -38,6 +38,7 @@ private:
     static constexpr uint8_t lenWej = 6; //7
 
     Value w[lenWej];
+    uint8_t in[lenWej];
 
 //p0 czujnik zblizeniowy 0 - blisko 1 - daleko
 //p1 czujnik ruchu 0 -brak ruchu 1 - ruch
