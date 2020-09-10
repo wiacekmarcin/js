@@ -1,8 +1,6 @@
-#ifndef __WEJSCIA_H__
-#define __WEJSCIA_H__
+#include <PCF8574.h>
 
 #include "value.h"
-#include <PCF8574.h>
 class Wejscia {
 public:
     Wejscia();
@@ -21,7 +19,6 @@ public:
     
     bool isChange() const;
 
-    void print();
     
 
 private:
@@ -38,7 +35,6 @@ private:
     static constexpr uint8_t lenWej = 6; //7
 
     Value w[lenWej];
-    uint8_t in[lenWej];
 
 //p0 czujnik zblizeniowy 0 - blisko 1 - daleko
 //p1 czujnik ruchu 0 -brak ruchu 1 - ruch
@@ -49,5 +45,3 @@ private:
 //p5 wieczor
 //p6 czujnik poziomu wody
 };
-
-#endif // !__WEJSCIA_H__
