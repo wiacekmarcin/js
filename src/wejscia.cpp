@@ -5,6 +5,10 @@ Wejscia::Wejscia() :
     wejscia(0x20)
 {
 
+    w[CZ_R_LUSTRO].setLowAsTrue(); //poziom niski
+    w[DRZWI].setLowAsTrue(); //zamkniete drzwi to true
+    w[KLAWISZ].setLowAsTrue(); //poziom niski
+    
 }
 
 void Wejscia::init()
@@ -23,7 +27,8 @@ void Wejscia::init()
 void Wejscia::get() 
 {
     for (uint8_t i = 0; i < lenWej; ++i) {
-        w[i] = wejscia.digitalRead(i);
+        in[i] = wejscia.digitalRead(i);
+        w[i] = in[i];
     }
 }
 
@@ -37,22 +42,29 @@ bool Wejscia::isChange() const
 }
 
 void Wejscia::print() {
-    Serial.println("--- Wejscia --- ");
+    
+    char buff[11];
+    printtime(millis(), buff);
+
+    
+    Serial.print(" ");
+    Serial.print(buff);
+    Serial.println(" --- Wejscia --- ");
     Serial.print("- isChange : ");
     Serial.println(isChange(), DEC);
 
-    const char et[] = { "| wlacznik |" 
-                        "|   lustro |"
-                        "| cz. ruchu|" 
-                        "|    drzwi |"
-                        "|  wieczor |" 
-                        "|      noc |"};
+    const char et[] = { "| wlacznik  " 
+                        "|   lustro  "
+                        "| cz. ruchu " 
+                        "|    drzwi  "
+                        "|  wieczor  " 
+                        "|      noc  |"};
     int klucze[] = { KLAWISZ, CZ_R_LUSTRO, CZ_R_WC, DRZWI, WIECZOR, NOC };
 
     Serial.println(et);
     for (int n = 0; n < lenWej; n++) {
         Serial.print("|     ");
-        Serial.print(wejscia.digitalRead(klucze[n]) == LOW ? "L" : "H");
+        Serial.print(in[klucze[n]] == LOW ? "L" : "H");
         Serial.print("     ");
     }
     Serial.println("|");
@@ -64,12 +76,12 @@ void Wejscia::print() {
     Serial.println("|");
     for (int n = 0; n < lenWej; n++) {
         Serial.print("|    ");
-        Serial.print(w[klucze[n]].isChange() == true ? "CHG" : "NCH");
+        Serial.print(w[klucze[n]].isChange() == true ? "CHG" : "EQU");
         Serial.print("    ");
     }
     Serial.println("|");
 
-    char buff[11];
+    
     for (int n = 0; n < lenWej; n++) {
         Serial.print("|");
         printtime(w[klucze[n]].time(), buff);
@@ -85,4 +97,6 @@ void Wejscia::print() {
         Serial.print("");
     }
     Serial.println("|");
+
+    Serial.println("\n");
 }
