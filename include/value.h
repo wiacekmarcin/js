@@ -1,3 +1,8 @@
+#ifndef __VALUE_H__
+#define __VALUE_H__
+
+#include <Arduino.h>
+
 class Value {
 public:
     Value(bool high = true);
@@ -15,7 +20,8 @@ public:
     unsigned long time() const { return m_timeChange[m_val ? 1 : 0]; }
     unsigned long prevtime() const { return m_timeChange[m_val ? 0 : 1]; }
 
-    bool operator() () const const { return m_val; }
+    bool operator() () const { return m_val; }
+    operator bool () const { return m_val; }
 
     inline static uint8_t lo(bool value) { return value ? LOW : HIGH; }
     inline static uint8_t ho(bool value) { return value ? HIGH : LOW; }
@@ -28,3 +34,5 @@ private:
     bool m_prev;
     unsigned long m_timeChange[2];    
 };
+
+#endif
