@@ -1,6 +1,8 @@
-#include <PCF8574.h>
+#ifndef __WEJSCIA_H__
+#define __WEJSCIA_H__
 
 #include "value.h"
+#include <PCF8574.h>
 class Wejscia {
 public:
     Wejscia();
@@ -19,6 +21,7 @@ public:
     
     bool isChange() const;
 
+    void print();
     
 
 private:
@@ -45,3 +48,5 @@ private:
 //p5 wieczor
 //p6 czujnik poziomu wody
 };
+
+#endif // !__WEJSCIA_H__

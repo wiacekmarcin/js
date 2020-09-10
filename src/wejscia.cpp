@@ -1,4 +1,6 @@
 #include "wejscia.h"
+#include "util.h"
+
 Wejscia::Wejscia() :
     wejscia(0x20)
 {
@@ -32,4 +34,55 @@ bool Wejscia::isChange() const
             return true;
     }
     return false;
+}
+
+void Wejscia::print() {
+    Serial.println("--- Wejscia --- ");
+    Serial.print("- isChange : ");
+    Serial.println(isChange(), DEC);
+
+    const char et[] = { "| wlacznik |" 
+                        "|   lustro |"
+                        "| cz. ruchu|" 
+                        "|    drzwi |"
+                        "|  wieczor |" 
+                        "|      noc |"};
+    int klucze[] = { KLAWISZ, CZ_R_LUSTRO, CZ_R_WC, DRZWI, WIECZOR, NOC };
+
+    Serial.println(et);
+    for (int n = 0; n < lenWej; n++) {
+        Serial.print("|     ");
+        Serial.print(wejscia.digitalRead(klucze[n]) == LOW ? "L" : "H");
+        Serial.print("     ");
+    }
+    Serial.println("|");
+    for (int n = 0; n < lenWej; n++) {
+        Serial.print("|     ");
+        Serial.print(w[klucze[n]] == true ? "T" : "N");
+        Serial.print("     ");
+    }
+    Serial.println("|");
+    for (int n = 0; n < lenWej; n++) {
+        Serial.print("|    ");
+        Serial.print(w[klucze[n]].isChange() == true ? "CHG" : "NCH");
+        Serial.print("    ");
+    }
+    Serial.println("|");
+
+    char buff[11];
+    for (int n = 0; n < lenWej; n++) {
+        Serial.print("|");
+        printtime(w[klucze[n]].time(), buff);
+        Serial.print(buff);
+        Serial.print("");
+    }
+    Serial.println("|");
+
+    for (int n = 0; n < lenWej; n++) {
+        Serial.print("|");
+        printtime(w[klucze[n]].prevtime(), buff);
+        Serial.print(buff);
+        Serial.print("");
+    }
+    Serial.println("|");
 }
