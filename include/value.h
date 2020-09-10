@@ -8,6 +8,8 @@ public:
     Value(bool high = true);
     Value(const Value & val);
 
+    void setLowAsTrue() { m_conv = false; }
+
     bool val() const { return m_val; }
     
     void set(bool newVal);
