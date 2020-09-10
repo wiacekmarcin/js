@@ -3,11 +3,15 @@
 void printtime(unsigned long mls, char * buf) {
     unsigned long m = mls / 100;
        
-    buf[10] = '\0';
+    buf[11] = '\0';
 
-    buf[9] = m % 10 + '0';
-    buf[8] = '.';
+    buf[10] = m % 10 + '0';
+    buf[9] = '.';
     
+    m /= 10;
+    buf[8] = m % 10 + '0';
+        
+
     m /= 10;
     if (m > 0) {
         buf[7] = m % 10 + '0';
@@ -15,7 +19,6 @@ void printtime(unsigned long mls, char * buf) {
     {
         buf[7] = ' ';
     }
-    
 
     m /= 10;
     if (m > 0) {
