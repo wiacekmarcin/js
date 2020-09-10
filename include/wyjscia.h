@@ -1,6 +1,3 @@
-#ifndef __WYJSCIA_H__
-#define __WYJSCIA_H__
-
 #include <PCF8574.h>
 
 #include "value.h"
@@ -12,19 +9,19 @@ public:
 
     void tiktok();
 
-    void setSwiatlo(bool on = true, unsigned long timeout = 10L*60L*1000L)
+    void setSwiatlo(bool on = true, unsigned long timeout = 10*60*1000)
         { set(SWIATLO, on, timeout); }
 
-    void setSzafka(bool on = true, unsigned long timeout = 0L)
+    void setSzafka(bool on = true, unsigned long timeout = 0)
         { set(SZAFKA, on, timeout); }
 
-    void setZawor(bool on = true, unsigned long timeout = 30L*1000L )
+    void setZawor(bool on = true, unsigned long timeout = 30*1000 )
         { set(ZAWOR, on, timeout); }
 
-    void setLustro(bool on = true, unsigned long timeout = 5L*60L*1000L)
+    void setLustro(bool on = true, unsigned long timeout = 5*60*1000)
         { set(LUSTRO, on, timeout); }
 
-    void setWiatrak(bool on = true, unsigned long timeout = 1000L)
+    void setWiatrak(bool on = true, unsigned long timeout = 1000)
         { set(WIATRAK, on, timeout); }
 
     
@@ -71,5 +68,3 @@ private:
     unsigned long timeout[maxWyj] = { 0, 0, 0, 0, 0};
 
 };
-
-#endif // !__WYJSCIA_H__

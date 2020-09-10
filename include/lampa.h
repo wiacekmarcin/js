@@ -1,8 +1,5 @@
-#ifndef __LAMPA_H__
-#define __LAMPA_H__
-
 #include "wyjscia.h"
-#include "wejscia.h"
+
 class Lampa {
 public:
 
@@ -12,8 +9,6 @@ public:
 
 
 private:
-    Wejscia & wej;
     Wyjscia & wyj;
+    Wejscia & wej;
 };
-
-#endif //! ___LAMPA_H__
