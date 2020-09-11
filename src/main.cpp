@@ -117,6 +117,7 @@ void loop() {
     
     lampa.set();
     lustro.set();
+    expWyjscia.tiktok();
 
     delay(500 - (millis() - mls));
 }
