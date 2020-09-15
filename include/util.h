@@ -24,6 +24,14 @@ class Klawisz : public Value {
     bool nacisniety() const { return val(); }
 };
 
+class Czujka : public Value {
+public :
+    Czujka(const Value & val) : Value(val) { }
+
+    bool ruch() const { return val(); }
+    unsigned long bezruch() const { return val() ? 0 : time(); }
+};
+
 void printtime(unsigned long mls, char * buf);
 
 
