@@ -54,7 +54,6 @@ public:
 
 protected:
     void set(uint8_t pos, bool value, unsigned long timeout);
-    void print();
 
 private:
 
@@ -70,9 +69,6 @@ private:
 
     bool on[maxWyj] = { false, false, false, false, false };
     unsigned long timeout[maxWyj] = { 0, 0, 0, 0, 0};
-
-    bool change;
-    unsigned long mask = 0;
 
 };
 
