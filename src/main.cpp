@@ -8,6 +8,7 @@
 
 #include "lampa.h"
 #include "lustro.h"
+#include "czruchu.h"
 
 #include "OneWire.h"
 #include "DallasTemperature.h"
@@ -30,6 +31,7 @@ Wyjscia expWyjscia;
 
 Lampa lampa(expWejscia, expWyjscia);
 Lustro lustro(expWejscia, expWyjscia);
+CzRuchu czujka(expWejscia, expWyjscia);
 
 //p0 p1 p2 p3
 //p0 czujnik zblizeniowy 0 - blisko 1 - daleko
@@ -117,7 +119,19 @@ void loop() {
     
     lampa.set();
     lustro.set();
-    expWyjscia.tiktok();
+    czujka.set();
+    
+    Value drzwi = expWejscia.getDrzwi();
+    if (drzwi.isChange() && !drzwi.val()) {
+        if (expWyjscia.getSwiatlo()) {
+            expWyjscia.setSwiatlo(true, 30L*1000L);
+            if (expWyjscia.getLustro())
+                  expWyjscia.setLustro(false);
+        }
+        if (expWyjscia.getLustro()) {
+            expWyjscia.setLustro(true, 30L*1000L);
+        }
+    }
 
     delay(500 - (millis() - mls));
 }
