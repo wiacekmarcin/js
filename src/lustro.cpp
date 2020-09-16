@@ -3,7 +3,7 @@
 #include "wejscia.h"
 #include "wyjscia.h"
 
-Lustro::Lustro(Wejscia & we, Wyjscia & wy) : prevczL(false), timeFirstCzZb(0),
+Lustro::Lustro(Wejscia & we, Wyjscia & wy) : prevczL(false), prevDrzwiOtw(false), timeFirstCzZb(0),
                     wej(we), wyj(wy)
 {
 
@@ -35,7 +35,7 @@ void Lustro::set()
         timeFirstCzZb = mls;
     } else if (prevczL && czL) { 
         if (mls - timeFirstCzZb > 500) { //przez 0.5 s
-            wyj.setLustro(true, mls + drzwi.otwarte() ? OFF_DRZWIOTWARTE : OFF_DRZWIZAMKNIETE);
+            wyj.setLustro(true, mls + (drzwi.otwarte() ? OFF_DRZWIOTWARTE : OFF_DRZWIZAMKNIETE));
         }
     }
 }

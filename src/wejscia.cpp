@@ -2,7 +2,7 @@
 #include "util.h"
 
 Wejscia::Wejscia() :
-    wejscia(0x20)
+    wejscia(0x20) 
 {
 
     w[CZ_R_LUSTRO].setLowAsTrue(); //poziom niski
@@ -43,7 +43,7 @@ bool Wejscia::isChange() const
 
 void Wejscia::print() {
     
-    char buff[11];
+    char buff[12];
     printtime(millis(), buff);
 
     

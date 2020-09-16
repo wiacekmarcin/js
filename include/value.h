@@ -16,8 +16,8 @@ public:
 
     bool isChange()const { return m_prev != m_val; }
 
-    const Value& operator=(const Value & rval);
-    const Value& operator=(uint8_t ival);
+    Value& operator=(const Value & rval);
+    Value& operator=(uint8_t ival);
 
     unsigned long time() const { return m_timeChange[m_val ? 1 : 0]; }
     unsigned long prevtime() const { return m_timeChange[m_val ? 0 : 1]; }
