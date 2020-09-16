@@ -12,19 +12,19 @@ public:
 
     void tiktok();
 
-    void setSwiatlo(bool on = true, unsigned long timeout = 10L*60L*1000L)
+    void setSwiatlo(bool on = true, unsigned int timeout = 10*60)
         { set(SWIATLO, on, timeout); }
 
-    void setSzafka(bool on = true, unsigned long timeout = 0L)
+    void setSzafka(bool on = true, unsigned int timeout = 0)
         { set(SZAFKA, on, timeout); }
 
-    void setZawor(bool on = true, unsigned long timeout = 30L*1000L )
+    void setZawor(bool on = true, unsigned int timeout = 30 )
         { set(ZAWOR, on, timeout); }
 
-    void setLustro(bool on = true, unsigned long timeout = 5L*60L*1000L)
+    void setLustro(bool on = true, unsigned int timeout = 5*60)
         { set(LUSTRO, on, timeout); }
 
-    void setWiatrak(bool on = true, unsigned long timeout = 1000L)
+    void setWiatrak(bool on = true, unsigned int timeout = 1)
         { set(WIATRAK, on, timeout); }
 
     
@@ -52,8 +52,10 @@ public:
     static uint8_t o(uint8_t id, bool value);
     static bool i(uint8_t id, uint8_t value);
 
+    void print(const char *ff) const;
+
 protected:
-    void set(uint8_t pos, bool value, unsigned long timeout);
+    void set(uint8_t pos, bool value, unsigned int timeout);
 
 private:
 

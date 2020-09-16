@@ -22,17 +22,35 @@ void Lampa::set()
 
     if (klawisz.isChange() && klawisz.val()) {
         if (!noc) {
-            wyj.setSwiatlo(!onS, 5L*60L*1000);
+            Serial.print(__FILE__);
+            Serial.print(":");
+            Serial.println(__LINE__, DEC);
+            wyj.setSwiatlo(!onS, 5*60);
         } else {
-            if (onS)
+            if (onS) {
+                Serial.print(__FILE__);
+                Serial.print(":");
+                Serial.println(__LINE__, DEC);
                 wyj.setSwiatlo(false);
-            if (onL)
+            }
+            if (onL) {
+                Serial.print(__FILE__);
+                Serial.print(":");
+                Serial.println(__LINE__, DEC);
                 wyj.setLustro(false);
-            if (!onS && !onL) 
-                wyj.setLustro(true, 5L*60L*1000L);
+            }
+            if (!onS && !onL) {
+                Serial.print(__FILE__);
+                Serial.print(":");
+                Serial.println(__LINE__, DEC);
+                wyj.setLustro(true, 5*60);
+            }
             if (!onS && onL) {
+                Serial.print(__FILE__);
+                Serial.print(":");
+                Serial.println(__LINE__, DEC);
                 wyj.setLustro(false);
-                wyj.setSwiatlo(true, 5L*60L*1000L);
+                wyj.setSwiatlo(true, 5*60);
             }
         }
     }

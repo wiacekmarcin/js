@@ -100,10 +100,10 @@ void printAddress(DeviceAddress deviceAddress)
 void loop() {
 
 
-    if (++tik % 10 == 0) {
-      Serial.print("Requesting temperatures...");
+    if (++tik % 100 == 0) {
+      //Serial.print("Requesting temperatures...");
       sensors.requestTemperatures(); // Send the command to get temperatures
-      Serial.println("DONE");
+      //Serial.println("DONE");
   
       // It responds almost immediately. Let's print out the data
       printTemperature(insideThermometer); // Use a simple function to print out the data
@@ -124,14 +124,25 @@ void loop() {
     Value drzwi = expWejscia.getDrzwi();
     if (drzwi.isChange() && !drzwi.val()) {
         if (expWyjscia.getSwiatlo()) {
-            expWyjscia.setSwiatlo(true, 30L*1000L);
-            if (expWyjscia.getLustro())
+            Serial.print(__FILE__);
+            Serial.print(":");
+            Serial.println(__LINE__, DEC);
+            expWyjscia.setSwiatlo(true, 30);
+            if (expWyjscia.getLustro()) {
+                  Serial.print(__FILE__);
+                  Serial.print(":");
+                  Serial.println(__LINE__, DEC);
                   expWyjscia.setLustro(false);
+            }
         }
         if (expWyjscia.getLustro()) {
-            expWyjscia.setLustro(true, 30L*1000L);
+            Serial.print(__FILE__);
+            Serial.print(":");
+            Serial.println(__LINE__, DEC);
+            expWyjscia.setLustro(true, 30);
         }
     }
+    expWyjscia.tiktok();
 
-    delay(500 - (millis() - mls));
+    delay(300 - (millis() - mls));
 }

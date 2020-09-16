@@ -20,8 +20,8 @@ private:
     bool prevczL;
     bool prevDrzwiOtw;
     unsigned long timeFirstCzZb; 
-    static constexpr unsigned long OFF_DRZWIOTWARTE = 1L*60L*1000L;
-    static constexpr unsigned long OFF_DRZWIZAMKNIETE = 5L*60L*1000L;
+    static constexpr unsigned long OFF_DRZWIOTWARTE = 60;
+    static constexpr unsigned long OFF_DRZWIZAMKNIETE = 5*60;
     Wejscia & wej;
     Wyjscia & wyj;
     
