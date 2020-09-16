@@ -9,7 +9,7 @@ CzRuchu::CzRuchu(Wejscia & wej_ , Wyjscia & wyj_) : wej(wej_), wyj(wyj_)
 void CzRuchu::set() 
 {
     Czujka c(wej.getCzRuchu());
-    Drzwi d(wej.getDrzwi());
+    //Drzwi d(wej.getDrzwi());
 
     bool wieczor = wej.getWieczor();
     bool noc = wej.getNoc();

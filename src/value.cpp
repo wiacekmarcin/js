@@ -17,7 +17,7 @@ Value::Value(const Value & cval)
     m_timeChange[1] = cval.m_timeChange[1];
 }
 
-const Value & Value::operator=(const Value & oval) 
+Value & Value::operator=(const Value & oval) 
 {
     m_val = oval.m_val;
     m_conv = oval.m_conv;
@@ -27,7 +27,7 @@ const Value & Value::operator=(const Value & oval)
     return *this;
 }
 
-const Value& Value::operator=(uint8_t ival)
+Value& Value::operator=(uint8_t ival)
 {
     bool bval = m_conv ? hi(ival) : li(ival);
     if (bval != m_val) {
