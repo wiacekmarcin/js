@@ -18,9 +18,15 @@ void CzRuchu::set()
         if (wyj.getLustro() || wyj.getSwiatlo())
             return;
         if (!wieczor || noc) {
-            wyj.setLustro(true, 2L*60L*1000L);
+            Serial.print(__FILE__);
+            Serial.print(":");
+            Serial.println(__LINE__, DEC);
+            wyj.setLustro(true, 2*60);
         } else {
-            wyj.setSwiatlo(true, 2L*60L*1000);
+            Serial.print(__FILE__);
+            Serial.print(":");
+            Serial.println(__LINE__, DEC);
+            wyj.setSwiatlo(true, 2*60);
         }
     }
 }

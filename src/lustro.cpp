@@ -27,15 +27,27 @@ void Lustro::set()
     bool czL = wej.getLustro();
 
     if (onLustro && drzwi.isChange() && drzwi.otwarte()) { //zmiana i drzwi otwarte
+        Serial.print(__FILE__);
+        Serial.print(":");
+        Serial.println(__LINE__, DEC);
         off();
         return ;
     }
     if (! prevczL && czL) { //jezeli wykryto ruch 
+        Serial.print(__FILE__);
+        Serial.print(":");
+        Serial.println(__LINE__, DEC);
         prevczL = true;
         timeFirstCzZb = mls;
     } else if (prevczL && czL) { 
+        Serial.print(__FILE__);
+        Serial.print(":");
+        Serial.println(__LINE__, DEC);
         if (mls - timeFirstCzZb > 500) { //przez 0.5 s
-            wyj.setLustro(true, mls + (drzwi.otwarte() ? OFF_DRZWIOTWARTE : OFF_DRZWIZAMKNIETE));
+            Serial.print(__FILE__);
+            Serial.print(":");
+            Serial.println(__LINE__, DEC);
+            wyj.setLustro(true, (drzwi.otwarte() ? OFF_DRZWIOTWARTE : OFF_DRZWIZAMKNIETE));
         }
     }
 }
