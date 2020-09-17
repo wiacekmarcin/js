@@ -18,14 +18,14 @@ void CzRuchu::set()
         if (wyj.getLustro() || wyj.getSwiatlo())
             return;
         if (!wieczor || noc) {
-            Serial.print(__FILE__);
-            Serial.print(":");
-            Serial.println(__LINE__, DEC);
+            //Serial.print(__FILE__);
+            //Serial.print(":");
+            //Serial.println(__LINE__, DEC);
             wyj.setLustro(true, 2*60);
         } else {
-            Serial.print(__FILE__);
-            Serial.print(":");
-            Serial.println(__LINE__, DEC);
+            //Serial.print(__FILE__);
+            //Serial.print(":");
+            //Serial.println(__LINE__, DEC);
             wyj.setSwiatlo(true, 2*60);
         }
     }

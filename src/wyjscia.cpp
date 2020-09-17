@@ -5,7 +5,8 @@ Wyjscia::Wyjscia() :
     wyjscia(0x21)
 {
     for (int i = 0; i < maxWyj; ++i) {
-        set(i, false, 0);
+        on[i] = false;
+        timeout[i] = 0;
     }
     
 }
@@ -18,6 +19,10 @@ void Wyjscia::init()
     wyjscia.pinMode(LUSTRO, OUTPUT, HIGH);
     wyjscia.pinMode(ZAWOR, OUTPUT, HIGH);
     wyjscia.pinMode(WIATRAK, OUTPUT, LOW);
+
+    for (int i = 0; i < maxWyj; ++i) {
+        set(i, false, 0);
+    }
 }
 
 void Wyjscia::set(uint8_t pos, bool value, unsigned int tmt)
