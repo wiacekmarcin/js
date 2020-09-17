@@ -62,8 +62,8 @@ private:
     PCF8574 wyjscia;
 
     static constexpr uint8_t SWIATLO = 0;
-    static constexpr uint8_t SZAFKA = 1;
-    static constexpr uint8_t LUSTRO = 2;
+    static constexpr uint8_t LUSTRO = 1;
+    static constexpr uint8_t SZAFKA = 2;
     static constexpr uint8_t ZAWOR = 3;
     static constexpr uint8_t WIATRAK = 4;
 

@@ -50,7 +50,7 @@ void setup() {
 
   expWyjscia.init();
 
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   expWejscia.get();
   expWejscia.print();
@@ -58,7 +58,7 @@ void setup() {
     // Start up the library
   sensors.begin();
 
-  if (!sensors.getAddress(insideThermometer, 0)) Serial.println("Unable to find address for Device 0"); 
+  if (!sensors.getAddress(insideThermometer, 0)) //Serial.println("Unable to find address for Device 0"); 
   
   // set the resolution to 9 bit (Each Dallas/Maxim device is capable of several different resolutions)
   sensors.setResolution(insideThermometer, 9);
@@ -69,20 +69,20 @@ void setup() {
 void printTemperature(DeviceAddress deviceAddress)
 {
   // method 1 - slower
-  //Serial.print("Temp C: ");
-  //Serial.print(sensors.getTempC(deviceAddress));
-  //Serial.print(" Temp F: ");
-  //Serial.print(sensors.getTempF(deviceAddress)); // Makes a second call to getTempC and then converts to Fahrenheit
+  ////Serial.print("Temp C: ");
+  ////Serial.print(sensors.getTempC(deviceAddress));
+  ////Serial.print(" Temp F: ");
+  ////Serial.print(sensors.getTempF(deviceAddress)); // Makes a second call to getTempC and then converts to Fahrenheit
 
   // method 2 - faster
   float tempC = sensors.getTempC(deviceAddress);
   if(tempC == DEVICE_DISCONNECTED_C) 
   {
-    Serial.println("Error: Could not read temperature data");
+    //Serial.println("Error: Could not read temperature data");
     return;
   }
-  Serial.print("Temp C: ");
-  Serial.print(tempC);
+  //Serial.print("Temp C: ");
+  //Serial.print(tempC);
 }
 
 unsigned long tik = 0;
@@ -92,57 +92,67 @@ void printAddress(DeviceAddress deviceAddress)
 {
   for (uint8_t i = 0; i < 8; i++)
   {
-    if (deviceAddress[i] < 16) Serial.print("0");
-    Serial.print(deviceAddress[i], HEX);
+    if (deviceAddress[i] < 16) //Serial.print("0");
+    //Serial.print(deviceAddress[i], HEX);
+    ;
   }
 }
 
 void loop() {
 
-
+  
+    unsigned long mls = millis();
+    /*
     if (++tik % 100 == 0) {
-      //Serial.print("Requesting temperatures...");
+      ////Serial.print("Requesting temperatures...");
       sensors.requestTemperatures(); // Send the command to get temperatures
-      //Serial.println("DONE");
+      ////Serial.println("DONE");
   
       // It responds almost immediately. Let's print out the data
       printTemperature(insideThermometer); // Use a simple function to print out the data
      
+     expWejscia.print();
+     expWyjscia.print("loop");
     }
 
+    */
     expWejscia.get();
     if (expWejscia.isChange()) {
-      expWejscia.print();
+        expWejscia.print();
+        lampa.set();
+        lustro.set();
     }
-    unsigned long mls = millis();
     
     
-    lampa.set();
-    lustro.set();
+    
+
+
+    /*   
     czujka.set();
     
     Value drzwi = expWejscia.getDrzwi();
     if (drzwi.isChange() && !drzwi.val()) {
         if (expWyjscia.getSwiatlo()) {
-            Serial.print(__FILE__);
-            Serial.print(":");
-            Serial.println(__LINE__, DEC);
+            //Serial.print(__FILE__);
+            //Serial.print(":");
+            //Serial.println(__LINE__, DEC);
             expWyjscia.setSwiatlo(true, 30);
             if (expWyjscia.getLustro()) {
-                  Serial.print(__FILE__);
-                  Serial.print(":");
-                  Serial.println(__LINE__, DEC);
+                  //Serial.print(__FILE__);
+                  //Serial.print(":");
+                  //Serial.println(__LINE__, DEC);
                   expWyjscia.setLustro(false);
             }
         }
         if (expWyjscia.getLustro()) {
-            Serial.print(__FILE__);
-            Serial.print(":");
-            Serial.println(__LINE__, DEC);
+            //Serial.print(__FILE__);
+            //Serial.print(":");
+            //Serial.println(__LINE__, DEC);
             expWyjscia.setLustro(true, 30);
         }
     }
-    expWyjscia.tiktok();
+    */
+    //expWyjscia.tiktok();
 
-    delay(300 - (millis() - mls));
+    delay(100 - (millis() - mls));
 }

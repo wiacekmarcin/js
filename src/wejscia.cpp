@@ -5,7 +5,7 @@ Wejscia::Wejscia() :
     wejscia(0x20) 
 {
 
-    //w[CZ_R_LUSTRO].setLowAsTrue(); //poziom niski
+    w[CZ_R_LUSTRO].setLowAsTrue(); //poziom niski
     w[DRZWI].setLowAsTrue(); //zamkniete drzwi to true
     w[KLAWISZ].setLowAsTrue(); //poziom niski
     
