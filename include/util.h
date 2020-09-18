@@ -12,8 +12,8 @@ public:
     unsigned long czasOtwarte() const  {  return val() ? time() : prevtime(); }
     unsigned long czasZamkniete() const  {  return val() ? prevtime() : time(); }
 
-    bool otwarte() const  { return val() ; }
-    bool zamkniete() const  { return ! val() ; }
+    bool czyOtwarte() const  { return !val() ; }
+
     void print() {
         //Serial.print("DRZWI val=");
         //Serial.print(val(),DEC);
@@ -32,13 +32,19 @@ class Klawisz : public Value {
     public:
     Klawisz(const Value & val) : Value(val) { }
     
-    bool nacisniety() const { return val(); }
+    bool czyNacisniety() const { return val(); }
+
+    unsigned long czasWcisniecia() const { return val() ? millis() - time() : 0; }
 
     void print() {
-        //Serial.print("KLAWISZ val=");
-        //Serial.print(val(),DEC);
-        //Serial.print(" nacisniety=");
-        //Serial.println(nacisniety(),DEC);
+        Serial.print("KLAWISZ val=");
+        Serial.print(bin(),DEC);
+        Serial.print(" nacisniety=");
+        Serial.println(czyNacisniety(),DEC);
+        Serial.print(" czas wcisniecia=");
+        char buf[12];
+        printtime(czasWcisniecia(), buf);
+        Serial.println(buf);
     }
 };
 
@@ -46,16 +52,19 @@ class Czujka : public Value {
 public :
     Czujka(const Value & val) : Value(val) { }
 
-    bool ruch() const { return val(); }
-    unsigned long bezruch() const { return val() ? 0 : time(); }
+    bool czyRuch() const { return val(); }
+    unsigned long czasBezRuchu() const { return val() ? 0 : millis() - time(); }
+
 
     void print() {
-        //Serial.print("CZUJKA val=");
-        //Serial.print(val(),DEC);
-        //Serial.print(" ruch=");
-        //Serial.print(ruch(),DEC);
-        //Serial.print(" bezruch=");
-        //Serial.println(bezruch(),DEC);
+        Serial.print("CZUJKA val=");
+        Serial.print(bin(),DEC);
+        Serial.print(" ruch=");
+        Serial.print(czyRuch(),DEC);
+        Serial.print(" bezruch=");
+        char buf[12];
+        printtime(czasBezRuchu(), buf);
+        Serial.println(buf);
     }
 
 };
