@@ -11,6 +11,8 @@ public:
     void setLowAsTrue() { m_conv = false; }
 
     bool val() const { return m_val; }
+
+    uint8_t bin() const { return m_conv ? lo(m_val) : ho(m_val) ; }
     
     void set(bool newVal);
 
