@@ -13,17 +13,19 @@ public:
 
     void set();
 
-    void zapal(unsigned long mls = 5L*60L*1000L);
+    void zapal(int mls = 5*60);
+    void zapalJakoGlowne(int mls = 2*60);
     void off();
-
+protected:
+    bool setNormal();
+    bool setSpecial();
 private:
-    bool prevczL;
-    bool prevDrzwiOtw;
-    unsigned long timeFirstCzZb; 
+
     static constexpr unsigned long OFF_DRZWIOTWARTE = 60;
     static constexpr unsigned long OFF_DRZWIZAMKNIETE = 5*60;
     Wejscia & wej;
     Wyjscia & wyj;
+    bool trybNormalny;  
     
 };
 #endif // !__LUSTRO_H__
