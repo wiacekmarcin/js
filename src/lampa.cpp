@@ -1,7 +1,6 @@
 #include "lampa.h"
 #include "wyjscia.h"
 #include "wejscia.h"
-#include "czruchu.h"
 #include "util.h"
 
 Lampa::Lampa(Wejscia & we, Wyjscia & wy) : wej(we), wyj(wy)
@@ -9,72 +8,61 @@ Lampa::Lampa(Wejscia & we, Wyjscia & wy) : wej(we), wyj(wy)
 
 }
 
+void Lampa::zapalSwiatlo(unsigned int s) 
+{
+    Serial.print("Zapal swiatlo, s=");
+    Serial.println(s, DEC);
+    wyj.setSwiatlo(true, s);
+    wyj.print("Zapal swiatlo");
+}
+
+void Lampa::off()
+{
+    Serial.println("zgas swiatlo");
+    wyj.setSwiatlo(false, 0);
+    wyj.print("zgas swiatlo");
+}
+
 void Lampa::set()
 {
     bool onS = wyj.getSwiatlo();
-    bool onL = wyj.getLustro();
-
-    Drzwi drzwi(wej.getDrzwi());
     Klawisz klawisz(wej.getWlacznik());
-    bool wieczor = wej.getWieczor();
     bool noc = wej.getNoc();
-    Czujka czujka(wej.getCzRuchu());
+    bool wieczor = wej.getWieczor();
+    Czujka c(wej.getCzRuchu());
+     Drzwi d(wej.getDrzwi());
 
-    //drzwi.print();
-    //klawisz.print();
-    //czujka.print();
-    //Serial.print("Noc=");
-    //Serial.println(noc, DEC);
-    //Serial.print("Wieczor=");
-    //Serial.println(wieczor, DEC);
-
-    if (klawisz.isChange() && klawisz.nacisniety()) {
-        if (onS)
-        {
-            wyj.setSwiatlo(false);
-        }
-        else
-        {
-            wyj.setSwiatlo(true);
-        }
-        wyj.print("lampa");
+    //jezeli swieci swiatlo to klawiszem zawsze wylaczamy
+    if (onS && klawisz.isChange() && klawisz.czyNacisniety()) {
+        Serial.print(__FILE__);Serial.print(":");Serial.println(__LINE__);
+        off();
+        return;
     }
 
-    /*
-    if (klawisz.isChange() && klawisz.val()) {
-        if (!noc) {
-            //Serial.print(__FILE__);
-            //Serial.print(":");
-            //Serial.println(__LINE__, DEC);
-            wyj.setSwiatlo(!onS, 5*60);
-        } else {
-            if (onS) {
-                //Serial.print(__FILE__);
-                //Serial.print(":");
-                //Serial.println(__LINE__, DEC);
-                wyj.setSwiatlo(false);
-            }
-            if (onL) {
-                //Serial.print(__FILE__);
-                //Serial.print(":");
-                //Serial.println(__LINE__, DEC);
-                wyj.setLustro(false);
-            }
-            if (!onS && !onL) {
-                //Serial.print(__FILE__);
-                //Serial.print(":");
-                //Serial.println(__LINE__, DEC);
-                wyj.setLustro(true, 5*60);
-            }
-            if (!onS && onL) {
-                //Serial.print(__FILE__);
-                //Serial.print(":");
-                //Serial.println(__LINE__, DEC);
-                wyj.setLustro(false);
-                wyj.setSwiatlo(true, 5*60);
-            }
-        }
+    //jezeli dzien to wlaczenie klawisza zapali swiatlo
+    //dla nocy zapalanie swiatla jest w lustro
+    if (!onS && noc && klawisz.isChange() && klawisz.czyNacisniety()) {
+        Serial.print(__FILE__);Serial.print(":");Serial.println(__LINE__);
+        zapalSwiatlo(10*60);
+        return;
     }
-    */
+    
+    if (wieczor || noc || onS)
+        Serial.print(__FILE__);Serial.print(":");Serial.println(__LINE__);
+        return; //funkcjonalnosc w lustro
+
+    //ruch przy zamknietych drzwiach
+    if (! d.czyOtwarte() && c.czyRuch()) {
+        Serial.print(__FILE__);Serial.print(":");Serial.println(__LINE__);
+        zapalSwiatlo(5*60);
+        return;
+    }
+
+    //ruch przy otwartych drzwiach
+    if (d.czyOtwarte() && c.czyRuch()) {
+        Serial.print(__FILE__);Serial.print(":");Serial.println(__LINE__);
+        zapalSwiatlo(1*60);
+        return;
+    }
 }
 

@@ -8,7 +8,8 @@ public:
 
     Lampa(Wejscia & we, Wyjscia & wy);
     void set();
-
+    void zapalSwiatlo(unsigned int s);
+    void off();
 
 
 private:

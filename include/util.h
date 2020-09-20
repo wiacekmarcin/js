@@ -5,6 +5,9 @@
 
 #include "Arduino.h"
 #include "value.h"
+
+void printtime(unsigned long mls, char * buf);
+
 class Drzwi : public Value {
 public:
     Drzwi(const Value & val) : Value(val) {} ;
@@ -36,7 +39,7 @@ class Klawisz : public Value {
     bool czyNacisniety() const { return val(); }
 
     unsigned long czasWcisniecia() const { return val() ? millis() - time() : 0; }
-    unsigned long czasPrzedWciśnięciem() const { return !val() ? time() - prevtime() : 0; }
+    unsigned long czasPrzedWcisnieciem() const { return !val() ? time() - prevtime() : 0; }
 
 
     void print() {
@@ -45,7 +48,7 @@ class Klawisz : public Value {
         Serial.print(" nacisniety=");
         Serial.println(czyNacisniety(),DEC);
         Serial.print(" czas przed wcisnieciem=");
-        Serial.print(czasPrzedWciśnięciem(),DEC);
+        Serial.print(czasPrzedWcisnieciem(),DEC);
         Serial.print(" czas wcisniecia=");
         char buf[12];
         printtime(czasWcisniecia(), buf);
@@ -74,7 +77,7 @@ public :
 
 };
 
-void printtime(unsigned long mls, char * buf);
+
 
 
 #endif // !__UTIL_H__

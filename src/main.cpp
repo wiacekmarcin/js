@@ -8,7 +8,6 @@
 
 #include "lampa.h"
 #include "lustro.h"
-#include "czruchu.h"
 
 #include "OneWire.h"
 #include "DallasTemperature.h"
@@ -31,7 +30,6 @@ Wyjscia expWyjscia;
 
 Lampa lampa(expWejscia, expWyjscia);
 Lustro lustro(expWejscia, expWyjscia);
-CzRuchu czujka(expWejscia, expWyjscia);
 
 //p0 p1 p2 p3
 //p0 czujnik zblizeniowy 0 - blisko 1 - daleko
@@ -98,6 +96,7 @@ void printAddress(DeviceAddress deviceAddress)
   }
 }
 
+uint8_t loopCnt = 0;
 void loop() {
 
   
@@ -117,42 +116,13 @@ void loop() {
 
     */
     expWejscia.get();
-    if (expWejscia.isChange()) {
+    if (loopCnt || expWejscia.isChange()) {
+        loopCnt = 10;
         expWejscia.print();
         lampa.set();
         lustro.set();
+        --loopCnt;
     }
-    
-    
-    
-
-
-    /*   
-    czujka.set();
-    
-    Value drzwi = expWejscia.getDrzwi();
-    if (drzwi.isChange() && !drzwi.val()) {
-        if (expWyjscia.getSwiatlo()) {
-            //Serial.print(__FILE__);
-            //Serial.print(":");
-            //Serial.println(__LINE__, DEC);
-            expWyjscia.setSwiatlo(true, 30);
-            if (expWyjscia.getLustro()) {
-                  //Serial.print(__FILE__);
-                  //Serial.print(":");
-                  //Serial.println(__LINE__, DEC);
-                  expWyjscia.setLustro(false);
-            }
-        }
-        if (expWyjscia.getLustro()) {
-            //Serial.print(__FILE__);
-            //Serial.print(":");
-            //Serial.println(__LINE__, DEC);
-            expWyjscia.setLustro(true, 30);
-        }
-    }
-    */
-    //expWyjscia.tiktok();
 
     delay(100 - (millis() - mls));
 }
