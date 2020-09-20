@@ -8,6 +8,7 @@ CzRuchu::CzRuchu(Wejscia & wej_ , Wyjscia & wyj_) : wej(wej_), wyj(wyj_)
 
 void CzRuchu::set() 
 {
+    /*
     Czujka c(wej.getCzRuchu());
     //Drzwi d(wej.getDrzwi());
 
@@ -29,4 +30,5 @@ void CzRuchu::set()
             wyj.setSwiatlo(true, 2*60);
         }
     }
+    */
 }
