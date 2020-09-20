@@ -12,16 +12,16 @@ Lustro::Lustro(Wejscia & we, Wyjscia & wy) :
 void Lustro::zapal(int mls)
 {
     trybNormalny = true;
-    Serial.print("Zapal lustro, mls=");
+    Serial.print("Zapal lustro, s=");
     Serial.println(mls, DEC);
     wyj.setLustro(true, mls);
     wyj.print("Zapal");
 }
 
-void Lustro::zapalJakoGlowne(int mls = 2*60)
+void Lustro::zapalJakoGlowne(int mls)
 {
     trybNormalny = false;
-    Serial.print("Zapal lustro, mls=");
+    Serial.print("Zapal lustro, s=");
     Serial.println(mls, DEC);
     wyj.setLustro(true, mls);
     wyj.print("Zapal");
