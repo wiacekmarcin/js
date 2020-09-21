@@ -8,6 +8,7 @@
 
 #include "lampa.h"
 #include "lustro.h"
+#include "util.h"
 
 #include "OneWire.h"
 #include "DallasTemperature.h"
@@ -97,10 +98,19 @@ void printAddress(DeviceAddress deviceAddress)
 }
 
 uint8_t loopCnt = 0;
+unsigned long prevs = 0;
 void loop() {
 
   
     unsigned long mls = millis();
+    unsigned long s = mls / (1000L * 60);
+
+    if (prevs != s) {
+      Serial.print("Min : ");
+      Serial.println(s, DEC);
+      prevs = s;
+    }
+
     /*
     if (++tik % 100 == 0) {
       ////Serial.print("Requesting temperatures...");
@@ -116,13 +126,58 @@ void loop() {
 
     */
     expWejscia.get();
-    if (loopCnt || expWejscia.isChange()) {
-        loopCnt = 10;
-        expWejscia.print();
-        lampa.set();
-        lustro.set();
-        --loopCnt;
+    bool isChange = expWejscia.isChange();
+
+    Klawisz klawisz(expWejscia.getWlacznik());
+    bool onS = expWyjscia.getSwiatlo();
+    bool onL = expWejscia.getLustro();
+    Czujka c(expWejscia.getCzRuchu());
+    Drzwi d(expWejscia.getDrzwi());
+    Czujka czL(expWejscia.getLustro());
+
+    if (klawisz.isChange() && klawisz.czyNacisniety()) {
+        expWyjscia.setSwiatlo(!onS, 30*60); //30 min
+        expWyjscia.setLustro(false);
     }
+
+    if (!onS && c.isChange() && c.czyRuch()) {
+        expWyjscia.setLustro(true, 2*60);
+    }
+
+    if (!onL && czL.czyRuch() && czL.czasRuchu() > 500) {
+        expWyjscia.setLustro(true, 4*60);
+    }
+
+    if (!onL && !onS && d.isChange() && d.czyOtwarte()) {
+        expWyjscia.setLustro(true, 2*60);
+    }
+
+    if (onL && d.isChange() && !d.czyOtwarte()) {
+        expWyjscia.setLustro(false, 0);
+    }
+    
+
+    /*
+    if (isChange) {
+      
+          Serial.println("------------------------------------------------\nWykroto zmiany: Wyjscie przed:");
+          expWyjscia.print("MAIN BEFORE");
+          Serial.println("");
+          loopCnt = 10;
+          expWejscia.print();
+    }
+    if (lustro.set(isChange)) //tryb normalny
+        lampa.set(isChange);
+    
+
+    if (isChange) { 
+        Serial.println("\nWyjscie po:");
+        expWyjscia.print("MAIN AFTER");
+        Serial.println("------------------------------------------------\n\n");
+    }
+*/
+    expWyjscia.tiktok();
+    
 
     delay(100 - (millis() - mls));
 }

@@ -40,13 +40,13 @@ then IC as you can see in the image have 8 digital input/output:
 So to read all analog input in one trasmission you can do (even if I use  a 10millis debounce time to prevent too much read from i2c):
 ```cpp
 	PCF8574::DigitalInput di = PCF8574.digitalReadAll();
-	Serial.print(di.p0);
-	Serial.print(" - ");
-	Serial.print(di.p1);
-	Serial.print(" - ");
-	Serial.print(di.p2);
-	Serial.print(" - ");
-	Serial.println(di.p3);
+	//Serial.print(di.p0);
+	//Serial.print(" - ");
+	//Serial.print(di.p1);
+	//Serial.print(" - ");
+	//Serial.print(di.p2);
+	//Serial.print(" - ");
+	//Serial.println(di.p3);
 ```
 
 To follow a request (you can see It on [issue #5](https://github.com/xreef/PCF8574_library/issues/5)) I create a define variable to work with low memori device, if you decomment this line on .h file of the library:
@@ -59,8 +59,8 @@ Enable low memory props and gain about 7byte of memory, and you must use the met
 
  ```cpp
 	byte di = pcf8574.digitalReadAll();
-	Serial.print("READ VALUE FROM PCF: ");
-	Serial.println(di, BIN);
+	//Serial.print("READ VALUE FROM PCF: ");
+	//Serial.println(di, BIN);
 ```
 
 where di is a byte like 1110001, so you must do a bitwise operation to get the data, operation that I already do in the "normal" mode, here an example:

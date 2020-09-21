@@ -7,7 +7,7 @@ class Lampa {
 public:
 
     Lampa(Wejscia & we, Wyjscia & wy);
-    void set();
+    void set(bool p);
     void zapalSwiatlo(unsigned int s);
     void off();
 

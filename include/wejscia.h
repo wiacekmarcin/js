@@ -23,6 +23,7 @@ public:
 
     void print();
     
+    void print(PCF8574::DigitalInput inp);
 
 private:
     
