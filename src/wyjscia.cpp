@@ -27,15 +27,18 @@ void Wyjscia::init()
 
 void Wyjscia::set(uint8_t pos, bool value, unsigned int tmt)
 {
+    unsigned long mls = millis();
     wyjscia.digitalWrite(pos, o(pos, value));
     on[pos] = value;
-    timeout[pos] = 1000*tmt + millis();
+    timeout[pos] = 1000L*tmt + mls;
     Serial.print("set pos=");
     Serial.print((int)pos, DEC);
     Serial.print(" value=");
     Serial.print((int)value, DEC);
     Serial.print(" tmt=");
-    Serial.println(tmt, DEC);
+    Serial.print(tmt, DEC);
+    Serial.print(" timeout=");
+    Serial.println(timeout[pos], DEC);
 }
 
 void Wyjscia::tiktok() 
@@ -66,10 +69,17 @@ bool Wyjscia::i(uint8_t id, uint8_t value)
 void Wyjscia::print(const char * funn) const
 {
     unsigned mls = millis();
+    unsigned mms = mls % 1000;
+    Serial.print(mls, DEC);
+    Serial.print(" (");
     Serial.print(mls/1000, DEC);
     Serial.print(".");
-    Serial.print(mls%1000, DEC);
-    Serial.print(" ");
+    if (mms < 10) 
+        Serial.print("0");
+    if (mms < 100) 
+        Serial.print("0");
+    Serial.print(mms, DEC);
+    Serial.print(") ");
     Serial.println(funn);
     const char et[] = { "|  swiatlo  " 
                         "|   lustro  "

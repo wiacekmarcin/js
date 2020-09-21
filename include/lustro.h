@@ -11,14 +11,14 @@ public:
     
     Lustro(Wejscia & we, Wyjscia & wy);
 
-    void set();
+    bool set(bool p);
 
     void zapal(int mls = 5*60);
     void zapalJakoGlowne(int mls = 2*60);
     void off();
 protected:
-    bool setNormal();
-    bool setSpecial();
+    bool setNormal(bool r);
+    bool setSpecial(bool p);
 private:
 
     static constexpr unsigned long OFF_DRZWIOTWARTE = 60;

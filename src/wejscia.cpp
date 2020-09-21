@@ -20,6 +20,8 @@ void Wejscia::init()
     wejscia.pinMode(KLAWISZ, INPUT);
     wejscia.pinMode(NOC, INPUT);
     wejscia.pinMode(WIECZOR, INPUT);
+    wejscia.pinMode(6, INPUT);
+    wejscia.pinMode(7, INPUT);
     //wejscia.pinMode(CZ_POZ_WODY, INPUT);
 }
 
@@ -46,6 +48,7 @@ void Wejscia::print() {
     char buff[12];
     printtime(millis(), buff);
 
+    
     
     Serial.print(" ");
     Serial.print(buff);
@@ -97,6 +100,18 @@ void Wejscia::print() {
         Serial.print("");
     }
     Serial.println("|");
+    print(wejscia.digitalReadAll());
+}
 
-    Serial.println("\n");
+void Wejscia::print(PCF8574::DigitalInput inp)
+{
+    Serial.print("Hex:");
+    Serial.print(inp.p7);
+    Serial.print(inp.p6);
+    Serial.print(inp.p5);
+    Serial.print(inp.p4);
+    Serial.print(inp.p3);
+    Serial.print(inp.p2);
+    Serial.print(inp.p1);
+    Serial.println(inp.p0);
 }
