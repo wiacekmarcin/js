@@ -6,8 +6,7 @@
 #include "wejscia.h"
 #include "wyjscia.h"
 
-#include "lampa.h"
-#include "lustro.h"
+#include "swiatlo.h"
 #include "util.h"
 
 #include "OneWire.h"
@@ -29,8 +28,7 @@ Wejscia expWejscia;
 //PCF8574 expWyjscia(0x21);
 Wyjscia expWyjscia;
 
-Lampa lampa(expWejscia, expWyjscia);
-Lustro lustro(expWejscia, expWyjscia);
+Swiatlo lampa(expWejscia, expWyjscia);
 
 //p0 p1 p2 p3
 //p0 czujnik zblizeniowy 0 - blisko 1 - daleko
