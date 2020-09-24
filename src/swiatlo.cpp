@@ -181,9 +181,42 @@ bool Swiatlo::setNormal(bool pr)
 
 bool Swiatlo::setSpecial(bool pr)
 {
-        //tryb zastepczy swiatla glownego
-    //1. w nocy po nacisnieciu klawisza
-    //2.  dzien gdy drzwi sa otwarte i nie ma swiatla glownego a jest ruch
+    /**
+     * Mamy 3 scenariusze zapalania światła głównego i podświetlenia lustra
+     * Scenariusze to dzień, wieczór i noc.
+     * ************ DZIEN ************************
+     * 1. Włącznik zapala lampe jak jest zgaszona
+     * 2. Włącznik zgasza lampę jak jest zgaszona 
+     * 3. Czujnik ruchu zapala lustro na 1 min przy otwartych drzwiach
+     * 4. Czujnik ruchu zapala lustro na 5 min przy zamkniętych drzwiach
+     * 5. Czujnik zbliżeniowy zapala lustro na 1 min przy otwartych drzwiach 
+     * 6. Czujnik zbliżeniowy zapala lustro na 3 min przy zamkniętych drzwiach 
+     * 7. Otwarcie drzwi powoduje zgaszenie lustra
+     * 
+     * ************ WIECZOR ********************
+     * 1. Włącznik zapala lampę główną jak jest zgaszona
+     * 2. Włącznik gasi lampę główną jak jest zapalona
+     * 3. Włącznik gasi lustro przy zamkniętych drzwiach jak jest zapalone
+     * 3. Czujnik ruchu zapala lampę główną na 1 min przy otwartych drzwiach
+     * 4. Czujnik ruchu zapala lampę główną na 5 min przy zamkniętych drzwiach
+     * 5. Czujnik zbliżeniowy zapala lustro na 1 min przy otwartych drzwiach
+     * 6. Czujnik zbliżeniowy zapala lustro na 3 min przy zamknietych drzwiach
+     * 7. Otwarcie drzwi jeżeli lustro pali się to gasi lustro
+     * 8. Zamknięcie drzwi jeżeli lustro pali się to gasi je po 15s 
+     *      od zamknięcia - w ten sposób dam czas czujnikowi ruchu na zapalanie lampy
+     * 
+     * ************** NOC ***********************
+     * 1. Włącznik zapala lustro jak jest zgaszone lustro i światło
+     * 2. Włącznik zapala światło i gasi lustro jak świeci się już lustro i czas od poprzedniego 
+     *     załąćzenia włącznika mniejsze niż 10 s. 
+     * 3!. Włącznik gasi światło i/lub lustro jeżelilustro lub światło główne jeżeli odstępy między kolejnymi 
+     *     załączeniami jest większy niż 10 s //do poprawki
+     * 4. Czujnik ruchu zapala lustro główną na 1 min przy otwartych drzwiach
+     * 5. Czujnik ruchu zapala lustro główną na 3 min przy zamkniętych drzwiach
+     * 6. Czujnik zbliżeniowy zapala lustro jeżeli świeci lampa główna na 0.5 min przy otwartych drzwiach
+     * 7. Czujnik zbliżeniowy zapala lustro jeżeli świeci lampa główna na 2 min przy zamknietych drzwiach
+     * 8. Otwarcie drzwi jeżeli lustro pali i pali się światło główne to gasi lustro
+     **/
     
     bool noc = wej.getNoc();
     bool onL = wyj.getLustro();

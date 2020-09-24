@@ -46,11 +46,9 @@ void setup() {
   expWejscia.init();
 
   expWyjscia.init();
-
+  
   Serial.begin(115200);
 
-  expWejscia.get();
-  expWejscia.print();
   
     // Start up the library
   sensors.begin();
@@ -59,7 +57,9 @@ void setup() {
   
   // set the resolution to 9 bit (Each Dallas/Maxim device is capable of several different resolutions)
   sensors.setResolution(insideThermometer, 9);
- 
+
+  
+  delay(10000); //czekaj 10s az czujniki sie ustabilizuja
 }
 
 // function to print the temperature for a device
