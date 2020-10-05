@@ -30,16 +30,6 @@ Wyjscia expWyjscia;
 
 Swiatlo lampa(expWejscia, expWyjscia);
 
-//p0 p1 p2 p3
-//p0 czujnik zblizeniowy 0 - blisko 1 - daleko
-//p1 czujnik ruchu 
-//p2 drzwi 0 - zamkniete 1 - otwarte
-//p3 klawisz 0 - nacisniety 1 - w normalnej pozycji
-
-//p4 noc
-//p5 wieczor
-//p6 czujnik poziomu wody
-
 DeviceAddress insideThermometer;
 void setup() {  
   
@@ -126,13 +116,15 @@ void loop() {
     expWejscia.get();
     bool isChange = expWejscia.isChange();
 
+/*
     Klawisz klawisz(expWejscia.getWlacznik());
     bool onS = expWyjscia.getSwiatlo();
     bool onL = expWejscia.getLustro();
     Czujka c(expWejscia.getCzRuchu());
     Drzwi d(expWejscia.getDrzwi());
     Czujka czL(expWejscia.getLustro());
-
+    */
+/*
     if (klawisz.isChange() && klawisz.czyNacisniety()) {
         expWyjscia.setSwiatlo(!onS, 30*60); //30 min
         expWyjscia.setLustro(false);
@@ -153,27 +145,66 @@ void loop() {
     if (onL && d.isChange() && !d.czyOtwarte()) {
         expWyjscia.setLustro(false, 0);
     }
-    
+  */  
 
-    /*
+    
     if (isChange) {
-      
-          Serial.println("------------------------------------------------\nWykroto zmiany: Wyjscie przed:");
-          expWyjscia.print("MAIN BEFORE");
-          Serial.println("");
-          loopCnt = 10;
+        lampa.set(false);
+      /*
+          //Serial.println("------------------------------------------------\nWykroto zmiany: Wyjscie przed:");
+          //expWyjscia.print("MAIN BEFORE");
+          Serial.println(loopCnt, DEC);
+          //loopCnt = 10;
           expWejscia.print();
-    }
-    if (lustro.set(isChange)) //tryb normalny
-        lampa.set(isChange);
+          
+          //lampa.set(true);
     
-
-    if (isChange) { 
-        Serial.println("\nWyjscie po:");
-        expWyjscia.print("MAIN AFTER");
+        //Serial.println("\nWyjscie po:");
+        //expWyjscia.print("MAIN AFTER");
         Serial.println("------------------------------------------------\n\n");
+
+        if (klawisz.isChange() && klawisz.czyNacisniety()) {
+          switch(loopCnt) {
+            case 0:
+              expWyjscia.setZawor(true, 100);
+              expWyjscia.setLustro(false);
+              expWyjscia.setSwiatlo(false);
+              expWyjscia.setSzafka(false);
+              loopCnt++;
+              break;
+            case 1:
+              expWyjscia.setLustro(true, 100);
+              expWyjscia.setZawor(false);
+              expWyjscia.setSwiatlo(false);
+              expWyjscia.setSzafka(false);
+              loopCnt++;
+              break;
+            case 2:
+              expWyjscia.setSwiatlo(true, 100);
+              expWyjscia.setZawor(false);
+              expWyjscia.setLustro(false);
+              expWyjscia.setSzafka(false);
+              loopCnt++;
+              break;
+            case 3:
+              expWyjscia.setSzafka(true, 100);
+              expWyjscia.setZawor(false);
+              expWyjscia.setLustro(false);
+              expWyjscia.setSwiatlo(false);
+              loopCnt++;
+              break;
+            case 4:
+              expWyjscia.setSzafka(false);
+              expWyjscia.setZawor(false);
+              expWyjscia.setLustro(false);
+              expWyjscia.setSwiatlo(false);
+              loopCnt = 0;
+          }
+         
+        }*/
+
     }
-*/
+
     expWyjscia.tiktok();
     
 

@@ -61,16 +61,17 @@ private:
 
     PCF8574 wyjscia;
 
-    static constexpr uint8_t SWIATLO = 0;
-    static constexpr uint8_t LUSTRO = 1;
-    static constexpr uint8_t SZAFKA = 2;
-    static constexpr uint8_t ZAWOR = 3;
-    static constexpr uint8_t WIATRAK = 4;
+    static constexpr uint8_t ZAWOR = 0; //fiolet
+    static constexpr uint8_t LUSTRO = 1;  //niebieski
+    static constexpr uint8_t SWIATLO = 2;  //bialy
+    static constexpr uint8_t SZAFKA = 3;   //zolty
+    static constexpr uint8_t WY_SWIATLO = 4;
+    static constexpr uint8_t WIATRAK = 5;
 
-    static constexpr uint8_t maxWyj = 5;
+    static constexpr uint8_t maxWyj = 6;
 
-    bool on[maxWyj] = { false, false, false, false, false };
-    unsigned long timeout[maxWyj] = { 0, 0, 0, 0, 0};
+    bool on[maxWyj] = { false, false, false, false, false, false };
+    unsigned long timeout[maxWyj] = { 0, 0, 0, 0, 0, 0};
 
 };
 
