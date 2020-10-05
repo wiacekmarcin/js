@@ -33,8 +33,9 @@ private:
     static constexpr uint8_t CZ_R_WC = 1;
     static constexpr uint8_t DRZWI = 2;
     static constexpr uint8_t KLAWISZ = 3;
-    static constexpr uint8_t NOC = 4;
-    static constexpr uint8_t WIECZOR = 5;
+    static constexpr uint8_t WIECZOR =4;
+    static constexpr uint8_t NOC = 5;
+    
     //static constexpr uint8_t CZ_POZ_WODY = 6;
     static constexpr uint8_t lenWej = 6; //7
 

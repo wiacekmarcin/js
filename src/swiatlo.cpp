@@ -121,6 +121,22 @@ void Swiatlo::setSwiatlo(bool pr)
 
 bool Swiatlo::set(bool pr)
 {
+    bool noc = wej.getNoc();
+    bool wieczor = wej.getWieczor();
+
+    if (!noc && !wieczor) {
+        setDzien();
+    } else if (wieczor && !noc) {
+        setWieczor();
+    } else if (wieczor && noc) {
+        setNoc();
+    } else if (!wieczor && noc) {
+        setDzien();
+    }
+    
+    return true;
+    /*
+
     //reakcja na dlugi czas nacisniecia klawisza -> off
     Klawisz k = wej.getWlacznik();
     if (k.czasWcisniecia() > 2000) {
@@ -139,7 +155,7 @@ bool Swiatlo::set(bool pr)
 
     trybNormalny = !setSpecial(pr);
     return trybNormalny;
-    
+    */
 }
 
 bool Swiatlo::setNormal(bool pr)
@@ -179,6 +195,137 @@ bool Swiatlo::setNormal(bool pr)
     return false;
 }
 
+void Swiatlo::setDzien() 
+{
+    bool onL = wyj.getLustro();
+    bool onS = wyj.getSwiatlo();
+
+    Klawisz k = wej.getWlacznik();
+    Drzwi d = wej.getDrzwi();
+    Czujka c = wej.getCzRuchu();
+    Czujka l = wej.getLustro();
+    if (k.isChange() && k.czyNacisniety()) {
+        wyj.setSwiatlo(!onS, 10*60);
+    }
+
+    if (k.isChange() && k.czyNacisniety() && onS && onL) {
+        wyj.setSwiatlo(false);
+        wyj.setLustro(false);
+    }
+    
+    if (c.isChange() && c.czyRuch()) {
+        wyj.setLustro(true, d.czyOtwarte() ? 60 : 5*60);
+    }
+
+    if (l.isChange() && l.czyRuch()) {
+        wyj.setLustro(true, d.czyOtwarte() ? 60 : 3*60);
+    }
+
+    if (d.isChange() && d.czyOtwarte() && onL) {
+        wyj.setLustro(false);
+        if (onS && k.czasPrzedWcisnieciem() > 5*60 ) {
+            wyj.setWiatrak(true , 5*60);
+        }
+    }
+
+    if (d.isChange() && !d.czyOtwarte() && onL) {
+        wyj.setWiatrak(false); // przy zamknieciu drzwi i wlaczonym swiale wylacz wiatrak jak chodzi
+    }
+}
+
+void Swiatlo::setWieczor() {
+    bool onL = wyj.getLustro();
+    bool onS = wyj.getSwiatlo();
+
+    Klawisz k = wej.getWlacznik();
+    Drzwi d = wej.getDrzwi();
+    Czujka c = wej.getCzRuchu();
+    Czujka l = wej.getLustro();
+
+    if (k.isChange() && k.czyNacisniety() && !onS) {
+        wyj.setSwiatlo(true, 10*60);
+    }
+
+    if (k.isChange() && k.czyNacisniety() && onS) {
+        wyj.setSwiatlo(false);
+    }
+
+    if (k.isChange() && k.czyNacisniety() && onL && !d.czyOtwarte()) {
+        wyj.setSwiatlo(false);
+    }
+
+    if (k.isChange() && k.czyNacisniety() && onS && onL) {
+        wyj.setSwiatlo(false);
+        wyj.setLustro(false);
+    }
+
+    if (c.isChange() && c.czyRuch()) {
+        wyj.setSwiatlo(true, d.czyOtwarte() ? 60 : 5*60);
+    }
+
+    if (l.isChange() && l.czyRuch()) {
+        wyj.setLustro(true, d.czyOtwarte() ? 60 : 3*60);
+    }
+
+    if (d.isChange() && d.czyOtwarte() && onL) {
+        wyj.setLustro(false);
+    }
+
+    if (d.isChange() && d.czyOtwarte() && d.czasZamkniecia() > 5*60) {
+        wyj.setWiatrak(true , 5*60);
+    }
+}
+
+void Swiatlo::setNoc()
+{
+
+    bool onL = wyj.getLustro();
+    bool onS = wyj.getSwiatlo();
+    Klawisz k = wej.getWlacznik();
+    Drzwi d = wej.getDrzwi();
+    Czujka c = wej.getCzRuchu();
+    Czujka l = wej.getLustro();
+
+    if (k.isChange() && k.czyNacisniety() && !onS && !onL) {
+        wyj.setSwiatlo(true, 10*60);
+    }
+
+    if (k.isChange() && k.czyNacisniety() && onS) {
+        wyj.setSwiatlo(false);
+    }
+
+    if (k.isChange() && k.czyNacisniety() && onS && onL) {
+        wyj.setSwiatlo(false);
+        wyj.setLustro(false);
+    }
+
+    if (k.isChange() && k.czyNacisniety() && !onS && onL && k.czasPrzedWcisnieciem() < 10) {
+        wyj.setSwiatlo(false);
+        wyj.setSwiatlo(true, 10*60);
+    }
+    
+    if (k.isChange() && k.czyNacisniety() && k.czasPrzedWcisnieciem() > 10 && (onL || onS)) {
+        wyj.setSwiatlo(false);
+        wyj.setLustro(false);
+    }
+
+    if (c.isChange() && c.czyRuch() && onS) {
+        wyj.setSwiatlo(true, d.czyOtwarte() ? 60 : 5*60);
+    }
+
+    if (c.isChange() && c.czyRuch() && !onS) {
+        wyj.setLustro(true, d.czyOtwarte() ? 60 : 5*60);
+    }
+
+    if (l.isChange() && l.czyRuch() && onS) {
+        wyj.setLustro(true, d.czyOtwarte() ? 30 : 2*60);
+    }
+
+    if (d.isChange() && d.czyOtwarte() && onL) {
+        wyj.setLustro(false);
+    }
+
+}
 bool Swiatlo::setSpecial(bool pr)
 {
     /**

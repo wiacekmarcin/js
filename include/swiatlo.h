@@ -20,7 +20,9 @@ public:
     void zapalLustroJakoSwiatlo(int mls = 2*60);
     void zgasLustro();
 protected:
-    
+    void setDzien(); 
+    void setWieczor(); 
+    void setNoc(); 
     bool setNormal(bool r);
     bool setSpecial(bool p);
     void setSwiatlo(bool p);
