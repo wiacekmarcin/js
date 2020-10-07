@@ -46,6 +46,7 @@ bool Wyjscia::tiktok()
 {
     bool ret = false;
     unsigned long mls = millis();
+    bool ret = false;
     for (int i = 0; i < maxWyj; ++i) {
         if (on[i]) {
             ret = true;
@@ -53,14 +54,12 @@ bool Wyjscia::tiktok()
                 on[i] = false;
                 wyjscia.digitalWrite(i, o(i, false));
                 timeout[i] = 0;
-                Serial.print("tittok OFF = ");
-                Serial.println(i, DEC);
-                print("tiktok OFF");
+                Serial.print(mls, DEC);
+                Serial.println(" tiktok");
+                ret = true;
             }
         }
     }
-    Serial.print("tiktok call : ");
-    Serial.print(ret ? "One_ON" : "All_off");
     return ret;
 }
 
@@ -93,7 +92,7 @@ void Wyjscia::print(const char * funn) const
                         "|   lustro  "
                         "|   szafka  " 
                         "|    zawor  "
-                        "| wy_swiat  "
+                        "| swiatlo_wy"
                         "|  wiatrak  |" 
                         };
 

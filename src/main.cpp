@@ -198,8 +198,11 @@ void loop() {
   */  
 
     
-    //if (isChange) {
-     //   lampa.set(false);
+    if (isChange) {
+        Serial.println(millis(), DEC);
+        expWejscia.print();
+        lampa.set(false);
+        expWyjscia.print("main:155");
       /*
           //Serial.println("------------------------------------------------\nWykroto zmiany: Wyjscie przed:");
           //expWyjscia.print("MAIN BEFORE");
@@ -255,7 +258,9 @@ void loop() {
 
   //  }
 
-    
+    if (expWyjscia.tiktok()) {
+      expWyjscia.print("tiktok");
+    }
     
 
     //delay(100 - (millis() - mls));
