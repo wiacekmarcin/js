@@ -41,19 +41,23 @@ void Wyjscia::set(uint8_t pos, bool value, unsigned int tmt)
     Serial.println(timeout[pos], DEC);
 }
 
-void Wyjscia::tiktok() 
+bool Wyjscia::tiktok() 
 {
     unsigned long mls = millis();
+    bool ret = false;
     for (int i = 0; i < maxWyj; ++i) {
         if (on[i]) {
             if (timeout[i] < mls && timeout[i]) {
                 on[i] = false;
                 wyjscia.digitalWrite(i, o(i, false));
                 timeout[i] = 0;
-                print("tiktok");
+                Serial.print(mls, DEC);
+                Serial.println(" tiktok");
+                ret = true;
             }
         }
     }
+    return ret;
 }
 
 uint8_t Wyjscia::o(uint8_t id, bool value)
@@ -85,10 +89,11 @@ void Wyjscia::print(const char * funn) const
                         "|   lustro  "
                         "|   szafka  " 
                         "|    zawor  "
+                        "| swiatlo_wy"
                         "|  wiatrak  |" 
                         };
 
-    int klucze[] = { SWIATLO, LUSTRO, SZAFKA, ZAWOR, WIATRAK };
+    int klucze[] = { SWIATLO, LUSTRO, SZAFKA, ZAWOR, WY_SWIATLO, WIATRAK };
     Serial.println(et);
     for (int i = 0; i < maxWyj; ++i) {
         Serial.print("|     ");

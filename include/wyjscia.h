@@ -10,7 +10,7 @@ public:
 
     void init();
 
-    void tiktok();
+    bool tiktok();
 
     void setSwiatlo(bool on = true, unsigned int timeout = 10*60)
         { set(SWIATLO, on, timeout); }
