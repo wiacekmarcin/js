@@ -43,10 +43,10 @@
 //#define PCF8574_DEBUG
 
 // Uncomment for low memory usage this prevent use of complex DigitalInput structure and free 7byte of memory
-// #define PCF8574_LOW_MEMORY
+#define PCF8574_LOW_MEMORY
 
 // Uncomment for low memory usage this prevent use of complex DigitalInput structure and free 7byte of memory
-// #define PCF8574_LOW_LATENCY
+#define PCF8574_LOW_LATENCY
 
 // Select an algorithm to manage encoder progression
 //#define BASIC_ENCODER_ALGORITHM

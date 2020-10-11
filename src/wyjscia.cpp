@@ -18,6 +18,7 @@ void Wyjscia::init()
     wyjscia.pinMode(SZAFKA, OUTPUT, HIGH);
     wyjscia.pinMode(LUSTRO, OUTPUT, HIGH);
     wyjscia.pinMode(ZAWOR, OUTPUT, HIGH);
+    wyjscia.pinMode(WY_SWIATLO, OUTPUT, HIGH);
     wyjscia.pinMode(WIATRAK, OUTPUT, LOW);
 
     for (int i = 0; i < maxWyj; ++i) {
@@ -41,19 +42,26 @@ void Wyjscia::set(uint8_t pos, bool value, unsigned int tmt)
     Serial.println(timeout[pos], DEC);
 }
 
-void Wyjscia::tiktok() 
+bool Wyjscia::tiktok() 
 {
+    bool ret = false;
     unsigned long mls = millis();
     for (int i = 0; i < maxWyj; ++i) {
         if (on[i]) {
+            ret = true;
             if (timeout[i] < mls && timeout[i]) {
                 on[i] = false;
                 wyjscia.digitalWrite(i, o(i, false));
                 timeout[i] = 0;
-                print("tiktok");
+                Serial.print("tittok OFF = ");
+                Serial.println(i, DEC);
+                print("tiktok OFF");
             }
         }
     }
+    Serial.print("tiktok call : ");
+    Serial.print(ret ? "One_ON" : "All_off");
+    return ret;
 }
 
 uint8_t Wyjscia::o(uint8_t id, bool value)
@@ -85,10 +93,11 @@ void Wyjscia::print(const char * funn) const
                         "|   lustro  "
                         "|   szafka  " 
                         "|    zawor  "
+                        "| wy_swiat  "
                         "|  wiatrak  |" 
                         };
 
-    int klucze[] = { SWIATLO, LUSTRO, SZAFKA, ZAWOR, WIATRAK };
+    int klucze[] = { SWIATLO, LUSTRO, SZAFKA, ZAWOR, WY_SWIATLO, WIATRAK };
     Serial.println(et);
     for (int i = 0; i < maxWyj; ++i) {
         Serial.print("|     ");

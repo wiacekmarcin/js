@@ -9,28 +9,34 @@
 #include "swiatlo.h"
 #include "util.h"
 
-#include "OneWire.h"
-#include "DallasTemperature.h"
+//#include "OneWire.h"
+//#include "DallasTemperature.h"
 
 // Data wire is plugged into port 2 on the Arduino
-#define ONE_WIRE_BUS 9
+//#define ONE_WIRE_BUS 9
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
-OneWire oneWire(ONE_WIRE_BUS);
+//OneWire oneWire(ONE_WIRE_BUS);
 
 // Pass our oneWire reference to Dallas Temperature. 
-DallasTemperature sensors(&oneWire);
+//DallasTemperature sensors(&oneWire);
 
 
 //PCF8574 expWejscia(0x20);
-Wejscia expWejscia;
+void keyPressedOnPCF8574();
+Wejscia expWejscia(keyPressedOnPCF8574);
 
 //PCF8574 expWyjscia(0x21);
 Wyjscia expWyjscia;
 
 Swiatlo lampa(expWejscia, expWyjscia);
 
-DeviceAddress insideThermometer;
+//DeviceAddress insideThermometer;
+
+
+
+
+volatile uint8_t cntLoop = 0;
 void setup() {  
   
   expWejscia.init();
@@ -41,17 +47,20 @@ void setup() {
 
   
     // Start up the library
-  sensors.begin();
+  //sensors.begin();
 
-  if (!sensors.getAddress(insideThermometer, 0)) //Serial.println("Unable to find address for Device 0"); 
+  //if (!sensors.getAddress(insideThermometer, 0)) //Serial.println("Unable to find address for Device 0"); 
   
   // set the resolution to 9 bit (Each Dallas/Maxim device is capable of several different resolutions)
-  sensors.setResolution(insideThermometer, 9);
+  //sensors.setResolution(insideThermometer, 9);
 
   
-  delay(10000); //czekaj 10s az czujniki sie ustabilizuja
-}
+  //delay(10000); //czekaj 10s az czujniki sie ustabilizuja
 
+    cntLoop = 0;
+    expWejscia.get(0, 0);
+}
+/*
 // function to print the temperature for a device
 void printTemperature(DeviceAddress deviceAddress)
 {
@@ -84,20 +93,54 @@ void printAddress(DeviceAddress deviceAddress)
     ;
   }
 }
+*/
 
-uint8_t loopCnt = 0;
-unsigned long prevs = 0;
+unsigned long timeInt = 0L;
+void keyPressedOnPCF8574()
+{
+    cli();
+    if (!cntLoop)
+        timeInt = millis();  
+    cntLoop = 1;
+    sei();
+}
+
+
+
+void mydelay(unsigned long ms)
+{
+	uint32_t start = micros();
+
+	while (ms > 0 && !cntLoop) {
+		yield();
+		while ( ms > 0 && (micros() - start) >= 1000) {
+			ms--;
+			start += 1000;
+		}
+	}
+}
+
+unsigned long mls = 0L;
 void loop() {
 
-  
-    unsigned long mls = millis();
-    unsigned long s = mls / (1000L * 60);
+    if (cntLoop > 0) {
+        Serial.print("cntLoop=");
+        Serial.println(cntLoop, DEC);
+        --cntLoop;
+        mls = millis();
+        expWejscia.get(timeInt, mls - timeInt);
+        expWejscia.print();
+        //lampa.set(true);
 
-    if (prevs != s) {
-      Serial.print("Min : ");
-      Serial.println(s, DEC);
-      prevs = s;
+        delay(50);
+
+    } else if (expWyjscia.tiktok()) {
+        mydelay(1000); //co 1s
+    } else {
+        mydelay(60L*1000); //co 1min
+        Serial.println(".");
     }
+}
 
     /*
     if (++tik % 100 == 0) {
@@ -113,8 +156,8 @@ void loop() {
     }
 
     */
-    expWejscia.get();
-    bool isChange = expWejscia.isChange();
+    
+    //bool isChange = expWejscia.isChange();
 
 /*
     Klawisz klawisz(expWejscia.getWlacznik());
@@ -148,8 +191,8 @@ void loop() {
   */  
 
     
-    if (isChange) {
-        lampa.set(false);
+    //if (isChange) {
+     //   lampa.set(false);
       /*
           //Serial.println("------------------------------------------------\nWykroto zmiany: Wyjscie przed:");
           //expWyjscia.print("MAIN BEFORE");
@@ -203,10 +246,10 @@ void loop() {
          
         }*/
 
-    }
+  //  }
 
-    expWyjscia.tiktok();
+    
     
 
-    delay(100 - (millis() - mls));
-}
+    //delay(100 - (millis() - mls));
+//}
