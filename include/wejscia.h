@@ -5,11 +5,16 @@
 #include <PCF8574.h>
 class Wejscia {
 public:
-    Wejscia();
+    Wejscia(void (*fun)());
 
     void init();
 
-    void get();
+    void get(unsigned long timeInt, unsigned int timeAfterInt);
+
+
+
+
+
 
     const Value & getWlacznik() const { return w[KLAWISZ]; }
     const Value & getLustro() const { return w[CZ_R_LUSTRO]; }
@@ -22,8 +27,8 @@ public:
     bool isChange() const;
 
     void print();
-    
-    void print(PCF8574::DigitalInput inp);
+
+    void printBin(uint8_t inp);
 
 private:
     
@@ -51,5 +56,24 @@ private:
 //p5 wieczor
 //p6 czujnik poziomu wody
 };
+
+class Wlacznik {
+
+public:
+    Wlacznik();
+    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+
+private:
+    bool m_val;
+    bool m_prev;
+    unsigned int m_cntPush;
+    unsigned long m_timeInt;
+    unsigned int m_timeAfterInt;
+};
+
+
+
+
+
 
 #endif // !__WEJSCIA_H__
