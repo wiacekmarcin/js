@@ -9,6 +9,10 @@
 #include "swiatlo.h"
 #include "util.h"
 
+constexpr unsigned short DELAY = 200; //50;
+constexpr unsigned long TIMEBEFORESLEEP = SEC(5);
+constexpr unsigned int CNTMAXLOOP = TIMEBEFORESLEEP / DELAY;
+
 //#include "OneWire.h"
 //#include "DallasTemperature.h"
 
@@ -29,7 +33,7 @@ Wejscia expWejscia(keyPressedOnPCF8574);
 //PCF8574 expWyjscia(0x21);
 Wyjscia expWyjscia;
 
-Swiatlo lampa(expWejscia, expWyjscia);
+//Swiatlo lampa(expWejscia, expWyjscia);
 
 //DeviceAddress insideThermometer;
 
@@ -101,7 +105,7 @@ void keyPressedOnPCF8574()
     cli();
     if (!cntLoop)
         timeInt = millis();  
-    cntLoop = 1;
+    cntLoop = CNTMAXLOOP;
     sei();
 }
 
@@ -124,8 +128,8 @@ unsigned long mls = 0L;
 void loop() {
 
     if (cntLoop > 0) {
-        Serial.print("cntLoop=");
-        Serial.println(cntLoop, DEC);
+        //Serial.print("cntLoop=");
+        //Serial.println(cntLoop, DEC);
         --cntLoop;
         mls = millis();
         expWejscia.get(timeInt, mls - timeInt);
@@ -133,6 +137,9 @@ void loop() {
         //lampa.set(true);
 
         delay(50);
+        if (cntLoop == 0) {
+            expWejscia.clear();
+        }
 
     } else if (expWyjscia.tiktok()) {
         mydelay(1000); //co 1s
