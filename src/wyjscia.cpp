@@ -18,6 +18,7 @@ void Wyjscia::init()
     wyjscia.pinMode(SZAFKA, OUTPUT, HIGH);
     wyjscia.pinMode(LUSTRO, OUTPUT, HIGH);
     wyjscia.pinMode(ZAWOR, OUTPUT, HIGH);
+    wyjscia.pinMode(WY_SWIATLO, OUTPUT, HIGH);
     wyjscia.pinMode(WIATRAK, OUTPUT, LOW);
 
     for (int i = 0; i < maxWyj; ++i) {
@@ -43,20 +44,24 @@ void Wyjscia::set(uint8_t pos, bool value, unsigned int tmt)
 
 bool Wyjscia::tiktok() 
 {
+    bool ret = false;
     unsigned long mls = millis();
     bool ret = false;
     for (int i = 0; i < maxWyj; ++i) {
         if (on[i]) {
+            ret = true;
             if (timeout[i] < mls && timeout[i]) {
                 on[i] = false;
                 wyjscia.digitalWrite(i, o(i, false));
                 timeout[i] = 0;
-                Serial.print(mls, DEC);
-                Serial.println(" tiktok");
-                ret = true;
+                Serial.print("tittok OFF = ");
+                Serial.println(i, DEC);
+                print("tiktok OFF");
             }
         }
     }
+    Serial.print("tiktok call : ");
+    Serial.print(ret ? "One_ON" : "All_off");
     return ret;
 }
 
@@ -89,7 +94,7 @@ void Wyjscia::print(const char * funn) const
                         "|   lustro  "
                         "|   szafka  " 
                         "|    zawor  "
-                        "| swiatlo_wy"
+                        "| wy_swiat  "
                         "|  wiatrak  |" 
                         };
 

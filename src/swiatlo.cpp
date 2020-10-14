@@ -3,6 +3,8 @@
 #include "wejscia.h"
 #include "util.h"
 
+
+#if 0
 Swiatlo::Swiatlo(Wejscia & we, Wyjscia & wy) : wej(we), wyj(wy), trybNormalny(false)
 { 
 
@@ -461,5 +463,5 @@ bool Swiatlo::setSpecial(bool pr)
     return !trybNormalny;
  }
 
-
+#endif
 

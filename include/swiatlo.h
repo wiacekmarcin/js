@@ -4,6 +4,7 @@
 #include "wyjscia.h"
 #include "wejscia.h"
 
+#if 0
 class Swiatlo {
 public:
 
@@ -35,4 +36,5 @@ private:
     bool trybNormalny; //w jakim trybie swieci lustro
 };
 
+#endif 
 #endif //! ___LAMPA_H__

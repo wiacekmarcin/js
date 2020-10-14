@@ -3,27 +3,61 @@
 
 #include "value.h"
 #include <PCF8574.h>
+
+class ValueBase {
+public:
+    ValueBase() : m_val(false) 
+    {}
+    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt) {}
+    bool get() const { return m_val; }
+    void clear() {}
+    void print() const;
+protected:
+    bool m_val;    
+};
+
+class Wlacznik : public ValueBase {
+
+public:
+    Wlacznik();
+    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+
+    bool nacisniety() const { return m_val && m_val != m_prev && m_cntPush == 1; }
+    bool wcisniety() const  { return m_val && m_val == m_prev; }
+    unsigned int czasWcisniecia() const { return m_timeHold; }
+    bool nacisnietyDrugiRaz() const { return m_val && m_val != m_prev && m_cntPush == 2; }
+    bool nacisnietyTrzeciRaz() const { return m_val && m_val != m_prev && m_cntPush == 3; }
+
+    void print() const;
+
+    void clear() { clearState(); }
+protected:
+    void clearState();
+private:
+    bool m_prev;
+    unsigned int m_cntPush;
+    unsigned long m_timeInt;
+    unsigned long m_timePush;
+    unsigned int m_timeHold;
+};
+
+
 class Wejscia {
 public:
-    Wejscia();
+    Wejscia(void (*fun)());
 
     void init();
 
-    void get();
+    void get(unsigned long timeInt, unsigned int timeAfterInt);
+    void clear() { wl.clear(); }
+    const Wlacznik & getWlacznik() const { return wl; }
 
-    const Value & getWlacznik() const { return w[KLAWISZ]; }
-    const Value & getLustro() const { return w[CZ_R_LUSTRO]; }
-    const Value & getCzRuchu() const { return w[CZ_R_WC]; }
-    const Value & getDrzwi() const { return w[DRZWI]; }
-    const Value & getWieczor() const { return w[WIECZOR]; }
-    const Value & getNoc() const { return w[NOC]; }
-    //const Value & getPoziomWody() const { return w[CZ_POW_WODY]; }
-    
-    bool isChange() const;
+
+   
 
     void print();
-    
-    void print(PCF8574::DigitalInput inp);
+
+    void printBin(uint8_t inp);
 
 private:
     
@@ -39,17 +73,17 @@ private:
     //static constexpr uint8_t CZ_POZ_WODY = 6;
     static constexpr uint8_t lenWej = 6; //7
 
-    Value w[lenWej];
+    //Value w[lenWej];
+    //ValueBase w[lenWej];
     uint8_t in[lenWej];
 
-//p0 czujnik zblizeniowy 0 - blisko 1 - daleko
-//p1 czujnik ruchu 0 -brak ruchu 1 - ruch
-//p2 drzwi 0 - zamkniete 1 - otwarte
-//p3 klawisz 0 - nacisniety 1 - w normalnej pozycji
-
-//p4 noc
-//p5 wieczor
-//p6 czujnik poziomu wody
+    class Wlacznik wl;
 };
+
+
+
+
+
+
 
 #endif // !__WEJSCIA_H__
