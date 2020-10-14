@@ -6,7 +6,7 @@
 
 class ValueBase {
 public:
-    ValueBase() : m_val(false) 
+    ValueBase() : m_val(false), m_prev(false)
     {}
     void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt) {}
     bool get() const { return m_val; }
@@ -14,6 +14,7 @@ public:
     void print() const;
 protected:
     bool m_val;    
+    bool m_prev;
 };
 
 class Wlacznik : public ValueBase {
@@ -34,13 +35,21 @@ public:
 protected:
     void clearState();
 private:
-    bool m_prev;
+    
     unsigned int m_cntPush;
     unsigned long m_timeInt;
     unsigned long m_timePush;
     unsigned int m_timeHold;
 };
 
+class CzujnikLustro : public ValueBase {
+public:    
+    CzujnikLustro();
+    bool isRuch() const { return m_zblizenie; }
+    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+private:
+    bool m_zblizenie;
+};
 
 class Wejscia {
 public:

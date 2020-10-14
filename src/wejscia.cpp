@@ -115,10 +115,9 @@ void Wejscia::printBin(uint8_t  inp)
 }
 
 
-Wlacznik::Wlacznik() : ValueBase(), m_prev(false), m_cntPush(0)
+Wlacznik::Wlacznik() : ValueBase(), m_cntPush(0), m_timeInt(0), m_timeAfterInt(0)
 {
-    unsigned long m_timeInt;
-    unsigned int m_timeAfterInt;
+
 }
     
 void Wlacznik::clearState() 
@@ -126,13 +125,14 @@ void Wlacznik::clearState()
     m_cntPush = 0;
     m_timePush = 0;
     m_timeHold = 0;
-}    
+}
+
 void Wlacznik::set(uint8_t value, unsigned long timeInt, unsigned int timeAfterInt)
 {
     
     m_prev = m_val;
     m_val = (value == LOW); //klawisz nacisniety
-
+/*
     Serial.print("milis()=");
     Serial.println(millis(), DEC);
     Serial.print("value = ");
@@ -145,10 +145,10 @@ void Wlacznik::set(uint8_t value, unsigned long timeInt, unsigned int timeAfterI
     Serial.println(timeInt, DEC);
     Serial.print("timeAfterInt=");
     Serial.println(timeAfterInt, DEC);
-    
+*/  
     if (m_timeInt != timeInt || timeAfterInt > SEC(10)) {
         m_timeInt = timeInt;
-        Serial.println("clear");
+        //Serial.println("clear");
         clearState();
     }
 
@@ -205,7 +205,10 @@ void Wlacznik::print() const
     } 
 }
 
+CzujnikLustro::CzujnikLustro() : ValueBase()
+{
     
+}       
     
 
 
