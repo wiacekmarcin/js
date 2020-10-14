@@ -36,30 +36,6 @@ public:
     }
 };
 
-class Klawisz : public Value {
-    public:
-    Klawisz(const Value & val) : Value(val) { }
-    
-    bool czyNacisniety() const { return val(); }
-
-    unsigned long czasWcisniecia() const { return val() ? millis() - time() : 0; }
-    unsigned long czasPrzedWcisnieciem() const { return !val() ? time() - prevtime() : 0; }
-
-
-    void print() {
-        Serial.print("KLAWISZ val=");
-        Serial.print(bin(),DEC);
-        Serial.print(" nacisniety=");
-        Serial.println(czyNacisniety(),DEC);
-        Serial.print(" czas przed wcisnieciem=");
-        Serial.print(czasPrzedWcisnieciem(),DEC);
-        Serial.print(" czas wcisniecia=");
-        char buf[12];
-        printtime(czasWcisniecia(), buf);
-        Serial.println(buf);
-    }
-};
-
 class Czujka : public Value {
 public :
     Czujka(const Value & val) : Value(val) { }
