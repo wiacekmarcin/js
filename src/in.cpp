@@ -72,7 +72,7 @@ void Wlacznik::print() const
     } 
 }
 
-CzujkaZblizeniowa::CzujkaZblizeniowa() : m_timePush(0), m_timeHold(0), m_ruch(false)
+CzujkaZblizeniowa::CzujkaZblizeniowa() : m_timePush(0), m_timeHold(0), m_ruch(false), m_wykrytoRuch(false)
 {
 
 }
@@ -86,17 +86,22 @@ void CzujkaZblizeniowa::set(uint8_t value, unsigned long timeInt, unsigned int t
         m_timePush = timeAfterInt;
         m_timeHold = 0;
         m_ruch = false;
+        m_wykrytoRuch = false;
     }
-    else if (m_val && !m_prev) {
+    else if (m_val && m_prev) {
         m_timeHold = timeAfterInt - m_timeHold;
     }
     else if (!m_val && m_prev) {
         m_timeHold = 0;
         m_timePush = 0;
         m_ruch = false;
+        m_wykrytoRuch = false;
     }
 
-    if (m_timeHold > 500 && !m_ruch) {
-        //czy wykryto ruch
+    if (m_timeHold > 500 && !m_wykrytoRuch) {
+        m_wykrytoRuch = true;
+        m_ruch = true;
+    } else {
+        m_ruch = true;
     }
 }

@@ -71,6 +71,7 @@ private:
     unsigned long m_timePush;
     unsigned int m_timeHold;
     bool m_ruch;
+    bool m_wykrytoRuch;
 };
 
 
