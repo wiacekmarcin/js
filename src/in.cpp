@@ -1,9 +1,8 @@
 #include "in.h"
 
-Wlacznik::Wlacznik() : ValueBase(), m_cntPush(0)
+Wlacznik::Wlacznik() : ValueBase(), m_cntPush(0), m_timeInt(0), m_timePush(0), m_timeHold(0)
 {
-    unsigned long m_timeInt;
-    unsigned int m_timeAfterInt;
+    
 }
     
 void Wlacznik::clearState() 
@@ -13,7 +12,7 @@ void Wlacznik::clearState()
     m_timeHold = 0;
 }    
 
-void Wlacznik::set(uint8_t value, unsigned long timeInt, unsigned int timeAfterInt)
+void Wlacznik::ustaw(uint8_t value, unsigned long timeInt, unsigned int timeAfterInt)
 {
     m_prev = m_val;
     m_val = (value == LOW); //klawisz nacisniety
@@ -34,6 +33,7 @@ void Wlacznik::set(uint8_t value, unsigned long timeInt, unsigned int timeAfterI
     }
 }
 
+#ifdef DEBUG
 void Wlacznik::print() const
 {
     static unsigned long mask  = 0;
@@ -72,14 +72,22 @@ void Wlacznik::print() const
         Serial.println("---------------------------");
     } 
 }
-
+#endif
 CzujkaZblizeniowa::CzujkaZblizeniowa() : m_timeSig(0), m_timeHold(0), m_ruch(false), m_wykrytoRuch(false)
 {
 
 }
 
-void CzujkaZblizeniowa::set(uint8_t value, unsigned long timeInt, unsigned int timeAfterInt)
+void CzujkaZblizeniowa::ustaw(uint8_t value, unsigned long timeInt, unsigned int timeAfterInt)
 {
+#ifdef DEBUG    
+    Serial.print("value=");
+    Serial.print(value,DEC);
+    Serial.print(" prev=");
+    Serial.print(m_prev,DEC);
+    Serial.print(" val=");
+    Serial.println(m_val,DEC);
+#endif    
     m_prev = m_val;
     m_val = (value == HIGH); 
 
@@ -90,7 +98,7 @@ void CzujkaZblizeniowa::set(uint8_t value, unsigned long timeInt, unsigned int t
         m_wykrytoRuch = false;
     }
     else if (m_val && m_prev) {
-        m_timeHold = timeAfterInt - m_timeHold;
+        m_timeHold = timeAfterInt - m_timeSig;
     }
     else if (!m_val && m_prev) {
         m_timeHold = 0;
@@ -99,14 +107,19 @@ void CzujkaZblizeniowa::set(uint8_t value, unsigned long timeInt, unsigned int t
         m_wykrytoRuch = false;
     }
 
-    if (m_timeHold > czasZblizenia && !m_wykrytoRuch) {
+    if (m_ruch && m_timeHold > czasZblizenia && !m_wykrytoRuch) {
         m_wykrytoRuch = true;
-        m_ruch = true;
-    } else {
-        m_ruch = true;
+    } else if (m_timeHold > czasZblizenia && m_wykrytoRuch) {
+        m_wykrytoRuch = false;
+    }
+
+    if (m_ruch && m_timeHold > czasDlugiegoZblizenia && !m_wykrytoDlugiRuch) {
+        m_wykrytoRuch = true;
+    } else if (m_timeHold > czasDlugiegoZblizenia && m_wykrytoDlugiRuch) {
+        m_wykrytoDlugiRuch = false;
     }
 }
-
+#ifdef DEBUG
 void CzujkaZblizeniowa::print() const
 {
     static unsigned long mask  = 0;
@@ -119,7 +132,7 @@ void CzujkaZblizeniowa::print() const
 
     if (mask2 != mask) {
         mask = mask2;
-        Serial.println("------- Wlacznik ------");
+        Serial.println("------- Czujka zblizeniowa ------");
         Serial.print("val = ");
         Serial.println(m_val, DEC);
         Serial.print("prev = ");
@@ -128,23 +141,25 @@ void CzujkaZblizeniowa::print() const
         Serial.println(m_ruch, DEC);
         Serial.print("wykrytoRuch = ");
         Serial.println(m_wykrytoRuch);
-        Serial.print("timePush = ");
+        Serial.print("timeSig = ");
         Serial.println(m_timeSig, DEC);
         Serial.print("timeHold = ");
         Serial.println(m_timeHold, DEC);
         Serial.println("****");
         Serial.print("czyRuch = ");
         Serial.println(czyRuch(), DEC);
-        Serial.print("czyRuch = ");
-        Serial.println(czyRuch(), DEC);
         Serial.println("---------------------------");
     } 
 }
+#endif
 
-void CzujkaZblizeniowa::clear() 
+void CzujkaZblizeniowa::czysc() 
 {
     m_timeSig = 0;
     m_timeHold = 0;
+    m_ruch = false;
+    m_wykrytoRuch = false;
+    m_wykrytoDlugiRuch = false;
 }    
 
 
@@ -155,7 +170,7 @@ CzujkaRuchu::CzujkaRuchu() : m_timelastMove(0), m_ruch(false)
     
 }
 
-void CzujkaRuchu::set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt)
+void CzujkaRuchu::ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt)
 {
     m_prev = m_val;
     m_val = (val == HIGH); 
@@ -174,7 +189,7 @@ Drzwi::Drzwi() : m_otwarte(false)
 }
 
 
-void Drzwi::set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt)
+void Drzwi::ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt)
 {
     m_prev = m_val;
     m_val = (val == LOW); 

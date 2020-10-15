@@ -11,7 +11,7 @@ void printtime(unsigned long mls, char * buf);
 #define SEC(X) ((unsigned long)(1000L*(X)))
 #define MIN(X) ((unsigned long)(6000L*(X)))
 
-
+/*
 class Drzwi : public Value {
 public:
     Drzwi(const Value & val) : Value(val) {} ;
@@ -56,7 +56,7 @@ public :
     }
 
 };
-
+*/
 
 
 

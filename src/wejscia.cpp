@@ -34,6 +34,7 @@ void Wejscia::init()
 void Wejscia::get(unsigned long timeInt, unsigned int timeAfterInt) 
 {
     static uint8_t inSave = 0;
+    Serial.println(millis(),DEC);
     uint8_t inD = wejscia.digitalReadAll();
     if (inD != inSave) {
         inSave = inD;
@@ -42,7 +43,10 @@ void Wejscia::get(unsigned long timeInt, unsigned int timeAfterInt)
     }
     
 
-    wl.set(MASK(inD, KLAWISZ), timeInt, timeAfterInt);
+    wl.ustaw(MASK(inD, KLAWISZ), timeInt, timeAfterInt);
+    czb.ustaw(MASK(inD, CZ_R_LUSTRO), timeInt, timeAfterInt);
+
+
 
 
     for (uint8_t i = 0; i < lenWej; ++i) {
@@ -80,7 +84,11 @@ void Wejscia::print() {
     }
     Serial.println("|");
     */
+#ifdef DEBUG   
     wl.print();
+    czb.print();
+#endif
+
 }
 
 void Wejscia::printBin(uint8_t  inp)

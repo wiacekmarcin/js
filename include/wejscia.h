@@ -13,7 +13,7 @@ public:
     void init();
 
     void get(unsigned long timeInt, unsigned int timeAfterInt);
-    void clear() { wl.clear(); }
+    void czysc() { wl.czysc(); }
     const Wlacznik & getWlacznik() const { return wl; }
 
 
@@ -42,6 +42,7 @@ private:
     uint8_t in[lenWej];
 
     class Wlacznik wl;
+    class CzujkaZblizeniowa czb;
 };
 
 

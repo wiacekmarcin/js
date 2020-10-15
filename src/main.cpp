@@ -138,7 +138,7 @@ void loop() {
 
         delay(50);
         if (cntLoop == 0) {
-            expWejscia.clear();
+            expWejscia.czysc();
         }
 
     } else if (expWyjscia.tiktok()) {

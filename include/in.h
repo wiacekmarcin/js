@@ -7,10 +7,10 @@
 
 /**
  * Podstawowa klasa dla wlacznika, czujnika ruchu i czujnia zblizeniowego
- * funkcje set - ustawia wartosc odczytana z pcf8572 i tutaj trzeba zrobic
+ * funkcje ustaw - ustawia wartosc odczytana z pcf8572 i tutaj trzeba zrobic
  * rozpoznanie czy LOW jest true czy HIGH jest true
  * funkcja get pobiera wartocsc true/false
- * funkcje clear - czysci dodatkowe parametry
+ * funkcje czysc - czysci dodatkowe parametry
  * funkcja print - drukuje do Serial zawartosc klasy
  * m_val - biezaca wartosc
  * m_prev - poprzednia wartosc m_val/m_prev sluza do jednoznacznego
@@ -18,12 +18,15 @@
  */
 class ValueBase {
 public:
-    ValueBase() : m_val(false) 
+    ValueBase() : m_val(false), m_prev(false) 
     {}
-    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt) {}
-    bool get() const { return m_val; }
-    void clear() {}
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt) {}
+   
+    void czysc() {}
+#ifdef DEBUG    
     void print() const;
+#endif
+
 protected:
     bool m_val; 
     bool m_prev;   
@@ -41,7 +44,7 @@ protected:
 class Wlacznik : public ValueBase {
 public:
     Wlacznik();
-    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
 
     bool nacisniety() const { return m_val && m_val != m_prev && m_cntPush == 1; }
     bool wcisniety() const  { return m_val && m_val == m_prev; }
@@ -49,9 +52,11 @@ public:
     bool nacisnietyDrugiRaz() const { return m_val && m_val != m_prev && m_cntPush == 2; }
     bool nacisnietyTrzeciRaz() const { return m_val && m_val != m_prev && m_cntPush == 3; }
 
+#ifdef DEBUG
     void print() const;
+#endif
 
-    void clear() { clearState(); }
+    void czysc() { clearState(); }
 protected:
     void clearState();
 private:
@@ -67,23 +72,30 @@ private:
  * Jeżeli czujnik wykryje bliską obecność przez około 0.5s to 
  * podaje raz sygnał o zmianie
  * funkcja czyRuch - zwraca ruch przez jeden cykl jezeli przez wykryto ruch dlizej niz czasZblizenia
+ * funkcja czyDlugiRuch - zwraca ruch przez jeden cykl jezeli przez wykryto ruch dlizej niz czasDlugiegoZblizenia
  * 
  */
 class CzujkaZblizeniowa : public ValueBase {
 public:
     CzujkaZblizeniowa();
-    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
-    bool czyRuch() const { return m_ruch; }
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    bool czyRuch() const { return m_wykrytoRuch; }
+    bool czyDlugiRuch() const { return m_wykrytoDlugiRuch; }
 
+#ifdef DEBUG
     void print() const;
-    void clear() ;
+#endif
+
+    void czysc() ;
 
 private:
     unsigned long m_timeSig;
     unsigned int m_timeHold;
     bool m_ruch;
     bool m_wykrytoRuch;
+    bool m_wykrytoDlugiRuch;
     static constexpr unsigned long czasZblizenia = 500; //ms
+    static constexpr unsigned long czasDlugiegoZblizenia = 5000; //ms
 };
 
 /**
@@ -95,7 +107,7 @@ class CzujkaRuchu : public ValueBase {
 public:
     CzujkaRuchu();
 
-    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
     bool czyRuch() const { return m_ruch; }
 
 private:
@@ -105,9 +117,9 @@ private:
 
 class Drzwi : public ValueBase {
 public:
-    Drzwi::Drzwi();
+    Drzwi();
 
-    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
     
     bool czyOtwarte() const { return m_otwarte; }
     bool czyZamkniete() const { return !m_otwarte; }
