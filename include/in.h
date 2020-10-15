@@ -36,6 +36,7 @@ protected:
  * funkcja czasWcisniecia zwraca czas wcisniecia (maks okolo 1 minuty - zanim zestartuje sie cykl)
  * funkcja nacisnietyDrugiRaz zwraca true jezeli klawisz zostal dwukrotnie wcisniety w ciagu 10s 
  * funkcja nacisnietyTrzeciRaz zwraca true jezeli klawisz zostal trzykrotnie wcisniety w ciagu 10s 
+ * 
  */
 class Wlacznik : public ValueBase {
 public:
@@ -54,7 +55,6 @@ public:
 protected:
     void clearState();
 private:
-    bool m_prev;
     unsigned int m_cntPush;
     unsigned long m_timeInt;
     unsigned long m_timePush;
@@ -62,18 +62,58 @@ private:
     static constexpr unsigned long maxTimeMultiClick = SEC(10); //maksymalny czas podczas ktorego mozna 1,2,3 razy nacisnac klawisz
 };
 
+/**
+ * Klasa czujnika zbliżeniowego
+ * Jeżeli czujnik wykryje bliską obecność przez około 0.5s to 
+ * podaje raz sygnał o zmianie
+ * funkcja czyRuch - zwraca ruch przez jeden cykl jezeli przez wykryto ruch dlizej niz czasZblizenia
+ * 
+ */
 class CzujkaZblizeniowa : public ValueBase {
 public:
     CzujkaZblizeniowa();
     void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
     bool czyRuch() const { return m_ruch; }
+
+    void print() const;
+    void clear() ;
+
 private:
-    unsigned long m_timePush;
+    unsigned long m_timeSig;
     unsigned int m_timeHold;
     bool m_ruch;
     bool m_wykrytoRuch;
+    static constexpr unsigned long czasZblizenia = 500; //ms
 };
 
+/**
+ * Klasa czujnika ruchu
+ * Klasa odpowiedzialna jest za wykrycie ruchu
+ * Podaje sygnał tylko raz jak zmieni się z sygnał z LOW na HIGH
+ **/
+class CzujkaRuchu : public ValueBase {
+public:
+    CzujkaRuchu();
+
+    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    bool czyRuch() const { return m_ruch; }
+
+private:
+    unsigned long m_timelastMove;
+    bool m_ruch;
+};
+
+class Drzwi : public ValueBase {
+public:
+    Drzwi::Drzwi();
+
+    void set(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    
+    bool czyOtwarte() const { return m_otwarte; }
+    bool czyZamkniete() const { return !m_otwarte; }
+private:
+    bool m_otwarte;
+};
 
 #endif  //_IN_H_
 
