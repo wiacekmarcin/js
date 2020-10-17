@@ -165,7 +165,7 @@ void CzujkaZblizeniowa::czysc()
 
 
 
-CzujkaRuchu::CzujkaRuchu() : m_timelastMove(0), m_ruch(false)
+CzujkaRuchu::CzujkaRuchu() : m_timelastMove(0), m_prevtimelastMove(0), m_ruch(false)
 {
     
 }
@@ -176,14 +176,52 @@ void CzujkaRuchu::ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAft
     m_val = (val == HIGH); 
 
     if (!m_ruch && m_val && !m_prev) {
+        m_prevtimelastMove = m_timelastMove;
         m_timelastMove = timeAfterInt + timeAfterInt;
         m_ruch = true;
     } else if (m_ruch) {
         m_ruch = false;
     }
 }
+#ifdef DEBUG
+void CzujkaRuchu::print() const 
+{
+    static unsigned long mask  = 0;
+    unsigned long mask2  = 0;
 
-Drzwi::Drzwi() : m_otwarte(false)
+    mask2 |= 0x01 & m_val;
+    mask2 |= (0x01 & m_prev) << 1;
+    mask2 |= (0x01 & m_ruch) << 2;
+
+    if (mask2 != mask) {
+        mask = mask2;
+        Serial.println("------- Czujka ruchu ------");
+        Serial.print("val = ");
+        Serial.println(m_val, DEC);
+        Serial.print("prev = ");
+        Serial.println(m_prev, DEC);
+        Serial.print("ruch = " );
+        Serial.println(m_ruch, DEC);
+        Serial.print("timelastMove = ");
+        Serial.println(m_timelastMove, DEC);
+        Serial.println("****");
+        Serial.print("czyRuch = ");
+        Serial.println(czyRuch(), DEC);
+        Serial.print("czasBezRuchu = ");
+        Serial.println(czasBezRuchu(), DEC);
+        Serial.println("---------------------------");
+    } 
+}
+#endif
+
+void CzujkaRuchu::czysc() 
+{
+    //m_timelastMove = 0;   //nie wiem czy chce to czyscic po przerwaniu
+    //m_prevtimelastMove = 0; // jak wyzej
+    m_ruch = 0;
+}
+
+Drzwi::Drzwi() : ValueBase(), m_otwarte(false), m_timeOpen(0), m_timeClose(0)
 {
 
 }
@@ -192,9 +230,112 @@ Drzwi::Drzwi() : m_otwarte(false)
 void Drzwi::ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt)
 {
     m_prev = m_val;
-    m_val = (val == LOW); 
+    m_val = (val == HIGH); //otwarte
 
     if (m_val && !m_prev) {
-        
+        m_otwarte = true;
+        m_timeOpen = timeInt + timeAfterInt;       
+    } else if (!m_val && m_prev) {
+        m_otwarte = false;
+        m_timeClose = timeInt + timeAfterInt;
     }
 }
+
+void Drzwi::czysc() 
+{
+    //nie wiem czy jest cos do czyszczeni
+}
+
+#ifdef DEBUG
+void Drzwi::print() const 
+{
+    static unsigned long mask  = 0;
+    unsigned long mask2  = 0;
+
+    mask2 |= 0x01 & m_val;
+    mask2 |= (0x01 & m_prev) << 1;
+    mask2 |= (0x01 & m_otwarte) << 2;
+
+    if (mask2 != mask) {
+        mask = mask2;
+        Serial.println("---------- Drzwi ---------");
+        Serial.print("val = ");
+        Serial.println(m_val, DEC);
+        Serial.print("prev = ");
+        Serial.println(m_prev, DEC);
+        Serial.print("otwarte = " );
+        Serial.println(m_otwarte, DEC);
+        Serial.print("timeOpen = ");
+        Serial.println(m_timeOpen, DEC);
+        Serial.print("timeClose = ");
+        Serial.println(m_timeClose, DEC);
+        Serial.println("****");
+        Serial.print("czyOtwarte = ");
+        Serial.println(czyOtwarte(), DEC);
+        Serial.print("czyZamkniete = ");
+        Serial.println(czyZamkniete(), DEC);
+        Serial.print("czasOtwarcia = ");
+        Serial.println(czasOtwarcia(), DEC);
+        Serial.print("czasZamkniecia = ");
+        Serial.println(czasZamkniecia(), DEC);
+        Serial.println("---------------------------");
+    } 
+}
+#endif
+
+PoraDnia::PoraDnia() : m_noc(false), m_wieczor(false), m_prevnoc(false),  m_prevwieczor(false)
+{
+
+}
+
+PoraDnia::Pora PoraDnia::getPoraDnia() const
+{
+    if (m_noc && m_prevnoc)
+        return NOC;
+    else if (m_wieczor && m_prevwieczor)
+        return WIECZOR;
+    else
+        return DZIEN;
+}
+
+void PoraDnia::ustaw(uint8_t valN, uint8_t valW)
+{
+    m_prevnoc = m_noc;
+    m_noc = valN == HIGH;
+
+    m_prevwieczor = m_wieczor;
+    m_wieczor = valW == HIGH;
+}
+
+#ifdef DEBUG
+void PoraDnia::print() const
+{
+    static unsigned long mask  = 0;
+    unsigned long mask2  = 0;
+
+    mask2 |= 0x01 & m_noc;
+    mask2 |= (0x01 & m_prevnoc) << 1;
+    mask2 |= (0x01 & m_wieczor) << 2;
+    mask2 |= (0x01 & m_prevwieczor) << 3;
+    if (mask2 != mask) {
+        mask = mask2;
+        Serial.println("---------- Pora dnia ---------");
+        Serial.print("noc = ");
+        Serial.println(m_noc, DEC);
+        Serial.print("prevnoc = ");
+        Serial.println(m_prevnoc, DEC);
+        Serial.print("wieczor = ");
+        Serial.println(m_wieczor, DEC);
+        Serial.print("prevwieczor = ");
+        Serial.println(m_prevwieczor, DEC);
+        Serial.println("-------");
+
+        Serial.print("czyWieczor() = ");
+        Serial.println(czyWieczor());
+        Serial.print("czyNoc() = ");
+        Serial.println(czyNoc());
+        Serial.print("czyDzien() = ");
+        Serial.println(czyDzien());
+    }
+}
+#endif

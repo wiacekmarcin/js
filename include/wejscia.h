@@ -1,7 +1,6 @@
 #ifndef __WEJSCIA_H__
 #define __WEJSCIA_H__
 
-#include "value.h"
 #include <PCF8574.h>
 
 #include "in.h"
@@ -15,13 +14,12 @@ public:
     void get(unsigned long timeInt, unsigned int timeAfterInt);
     void czysc() { wl.czysc(); }
     const Wlacznik & getWlacznik() const { return wl; }
-
-
+    const CzujkaZblizeniowa & getCzujkaZbl() const { return czBl; }
+    const CzujkaRuchu & getCzujkaRuchu() const { return czR; }
+    const Drzwi & getDrzwi() const { return drz; }
    
 
     void print();
-
-    void printBin(uint8_t inp);
 
 private:
     
@@ -37,12 +35,11 @@ private:
     //static constexpr uint8_t CZ_POZ_WODY = 6;
     static constexpr uint8_t lenWej = 6; //7
 
-    //Value w[lenWej];
-    //ValueBase w[lenWej];
-    uint8_t in[lenWej];
-
     class Wlacznik wl;
-    class CzujkaZblizeniowa czb;
+    class CzujkaZblizeniowa czBl;
+    class CzujkaRuchu czR;
+    class Drzwi drz;
+    class PoraDnia prd;
 };
 
 

@@ -1,10 +1,10 @@
 #ifndef     _IN_H_
 #define     _IN_H_
 
-#include "value.h"
 #include <PCF8574.h>
 #include "util.h"
 
+#define DEBUG
 /**
  * Podstawowa klasa dla wlacznika, czujnika ruchu i czujnia zblizeniowego
  * funkcje ustaw - ustawia wartosc odczytana z pcf8572 i tutaj trzeba zrobic
@@ -102,6 +102,9 @@ private:
  * Klasa czujnika ruchu
  * Klasa odpowiedzialna jest za wykrycie ruchu
  * Podaje sygnał tylko raz jak zmieni się z sygnał z LOW na HIGH
+ * m_timeLastMove - znacznik czasowy kiedy wystąpił ruch - informacja jak dawno nie było ruchu
+ * m_prevtimelastMove - zapasowa informacja o wystąpieniu ruchu - (poprzedni parametr jest ustawiany
+ * na nowo podczas ruchu, przydatne aby okreslic jak dawno wystapil poprzedni ruch)
  **/
 class CzujkaRuchu : public ValueBase {
 public:
@@ -109,9 +112,17 @@ public:
 
     void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
     bool czyRuch() const { return m_ruch; }
+    unsigned long czasBezRuchu() const { return millis() - m_timelastMove; }
+    unsigned long poprzCzasBezRuchu() const { return millis() - m_prevtimelastMove; }
 
+#ifdef DEBUG
+    void print() const;
+#endif
+
+    void czysc() ;
 private:
     unsigned long m_timelastMove;
+    unsigned long m_prevtimelastMove;
     bool m_ruch;
 };
 
@@ -123,8 +134,47 @@ public:
     
     bool czyOtwarte() const { return m_otwarte; }
     bool czyZamkniete() const { return !m_otwarte; }
+    unsigned long czasOtwarcia() const { return m_otwarte ? millis() - m_timeOpen : 0; }
+    unsigned long czasZamkniecia() const { return m_otwarte ? 0 : millis() - m_timeClose; }
+
+#ifdef DEBUG
+    void print() const;
+#endif
+
+    void czysc() ;
+
 private:
     bool m_otwarte;
+    unsigned long m_timeOpen;
+    unsigned long m_timeClose;
+};
+
+class PoraDnia  {
+public:
+    typedef enum epora {
+        DZIEN,
+        WIECZOR,
+        NOC
+    } Pora;
+
+    PoraDnia();
+    void ustaw(uint8_t valN, uint8_t valW);
+    bool czyWieczor() const { return m_wieczor && m_prevwieczor; }
+    bool czyNoc() const { return m_noc & m_prevwieczor; }
+    bool czyDzien() const { return !((m_wieczor && m_prevwieczor) || (m_noc & m_prevwieczor)); }
+
+    Pora getPoraDnia() const;
+    
+#ifdef DEBUG
+    void print() const;
+#endif
+
+    void czysc() { }
+private:
+    bool m_noc;
+    bool m_wieczor;
+    bool m_prevnoc;
+    bool m_prevwieczor;
 };
 
 #endif  //_IN_H_

@@ -24,8 +24,8 @@ void Wejscia::init()
     wejscia.pinMode(KLAWISZ, INPUT);
     wejscia.pinMode(NOC, INPUT);
     wejscia.pinMode(WIECZOR, INPUT);
-    wejscia.pinMode(6, INPUT);
-    wejscia.pinMode(7, INPUT);
+    //wejscia.pinMode(6, INPUT);
+    //wejscia.pinMode(7, INPUT);
     //wejscia.pinMode(CZ_POZ_WODY, INPUT);
 
 }
@@ -44,82 +44,23 @@ void Wejscia::get(unsigned long timeInt, unsigned int timeAfterInt)
     
 
     wl.ustaw(MASK(inD, KLAWISZ), timeInt, timeAfterInt);
-    czb.ustaw(MASK(inD, CZ_R_LUSTRO), timeInt, timeAfterInt);
+    czBl.ustaw(MASK(inD, CZ_R_LUSTRO), timeInt, timeAfterInt);
+    czR.ustaw(MASK(inD, CZ_R_WC), timeInt, timeAfterInt);
+    drz.ustaw(MASK(inD, DRZWI), timeInt, timeAfterInt);
+    prd.ustaw(MASK(inD, NOC), MASK(inD, WIECZOR));
 
-
-
-
-    for (uint8_t i = 0; i < lenWej; ++i) {
-        in[i] = MASK(inD,i);
-    }
-    //printBin(inD);
-    //print();
 }
 
-void Wejscia::print() {
-    /*
-    char buff[12];
-    printtime(millis(), buff);
-
-    
-    
-    Serial.print(" ");
-    Serial.println(buff);
-    Serial.println(" --- Wejscia --- ");
-    Serial.print("- isChange : ");
-    
-    const char et[] = { "| wlacznik  " 
-                        "|   lustro  "
-                        "| cz. ruchu " 
-                        "|    drzwi  "
-                        "|  wieczor  " 
-                        "|      noc  |"};
-    int klucze[] = { KLAWISZ, CZ_R_LUSTRO, CZ_R_WC, DRZWI, WIECZOR, NOC };
-
-    Serial.println(et);
-    for (int n = 0; n < lenWej; n++) {
-        Serial.print("|     ");
-        Serial.print(in[klucze[n]] == LOW ? "L" : "H");
-        Serial.print("     ");
-    }
-    Serial.println("|");
-    */
+void Wejscia::print() 
+{
 #ifdef DEBUG   
     wl.print();
-    czb.print();
+    czBl.print();
+    czR.print();
+    drz.print();
+    prd.print();
 #endif
 
-}
-
-void Wejscia::printBin(uint8_t  inp)
-{
-
-    struct DigitalInput {
-			uint8_t p0;
-			uint8_t p1;
-			uint8_t p2;
-			uint8_t p3;
-			uint8_t p4;
-			uint8_t p5;
-			uint8_t p6;
-			uint8_t p7;
-	};
-    union D {
-        struct DigitalInput a;
-        byte b;
-    } d;
-    d.b = inp;
-    struct DigitalInput in = d.a;
-
-    Serial.print("Hex:");
-    Serial.print(in.p7);
-    Serial.print(in.p6);
-    Serial.print(in.p5);
-    Serial.print(in.p4);
-    Serial.print(in.p3);
-    Serial.print(in.p2);
-    Serial.print(in.p1);
-    Serial.println(in.p0);
 }
 
 

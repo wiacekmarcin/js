@@ -3,7 +3,6 @@
 
 #include <PCF8574.h>
 
-#include "value.h"
 class Wyjscia {
 public:
     Wyjscia();

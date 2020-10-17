@@ -61,7 +61,7 @@ bool Wyjscia::tiktok()
         }
     }
     Serial.print("tiktok call : ");
-    Serial.print(ret ? "One_ON" : "All_off");
+    Serial.println(ret ? "One_On" : "All_off");
     return ret;
 }
 
