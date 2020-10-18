@@ -11,19 +11,19 @@ public:
 
     bool tiktok();
 
-    void setSwiatlo(bool on = true, unsigned int timeout = 10*60)
+    void setSwiatlo(bool on = true, unsigned long timeout = 10*60)
         { set(SWIATLO, on, timeout); }
 
-    void setSzafka(bool on = true, unsigned int timeout = 0)
+    void setSzafka(bool on = true, unsigned long timeout = 0)
         { set(SZAFKA, on, timeout); }
 
-    void setZawor(bool on = true, unsigned int timeout = 30 )
+    void setZawor(bool on = true, unsigned long timeout = 30 )
         { set(ZAWOR, on, timeout); }
 
-    void setLustro(bool on = true, unsigned int timeout = 5*60)
+    void setLustro(bool on = true, unsigned long timeout = 5*60)
         { set(LUSTRO, on, timeout); }
 
-    void setWiatrak(bool on = true, unsigned int timeout = 1)
+    void setWiatrak(bool on = true, unsigned long timeout = 1)
         { set(WIATRAK, on, timeout); }
 
     
@@ -42,6 +42,12 @@ public:
     bool getWiatrak()
         { return on[WIATRAK]; }
 
+    void addSwiatlo(unsigned int timeout = 10*60)
+        { add(SWIATLO, timeout); }
+
+    void addLustro(unsigned int timeout = 10*60)
+        { add(LUSTRO, timeout); }
+
     inline static uint8_t lo(bool value) { return value ? LOW : HIGH; }
     inline static uint8_t ho(bool value) { return value ? HIGH : LOW; }
 
@@ -54,7 +60,8 @@ public:
     void print(const char *ff) const;
 
 protected:
-    void set(uint8_t pos, bool value, unsigned int timeout);
+    void set(uint8_t pos, bool value, unsigned long timeout);
+    void add(uint8_t pos, unsigned long timeout);
 
 private:
 

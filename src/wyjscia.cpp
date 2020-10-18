@@ -26,12 +26,13 @@ void Wyjscia::init()
     }
 }
 
-void Wyjscia::set(uint8_t pos, bool value, unsigned int tmt)
+void Wyjscia::set(uint8_t pos, bool value, unsigned long tmt)
 {
     unsigned long mls = millis();
     wyjscia.digitalWrite(pos, o(pos, value));
     on[pos] = value;
     timeout[pos] = 1000L*tmt + mls;
+#ifdef DEBUG
     Serial.print("set pos=");
     Serial.print((int)pos, DEC);
     Serial.print(" value=");
@@ -40,7 +41,20 @@ void Wyjscia::set(uint8_t pos, bool value, unsigned int tmt)
     Serial.print(tmt, DEC);
     Serial.print(" timeout=");
     Serial.println(timeout[pos], DEC);
+#endif // DEBUG        
 }
+
+void Wyjscia::add(uint8_t pos, unsigned long tmt)
+{
+    timeout[pos] += 1000L*tmt;
+#ifdef DEBUG
+    Serial.print(" tmt=");
+    Serial.print(tmt, DEC);
+    Serial.print(" timeout=");
+    Serial.println(timeout[pos], DEC);
+#endif // DEBUG        
+}
+
 
 bool Wyjscia::tiktok() 
 {
@@ -54,14 +68,18 @@ bool Wyjscia::tiktok()
                 on[i] = false;
                 wyjscia.digitalWrite(i, o(i, false));
                 timeout[i] = 0;
+#ifdef DEBUG                
                 Serial.print("tittok OFF = ");
                 Serial.println(i, DEC);
+#endif                
                 print("tiktok OFF");
             }
         }
     }
+#ifdef DEBUG      
     Serial.print("tiktok call : ");
     Serial.println(ret ? "One_On" : "All_off");
+#endif    
     return ret;
 }
 
@@ -77,6 +95,7 @@ bool Wyjscia::i(uint8_t id, uint8_t value)
 
 void Wyjscia::print(const char * funn) const
 {
+#ifdef DEBUG
     unsigned mls = millis();
     unsigned mms = mls % 1000;
     Serial.print(mls, DEC);
@@ -120,5 +139,5 @@ void Wyjscia::print(const char * funn) const
         Serial.print(buff);
     }
     Serial.println("|");
-
+#endif // DEBUG    
 }

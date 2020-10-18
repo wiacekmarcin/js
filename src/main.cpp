@@ -39,9 +39,8 @@ Wejscia expWejscia(keyPressedOnPCF8574);
 //PCF8574 expWyjscia(0x21);
 Wyjscia expWyjscia;
 
-//Swiatlo lampa(expWejscia, expWyjscia);
+Swiatlo lampa(expWejscia, expWyjscia);
 
-//
 
 void printTemperature(DeviceAddress deviceAddress);
 void printAddress(DeviceAddress deviceAddress);
@@ -121,6 +120,17 @@ void mydelay(unsigned long ms)
 
 bool wasTemp = false;
 unsigned long mls = 0L;
+
+void setWiatrak() 
+{
+    const Wlacznik & w = expWejscia.getWlacznik();
+    if (w.nacisnietyTrzeciRaz()) {
+        expWyjscia.setSwiatlo(false);
+        expWyjscia.setWiatrak(true, L_MIN(5));
+    }
+}
+
+
 void loop() {
 
     if (cntLoop > 0) {
@@ -129,9 +139,11 @@ void loop() {
         --cntLoop;
         mls = millis();
         expWejscia.get(timeInt, mls - timeInt);
+#ifdef DEBUG        
         expWejscia.print();
-        //lampa.set(true);
-
+#endif        
+        lampa.set(mls);
+        setWiatrak();
         delay(50);
         if (cntLoop == 0) {
             expWejscia.czysc();

@@ -131,7 +131,7 @@ public:
     Drzwi();
 
     void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
-    
+    bool zostalyOtwarte() const { return m_otworzone; };
     bool czyOtwarte() const { return m_otwarte; }
     bool czyZamkniete() const { return !m_otwarte; }
     unsigned long czasOtwarcia() const { return m_otwarte ? millis() - m_timeOpen : 0; }
@@ -147,6 +147,7 @@ private:
     bool m_otwarte;
     unsigned long m_timeOpen;
     unsigned long m_timeClose;
+    bool m_otworzone;
 };
 
 class PoraDnia  {

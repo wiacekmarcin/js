@@ -17,6 +17,7 @@ public:
     const CzujkaZblizeniowa & getCzujkaZbl() const { return czBl; }
     const CzujkaRuchu & getCzujkaRuchu() const { return czR; }
     const Drzwi & getDrzwi() const { return drz; }
+    const PoraDnia & getPoraDnia() const { return prd; }
    
 
     void print();

@@ -221,7 +221,7 @@ void CzujkaRuchu::czysc()
     m_ruch = 0;
 }
 
-Drzwi::Drzwi() : ValueBase(), m_otwarte(false), m_timeOpen(0), m_timeClose(0)
+Drzwi::Drzwi() : ValueBase(), m_otwarte(false), m_timeOpen(0), m_timeClose(0), m_otworzone(false)
 {
 
 }
@@ -234,11 +234,15 @@ void Drzwi::ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt)
 
     if (m_val && !m_prev) {
         m_otwarte = true;
+        m_otworzone = true;
         m_timeOpen = timeInt + timeAfterInt;       
     } else if (!m_val && m_prev) {
         m_otwarte = false;
         m_timeClose = timeInt + timeAfterInt;
+    } else if (m_val && m_prev && m_otworzone) {
+        m_otworzone = false;
     }
+
 }
 
 void Drzwi::czysc() 
