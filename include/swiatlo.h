@@ -26,13 +26,19 @@ protected:
     void setWieczor(); 
     void setNoc(); 
 
+    unsigned long czasZapaleniaSwiatlo(bool noc, bool otwarte_drzwi) {
+        return noc ? (otwarte_drzwi ? L_SEC(30) : L_MIN(2)) : (otwarte_drzwi ? L_MIN(1) : L_MIN(5));
+    }
 
-
+    unsigned long czasZapaleniaLustro(bool noc, bool otwarte_drzwi) {
+        return noc ? (otwarte_drzwi ? L_SEC(20) : L_MIN(1)) : (otwarte_drzwi ? L_MIN(1) : L_MIN(3));
+    }
+    
 private:
     Wejscia & wej;
     Wyjscia & wyj;
 
-    bool trybNormalny; //w jakim trybie swieci lustro
+    bool lustroJakoSwiatlo; //w jakim trybie swieci lustro
 };
 
 #endif //! ___LAMPA_H__
