@@ -5,7 +5,7 @@
 #include "in.h"
 
 
-Swiatlo::Swiatlo(Wejscia & we, Wyjscia & wy) : wej(we), wyj(wy)
+Swiatlo::Swiatlo(Wejscia & we, Wyjscia & wy) : wej(we), wyj(wy), lustroJakoSwiatlo(false)
 { 
 
 }
@@ -109,16 +109,82 @@ void Swiatlo::zgasLustro()
 
 bool Swiatlo::set(unsigned long mls)
 {
-    const PoraDnia & pora = wej.getPoraDnia();
-
-    if (pora.czyDzien()) {
-        setDzien();
-    } else if (pora.czyNoc()) {
-        setNoc();
-    } else if (pora.czyWieczor()) {
-        setWieczor();
+    bool onL = wyj.getLustro();
+    bool onS = wyj.getSwiatlo();
     
+    const PoraDnia & pora = wej.getPoraDnia();
+    const Wlacznik & w = wej.getWlacznik();
+    const Drzwi & d = wej.getDrzwi();
+    const CzujkaRuchu & c = wej.getCzujkaRuchu();
+    const CzujkaZblizeniowa & l = wej.getCzujkaZbl();
+
+    if (!onL && !onS && w.nacisniety()) {
+        if (pora.czyWieczor() && !pora.czyNoc()) { //zapalamy glowne swiatlo
+            zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+        } else {  //zapalamy lustro
+            lustroJakoSwiatlo = true;
+            zapalLustro(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+        }
+        return;
     }
+
+    if (!onS && onL && w.nacisnietyDrugiRaz() && lustroJakoSwiatlo) {
+        zgasLustro();
+        lustroJakoSwiatlo = false;
+        zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+    }
+
+    if (onS && w.nacisniety()) {
+        if (pora.czyNoc() && pora.czyWieczor()) {
+            zapalSwiatlo(L_SEC(15));
+        } else {
+            zgasSwiatlo();
+        }
+    }
+
+    if (onL && w.nacisniety() && lustroJakoSwiatlo) {
+        if (pora.czyNoc() && pora.czyWieczor()) {
+            zapalLustro(L_SEC(15));
+        } else {
+            zgasLustro();
+        }
+        lustroJakoSwiatlo = false;
+        return;
+    } 
+
+    if (!lustroJakoSwiatlo && !onL && l.czyRuch()) {
+        zapalLustro(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
+        return;
+    }
+
+    if (!onL && !onS && c.czyRuch()) {
+        if (pora.czyNoc() && pora.czyWieczor()) {
+            zapalLustro(L_MIN(1));
+            lustroJakoSwiatlo = true;
+        } else {
+            zapalSwiatlo(L_MIN(3));
+        }
+        return;    
+    }
+    
+    if (onS && c.czyRuch()) {
+        if (pora.czyNoc() && pora.czyWieczor()) {
+            przedluzSwiatlo(L_MIN(1));
+        } else {
+            przedluzSwiatlo(L_MIN(3));
+        }
+        return;    
+    }
+    
+    if (onL && c.czyRuch() && lustroJakoSwiatlo) {
+        if (pora.czyNoc() && pora.czyWieczor()) {
+            przedluzLustro(L_MIN(1));
+        } else {
+            przedluzLustro(L_MIN(3));
+        }
+        return;    
+    }
+
     return true;
 }
 
