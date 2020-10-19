@@ -4,6 +4,7 @@
 #include "wyjscia.h"
 #include "wejscia.h"
 
+#define DEBUG
 class Swiatlo {
 public:
 

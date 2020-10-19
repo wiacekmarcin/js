@@ -4,7 +4,7 @@
 #include <PCF8574.h>
 
 #include "in.h"
-
+#define DEBUG
 class Wejscia {
 public:
     Wejscia(void (*fun)());
