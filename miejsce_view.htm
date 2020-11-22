@@ -1,0 +1,44 @@
+<div class="container" ng-controller="miejsceview-ctrl">
+
+    <label class=>Miejsce id : </label> <span>{{miejsce.id}}</span><br>
+    <label>Kod : </label> <span>{{miejsce.kod}}</span><br>
+    <label>Nazwa : </label> <span>{{miejsce.nazwa}}</span><br>
+    <label>Opis : </label> <span>{{miejsce.descr}}</span><br>
+    <label>Pomiesczenie :</label> <span>{{miejsce.pom}}</span><br>
+    <label>Zbiorcze : </label> <span>{{miejsce.zb}}</span><br>
+    <label>Połączenie : </label> <span>{{miejsce.pol}}</span><br>
+
+    <hr>
+
+    <h4>Zewnetrzne</h4>
+    <fieldset ng-repeat="zew in zewnetrzne">
+        <legend>{{zew}}</legend>
+        <label>Numer</label><span>{{zew}}</span><br>
+        <label>Opis : </label><span>{{przewody[zew].desc}}</span><br>
+        <label>Ilość żył : </label><span>{{przewody[zew].il_zyl}}</span><br>
+        <table>
+            <tr ng-repeat="zyla in zyly[zew]">
+                <td>{{$index + 1}}</td>
+                <td style="background-color: {{zyla.chtml}};">&nbsp;</td>
+                <td>{{zyla.cname}}</td>
+                <td>{{zyla.opis}}</td>
+            </tr>
+        </table>
+    </fieldset>
+
+    <h4>Wewnetrzne</h4>
+    <fieldset ng-repeat="wew in wewnetrzne">
+        <legend>{{wew}}</legend>
+        <label>Numer : </label><span>{{wew}}</span><br>
+        <label>Opis : </label><span>{{przewody[wew].desc}}</span><br>
+        <label>Ilość żył : </label><span>{{przewody[wew].il_zyl}}</span><br>
+        <table>
+            <tr ng-repeat="zyla in zyly[wew]">
+                <td>{{$index+1}}</td>
+                <td style="background-color: {{zyla.chtml}};">&nbsp;</td>
+                <td>{{zyla.cname}}</td>
+                <td>{{zyla.opis}}</td>
+            </tr>
+        </table>
+    </fieldset>
+</div>

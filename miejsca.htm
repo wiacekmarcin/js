@@ -1,0 +1,81 @@
+<div class="container" ng-controller="miejsca-ctrl">
+
+    <p>
+    <a href="index.html">Powrót</a> <a href="#!/miejsca/-1">Wszystkie</a> <a href="#!/miejsca/0">Zbiorcze</a> 
+    <a ng-repeat-start="item in pomieszczenia" href="#!/miejsca/{{item.id}}">{{item.name}}</a><span ng-repeat-end> </span> 
+    <!-- 
+    <a href="#!/miejsca/2">WC</a> <a href="#!/miejsca/3">Sypialnia</a> <a href="#!/miejsca/4">Pokój</a> 	
+    <a href="#!/miejsca/5">Pracownia</a> <a href="#!/miejsca/6">Salon</a> <a href="#!/miejsca/7">Kuchnia</a> 
+    <a href="#!/miejsca/8">Łazienka</a> <a href="#!/miejsca/9">Jadalnia</a>
+    -->
+    </p>
+    <hr>
+    <h4>{{title}}</h4>
+    <table>
+        <tr>
+            <th>Kod</th><th>Nazwa</th><th ng-show="show_place">Miejsce</th>
+            <th>Opis</th><th>Przewody</th><th>Zb.</th><th>Poł.</th><th>Akcje</th></tr>
+        <tr ng-repeat-start="place in places" style="background-color: {{ $odd ? '#f1f1f1' : '#ffffff'}}">
+            <td style="text-align: left;"><a href="#!/miejsce_view/{{ place.id }}">{{place.kod}}</a></td>
+            <td style="text-align: left;">{{ place.name }}</td>
+            <td style="text-align: left;" ng-show="show_place"><a href="#!/miejsca/{{ place.id_pomieszczenie }}">{{ place.pomieszczenie }}</a></td>
+            <td style="text-align: left;">{{ place.description }}</td>
+            <td style="text-align: left;;"> {{ place.kable.length }} : <span ng-repeat="p in place.kable"><a href="#!/przewod/{{p}}">{{p}}</a>, </span></td>
+            <td style="text-align: center;">{{ place.zbiorcze }}</td>
+            <td style="text-align: center;">{{ place.polaczenie }}</td>
+            <td style="text-align: center;"><button ng-click="editPlace(place)">Edytuj</button></td>
+        </tr>
+        <tr ng-repeat-end ng-show="edit_place == place.id" style="background-color: aquamarine;">
+            <td><input type="text" ng-model="ekod"></td>
+            <td><input type="text" ng-model="ename"></td>
+            <td >
+                <select ng-model="epomieszczenie">
+                    <option ng-repeat="item in pomieszczenia" value="{{item.id}}" ng-selected="item.id==epomieszczenie">{{item.name}}</option>
+                </select>
+            </td>
+            <td><input type="text" ng-model="edescription"></td>
+            <td></td>
+            <td><select ng-model="ezbiorcze"><option value="0" ng-selected="ezbiorcze==0">0</option><option value="1" ng-selected="ezbiorcze==1">1</option></select></td>
+            <td><select ng-model="epolaczenie"><option value="0" ng-selected="epolaczenie==0">0</option><option value="1" ng-selected="epolaczenie==1">1</option></select></td>
+            <td><button ng-click="savePlace()">Zapisz</button><button ng-click="canceleditPlace()">Anuluj</button></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td ng-show="show_place"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><button ng-click="addPlace()">Dodaj</button></td>
+        </tr>
+        <tr ng-repeat-end ng-show="add_place" style="background-color: aqua;">
+            <td><input type="text" ng-model="akod"></td>
+            <td><input type="text" ng-model="aname"></td>
+            <td ng-show="show_place">
+                <select ng-model="apomieszczenie">
+                    <option ng-repeat="item in pomieszczenia" value="{{item.id}}" >{{item.name}}</option>
+                </select>
+            </td>
+            <td><input type="text" ng-model="adescription"></td>
+            <td></td>
+            <td>
+                <select ng-model="azbiorcze"><option value="0" selected>0</option><option value="1">1</option></select>
+            </td>
+            <td>
+                <select ng-model="apolaczenie"><option value="0" selected>0</option><option value="1">1</option></select>
+            </td>
+            <td><button ng-click="addnewPlace()">Zapisz</button><button ng-click="canceladdPlace()">Anuluj</button></td>
+        </tr>
+    </table>
+</div>
+<!--
+        $scope.edit_place = row.id;
+        $scope.ename = row.name;
+        $scope.eid_pomiesczenie = row.id_pomiesczenie;
+        $scope.edescription = row.description;
+        $scope.ekod = row.kod;
+        $scope.epolaczenia = row.polaczenie;
+        $scope.ezbiorcze = row.zbiorcze;
+-->
+
