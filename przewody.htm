@@ -1,0 +1,58 @@
+<div class="container" ng-controller="przewody-ctrl">
+    <p>
+        <span><button ng-click="choose(-1, 'Wszystkie');">Wszystkie</button> </span>
+        <span ng-repeat="zb in zbiorcze"><button ng-click="choose(zb.id, zb.name);">{{zb.name}}</button> </span>
+    </p>
+    <h4>{{selectZbiorcze == -1 ? "Wszystkie" : chooseName}}</h4>
+    <button ng-click="setDetailsAll()">{{ detailsAll ? "Ukryj " : "Pokaż "}} wszystkie</button> </span>
+    <table>
+        <tr><th>Nr przewodu</th><th>Opis</th><th>Ilość żył</th><th ng-show="selectZbiorcze == -1">Miejsce 1</th><th>Miejsce 2</th><th>Akcje</th></tr>
+        <tr ng-repeat-start="wire in wires" style="background-color: {{ $odd ? '#f1f1f1' : '#ffffff'}}">
+            <td style="text-align: center;">{{wire.id }}</td>
+            <td style="text-align: left;">{{ wire.descr }}</td>
+            <td style="text-align: center;">{{ wire.ilosc_zyl }}</td>
+            <td style="text-align: left;" ng-show="selectZbiorcze == -1">{{ wire.miejsce1 }}</td>
+            <td style="text-align: left;">{{ wire.miejsce2 }}</td>
+            <td style="text-align: center;"> <div class="btn-group">
+                <button ng-click="seteditPlace(wire.id)">Edytuj</button>
+                <button ng-click="setDetails(wire.id)">Szczegóły</button></div>
+            </td>
+        </tr>
+        <tr ng-show="detailsAll || (detailsId == wire.id)" style="background-color: honeydew;">
+            <td></td>
+            <td>
+                <table>
+                    <tr ng-repeat="zyla in zyly[wire.id]">
+                        <td>{{$index+1}}</td>
+                        <td style="background-color: {{zyla.chtml}};">&nbsp;</td>
+                        <td>{{zyla.cname}}</td>
+                        <td>{{zyla.opis}}</td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+            <td ng-show="selectZbiorcze == -1"></td>
+            <td></td>
+            <td><button ng-click="setDetails(-1)">Ukryj</button></td>
+        </tr>
+        <tr ng-repeat-end ng-show="editRow == wire.id">
+            <td></td>
+            <td><input type="text" ng-model="edescr" value="{{ wire.descr }}"></td>
+            <td></td>
+            <td> </td>
+            <td></td>
+            <td></td>
+        </tr> 
+    </table>
+</div>
+<!--
+'id' => $pid,
+'descr' => $row['pdescription'],
+'miejsce1' => $namepom1, 
+'miejsce2' => $namepom2, 
+'mid1' => $mid1,
+'mid2' => $mid2,
+'zbiorcze1' => $zbiorcze1,
+'zbiorcze2' => $zbiorcze2,
+'ilosc_zyl' => $row['ilosc_zyl']
+-->

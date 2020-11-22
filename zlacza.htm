@@ -1,0 +1,44 @@
+<div class="container" ng-controller="zlacza-ctrl">
+    <p>
+        <span><button ng-click="chooseAll();">Wszystko</button> </span>
+        <span ng-repeat="zb in zbiorcze"><button ng-click="choose(zb.id, zb.name, zb.pom);">{{zb.name}}</button> </span>
+    </p>
+    <h4>{{selectZbiorcze == -1 ? "Wszystko" : chooseName}}</h4>
+    
+    <button ng-click="setDetailsAll()">{{ detailsAll ? "Ukryj " : "Pokaż "}} wszystko</button>
+    <table>
+        <tr><th ng-show="selectZbiorcze == -1">Pomieszczenie</th><th ng-show="selectZbiorcze == -1">Miejsce</th><th>Przewod</th>
+        <th>Etykieta</th><th>Opis</th><th>Ilość żył</th><th>Akcje</th></tr>
+
+        <tr ng-repeat-start="zlacze in zlacza | filter:filterZlacze" style="background-color: {{ $odd ? '#f1f1f1' : '#ffffff'}}">
+            <td ng-show="selectZbiorcze == -1" style="text-align: center;">{{miejsca[zlacze.miejsce_id].pom }}</td>
+            <td ng-show="selectZbiorcze == -1" style="text-align: left;">{{ miejsca[zlacze.miejsce_id].name }}</td>
+            <td style="text-align: center;">{{ zlacze.przewod_id }}</td>
+            <td style="text-align: center;">{{ zlacze.etykieta }}</td>
+            <td style="text-align: left;" >{{ przewody[zlacze.przewod_id].desc }}</td>
+            <td style="text-align: center;">{{ przewody[zlacze.przewod_id].il }}</td>
+            <td style="text-align: center;"> 
+                <button ng-if="zlacze.zlacze_id" ng-click="setDetails(zlacze.zlacze_id)">Szczegóły</button>
+            </td>
+        </tr>
+        <tr ng-repeat-end ng-if="zlacze.zlacze_id" ng-show="detailsAll || (zlacze.zlacze_id == selectedZlaczeId)" style="background-color: honeydew;">
+            <td ng-show="selectZbiorcze == -1"></td>
+            <td ng-show="selectZbiorcze == -1"></td>
+            <td></td>
+            <td></td>
+            <td>
+                <table>
+                    <tr ng-repeat="item in zyly[zlacze.zlacze_id]">
+                        <td>{{ item.pos }}</td>
+                        <td style="background-color: {{ item.chtml }};">&nbsp;</td>
+                        <td>{{ item.cname }} </td>
+                        <td>{{ item.opis }} </td>
+
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+            <td><button ng-click="setDetails(-1)">Ukryj</button></td>
+        </tr>
+    </table>
+</div>

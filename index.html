@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap_1.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.css"> 
+    <link rel="stylesheet" href="css/bootstrap-theme_1.css">
+    <link rel="stylesheet" href="css/ng-table.css">
+    <link rel="stylesheet" href="css/tooltip.css">
+    <link rel="stylesheet" href="css/trb-styles.css">
+
+    <script src="app.js"></script>
+    <script src="directives.js"></script>
+    <script src="filters.js"></script>
+    <script src="route.js"></script>
+    <script src="main.js"></script>
+    <script src="kolory.js"></script>
+    <script src="miejsca.js"></script>
+    <script src="przewody.js"></script>
+    <script src="miejsce_view.js"></script>
+    <script src="zlacza.js"></script>
+    <script src="polaczenie_add.js"></script>
+</head>
+<body ng-app="myApp">
+
+<p> <a href="#!/">Strona domowa</a> 
+    <a href="#!/kolory">Kolory</a> 
+    <a href="#!/miejsca/-1">Miejsca</a>
+    <a href="#!/przewody">Przewody</a>
+    <a href="#!/zlacza">Złącza</a>
+    <a href="#!/zlacza_add">Dodaj nowe złącze</a>
+    <a href="#!/polaczenie_add">Dodaj nowe złącze</a>
+</p>   
+
+<div class="w3-container" ng-view></div>
+
+
+</body>
+</html>
+
