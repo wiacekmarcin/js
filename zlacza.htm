@@ -10,7 +10,8 @@
         <tr><th ng-show="selectZbiorcze == -1">Pomieszczenie</th><th ng-show="selectZbiorcze == -1">Miejsce</th><th>Przewod</th>
         <th>Etykieta</th><th>Opis</th><th>Ilość żył</th><th>Akcje</th></tr>
 
-        <tr ng-repeat-start="zlacze in zlacza | filter:filterZlacze" style="background-color: {{ $odd ? '#f1f1f1' : '#ffffff'}}">
+        <tr ng-repeat-start="zlacze in zlacza | filter:filterZlacze" 
+            ng-style='$odd ? {"background-color": "#f1f1f1" } : {"background-color": "#ffffff"}'>
             <td ng-show="selectZbiorcze == -1" style="text-align: center;">{{miejsca[zlacze.miejsce_id].pom }}</td>
             <td ng-show="selectZbiorcze == -1" style="text-align: left;">{{ miejsca[zlacze.miejsce_id].name }}</td>
             <td style="text-align: center;">{{ zlacze.przewod_id }}</td>
@@ -30,7 +31,7 @@
                 <table>
                     <tr ng-repeat="item in zyly[zlacze.zlacze_id]">
                         <td>{{ item.pos }}</td>
-                        <td style="background-color: {{ item.chtml }};">&nbsp;</td>
+                        <td ng-style='{ "background-color": "{{item.chtml}}" }'>&nbsp;</td>
                         <td>{{ item.cname }} </td>
                         <td>{{ item.opis }} </td>
 
