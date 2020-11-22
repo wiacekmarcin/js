@@ -19,7 +19,7 @@
         <table>
             <tr ng-repeat="zyla in zyly[zew]">
                 <td>{{$index + 1}}</td>
-                <td style="background-color: {{zyla.chtml}};">&nbsp;</td>
+                <td ng-style='{"background-color": "{{zyla.chtml}}"}'>&nbsp;</td>
                 <td>{{zyla.cname}}</td>
                 <td>{{zyla.opis}}</td>
             </tr>
@@ -35,7 +35,7 @@
         <table>
             <tr ng-repeat="zyla in zyly[wew]">
                 <td>{{$index+1}}</td>
-                <td style="background-color: {{zyla.chtml}};">&nbsp;</td>
+                <td ng-style='{"background-color": "{{zyla.chtml}}"}'>&nbsp;</td>
                 <td>{{zyla.cname}}</td>
                 <td>{{zyla.opis}}</td>
             </tr>

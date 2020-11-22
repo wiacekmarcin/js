@@ -8,7 +8,7 @@
         </tr>
           <tr ng-repeat-start="color in colors">
             <td>{{ color.id }}</td>
-            <td style="background-color: {{ color.html }};">&nbsp;</td>
+            <td ng-style='{ "background-color": "{{color.html}}" }'>&nbsp;</td>
             <td>{{ color.name }}</td>
             <td>{{ color.cnt }}</td>
             <td>

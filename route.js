@@ -18,4 +18,7 @@ app.config(function($routeProvider) {
     .when("/zlacza", {
         templateUrl: 'zlacza.htm',    
     })
+    .when("/polaczenie_add", {
+        templateUrl: 'polaczenie_add.htm',    
+    })
 });

@@ -7,7 +7,7 @@
     <button ng-click="setDetailsAll()">{{ detailsAll ? "Ukryj " : "Pokaż "}} wszystkie</button> </span>
     <table>
         <tr><th>Nr przewodu</th><th>Opis</th><th>Ilość żył</th><th ng-show="selectZbiorcze == -1">Miejsce 1</th><th>Miejsce 2</th><th>Akcje</th></tr>
-        <tr ng-repeat-start="wire in wires" style="background-color: {{ $odd ? '#f1f1f1' : '#ffffff'}}">
+        <tr ng-repeat-start="wire in wires" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
             <td style="text-align: center;">{{wire.id }}</td>
             <td style="text-align: left;">{{ wire.descr }}</td>
             <td style="text-align: center;">{{ wire.ilosc_zyl }}</td>
@@ -24,7 +24,7 @@
                 <table>
                     <tr ng-repeat="zyla in zyly[wire.id]">
                         <td>{{$index+1}}</td>
-                        <td style="background-color: {{zyla.chtml}};">&nbsp;</td>
+                        <td ng-style="background-color: {{zyla.chtml}};">&nbsp;</td>
                         <td>{{zyla.cname}}</td>
                         <td>{{zyla.opis}}</td>
                     </tr>

@@ -15,7 +15,7 @@
         <tr>
             <th>Kod</th><th>Nazwa</th><th ng-show="show_place">Miejsce</th>
             <th>Opis</th><th>Przewody</th><th>Zb.</th><th>Poł.</th><th>Akcje</th></tr>
-        <tr ng-repeat-start="place in places" style="background-color: {{ $odd ? '#f1f1f1' : '#ffffff'}}">
+        <tr ng-repeat-start="place in places" ng-style='$odd ? {"background-color": "#f1f1f1"} : {"background-color": "#ffffff"}'>
             <td style="text-align: left;"><a href="#!/miejsce_view/{{ place.id }}">{{place.kod}}</a></td>
             <td style="text-align: left;">{{ place.name }}</td>
             <td style="text-align: left;" ng-show="show_place"><a href="#!/miejsca/{{ place.id_pomieszczenie }}">{{ place.pomieszczenie }}</a></td>
