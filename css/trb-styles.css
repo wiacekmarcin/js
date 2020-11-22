@@ -1,0 +1,907 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 2014-07-16, 16:34:11
+    Author     : annah
+*/
+
+body {
+    font-size: small;
+    overflow: scroll;
+    margin-top:20px;
+}
+
+div#mojdiv + div {
+    color: red;
+    font-size: 20pt;
+}
+
+.activeTab {
+    color: black;
+    font-weight: bold;
+}
+
+.inactiveTab {
+    color: black;
+}
+
+.inactiveTab:hover {
+    color: black;
+    font-weight: bold;
+}
+.settedMenu {
+    color: green;
+}
+.trbPanelView {
+    margin-top: 1em;
+}
+
+.trbPanelHeadView {
+    padding: 1px 10px;
+}
+
+.trbPanelHeadView h5 {
+    font-weight: bold;
+}
+
+table {
+    font-size: small;
+}
+
+.table > tfoot > tr > td,
+.table > tbody > tr > td {
+    padding: 4px 4px;
+    border-top: 1px solid #aaa;
+}
+
+.ng-table-pagination {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.ng-table-pager {
+    margin-top: 1em;
+}
+
+/** basic configuration - panele */
+.trbBasicConfigContainer {
+    position: relative;
+    overflow: hidden;
+}
+
+.trbBasicConfigContainerLeft {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 50%;
+    height: 100%;
+}
+
+.trbBasicConfigContainerRight {
+    overflow: hidden;
+    margin-left: 50%;
+    width: 50%;
+
+}
+
+.trbBasicConfigLeftPanelContent {
+    height: 200px;
+}
+
+.trbBasicConfigRightPanelContent {
+    height: 200px;
+}
+
+/* columns of same height styles */
+.table {
+    background: #eee;
+    border: solid 1px #aaa;
+    margin-bottom: 0px;
+}
+
+.table th {
+    font-size: small;
+    background: #fff;
+    border-right: 1px dashed #aaa;
+    border-bottom: solid 1px #999 !important;
+}
+
+.table td {
+    border-right: 1px dashed #aaa;
+}
+
+.table th div {
+    vertical-align: text-top;
+}
+
+.panel-default h5 {
+  font-size: small;
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+}
+
+.panel-default {
+  border-color: #355858 !important;
+  margin-bottom: 2.5em;
+}
+.panel-default > .panel-heading {
+  color: #fff !important;
+  background: #355858 !important;
+  border-color: #355858 !important;
+}
+.panel-default > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #355858 !important;
+}
+.panel-default > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #355858 !important;
+}
+
+.form-inline label {
+    font-size: small;
+    padding-top: 2.5px;
+}
+
+.nav > li > a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+input[type="button"],
+input[type="submit"] {
+    height: 24px !important;
+    font-size: small !important;;
+    padding-top: 1px !important;;
+    padding-bottom: 1px !important;;
+    padding-left: 4px !important;;
+    padding-right: 4px !important;;
+}
+
+.ng-table .input-filter {
+    min-height: 10px !important;
+    font-size: smaller !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select[class] {
+    height: 24px !important;;
+    font-size: small !important;;
+    padding: 2.5px 3px !important;;
+    padding: 1.25px 1.25px 1.25px 2.5px !important;
+}
+
+.trbHorizontalMargin {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.trbPanelPadding {
+    padding: 1em;
+}
+
+.trbSuccess {
+    background: #c6dec5;
+}
+
+.trbWarning {
+    background: #edddb2;
+}
+
+.trbDanger {
+    background: #dcbab9;
+}
+
+.trbDefault {
+}
+
+.trbWhiteFaulty {
+    background: #ffffff;
+}
+
+.trbLineThrough {
+    text-decoration: line-through;
+}
+
+/* Button styles */
+.trbCustomButton {
+    color: #000;
+    border-color: #618d51;
+}
+
+input[type].trbCustomButton {
+    min-width: 2em;
+    color: #000;
+    background: #9dbd9e;
+    border-color: #618d51;
+}
+
+input[type].trbCustomButton:hover,
+input[type].trbCustomButton:focus,
+input[type].trbCustomButton:active {
+    color: #444;
+    background-color: #aacaab;
+    border-color: #2a9a00;
+}
+
+
+.trbEditButton {
+    color: #000;
+    border-color: #618d51;
+}
+
+input[type].trbEditButton {
+    min-width: 4em;
+    color: #000;
+    background: #9dbd9e;
+    border-color: #618d51;
+}
+
+input[type].trbEditButton:hover,
+input[type].trbEditButton:active {
+    color: #444;
+    background-color: #aacaab;
+    border-color: #2a9a00;
+}
+
+.trbToolButton {
+    font-size: xx-small;
+    line-height: 0.8;
+    color: #000;
+    border-color: #64155d;
+}
+
+button.trbToolButton {
+    min-width: 4em;
+    color: #000;
+    background: #c3a5c1;
+    border-color: #64155d;
+}
+
+button.trbToolButton:hover,
+button.trbToolButton:active {
+    color: #444;
+    background-color: #aca5ab;
+    border-color: #64155d;
+}
+
+
+
+
+.trbCancelButton {
+    color: #000;
+    border-color: #a5965f;
+}
+
+input[type].trbCancelButton {
+    color: #000;
+    min-width: 4em;
+    background-color: #c7b497;
+    border-color: #a5965f;
+}
+
+input[type].trbCancelButton:hover,
+input[type].trbCancelButton:focus,
+input[type].trbCancelButton:active {
+    color: #444;
+    border-color: #b48e00;
+    background-color: #d4c1a4;
+}
+
+.trbDelButton {
+    color: #000;
+    border-color: #a6536f;
+}
+
+input[type].trbDelButton {
+    color: #000;
+    min-width: 4em;
+    background-color: #cc8e8f;
+    border-color: #a6536f;
+}
+
+input[type].trbDelButton:hover,
+input[type].trbDelButton:focus,
+input[type].trbDelButton:active {
+    color: #444;
+    border-color: #b40D00;
+    background-color: #d99b9c;
+}
+
+.trbSaveButton,
+.trbAddButton {
+    color: #000;
+    border-color: #82aacf;
+}
+
+input[type].trbAddButton,
+input[type].trbSaveButton {
+    color: #000;
+    min-width: 4em;
+    background-color: #a1bbce;
+    border-color: #2a8585;
+}
+
+input[type].trbSaveButton:hover,
+input[type].trbSaveButton:focus,
+input[type].trbSaveButton:active,
+input[type].trbAddButton:hover,
+input[type].trbAddButton:focus,
+input[type].trbAddButton:active {
+    color: #444;
+    border-color: #355858;
+    background-color: #aec8db;
+}
+
+td {
+    text-align: center;
+}
+
+.trbWidthCol1 {
+    width: 1%;
+}
+
+.trbWidthCol2 {
+    width: 2%;
+}
+
+.trbWidthCol3 {
+    width: 3%;
+}
+
+.trbWidthCol4 {
+    width: 4%;
+}
+
+.trbWidthCol5 {
+    width: 5%;
+}
+
+.trbWidthCol6 {
+    width: 6%;
+}
+
+.trbWidthCol7 {
+    width: 7%;
+}
+
+.trbWidthCol8 {
+    width: 8%;
+}
+
+.trbWidthCol9 {
+    width: 9%;
+}
+
+.trbWidthCol10 {
+    width: 10%;
+}
+
+.trbWidthCol11 {
+    width: 11%;
+}
+
+.trbWidthCol12 {
+    width: 12%;
+}
+
+.trbWidthCol13 {
+    width: 13%;
+}
+
+.trbWidthCol14 {
+    width: 14%;
+}
+
+.trbWidthCol15 {
+    width: 15%;
+}
+
+.trbWidthCol16 {
+    width: 16%;
+}
+
+.trbWidthCol17 {
+    width: 17%;
+}
+
+.trbWidthCol18 {
+    width: 18%;
+}
+
+.trbWidthCol19 {
+    width: 19%;
+}
+
+.trbWidthCol20 {
+    width: 20%;
+}
+
+.trbWidthCol21 {
+    width: 21%;
+}
+
+.trbWidthCol22 {
+    width: 22%;
+}
+
+.trbWidthCol23 {
+    width: 23%;
+}
+
+.trbWidthCol24 {
+    width: 24%;
+}
+
+.trbWidthCol25 {
+    width: 25%;
+}
+
+.trbWidthCol35 {
+    width: 35%;
+}
+
+.trbWidthCol48 {
+    width: 48%;
+}
+
+.trbWidthCol49 {
+    width: 49%;
+}
+
+.trbWidthCol50 {
+    width: 50%;
+}
+
+/**********szerokości kolumn w tabeli w zależności od tytułu*************************/
+
+.trbWidthColTxPackets,
+.trbWidthColRxPackets {
+    width: 2%;
+    alignment-adjust: central;
+}
+
+.trbWidthColName,
+.trbWidthColLink{
+    width: 3%;
+    alignment-adjust: central;
+}
+
+.trbWidthColButton {
+    width: 5%;
+    alignment-adjust: central;
+}
+
+.trbWidthColMTU,
+.trbWidthColType {
+    width: 7%;
+    alignment-adjust: central;
+}
+
+.trbWidthColZone {
+    width: 8%;
+    alignment-adjust: central;
+}
+
+.trbWidthColSource {
+    width: 9%;
+    alignment-adjust: central;
+}
+
+.trbWidthColPrefix,
+.trbWidthColMask,
+.trbWidthColIpAddress,
+.trbWidthColPassword {
+    width: 10%;
+}
+
+.trbWidthColReversePathFilter,
+.trbWidthColReorderHeader {
+    width: 11%;
+    alignment-adjust: central;
+}
+
+.trbWidthColState,
+.trbWidthColMode,
+.trbWidthColSignalization{
+    width: 12%;
+    alignment-adjust: central;
+}
+
+
+
+.trbWidthColConfName,
+.trbWidthColConfCreationDate {
+    width: 20%;
+    alignment-adjust: central;
+}
+
+.trbWidthColConfDescription {
+    width: 42%;
+    alignment-adjust: central;
+}
+
+.trbContainer {
+    background-color:white;
+    top: 0px;
+}
+
+.trbWelcome {
+    font-family: monospace;
+    white-space: pre;
+}
+
+.trbMenuView {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.trbMenuEntryView {
+    position: absolute;
+}
+
+.trbMenuEntryStretcher {
+    font-weight: bold;
+    color: white;
+    visibility: hidden;
+}
+
+.trbRow {
+    margin-top: 10px;
+}
+
+.trbFgWarning {
+    color: red;
+}
+
+.trbFgYellow {
+    color: #bb0;
+}
+
+.trbFgOk {
+    color: green;
+}
+
+.trbDateTime input {
+    width: 50px;
+    text-align: center;
+}
+
+.trbDateTime td {
+    width: 30px;
+    text-align: center;
+}
+
+.trbYear {
+    width: 70px;
+    text-align: center;
+}
+
+.important-element {
+    font-weight: bold;
+}
+
+.alarm {
+    color: red;
+}
+
+.trbAlignRight {
+    float: right;
+    clear: both;
+}
+
+.trbAlignLeft {
+    float: left;
+    clear: both;
+}
+
+.trbWidthYearForm {
+    width: 100px;
+}
+
+.trbWidthMounthForm {
+    width: 70px;
+}
+
+.trbWidthDayForm {
+    width: 70px;
+}
+
+table.channellist {
+    border-style: solid;
+    border-color: white;
+    border-width: 1px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+table.channellist td {
+    background-color: #f8efc0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
+    font-size: 85%;
+    font-weight: bold;
+}
+
+table.channellist td div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+table.channellist td.chanheader {
+    background-color: rgba(141, 192, 219, 0.25);
+    font-size: 100%;
+}
+
+table.channellist td.selectable {
+    cursor: default;
+}
+
+table.channellist td.synch_storczyk {
+    background-color: #ffeedd;
+}
+
+table.channellist td.synch_pcm {
+    background-color: #ddeeff;
+}
+
+table.channellist td.crossed {
+}
+
+table.channellist td.selected {
+    background-color: #000;
+    color: white;
+}
+
+table.channellist td.crossed.selected div {
+    background: radial-gradient(#000 0%, #111 45%, rgba(0, 0, 0, 0) 100%);
+    color: #ffffff;
+}
+
+table.channellist td.synch_storczyk.selected div,
+table.channellist td.synch_pcm.selected div {
+    background: radial-gradient(#000 0%, #111 45%, rgba(0, 0, 0, 0) 100%);
+}
+
+.crossbox {
+    margin-left: 1em;
+    margin-right: 1em;
+    display: block;
+    width: 3em;
+    height: 1em;
+}
+
+.highlighted td {
+    box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+.highlighted div {
+    box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+div.popup-background {
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.75);
+}
+
+div.popup-background div.popup-panel {
+    min-width: 50%;
+    max-width: 100%;
+    min-height: 50%;
+    max-height: 80%;
+    margin: 5% 25%;
+    overflow: auto;
+}
+
+div.popup-background div.popup-message {
+    min-width: 50%;
+    max-width: 100%;
+    min-height: 15%;
+    max-height: 40%;
+    margin: 5% 25%;
+    overflow: auto;
+}
+
+.ospfStaticIdentifier {
+    color: #2a8585;
+}
+
+.ospfAutoIdentifier {
+    color: #a6536f;
+}
+
+/* Kolory polis */
+.bg-black {
+    background-color: #000;
+}
+.clr-black {
+    color: #000;
+}
+.bg-red {
+    background-color: #FF0000;
+}
+.clr-red {
+    color: #FF0000;
+}
+.bg-aqua  {
+    background-color: #00FFFF;
+}
+.clr-aqua {
+    color: #00FFFF;
+}
+.bg-blue {
+    background-color: #0000FF;
+}
+.clr-blue {
+    color: #0000FF;
+}
+.bg-green {
+    background-color: #008000;
+}
+.clr-green {
+    color:#008000;
+}
+.bg-khaki {
+    background-color: #F0E68C;
+}
+.clr-khaki {
+    color: #F0E68C;
+}
+.bg-orchid {
+    background-color: #DA70D6;
+}
+.clr-orchid {
+    color: #DA70D6;
+}
+.bg-olive {
+    background-color: #808000;
+}
+.clr-olive {
+    color: #808000;
+}
+.bg-plum {
+    background-color: #DDA0DD;
+}
+.clr-plum {
+    color: #DDA0DD;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.borderall * {
+    border: 1px solid;
+}
+
+.highlight-up {
+    background-color: #f0ad4e;
+    font-weight: bold;
+    -webkit-transition: background-color 0.6s ease-in-out;
+    -moz-transition: background-color 0.6s ease-in-out;
+    -o-transition: background-color 0.6s ease-in-out;
+    -ms-transition: background-color 0.6s ease-in-out;
+    transition: background-color 0.6s ease-in-out;
+}
+
+.highlight-down {
+    background-color: #b9def0;
+    font-weight: bold;
+    -webkit-transition: background-color 0.6s ease-in-out;
+    -moz-transition: background-color 0.6s ease-in-out;
+    -o-transition: background-color 0.6s ease-in-out;
+    -ms-transition: background-color 0.6s ease-in-out;
+    transition: background-color 0.6s ease-in-out;
+}
+
+th.noRightBorder {
+    border-right: none;
+}
+
+td.noRightBorder {
+    border-right: none;
+}
+
+.deleting td {
+    background: #ddd4d7 !important;
+}
+
+.editing td {
+    background: #d5ded5 !important;
+}
+
+.adding td {
+    background: #d5e0e8 !important;
+}
+
+.even-row td {
+    background-color: #f9f9f9;
+}
+
+.tooltip-inner {
+  color: black;
+  background-color: white;;
+  border-color: black;
+  max-width: 400px;
+  text-align: left;
+}
+
+.tooltip-arrow {
+
+}
+
+.radioLinePortPanelViewLeft {
+    padding-left: 0px;
+    padding-right: 5px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    display: inline-block;
+    border: 0px;
+    margin: 0px;
+    height:100%;
+    display: table-cell;
+}
+.radioLinePortPanelViewRight {
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    padding-top: 0px;
+    display: inline-block;
+    border: 0px;
+    margin: 0px;
+    height:100%;
+    display: table-cell;
+}
+
+
+.radioLinePortHeadView {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.radioLinePortHeadView h5 {
+     font-size: large;
+}
+
+.radioLinePortPanelBody {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.activeRadiolineRfuMenu {
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-top: 1px solid;
+}
+
+.inactiveRadiolineRfuMenu {
+    border-bottom: 1px solid;
+}
+
+.disabledTab {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: grey;
+}
+
+
