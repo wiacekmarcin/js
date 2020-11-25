@@ -1,0 +1,45 @@
+<div ng-controller="polaczenieadd-ctrl">
+<label>Wybierz miejsce</label>
+<select ng-model="id_miejsce" ng-options="miejsce as miejsce.name for miejsce in miejsca" ng-change="zmianaMiejsca()">
+</select>
+
+<table>
+    <tr>
+        <td>
+            <label>Wybierz przewod 1</label>
+            <select ng-model="przewod1" ng-options="przew for przew in przewody" ng-change="zmianaPrzewodu1()">
+            </select>
+        </td>
+        <td>&nbsp;</td>
+        <td>
+            <label>Wybierz przewod 2</label>
+             <select ng-model="przewod2" ng-options="przew for przew in przewody" ng-change="zmianaPrzewodu2()">
+            </select>
+        </td>
+    </tr>
+    <tr><td></td><td></td><td></td></tr>
+    <td colspan="3">
+        <table>
+            <tr>
+                <th>Żyła 1</th>
+                <th>Żyła 2</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="zyla in zyly1">
+                <td style="text-align: left;"><span ng-style='{"background-color": "{{zyla.chtml}}"}' style="width: 5px;">&nbsp;</span>
+                    {{zyla.cname}} - {{zyla.opis}}
+                </td>
+                <td>
+                    <select ng-model="zyla2[zyla.id]" 
+                        ng-options="z as z.cname + ' : ' + z.opis  for z in zyly2" 
+                        ng-change="zmianaZyly2(zyla.id)"></select>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+</table>
+{{z1}} {{z2}}
+
+</div>
