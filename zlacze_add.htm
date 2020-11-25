@@ -1,2 +1,9 @@
 <div ng-controller="zlaczeadd-ctrl">
+    <table>
+        <tr>
+            <td ng-repeat="part in przewody track by $index"><label>{{$index*50}} - {{$index*50+49}}</label>
+                <select ng-options="przewod as przewod.id +' ' + przewod.descr for przewod in part" ng-change="chosePrzewod(przewod.id)"></select>
+            </td>
+        </tr>
+    </table>
 </div>
