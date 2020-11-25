@@ -5,23 +5,27 @@ require_once "database.php";
 
 $con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con, "utf8");
-$query = "SELECT `id`, `name`, `zbiorcze`, `kod`, `polaczenie`, `pomieszczenie` FROM `MiejsceView` WHERE `polaczenie` = 1";
 
-$result = mysqli_query($con, $query);
-$miejscaarray = array();
-$zbiorczearray = array();
-while($row = mysqli_fetch_array($result)) {
-	array_push($miejscaarray, array( 'id' => $row['id'], 
-                                    'name' => $row['name'] . " (" . $row['pomieszczenie'] . ")", 
-									'kable' => array()
-                                    ));
-    $zbiorczearray[$row['id']] = $row['zbiorcze'];
+$index = 0;
+$przewody = array();
+while(true) {
+    $tmp = array();
+    $query = "SELECT `id`, `description`, `ilosc_zyl` FROM `przewod` LIMIT " . 50*$index . ",  50";
+    $isrow = false;
+    while($row = mysqli_fetch_array($result)) {
+        $isrow = true;
+        array_push($tmp, array(
+            'id' => $row['id'],
+            'descr' => $row['description'],
+            'ilosc_zyl' => $row['ilosc_zyl']
+        ));
+    }    
+    $index += 1;
+    array_push($przewody, $tmp);
 }
 
 $opt = array(
-    "miejsca" => $miejscaarray,
-    "zbiorcze" => $zbiorczearray,
-    "zyly" => $zylyarray,
+    "przewody" => $przewody
 );
 echo json_encode ($opt);
 mysqli_close($con);

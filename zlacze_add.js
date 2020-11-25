@@ -3,7 +3,7 @@ app.controller('zlaczeadd-ctrl', ['$scope', '$http', function($scope, $http) {
     $scope.przewody = []
     $scope.zyla2 = {};
     $http.get("zlacze_add.php").then(function(response) { 
-        //$scope.zbiorcze = response.data.zbiorcze;
+        $scope.przewody = response.data.przewody;
         //$scope.przewody = response.data.przewody;
         //$scope.zlacza = response.data.zlacza;
         //$scope.zyly = response.data.zyly;
