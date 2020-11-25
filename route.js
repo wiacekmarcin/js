@@ -18,7 +18,13 @@ app.config(function($routeProvider) {
     .when("/zlacza", {
         templateUrl: 'zlacza.htm',    
     })
+    .when("/zlacze_add", {
+        templateUrl: 'zlacze_add.htm',    
+    })
     .when("/polaczenie_add", {
         templateUrl: 'polaczenie_add.htm',    
+    })
+    .when("/zyla_add", {
+        templateUrl: 'zyla_add.htm',    
     })
 });
