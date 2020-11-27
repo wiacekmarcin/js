@@ -1,45 +1,55 @@
 <div ng-controller="polaczenieadd-ctrl">
-<label>Wybierz miejsce</label>
-<select ng-model="id_miejsce" ng-options="miejsce as miejsce.name for miejsce in miejsca" ng-change="zmianaMiejsca()">
-</select>
+    <div class="w3-container" ng-show="choose">
+        <label>Wybierz miejsce</label>
+        <select ng-model="id_miejsce" ng-options="miejsce as miejsce.name for miejsce in miejsca" ng-change="zmianaMiejsca(miejsce)">
+        </select><br>
 
-<table>
-    <tr>
-        <td>
-            <label>Wybierz przewod 1</label>
-            <select ng-model="przewod1" ng-options="przew for przew in przewody" ng-change="zmianaPrzewodu1()">
-            </select>
-        </td>
-        <td>&nbsp;</td>
-        <td>
-            <label>Wybierz przewod 2</label>
-             <select ng-model="przewod2" ng-options="przew for przew in przewody" ng-change="zmianaPrzewodu2()">
-            </select>
-        </td>
-    </tr>
-    <tr><td></td><td></td><td></td></tr>
-    <td colspan="3">
+        <label>Wybierz połączenie</label>
+        <select ng-model="id_polmiejsce" ng-options="polmiejsce as polmiejsce.name for polmiejsce in polmiejsca" ng-change="zmianaPolMiejsca()">
+        </select><br>
+        <input type="button" ng-click="chooseMiejsce(false)" value="Dodaj połączenia"><br>
+    </div>
+    <div class="w3-container" ng-show="!choose">
         <table>
             <tr>
-                <th>Żyła 1</th>
-                <th>Żyła 2</th>
-                <th></th>
-            </tr>
-            <tr ng-repeat="zyla in zyly1">
-                <td style="text-align: left;"><span ng-style='{"background-color": "{{zyla.chtml}}"}' style="width: 5px;">&nbsp;</span>
-                    {{zyla.cname}} - {{zyla.opis}}
-                </td>
                 <td>
-                    <select ng-model="zyla2[zyla.id]" 
-                        ng-options="z as z.cname + ' : ' + z.opis  for z in zyly2" 
-                        ng-change="zmianaZyly2(zyla.id)"></select>
+                    <label>Wybierz przewod 1</label>
+                    <select ng-model="przewod1" ng-options="przew for przew in przewody" ng-change="zmianaPrzewodu1()">
+                    </select>
                 </td>
-                <td></td>
+                <td>&nbsp;</td>
+                <td>
+                    <label>Wybierz przewod 2</label>
+                    <select ng-model="przewod2" ng-options="przew for przew in przewody" ng-change="zmianaPrzewodu2()">
+                    </select>
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr ng-show="przewod1 && przewod2">
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <th>Żyła 1</th>
+                            <th>Żyła 2</th>
+                            <th></th>
+                        </tr>
+                        <tr ng-repeat="zyla in zyly1">
+                            <td style="text-align: left;"><span ng-style='{"background-color": "{{zyla.chtml}}"}' style="width: 5px;">&nbsp;</span>
+                                {{zyla.cname}} - {{zyla.opis}}
+                            </td>
+                            <td>
+                                <select ng-model="zyla2[zyla.id]" 
+                                    ng-options="z as z.id + '.' + z.cname + ' : ' + z.opis  for z in zyly2" 
+                                    ng-change="zmianaZyly2(zyla.id)"></select>
+                            </td>
+                            <td>
+                                <input bg-if="z2 == zyla.id" type="button" ng-click="insertPolaczenia(z1,z2)" value="Dodaj">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </table>
-    </td>
-</tr>
-</table>
-{{z1}} {{z2}}
-
+        <input type="button" ng-click="chooseMiejsce(true)" value="Anuluj">&nbsp;<input type="button" ng-click="addPolaczenie()" value="Dodaj">
+    </div>
 </div>
