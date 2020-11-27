@@ -60,11 +60,36 @@ app.controller('zylaadd-ctrl', ['$scope', '$http', function($scope, $http) {
 
 
     $scope.dodajDoBazy = function() {
-        var przewod_id = $scope.przewod_id.id;
-        var zyly = [];
+        var params =  {'przewod' : $scope.przewod_id.id , 'count' : $scope.przewod_id.ilosc_zyl};
         for (var i = 0; i < $scope.przewod_id.ilosc_zyl; i++) {
-            zyly.push({'id' : $scope.selectedZid[i], 'cid': $scope.selectedKolor[i].id, 'opis': $scope.selectedOpis[i]});
+            params['id_' + i] = $scope.selectedZid[i] ? $scope.selectedZid[i] : '-1'; 
+            params['color_' + i] = $scope.selectedKolor[i].id;
+            params['descr_' + i] = $scope.selectedOpis[i] ? $scope.selectedOpis[i] : '';
         }
-        console.log(zyly);
+        sendData(params);
+    }
+
+    var toparams = function (obj) {
+        var p = [];
+        for (var key in obj) {
+            p.push(key + '=' + encodeURIComponent(obj[key]));
+        }
+        return p.join('&');
+    };
+
+    var sendData = function(params) {
+        $http({
+            method: 'POST',
+            url: "zyla_ins.php",
+            data: toparams(params),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then( function success(response) {
+            console.log(response);
+            $scope.dodajZyly(false);
+        }, function error(response) {
+            alert("Nie Udało się") ;
+        });
     }
 }]);
+
+
