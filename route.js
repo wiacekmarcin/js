@@ -24,6 +24,9 @@ app.config(function($routeProvider) {
     .when("/polaczenie_add", {
         templateUrl: 'polaczenie_add.htm',    
     })
+    .when("/polaczenie_zyla", {
+        templateUrl: 'polaczenie_zyla.htm',    
+    })
     .when("/zyla_add", {
         templateUrl: 'zyla_add.htm',    
     })

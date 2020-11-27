@@ -31,8 +31,12 @@ app.controller('polaczenieadd-ctrl', ['$scope', '$http', function($scope, $http)
     $scope.zmianaZyly2 = function(id) {
         if (id == undefined) {
             $scope.z2 = undefined;
-        } else
-            $scope.z2 = $scope.zyla2[id].id;
+        } else {
+            if ($scope.zyla2[id] == undefined)
+                $scope.z2 = undefined;
+            else 
+                $scope.z2 = $scope.zyla2[id].id;
+        }
         $scope.z1 = id;
     }
 
@@ -80,7 +84,7 @@ app.controller('polaczenieadd-ctrl', ['$scope', '$http', function($scope, $http)
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then( function success(response) {
             console.log(response);
-            
+            $scope.zyla2 = {};
         }, function error(response) {
             alert("Nie Udało się") ;
         });
