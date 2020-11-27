@@ -56,6 +56,7 @@ $result = mysqli_query($con, $query);
 $polmiejsce = array();
 while($row = mysqli_fetch_array($result)) {
     if ($prevmid != $row['miejsce_id']) {
+        $prevmid = $row['miejsce_id'];
         $polmiejsce[$row['miejsce_id']] = array();
     }
     array_push($polmiejsce[$row['miejsce_id']], array(
