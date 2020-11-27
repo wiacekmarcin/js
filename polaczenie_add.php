@@ -49,10 +49,25 @@ while($row = mysqli_fetch_array($result)) {
                                     'chtml' => $row['html'],
                                     ));
 }
+
+$prevmid = -1;
+$query = "SELECT `id`, `miejsce_id`, `opis` FROM `polaczenie` ORDER by `miejsce_id`"; 
+$result = mysqli_query($con, $query);
+$polmiejsce = array();
+while($row = mysqli_fetch_array($result)) {
+    if ($prevmid != $row['miejsce_id']) {
+        $polmiejsce[$row['miejsce_id']] = array();
+    }
+    array_push($polmiejsce[$row['miejsce_id']], array(
+        'id' => $row['id'],
+        'name' => $row['opis']
+    ));
+}
 $opt = array(
     "miejsca" => $miejscaarray,
     "zbiorcze" => $zbiorczearray,
     "zyly" => $zylyarray,
+    "polmiejsca" => $polmiejsce
 );
 echo json_encode ($opt);
 mysqli_close($con);

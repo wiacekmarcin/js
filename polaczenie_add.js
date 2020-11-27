@@ -2,15 +2,21 @@ app.controller('polaczenieadd-ctrl', ['$scope', '$http', function($scope, $http)
     $scope.id_miejsce = -1;
     $scope.przewody = []
     $scope.zyla2 = {};
+    $scope.choose = true;
+    $scope.polmiejsca = [];
     $http.get("polaczenie_add.php").then(function(response) { 
         $scope.zbiorcze = response.data.zbiorcze;
-        //$scope.przewody = response.data.przewody;
-        //$scope.zlacza = response.data.zlacza;
+        $scope.polaczniamiejsca = response.data.polmiejsca;
         $scope.zyly = response.data.zyly;
         $scope.miejsca = response.data.miejsca;
     });
 
-    $scope.zmianaMiejsca = function() {
+    $scope.zmianaMiejsca = function(miejsce) {
+        $scope.przewody = this.id_miejsce.kable;
+        $scope.polmiejsca = $scope.polaczniamiejsca[this.id_miejsce.id];
+    }
+
+    $scope.zmianaPolMiejsca = function() {
         $scope.przewody = $scope.id_miejsce.kable;
     }
 
@@ -23,7 +29,61 @@ app.controller('polaczenieadd-ctrl', ['$scope', '$http', function($scope, $http)
     }
 
     $scope.zmianaZyly2 = function(id) {
+        if (id == undefined) {
+            $scope.z2 = undefined;
+        } else
+            $scope.z2 = $scope.zyla2[id].id;
         $scope.z1 = id;
-        $scope.z2 = $scope.zyla2[id].id;
     }
+
+    $scope.chooseMiejsce = function(bl) {
+        $scope.choose = bl;
+    }
+    
+    $scope.insertPolaczenia = function(z1, z2)
+    {
+        var s1 = 'INSERT INTO `polaczenie_zyla`(`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES ';
+        s1 += '(NULL, 1, '  + z1 + ',' + z2 + ')';
+        var s2 = 'INSERT INTO `polaczenie_zyla`(`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES ';
+        s2 += '(NULL, 1, '  + z2 + ',' + z1 + ')';
+        console.log(s1);
+        console.log(s2);
+    }
+
+    $scope.addPolaczenie = function() {
+        var params =  {'polaczenie_miejsce_id' : $scope.id_polmiejsce.id , 'count' : 0};
+        var i = 0;
+        for (var m in $scope.zyla2) {
+            if ($scope.zyla2[m] == undefined)
+                continue;
+            params['id1_' + i] = m;
+            params['id2_' + i] = $scope.zyla2[m].id;
+            i+=1;
+        }
+        params['count'] = i;
+        sendData(params);
+    }
+
+    var toparams = function (obj) {
+        var p = [];
+        for (var key in obj) {
+            p.push(key + '=' + encodeURIComponent(obj[key]));
+        }
+        return p.join('&');
+    };
+
+    var sendData = function(params) {
+        $http({
+            method: 'POST',
+            url: "polaczenie_ins.php",
+            data: toparams(params),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then( function success(response) {
+            console.log(response);
+            
+        }, function error(response) {
+            alert("Nie Udało się") ;
+        });
+    }
+
 }]);
