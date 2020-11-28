@@ -43,6 +43,8 @@ $result = mysqli_query($con, $query);
 
 while($row = mysqli_fetch_array($result)) {
     array_push($zylyArray[$row['zlacze_id']], array(
+        "id" => $row['id'],
+        "zid" => $row['zyla_id'],
         "pos" => $row['pos'],
         "opis" => $row['opis'],
         "cname" => $row['name'],
@@ -60,11 +62,29 @@ while($row = mysqli_fetch_array($result)) {
                     'pom' => $row['pomieszczenie']);
 }
 
+$query = "SELECT `id`, `color_id`, `przewod_id`, `opis`, `name`, `html` FROM `ZylaWidok` WHERE 1 ORDER BY `przewod_id`";
+$allzylyArray = array();
+$ppid = -1;
+$result = mysqli_query($con, $query);
+while($row = mysqli_fetch_array($result)) {
+    if ($ppid != $row['przewod_id']) {
+        $allzylyArray[$row['przewod_id']] = array();
+        $ppid = $row['przewod_id'];
+    }
+    array_push($allzylyArray[$row['przewod_id']],
+                    array("zid" => $row["id"],
+                    "cname" => $row["name"],
+                    "html" => $row["html"],
+                    "opis" => $row["opis"]
+                ));
+}
+
 $opt = array(
     'zbiorcze' => $zbiorczeArray,
     'zlacza' => $zlaczaArray,
     'przewody' => $kableArray,
     'zyly' => $zylyArray,
+    'allzyly' => $allzylyArray,
     'miejsca' => $miejsceArray
 );
 
