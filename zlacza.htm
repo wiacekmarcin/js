@@ -3,7 +3,7 @@
         <span><button ng-click="chooseAll();">Wszystko</button> </span>
         <span ng-repeat="zb in zbiorcze"><button ng-click="choose(zb.id, zb.name, zb.pom);">{{zb.name}}</button> </span>
     </p>
-    <h4>{{selectZbiorcze == -1 ? "Wszystko" : chooseName}}</h4>
+    <h4>{{(selectZbiorcze == -1 ? "Wszystko" : chooseName)}}</h4>
     
     <button ng-click="setDetailsAll()">{{ detailsAll ? "Ukryj " : "Pokaż "}} wszystko</button>
     <table>
@@ -20,9 +20,11 @@
             <td style="text-align: center;">{{ przewody[zlacze.przewod_id].il }}</td>
             <td style="text-align: center;"> 
                 <button ng-if="zlacze.zlacze_id" ng-click="setDetails(zlacze.zlacze_id)">Szczegóły</button>
+                <button ng-if="!zlacze.zlacze_id && allzyly[zlacze.przewod_id]" 
+                ng-click="addZlacze(zlacze.przewod_id, zlacze.miejsce_id, przewody[zlacze.przewod_id].il)">Dodaj&nbsp;złacze</button>
             </td>
         </tr>
-        <tr ng-repeat-end ng-if="zlacze.zlacze_id" ng-show="detailsAll || (zlacze.zlacze_id == selectedZlaczeId)" style="background-color: honeydew;">
+        <tr ng-show="detailsAll || (selectedZlaczeId != -1 && zlacze.zlacze_id == selectedZlaczeId)" style="background-color: honeydew;">
             <td ng-show="selectZbiorcze == -1"></td>
             <td ng-show="selectZbiorcze == -1"></td>
             <td></td>
@@ -39,7 +41,33 @@
                 </table>
             </td>
             <td></td>
-            <td><button ng-click="setDetails(-1)">Ukryj</button></td>
+            <td><button ng-click="setDetails(-1)">Ukryj</button><button ng-click="editZlacze(zlacze)">Edytuj</button></td>
+        </tr>
+        <tr ng-repeat-end ng-show="zlacze.zlacze_id == editZlId || (zlacze.przewod_id == selectedPrzewodId && add)" style="background-color: cadetblue;">
+            <td ng-show="selectZbiorcze == -1"></td>
+            <td ng-show="selectZbiorcze == -1"></td>
+            <td></td>
+            <td><input type="text" ng-model="editEtykieta"></td>
+            <td>
+                <table>
+                    <tr ng-repeat="zyla in zylyedytowane track by $index" >
+                        <td><span ng-show="!add">{{zyla.pos}}</span><span ng-show="add">{{$index+1}}</span></td>
+                        <td>
+                            <select ng-model="editZyla[zyla.pos]" 
+                            ng-options="item as item.opis for item in selectedit track by item.pos"
+                            ng-change="checkZlacze()">
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+            <td>
+                <button ng-click="saveEdit()" ng-show="iseditcorret">Zachowaj</button>
+                <button ng-click="cancelEdit()">Anuluj</button>
+            </td>
+        </tr>
+
         </tr>
     </table>
 </div>

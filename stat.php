@@ -31,13 +31,17 @@ $query = "SELECT CAST(count(*)/2 AS UNSIGNED) FROM `ZewnetrzneKableView` WHERE 1
 $result = mysqli_query($con, $query);
 $cntPzew = $result->fetch_array()[0];
 
+$query = "SELECT sum(`ilosc_zyl`) FROM `przewod` WHERE 1 ";
+$result = mysqli_query($con, $query);
+$cntAllZyl = $result->fetch_array()[0];
+
 $outp = "{";
 $outp .= '"przewod":"'  . $cntPrz . '",';
 $outp .= '"zyla":"'      . $cntZyla        . '",';
 $outp .= '"zlacze":"'    . $cntZlacze     . '",';
 $outp .= '"zewn_przew":"'    . $cntPzew     . '",';
-$outp .= '"wewn_przew":"'    . $cntPwew     . '"}';
-
+$outp .= '"wewn_przew":"'    . $cntPwew     . '",';
+$outp .= '"zyla_all":"'     . $cntAllZyl .  '"}';
 $con->close();
 
 echo($outp);
