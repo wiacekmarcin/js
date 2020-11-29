@@ -1,5 +1,9 @@
-app.controller('zylaadd-ctrl', ['$scope', '$http', function($scope, $http) {
+app.controller('zylaadd-ctrl', ['$scope', '$routeParams', '$location', '$http', 
+function($scope, $routeParams, $location, $http) {
+    var pid = $routeParams.id;
+    
     $scope.przewod_id = -1;
+
     $scope.selectedId = {};
     $scope.selectedZyla = false;
 
@@ -11,6 +15,18 @@ app.controller('zylaadd-ctrl', ['$scope', '$http', function($scope, $http) {
     $http.get("zyla_add.php").then(function(response) { 
         $scope.przewody = response.data.przewody;
         $scope.colors = response.data.colors;
+        if (pid != -1) {
+            for (var i = 0; i < $scope.przewody.length; i++) {
+                for (var j = 0; j < $scope.przewody[i].length; j++) {
+                    if ($scope.przewody[i][j].id == pid) {
+                        $scope.przewod_id = $scope.przewody[i][j];
+                        $scope.dodajZyly(true);
+                        j = $scope.przewody[i].length;
+                        i = $scope.przewody.length;
+                    }
+                }
+            }
+        }
     });
 
     $scope.choosePrzewod = function(index)
@@ -51,6 +67,7 @@ app.controller('zylaadd-ctrl', ['$scope', '$http', function($scope, $http) {
         } else {
             $scope.przewod_id = -1;
             $scope.selectedId = {};
+            $location.path("zyla_add/-1");
         }
     }
 

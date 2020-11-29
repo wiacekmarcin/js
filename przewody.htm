@@ -12,7 +12,7 @@
             <td style="text-align: left;">{{ wire.descr }}</td>
             <td style="text-align: center;">{{ wire.ilosc_zyl }}</td>
             <td style="text-align: left;" ng-show="selectZbiorcze == -1">{{ wire.miejsce1 }}</td>
-            <td style="text-align: left;">{{ wire.miejsce2 }}</td>
+            <td style="text-align: left;">{{ wire.miejsce2 }} ( {{ wire.mid2 }} )</td>
             <td style="text-align: center;"> <div class="btn-group">
                 <button ng-click="seteditPlace(wire.id)">Edytuj</button>
                 <button ng-click="setDetails(wire.id)">Szczegóły</button></div>
@@ -23,6 +23,7 @@
             <td>
                 <table>
                     <tr ng-repeat="zyla in zyly[wire.id]">
+                        <td>{{zyla.zid}}</td>
                         <td>{{$index+1}}</td>
                         <td ng-style='{"background-color": "{{zyla.chtml}}"}'>&nbsp;</td>
                         <td>{{zyla.cname}}</td>

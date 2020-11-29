@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 27 Lis 2020, 06:14
+-- Czas generowania: 29 Lis 2020, 18:05
 -- Wersja serwera: 5.7.32
 -- Wersja PHP: 7.4.3
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `kb_ster`
 --
+CREATE DATABASE IF NOT EXISTS `kb_ster` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `kb_ster`;
 
 -- --------------------------------------------------------
 
@@ -28,12 +30,22 @@ SET time_zone = "+00:00";
 -- Struktura tabeli dla tabeli `kolor`
 --
 
+DROP TABLE IF EXISTS `kolor`;
 CREATE TABLE `kolor` (
   `id` tinyint(4) UNSIGNED NOT NULL,
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `html` text CHARACTER SET ascii NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
+--
+-- RELACJE DLA TABELI `kolor`:
+--
+
+--
+-- Tabela Truncate przed wstawieniem `kolor`
+--
+
+TRUNCATE TABLE `kolor`;
 --
 -- Zrzut danych tabeli `kolor`
 --
@@ -52,7 +64,8 @@ INSERT INTO `kolor` (`id`, `name`, `html`) VALUES
 (10, 'Szary', 'silver'),
 (11, 'Jasnozielony', 'lime'),
 (12, 'Jasnobrązowy', '#CD853F'),
-(13, 'Różowy', 'fuchsia');
+(13, 'Różowy', 'fuchsia'),
+(14, 'Błękitny', 'aqua');
 
 -- --------------------------------------------------------
 
@@ -60,6 +73,7 @@ INSERT INTO `kolor` (`id`, `name`, `html`) VALUES
 -- Zastąpiona struktura widoku `KolorView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `KolorView`;
 CREATE TABLE `KolorView` (
 `id` tinyint(4) unsigned
 ,`name` varchar(20)
@@ -72,6 +86,7 @@ CREATE TABLE `KolorView` (
 -- Struktura tabeli dla tabeli `miejsce`
 --
 
+DROP TABLE IF EXISTS `miejsce`;
 CREATE TABLE `miejsce` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
@@ -82,6 +97,17 @@ CREATE TABLE `miejsce` (
   `polaczenie` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- RELACJE DLA TABELI `miejsce`:
+--   `id_pomieszczenie`
+--       `pomieszczenie` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `miejsce`
+--
+
+TRUNCATE TABLE `miejsce`;
 --
 -- Zrzut danych tabeli `miejsce`
 --
@@ -113,14 +139,14 @@ INSERT INTO `miejsce` (`id`, `name`, `description`, `zbiorcze`, `id_pomieszczeni
 (24, 'Puszka w kuchni obok gazu', 'W kuchni na ścianie w kanałem odpowietrzającym obok rury gazowej', 1, 7, 'KUCH-SZAF_GAZ', 0),
 (25, 'Rozdzielnia licznik', 'W holu umieszczona nad drzwiami wejściowymi', 1, 1, 'HOL-LICZNIK', 0),
 (26, 'Rozdzielnia pokój', 'Umieszczona na dłuższej ścianie dłuższej łazienki. ', 1, 4, 'POK-ROZD', 0),
-(27, 'Rozdzielnia przy pompie wody', 'Łazienka, umieszczona za wanną. ', 1, 8, 'LAZ-POMPA', 0),
+(27, 'Rozdzielnia przy pompie wody', 'Łazienka, umieszczona za wanną. ', 0, 8, 'LAZ-POMPA', 1),
 (28, 'Rozdzielnia sypialnia', 'Umieszczona w sypialni na ścianie z przedpokojem po lewej stronie w rogu ze ścianą od salonu', 1, 3, 'SYP-ROZD', 0),
 (29, 'Grzejnik jadalnia', 'Zasilanie termostatu i czujnik temperatury przy grzejniku w jadalni', 0, 9, 'JAD-GRZEJNIK', 0),
 (30, 'Gniazda 230V pokój', 'Umieszczone na ścianie z salonem pod oknem i na ścianie na naprzeciwko bliżej okna i bliżej łazienki. ', 0, 4, 'POK-GNIAZDA', 0),
 (31, 'Grzejnik pracownia', 'Zasilanie termostatu i czujnik temperatury przy grzejniku w pracowni', 0, 5, 'PRAC-GRZEJNIK', 0),
 (32, 'Grzejnik salon', 'Zasilanie termostatu i czujnik temperatury przy grzejniku w salonie', 0, 6, 'SAL-GRZEJNIK', 0),
 (33, 'Grzejnik sypialnia', 'Zasilanie termostatu i czujnik temperatury przy grzejniku w sypialni', 0, 3, 'SYP-GRZEJNIK', 0),
-(34, 'Sciana w holu z drzwiami od pokojów', 'Sciana w holu z drzwiami od pokojów', 0, 1, 'HOL-SC_POKOJE', 0),
+(34, 'Sciana w holu z drzwiami od pokojów', 'Sciana w holu z drzwiami od pokojów', 0, 1, 'HOL-SC_POKOJE', 1),
 (35, 'Kontaktron pokój', 'Kontaktron umieszczony w drzwiach od pokoju', 0, 4, 'POK-KONTAKTRON', 0),
 (36, 'Kontaktron pracownia', 'Kontaktron umieszczony w drzwiach od pracowni ', 0, 5, 'PRAC-KONTAKTRON', 0),
 (37, 'Czujniki ruchu w holu od pokoi', 'Czujnik ruchu umieszczony na ścianie z drzwiami od pokoju na górze przy rurze gazowej', 0, 1, 'HOL-RUCH_POK', 0),
@@ -177,7 +203,7 @@ INSERT INTO `miejsce` (`id`, `name`, `description`, `zbiorcze`, `id_pomieszczeni
 (88, 'Gniazdo 230V w łazience lewe', 'Gniazdo 230V w łazience lewe umieszczone po lewej stronie drzwi bliżej wanny', 0, 8, 'LAZ-GNIAZD_LEWE', 0),
 (89, 'Monitor pod lustrem', 'Monitor pod lustrem w łazience. ', 0, 8, 'LAZ-MONITOR', 0),
 (90, 'Temperatura łazienka podłoga', 'Czujnik temperatury w podłodze w łazience (ogrzewanie wodne)', 0, 7, 'LAZ-PODL_TEMP', 0),
-(91, 'Łazienka, ściana z drzwiami', 'Łazienka, ściana z drzwiami obok wanny', 0, 8, 'LAZ-SC_DRZWI', 0),
+(91, 'Łazienka, ściana z drzwiami', 'Łazienka, ściana z drzwiami obok wanny', 0, 8, 'LAZ-SC_DRZWI', 1),
 (92, 'Gabaryt w łazience', 'Gabaryt w łazience', 0, 8, 'LAZ-GABARYT', 0),
 (93, 'Gniazdo 230V w pod lustrem lewe', 'Gniazdo 230V w pod lustrem lewe w łazience bliżej wanny', 0, 8, 'LAZ-GND-LUS-LEWE', 0),
 (94, 'Gniazda 230V pod lustrem prawe', 'Gniazda 230V pod lustrem prawe bliżej prysznica w łazience', 0, 8, 'LAZ-GND-LUS-PRAW', 0),
@@ -200,6 +226,7 @@ INSERT INTO `miejsce` (`id`, `name`, `description`, `zbiorcze`, `id_pomieszczeni
 -- Zastąpiona struktura widoku `MiejsceView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `MiejsceView`;
 CREATE TABLE `MiejsceView` (
 `id` tinyint(3) unsigned
 ,`name` varchar(64)
@@ -217,18 +244,34 @@ CREATE TABLE `MiejsceView` (
 -- Struktura tabeli dla tabeli `polaczenie`
 --
 
+DROP TABLE IF EXISTS `polaczenie`;
 CREATE TABLE `polaczenie` (
   `id` smallint(11) NOT NULL,
-  `miejsce_id` tinyint(3) NOT NULL,
+  `miejsce_id` tinyint(3) UNSIGNED NOT NULL,
   `opis` varchar(64) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- RELACJE DLA TABELI `polaczenie`:
+--   `miejsce_id`
+--       `miejsce` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `polaczenie`
+--
+
+TRUNCATE TABLE `polaczenie`;
 --
 -- Zrzut danych tabeli `polaczenie`
 --
 
 INSERT INTO `polaczenie` (`id`, `miejsce_id`, `opis`) VALUES
-(1, 105, 'Połączenie przewodu 20 i 21');
+(1, 105, 'Przewód 20'),
+(2, 27, 'Przewód 7'),
+(3, 27, 'Przewód 8'),
+(4, 91, 'Przewód 13'),
+(5, 34, 'Przewód 42');
 
 -- --------------------------------------------------------
 
@@ -236,9 +279,10 @@ INSERT INTO `polaczenie` (`id`, `miejsce_id`, `opis`) VALUES
 -- Zastąpiona struktura widoku `PolaczenieView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `PolaczenieView`;
 CREATE TABLE `PolaczenieView` (
 `pid` smallint(11)
-,`miejsce_id` tinyint(3)
+,`miejsce_id` tinyint(3) unsigned
 ,`opis` varchar(64)
 ,`mid` tinyint(3) unsigned
 ,`name` varchar(64)
@@ -253,37 +297,155 @@ CREATE TABLE `PolaczenieView` (
 -- --------------------------------------------------------
 
 --
+-- Zastąpiona struktura widoku `PolaczenieZylaWidok`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+DROP VIEW IF EXISTS `PolaczenieZylaWidok`;
+CREATE TABLE `PolaczenieZylaWidok` (
+`id` smallint(6)
+,`polaczenie_id` smallint(6)
+,`zyla_id_1` smallint(6) unsigned
+,`zyla_id_2` smallint(6) unsigned
+,`cid1` tinyint(3) unsigned
+,`pid1` tinyint(3) unsigned
+,`opis1` varchar(50)
+,`cname1` varchar(20)
+,`html1` text
+,`cid2` tinyint(3) unsigned
+,`pid2` tinyint(3) unsigned
+,`opis2` varchar(50)
+,`cname2` varchar(20)
+,`html2` text
+,`miejsce_id` tinyint(3) unsigned
+,`pol_opis` varchar(64)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `polaczenie_zyla`
 --
 
+DROP TABLE IF EXISTS `polaczenie_zyla`;
 CREATE TABLE `polaczenie_zyla` (
   `id` smallint(6) NOT NULL,
   `polaczenie_id` smallint(6) NOT NULL,
-  `zyla_id_1` smallint(6) NOT NULL,
-  `zyla_id_2` smallint(6) NOT NULL
+  `zyla_id_1` smallint(6) UNSIGNED NOT NULL,
+  `zyla_id_2` smallint(6) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- RELACJE DLA TABELI `polaczenie_zyla`:
+--   `zyla_id_1`
+--       `zyla` -> `id`
+--   `zyla_id_2`
+--       `zyla` -> `id`
+--   `polaczenie_id`
+--       `polaczenie` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `polaczenie_zyla`
+--
+
+TRUNCATE TABLE `polaczenie_zyla`;
 --
 -- Zrzut danych tabeli `polaczenie_zyla`
 --
 
 INSERT INTO `polaczenie_zyla` (`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES
-(1, 1, 4, 400),
-(2, 1, 400, 4),
 (3, 1, 1, 398),
-(4, 1, 398, 1),
 (5, 1, 2, 399),
-(6, 1, 399, 2),
 (7, 1, 3, 401),
-(8, 1, 401, 3),
+(1, 1, 4, 400),
 (9, 1, 5, 404),
-(10, 1, 404, 5),
 (11, 1, 6, 402),
-(12, 1, 402, 6),
 (13, 1, 7, 405),
-(14, 1, 405, 7),
 (15, 1, 8, 403),
-(16, 1, 403, 8);
+(4, 1, 398, 1),
+(6, 1, 399, 2),
+(2, 1, 400, 4),
+(8, 1, 401, 3),
+(12, 1, 402, 6),
+(16, 1, 403, 8),
+(10, 1, 404, 5),
+(14, 1, 405, 7),
+(35, 2, 256, 315),
+(17, 2, 257, 278),
+(19, 2, 258, 277),
+(21, 2, 259, 276),
+(23, 2, 260, 275),
+(53, 2, 261, 274),
+(27, 2, 262, 273),
+(31, 2, 263, 272),
+(49, 2, 264, 271),
+(33, 2, 265, 270),
+(34, 2, 270, 265),
+(50, 2, 271, 264),
+(32, 2, 272, 263),
+(28, 2, 273, 262),
+(54, 2, 274, 261),
+(24, 2, 275, 260),
+(22, 2, 276, 259),
+(20, 2, 277, 258),
+(18, 2, 278, 257),
+(36, 2, 315, 256),
+(43, 3, 266, 281),
+(45, 3, 267, 280),
+(47, 3, 268, 279),
+(39, 3, 269, 314),
+(48, 3, 279, 268),
+(46, 3, 280, 267),
+(44, 3, 281, 266),
+(40, 3, 314, 269),
+(55, 4, 282, 290),
+(57, 4, 283, 291),
+(59, 4, 284, 292),
+(61, 4, 285, 293),
+(63, 4, 286, 294),
+(65, 4, 287, 295),
+(67, 4, 288, 296),
+(69, 4, 289, 297),
+(56, 4, 290, 282),
+(58, 4, 291, 283),
+(60, 4, 292, 284),
+(62, 4, 293, 285),
+(64, 4, 294, 286),
+(66, 4, 295, 287),
+(68, 4, 296, 288),
+(70, 4, 297, 289),
+(108, 5, 410, 431),
+(71, 5, 411, 418),
+(76, 5, 411, 419),
+(86, 5, 411, 424),
+(88, 5, 411, 425),
+(102, 5, 411, 428),
+(104, 5, 411, 429),
+(84, 5, 412, 423),
+(78, 5, 413, 420),
+(82, 5, 413, 422),
+(106, 5, 413, 430),
+(80, 5, 414, 421),
+(98, 5, 415, 426),
+(100, 5, 416, 427),
+(120, 5, 416, 433),
+(118, 5, 417, 432),
+(72, 5, 418, 411),
+(75, 5, 419, 411),
+(77, 5, 420, 413),
+(79, 5, 421, 414),
+(81, 5, 422, 413),
+(83, 5, 423, 412),
+(85, 5, 424, 411),
+(87, 5, 425, 411),
+(97, 5, 426, 415),
+(99, 5, 427, 416),
+(101, 5, 428, 411),
+(103, 5, 429, 411),
+(105, 5, 430, 413),
+(107, 5, 431, 410),
+(117, 5, 432, 417),
+(119, 5, 433, 416);
 
 -- --------------------------------------------------------
 
@@ -291,11 +453,21 @@ INSERT INTO `polaczenie_zyla` (`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) 
 -- Struktura tabeli dla tabeli `pomieszczenie`
 --
 
+DROP TABLE IF EXISTS `pomieszczenie`;
 CREATE TABLE `pomieszczenie` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(25) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- RELACJE DLA TABELI `pomieszczenie`:
+--
+
+--
+-- Tabela Truncate przed wstawieniem `pomieszczenie`
+--
+
+TRUNCATE TABLE `pomieszczenie`;
 --
 -- Zrzut danych tabeli `pomieszczenie`
 --
@@ -317,12 +489,22 @@ INSERT INTO `pomieszczenie` (`id`, `name`) VALUES
 -- Struktura tabeli dla tabeli `przewod`
 --
 
+DROP TABLE IF EXISTS `przewod`;
 CREATE TABLE `przewod` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `description` varchar(250) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `ilosc_zyl` tinyint(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- RELACJE DLA TABELI `przewod`:
+--
+
+--
+-- Tabela Truncate przed wstawieniem `przewod`
+--
+
+TRUNCATE TABLE `przewod`;
 --
 -- Zrzut danych tabeli `przewod`
 --
@@ -371,10 +553,10 @@ INSERT INTO `przewod` (`id`, `description`, `ilosc_zyl`) VALUES
 (40, 'Włącznik światła WC', 3),
 (41, 'Hol, dodatkowy kabel w zabudowie rury gazowej', 8),
 (42, 'Hol, kabel od czujników ruchu i kontaktronów. Powiązany z kablami 43, 44, 45, 46, 47', 8),
-(43, 'Hol, czujnik ruchu w Holu umieszczony nad drzwiami do pokoju. Kabel powiązany z 42', 3),
-(44, 'Pracowania, czujnik ruchu nad drzwiami. Kabel powiązany z 42', 3),
+(43, 'Hol, czujnik ruchu w Holu umieszczony nad drzwiami do pokoju. Kabel powiązany z 42', 4),
+(44, 'Pracowania, czujnik ruchu nad drzwiami. Kabel powiązany z 42', 4),
 (45, 'Pracowania, kontaktron w drzwiach. Kabel powiązany z 42', 2),
-(46, 'Pokoj, czujnik ruchu umieszczony nad drzwiami. Kabel powiązany z 42', 3),
+(46, 'Pokoj, czujnik ruchu umieszczony nad drzwiami. Kabel powiązany z 42', 4),
 (47, 'Pokoj, kontaktron w drzwiach. Kabel powiązany z 42', 2),
 (48, 'WC, do mikroprocesora kabel A (prawa strona)', 12),
 (49, 'WC, do mikroprocesora, kabel B (lewa strona)', 12),
@@ -493,6 +675,7 @@ INSERT INTO `przewod` (`id`, `description`, `ilosc_zyl`) VALUES
 -- Zastąpiona struktura widoku `PrzewodyView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `PrzewodyView`;
 CREATE TABLE `PrzewodyView` (
 `id` smallint(6) unsigned
 ,`kabel_id` tinyint(3) unsigned
@@ -514,12 +697,26 @@ CREATE TABLE `PrzewodyView` (
 -- Struktura tabeli dla tabeli `przewod_miejsce`
 --
 
+DROP TABLE IF EXISTS `przewod_miejsce`;
 CREATE TABLE `przewod_miejsce` (
   `id` smallint(6) UNSIGNED NOT NULL,
   `kabel_id` tinyint(3) UNSIGNED NOT NULL,
   `miejsce_id` tinyint(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii COLLATE=ascii_bin;
 
+--
+-- RELACJE DLA TABELI `przewod_miejsce`:
+--   `kabel_id`
+--       `przewod` -> `id`
+--   `miejsce_id`
+--       `miejsce` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `przewod_miejsce`
+--
+
+TRUNCATE TABLE `przewod_miejsce`;
 --
 -- Zrzut danych tabeli `przewod_miejsce`
 --
@@ -614,7 +811,7 @@ INSERT INTO `przewod_miejsce` (`id`, `kabel_id`, `miejsce_id`) VALUES
 (87, 43, 34),
 (88, 43, 34),
 (89, 44, 8),
-(90, 44, 36),
+(90, 44, 34),
 (91, 45, 34),
 (92, 45, 36),
 (93, 46, 34),
@@ -845,44 +1042,221 @@ INSERT INTO `przewod_miejsce` (`id`, `kabel_id`, `miejsce_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `rodzaj_zlacza`
+--
+
+DROP TABLE IF EXISTS `rodzaj_zlacza`;
+CREATE TABLE `rodzaj_zlacza` (
+  `id` tinyint(4) NOT NULL,
+  `nazwa` varchar(32) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `kod` varchar(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELACJE DLA TABELI `rodzaj_zlacza`:
+--
+
+--
+-- Tabela Truncate przed wstawieniem `rodzaj_zlacza`
+--
+
+TRUNCATE TABLE `rodzaj_zlacza`;
+--
+-- Zrzut danych tabeli `rodzaj_zlacza`
+--
+
+INSERT INTO `rodzaj_zlacza` (`id`, `nazwa`, `kod`) VALUES
+(1, 'wtyczka', 'W'),
+(2, 'płytka', 'P'),
+(3, 'kabel', 'K'),
+(4, 'urządzenie', 'U');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `urzadzenie_piny`
+--
+
+DROP TABLE IF EXISTS `urzadzenie_piny`;
+CREATE TABLE `urzadzenie_piny` (
+  `id` smallint(5) UNSIGNED NOT NULL,
+  `urzadzenie_id` smallint(5) UNSIGNED NOT NULL,
+  `etykieta` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci NOT NULL,
+  `pos` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELACJE DLA TABELI `urzadzenie_piny`:
+--   `urzadzenie_id`
+--       `urządzenia` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `urzadzenie_piny`
+--
+
+TRUNCATE TABLE `urzadzenie_piny`;
+--
+-- Zrzut danych tabeli `urzadzenie_piny`
+--
+
+INSERT INTO `urzadzenie_piny` (`id`, `urzadzenie_id`, `etykieta`, `pos`) VALUES
+(1, 2, 'PO', 1),
+(2, 2, 'P1', 2),
+(3, 2, 'P2', 3),
+(4, 2, 'P3', 4),
+(5, 2, 'P4', 5),
+(6, 2, 'P5', 6),
+(7, 2, 'P6', 7),
+(8, 2, 'P7', 8),
+(9, 2, 'INT', 9),
+(10, 2, 'VCC', 10),
+(11, 2, 'GND', 11),
+(12, 2, 'SDA', 12),
+(13, 2, 'SCL', 13),
+(14, 3, 'P0', 1),
+(15, 3, 'P1', 2),
+(16, 3, 'P2', 3),
+(17, 3, 'P3', 4),
+(18, 3, 'P4', 5),
+(19, 3, 'P5', 6),
+(20, 3, 'P6', 7),
+(21, 3, 'P7', 8),
+(22, 3, 'INT', 9),
+(23, 3, 'VCC', 10),
+(24, 3, 'GND', 11),
+(25, 3, 'SDA', 12),
+(26, 3, 'SCL', 13),
+(27, 4, 'TX0', 1),
+(28, 4, 'RX1', 2),
+(29, 4, 'GND', 3),
+(30, 4, 'GND', 4),
+(31, 4, '2', 5),
+(32, 4, '3', 6),
+(33, 4, '4', 7),
+(34, 4, '5', 8),
+(35, 4, '6', 9),
+(36, 4, '7', 10),
+(37, 4, '8', 11),
+(38, 4, '9', 12),
+(39, 4, 'RAW', 13),
+(40, 4, 'GND', 14),
+(41, 4, 'RST', 15),
+(42, 4, 'VCC', 16),
+(43, 4, 'A3', 17),
+(44, 4, 'A2', 18),
+(45, 4, 'A1', 19),
+(46, 4, 'A0', 20),
+(47, 4, '15', 21),
+(48, 4, '14', 22),
+(49, 4, '16', 23),
+(50, 4, '10', 24);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `urzadzenie_polaczenie`
+--
+
+DROP TABLE IF EXISTS `urzadzenie_polaczenie`;
+CREATE TABLE `urzadzenie_polaczenie` (
+  `id` smallint(6) NOT NULL,
+  `urzadzenie_id` smallint(5) UNSIGNED NOT NULL,
+  `miejsce_id` tinyint(5) UNSIGNED NOT NULL,
+  `zyla_id` smallint(5) UNSIGNED NOT NULL,
+  `pin_id` smallint(5) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELACJE DLA TABELI `urzadzenie_polaczenie`:
+--   `miejsce_id`
+--       `miejsce` -> `id`
+--   `pin_id`
+--       `urzadzenie_piny` -> `id`
+--   `urzadzenie_id`
+--       `urządzenia` -> `id`
+--   `zyla_id`
+--       `zyla` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `urzadzenie_polaczenie`
+--
+
+TRUNCATE TABLE `urzadzenie_polaczenie`;
+--
+-- Zrzut danych tabeli `urzadzenie_polaczenie`
+--
+
+INSERT INTO `urzadzenie_polaczenie` (`id`, `urzadzenie_id`, `miejsce_id`, `zyla_id`, `pin_id`) VALUES
+(1, 3, 2, 90, 16),
+(2, 3, 2, 88, 14),
+(3, 3, 2, 89, 15),
+(4, 3, 2, 91, 17);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `urzadzenie_zyla`
 --
 
+DROP TABLE IF EXISTS `urzadzenie_zyla`;
 CREATE TABLE `urzadzenie_zyla` (
   `id` smallint(5) UNSIGNED NOT NULL,
   `urzadzenie_id` smallint(5) UNSIGNED NOT NULL,
   `nazwa` varchar(200) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `pos` tinyint(4) NOT NULL,
-  `zyla_id` smallint(6) NOT NULL
+  `zyla_id` smallint(6) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- RELACJE DLA TABELI `urzadzenie_zyla`:
+--   `urzadzenie_id`
+--       `urządzenia` -> `id`
+--   `zyla_id`
+--       `zyla` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `urzadzenie_zyla`
+--
+
+TRUNCATE TABLE `urzadzenie_zyla`;
 -- --------------------------------------------------------
 
 --
 -- Struktura tabeli dla tabeli `urządzenia`
 --
 
+DROP TABLE IF EXISTS `urządzenia`;
 CREATE TABLE `urządzenia` (
-  `id` smallint(11) NOT NULL,
+  `id` smallint(11) UNSIGNED NOT NULL,
   `miejsce_id` smallint(11) NOT NULL,
-  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
+  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `ilosc` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- RELACJE DLA TABELI `urządzenia`:
+--
+
+--
+-- Tabela Truncate przed wstawieniem `urządzenia`
+--
+
+TRUNCATE TABLE `urządzenia`;
 --
 -- Zrzut danych tabeli `urządzenia`
 --
 
-INSERT INTO `urządzenia` (`id`, `miejsce_id`, `opis`) VALUES
-(1, 2, 'GND wspolna masa'),
-(2, 2, '5V oswietlenia'),
-(3, 2, '5V ogrzewanie'),
-(4, 2, 'Przetwornica 24/5 oświetlenie'),
-(5, 2, 'Expander portów I/O 0x00'),
-(6, 2, 'Expander portów I/O 0x01'),
-(7, 2, 'Mikrokontroler'),
-(8, 2, 'Przekaźniki ogrzewania 2x'),
-(9, 2, 'Czujnik temperatury DS1820'),
-(10, 2, 'Złączka przewodów 230V');
+INSERT INTO `urządzenia` (`id`, `miejsce_id`, `opis`, `ilosc`) VALUES
+(1, 2, 'Przetwornica 24/5 oświetlenie', 3),
+(2, 2, 'Expander portów I/O 0x00', 13),
+(3, 2, 'Expander portów I/O 0x01', 13),
+(4, 2, 'Mikrokontroler', 24),
+(5, 2, 'Przekaźniki ogrzewania 2x', 4),
+(6, 2, 'Czujnik temperatury DS1820', 3),
+(7, 2, 'Złączka przewodów 230V', 3);
 
 -- --------------------------------------------------------
 
@@ -890,6 +1264,7 @@ INSERT INTO `urządzenia` (`id`, `miejsce_id`, `opis`) VALUES
 -- Zastąpiona struktura widoku `WewnetrzneKableView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `WewnetrzneKableView`;
 CREATE TABLE `WewnetrzneKableView` (
 `kabel_id` tinyint(3) unsigned
 ,`miejsce_id` tinyint(3) unsigned
@@ -902,6 +1277,7 @@ CREATE TABLE `WewnetrzneKableView` (
 -- Zastąpiona struktura widoku `ZewnetrzneKableView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `ZewnetrzneKableView`;
 CREATE TABLE `ZewnetrzneKableView` (
 `kabel_id` tinyint(3) unsigned
 ,`miejsce_id` tinyint(3) unsigned
@@ -914,6 +1290,7 @@ CREATE TABLE `ZewnetrzneKableView` (
 -- Zastąpiona struktura widoku `ZlaczaView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `ZlaczaView`;
 CREATE TABLE `ZlaczaView` (
 );
 
@@ -923,44 +1300,61 @@ CREATE TABLE `ZlaczaView` (
 -- Struktura tabeli dla tabeli `zlacze`
 --
 
+DROP TABLE IF EXISTS `zlacze`;
 CREATE TABLE `zlacze` (
   `id` smallint(5) UNSIGNED NOT NULL,
   `etykieta` varchar(10) NOT NULL,
-  `przewod_miejsce_id` smallint(6) NOT NULL
+  `przewod_miejsce_id` smallint(6) UNSIGNED NOT NULL,
+  `rodzaj_zlacza` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- RELACJE DLA TABELI `zlacze`:
+--   `przewod_miejsce_id`
+--       `przewod_miejsce` -> `id`
+--   `rodzaj_zlacza`
+--       `rodzaj_zlacza` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `zlacze`
+--
+
+TRUNCATE TABLE `zlacze`;
 --
 -- Zrzut danych tabeli `zlacze`
 --
 
-INSERT INTO `zlacze` (`id`, `etykieta`, `przewod_miejsce_id`) VALUES
-(1, 'O', 41),
-(2, 'J', 49),
-(3, 'M', 51),
-(4, 'B', 53),
-(5, 'C', 55),
-(6, 'G', 57),
-(7, 'I', 65),
-(8, 'E', 68),
-(9, 'A', 70),
-(10, 'P', 72),
-(11, 'D', 74),
-(12, 'N', 76),
-(13, 'H', 79),
-(14, 'L', 81),
-(15, 'K', 97),
-(16, 'A', 50),
-(17, 'F', 99),
-(18, 'B', 299),
-(19, 'C', 301),
-(20, 'A', 78),
-(21, 'B', 108),
-(22, 'C', 303),
-(23, 'D', 305),
-(24, 'F', 307),
-(25, 'G', 309),
-(26, 'H', 311),
-(27, 'I', 313);
+INSERT INTO `zlacze` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zlacza`) VALUES
+(1, 'O', 41, 1),
+(2, 'J', 49, 1),
+(3, 'M', 51, 1),
+(4, 'B', 53, 1),
+(5, 'C', 55, 1),
+(6, 'G', 57, 1),
+(7, 'I', 65, 1),
+(8, 'E', 68, 1),
+(9, 'A', 70, 1),
+(10, 'P', 72, 1),
+(11, 'D', 74, 1),
+(12, 'N', 76, 1),
+(13, 'H', 79, 1),
+(14, 'L', 81, 1),
+(15, 'K', 97, 1),
+(16, 'A', 50, 1),
+(17, 'F', 99, 1),
+(18, 'B', 299, 1),
+(19, 'C', 301, 1),
+(20, 'A', 78, 1),
+(21, 'B', 108, 1),
+(22, 'C', 303, 1),
+(23, 'D', 305, 1),
+(24, 'F', 307, 1),
+(25, 'G', 309, 1),
+(26, 'H', 311, 1),
+(27, 'I', 313, 1),
+(28, 'Q', 296, 1),
+(29, 'R', 298, 1);
 
 -- --------------------------------------------------------
 
@@ -968,6 +1362,7 @@ INSERT INTO `zlacze` (`id`, `etykieta`, `przewod_miejsce_id`) VALUES
 -- Zastąpiona struktura widoku `ZlaczePrzewodView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `ZlaczePrzewodView`;
 CREATE TABLE `ZlaczePrzewodView` (
 `id` smallint(6) unsigned
 ,`kabel_id` tinyint(3) unsigned
@@ -982,6 +1377,7 @@ CREATE TABLE `ZlaczePrzewodView` (
 -- Zastąpiona struktura widoku `ZlaczeView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `ZlaczeView`;
 CREATE TABLE `ZlaczeView` (
 `zk_id` int(11) unsigned
 ,`zlacze_id` smallint(5) unsigned
@@ -1002,6 +1398,7 @@ CREATE TABLE `ZlaczeView` (
 -- Struktura tabeli dla tabeli `zlacze_kolejnosc`
 --
 
+DROP TABLE IF EXISTS `zlacze_kolejnosc`;
 CREATE TABLE `zlacze_kolejnosc` (
   `id` int(11) UNSIGNED NOT NULL,
   `zlacze_id` smallint(5) UNSIGNED NOT NULL,
@@ -1009,6 +1406,19 @@ CREATE TABLE `zlacze_kolejnosc` (
   `pos` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
+--
+-- RELACJE DLA TABELI `zlacze_kolejnosc`:
+--   `zlacze_id`
+--       `zlacze` -> `id`
+--   `zyla_id`
+--       `zyla` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `zlacze_kolejnosc`
+--
+
+TRUNCATE TABLE `zlacze_kolejnosc`;
 --
 -- Zrzut danych tabeli `zlacze_kolejnosc`
 --
@@ -1194,7 +1604,15 @@ INSERT INTO `zlacze_kolejnosc` (`id`, `zlacze_id`, `zyla_id`, `pos`) VALUES
 (178, 27, 372, 7),
 (179, 27, 373, 8),
 (180, 27, 374, 9),
-(181, 27, 375, 10);
+(181, 27, 375, 10),
+(182, 29, 104, 1),
+(183, 29, 105, 2),
+(184, 29, 106, 3),
+(185, 29, 107, 4),
+(186, 28, 108, 1),
+(187, 28, 109, 2),
+(188, 28, 110, 3),
+(189, 28, 111, 4);
 
 -- --------------------------------------------------------
 
@@ -1202,6 +1620,7 @@ INSERT INTO `zlacze_kolejnosc` (`id`, `zlacze_id`, `zyla_id`, `pos`) VALUES
 -- Struktura tabeli dla tabeli `zyla`
 --
 
+DROP TABLE IF EXISTS `zyla`;
 CREATE TABLE `zyla` (
   `id` smallint(5) UNSIGNED NOT NULL,
   `color_id` tinyint(3) UNSIGNED NOT NULL,
@@ -1209,6 +1628,19 @@ CREATE TABLE `zyla` (
   `opis` varchar(50) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- RELACJE DLA TABELI `zyla`:
+--   `color_id`
+--       `kolor` -> `id`
+--   `przewod_id`
+--       `przewod` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `zyla`
+--
+
+TRUNCATE TABLE `zyla`;
 --
 -- Zrzut danych tabeli `zyla`
 --
@@ -1477,7 +1909,7 @@ INSERT INTO `zyla` (`id`, `color_id`, `przewod_id`, `opis`) VALUES
 (261, 3, 7, 'Sygnał czujnika temperatury'),
 (262, 5, 7, '+5V'),
 (263, 6, 7, 'GND'),
-(264, 0, 7, 'Sygnał czujnika temperatury'),
+(264, 14, 7, 'Sygnał czujnika temperatury'),
 (265, 7, 7, '+5V'),
 (266, 9, 8, 'GND'),
 (267, 6, 8, 'Sygnał czujnika temperatury'),
@@ -1618,7 +2050,35 @@ INSERT INTO `zyla` (`id`, `color_id`, `przewod_id`, `opis`) VALUES
 (402, 2, 22, '-'),
 (403, 3, 22, '-'),
 (404, 1, 22, '-'),
-(405, 1, 22, '');
+(405, 1, 22, ''),
+(406, 2, 23, '+5V dla przepływomierza'),
+(407, 3, 23, 'GND'),
+(408, 1, 23, 'Sygnał od przepływomierza'),
+(409, 1, 23, 'Sygnał od przycisku'),
+(410, 6, 42, 'Sygnał czujnika ruchu dla pokoju'),
+(411, 7, 42, 'GND dla czujników ruchu'),
+(412, 9, 42, 'Sygnał czujnika ruchu dla pracowni'),
+(413, 4, 42, '+5V dla czujników ruchu'),
+(414, 2, 42, 'Sygnał czujnika ruchu dla holu'),
+(415, 3, 42, 'Sygnał kontaktronu pracowania'),
+(416, 1, 42, 'GND dla kontaktronów'),
+(417, 8, 42, 'Sygnał kontaktronu dla pokoju'),
+(418, 6, 43, 'GND'),
+(419, 9, 43, 'GND'),
+(420, 13, 43, '+5V'),
+(421, 8, 43, 'Sygnał'),
+(422, 4, 44, '+5V'),
+(423, 9, 44, 'Sygnał'),
+(424, 3, 44, 'GND'),
+(425, 1, 44, 'GND'),
+(426, 3, 45, 'Sygnał'),
+(427, 1, 45, 'GND'),
+(428, 6, 46, 'GND'),
+(429, 7, 46, 'GND'),
+(430, 5, 46, '+5V'),
+(431, 8, 46, 'Sygnał'),
+(432, 3, 47, 'Sygnał'),
+(433, 1, 47, 'GND');
 
 -- --------------------------------------------------------
 
@@ -1626,6 +2086,7 @@ INSERT INTO `zyla` (`id`, `color_id`, `przewod_id`, `opis`) VALUES
 -- Zastąpiona struktura widoku `ZylaWidok`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `ZylaWidok`;
 CREATE TABLE `ZylaWidok` (
 `id` smallint(5) unsigned
 ,`color_id` tinyint(3) unsigned
@@ -1641,6 +2102,7 @@ CREATE TABLE `ZylaWidok` (
 -- Zastąpiona struktura widoku `ZylaZlaczeKolejnoscView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `ZylaZlaczeKolejnoscView`;
 CREATE TABLE `ZylaZlaczeKolejnoscView` (
 `pm_id` smallint(6) unsigned
 ,`pm_kabel_id` tinyint(3) unsigned
@@ -1662,6 +2124,7 @@ CREATE TABLE `ZylaZlaczeKolejnoscView` (
 -- Zastąpiona struktura widoku `ZylaZlaczeView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
+DROP VIEW IF EXISTS `ZylaZlaczeView`;
 CREATE TABLE `ZylaZlaczeView` (
 `id` smallint(5) unsigned
 ,`zlacze_id` smallint(5) unsigned
@@ -1699,6 +2162,15 @@ CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 DROP TABLE IF EXISTS `PolaczenieView`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PolaczenieView`  AS  select `p`.`id` AS `pid`,`p`.`miejsce_id` AS `miejsce_id`,`p`.`opis` AS `opis`,`m`.`id` AS `mid`,`m`.`name` AS `name`,`m`.`description` AS `description`,`m`.`zbiorcze` AS `zbiorcze`,`m`.`id_pomieszczenie` AS `id_pomieszczenie`,`m`.`kod` AS `kod`,`m`.`polaczenie` AS `polaczenie`,`m`.`pomieszczenie` AS `pomieszczenie` from (`polaczenie` `p` left join `MiejsceView` `m` on((`p`.`miejsce_id` = `m`.`id`))) where 1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `PolaczenieZylaWidok`
+--
+DROP TABLE IF EXISTS `PolaczenieZylaWidok`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PolaczenieZylaWidok`  AS  select `pz`.`id` AS `id`,`pz`.`polaczenie_id` AS `polaczenie_id`,`pz`.`zyla_id_1` AS `zyla_id_1`,`pz`.`zyla_id_2` AS `zyla_id_2`,`p1`.`color_id` AS `cid1`,`p1`.`przewod_id` AS `pid1`,`p1`.`opis` AS `opis1`,`p1`.`name` AS `cname1`,`p1`.`html` AS `html1`,`p2`.`color_id` AS `cid2`,`p2`.`przewod_id` AS `pid2`,`p2`.`opis` AS `opis2`,`p2`.`name` AS `cname2`,`p2`.`html` AS `html2`,`poz`.`miejsce_id` AS `miejsce_id`,`poz`.`opis` AS `pol_opis` from (((`polaczenie_zyla` `pz` left join `ZylaWidok` `p1` on((`p1`.`id` = `pz`.`zyla_id_1`))) left join `ZylaWidok` `p2` on((`p2`.`id` = `pz`.`zyla_id_2`))) left join `polaczenie` `poz` on((`pz`.`polaczenie_id` = `poz`.`id`))) where 1 order by `p1`.`przewod_id`,`poz`.`miejsce_id`,`p2`.`przewod_id` ;
 
 -- --------------------------------------------------------
 
@@ -1812,6 +2284,7 @@ ALTER TABLE `polaczenie`
 --
 ALTER TABLE `polaczenie_zyla`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pol_zylas` (`polaczenie_id`,`zyla_id_1`,`zyla_id_2`) USING BTREE,
   ADD KEY `zyla_id_1` (`zyla_id_1`),
   ADD KEY `polaczenie_id` (`polaczenie_id`) USING BTREE,
   ADD KEY `zyla_id_2` (`zyla_id_2`);
@@ -1837,11 +2310,35 @@ ALTER TABLE `przewod_miejsce`
   ADD KEY `miididx` (`miejsce_id`);
 
 --
+-- Indeksy dla tabeli `rodzaj_zlacza`
+--
+ALTER TABLE `rodzaj_zlacza`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `urzadzenie_piny`
+--
+ALTER TABLE `urzadzenie_piny`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `urzidfg` (`urzadzenie_id`);
+
+--
+-- Indeksy dla tabeli `urzadzenie_polaczenie`
+--
+ALTER TABLE `urzadzenie_polaczenie`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `urzadzenie_id` (`urzadzenie_id`),
+  ADD KEY `miejsce_id` (`miejsce_id`),
+  ADD KEY `zyla_id` (`zyla_id`),
+  ADD KEY `pin_id` (`pin_id`);
+
+--
 -- Indeksy dla tabeli `urzadzenie_zyla`
 --
 ALTER TABLE `urzadzenie_zyla`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `zyla_id` (`zyla_id`);
+  ADD KEY `zyla_id` (`zyla_id`),
+  ADD KEY `urzfg` (`urzadzenie_id`);
 
 --
 -- Indeksy dla tabeli `urządzenia`
@@ -1855,7 +2352,8 @@ ALTER TABLE `urządzenia`
 --
 ALTER TABLE `zlacze`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `przewod_miejsce_id` (`przewod_miejsce_id`);
+  ADD KEY `przewod_miejsce_id` (`przewod_miejsce_id`),
+  ADD KEY `rodzaj_zlacza` (`rodzaj_zlacza`);
 
 --
 -- Indeksy dla tabeli `zlacze_kolejnosc`
@@ -1881,7 +2379,7 @@ ALTER TABLE `zyla`
 -- AUTO_INCREMENT dla tabeli `kolor`
 --
 ALTER TABLE `kolor`
-  MODIFY `id` tinyint(4) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` tinyint(4) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT dla tabeli `miejsce`
@@ -1893,13 +2391,13 @@ ALTER TABLE `miejsce`
 -- AUTO_INCREMENT dla tabeli `polaczenie`
 --
 ALTER TABLE `polaczenie`
-  MODIFY `id` smallint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` smallint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
 --
 ALTER TABLE `polaczenie_zyla`
-  MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT dla tabeli `pomieszczenie`
@@ -1920,6 +2418,24 @@ ALTER TABLE `przewod_miejsce`
   MODIFY `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=317;
 
 --
+-- AUTO_INCREMENT dla tabeli `rodzaj_zlacza`
+--
+ALTER TABLE `rodzaj_zlacza`
+  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT dla tabeli `urzadzenie_piny`
+--
+ALTER TABLE `urzadzenie_piny`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+
+--
+-- AUTO_INCREMENT dla tabeli `urzadzenie_polaczenie`
+--
+ALTER TABLE `urzadzenie_polaczenie`
+  MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT dla tabeli `urzadzenie_zyla`
 --
 ALTER TABLE `urzadzenie_zyla`
@@ -1929,25 +2445,25 @@ ALTER TABLE `urzadzenie_zyla`
 -- AUTO_INCREMENT dla tabeli `urządzenia`
 --
 ALTER TABLE `urządzenia`
-  MODIFY `id` smallint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` smallint(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT dla tabeli `zlacze`
 --
 ALTER TABLE `zlacze`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT dla tabeli `zlacze_kolejnosc`
 --
 ALTER TABLE `zlacze_kolejnosc`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
 
 --
 -- AUTO_INCREMENT dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=406;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=434;
 
 --
 -- Ograniczenia dla zrzutów tabel
@@ -1960,9 +2476,17 @@ ALTER TABLE `miejsce`
   ADD CONSTRAINT `pomieszczenie_fgkey` FOREIGN KEY (`id_pomieszczenie`) REFERENCES `pomieszczenie` (`id`);
 
 --
+-- Ograniczenia dla tabeli `polaczenie`
+--
+ALTER TABLE `polaczenie`
+  ADD CONSTRAINT `mieidfg` FOREIGN KEY (`miejsce_id`) REFERENCES `miejsce` (`id`);
+
+--
 -- Ograniczenia dla tabeli `polaczenie_zyla`
 --
 ALTER TABLE `polaczenie_zyla`
+  ADD CONSTRAINT `polzyla1fg` FOREIGN KEY (`zyla_id_1`) REFERENCES `zyla` (`id`),
+  ADD CONSTRAINT `polzyla2fg` FOREIGN KEY (`zyla_id_2`) REFERENCES `zyla` (`id`),
   ADD CONSTRAINT `polzylfg` FOREIGN KEY (`polaczenie_id`) REFERENCES `polaczenie` (`id`);
 
 --
@@ -1971,6 +2495,35 @@ ALTER TABLE `polaczenie_zyla`
 ALTER TABLE `przewod_miejsce`
   ADD CONSTRAINT `kidfg` FOREIGN KEY (`kabel_id`) REFERENCES `przewod` (`id`),
   ADD CONSTRAINT `midfg` FOREIGN KEY (`miejsce_id`) REFERENCES `miejsce` (`id`);
+
+--
+-- Ograniczenia dla tabeli `urzadzenie_piny`
+--
+ALTER TABLE `urzadzenie_piny`
+  ADD CONSTRAINT `urzidfg` FOREIGN KEY (`urzadzenie_id`) REFERENCES `urządzenia` (`id`);
+
+--
+-- Ograniczenia dla tabeli `urzadzenie_polaczenie`
+--
+ALTER TABLE `urzadzenie_polaczenie`
+  ADD CONSTRAINT `upmidfg` FOREIGN KEY (`miejsce_id`) REFERENCES `miejsce` (`id`),
+  ADD CONSTRAINT `uppidfg` FOREIGN KEY (`pin_id`) REFERENCES `urzadzenie_piny` (`id`),
+  ADD CONSTRAINT `upuidfg` FOREIGN KEY (`urzadzenie_id`) REFERENCES `urządzenia` (`id`),
+  ADD CONSTRAINT `upzidfg` FOREIGN KEY (`zyla_id`) REFERENCES `zyla` (`id`);
+
+--
+-- Ograniczenia dla tabeli `urzadzenie_zyla`
+--
+ALTER TABLE `urzadzenie_zyla`
+  ADD CONSTRAINT `urzfg` FOREIGN KEY (`urzadzenie_id`) REFERENCES `urządzenia` (`id`),
+  ADD CONSTRAINT `zlafg` FOREIGN KEY (`zyla_id`) REFERENCES `zyla` (`id`);
+
+--
+-- Ograniczenia dla tabeli `zlacze`
+--
+ALTER TABLE `zlacze`
+  ADD CONSTRAINT `przmieidfg` FOREIGN KEY (`przewod_miejsce_id`) REFERENCES `przewod_miejsce` (`id`),
+  ADD CONSTRAINT `rodzzlfg` FOREIGN KEY (`rodzaj_zlacza`) REFERENCES `rodzaj_zlacza` (`id`);
 
 --
 -- Ograniczenia dla tabeli `zlacze_kolejnosc`

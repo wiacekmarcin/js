@@ -22,6 +22,7 @@
                 <button ng-if="zlacze.zlacze_id" ng-click="setDetails(zlacze.zlacze_id)">Szczegóły</button>
                 <button ng-if="!zlacze.zlacze_id && allzyly[zlacze.przewod_id]" 
                 ng-click="addZlacze(zlacze.przewod_id, zlacze.miejsce_id, przewody[zlacze.przewod_id].il)">Dodaj&nbsp;złacze</button>
+                <a ng-if="allzyly[zlacze.przewod_id] == undefined" href="#!/zyla_add/{{zlacze.przewod_id}}">Dodaj żyły</a>
             </td>
         </tr>
         <tr ng-show="detailsAll || (selectedZlaczeId != -1 && zlacze.zlacze_id == selectedZlaczeId)" style="background-color: honeydew;">
