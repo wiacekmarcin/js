@@ -27,7 +27,7 @@ app.config(function($routeProvider) {
     .when("/polaczenie_zyla", {
         templateUrl: 'polaczenie_zyla.htm',    
     })
-    .when("/zyla_add", {
+    .when("/zyla_add/:id", {
         templateUrl: 'zyla_add.htm',    
     })
 });
