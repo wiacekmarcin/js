@@ -136,7 +136,7 @@ bool Swiatlo::set(unsigned long mls)
 
     if (onS && w.nacisniety()) {
         if (pora.czyNoc() && pora.czyWieczor()) {
-            zapalSwiatlo(L_SEC(15));
+            zapalSwiatlo(L_SEC(5));
         } else {
             zgasSwiatlo();
         }
@@ -144,7 +144,8 @@ bool Swiatlo::set(unsigned long mls)
 
     if (onL && w.nacisniety() && lustroJakoSwiatlo) {
         if (pora.czyNoc() && pora.czyWieczor()) {
-            zapalLustro(L_SEC(15));
+            zgasLustro();
+            zapalSwiatlo(L_SEC(5));
         } else {
             zgasLustro();
         }
