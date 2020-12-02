@@ -16,7 +16,7 @@ app.controller('miejsca-ctrl', ['$scope','$routeParams', '$http', function($scop
             $scope.show_place = false;
             for (var i=0; i < $scope.pomieszczenia.length; i++) {
                 if ($scope.pomieszczenia[i].id == mid) {
-                    $scope.title = $scope.pomieszczenia[i].name;
+                    $scope.title = $scope.pomieszczenia[i].nazwa;
                     break;
                 }
             }
@@ -25,9 +25,9 @@ app.controller('miejsca-ctrl', ['$scope','$routeParams', '$http', function($scop
 
     $scope.editPlace = function(row) {
         $scope.edit_place = row.id;
-        $scope.ename = row.name;
+        $scope.ename = row.nazwa;
         $scope.epomieszczenie = row.id_pomieszczenie;
-        $scope.edescription = row.description;
+        $scope.edescription = row.opis;
         $scope.ekod = row.kod;
         $scope.epolaczenie = row.polaczenie;
         $scope.ezbiorcze = row.zbiorcze;
@@ -63,9 +63,9 @@ app.controller('miejsca-ctrl', ['$scope','$routeParams', '$http', function($scop
     $scope.savePlace = function() {
         sendData({"id" :  $scope.edit_place,
                   "kod" : $scope.ekod,
-                  "name" : $scope.ename,
+                  "nazwa" : $scope.ename,
                   "id_pomieszczenie" : $scope.epomieszczenie,
-                  "description" : $scope.edescription,
+                  "opis" : $scope.edescription,
                   "zbiorcze" : $scope.ezbiorcze,
                   "polaczenie" : $scope.epolaczenie
         });
@@ -74,9 +74,9 @@ app.controller('miejsca-ctrl', ['$scope','$routeParams', '$http', function($scop
     $scope.addnewPlace = function() {
         sendData({"id" :  -1,
                   "kod" : $scope.akod,
-                  "name" : $scope.aname,
+                  "nazwa" : $scope.aname,
                   "id_pomieszczenie" : $scope.apomieszczenie,
-                  "description" : $scope.adescription,
+                  "opis" : $scope.adescription,
                   "zbiorcze" : $scope.azbiorcze,
                   "polaczenie" : $scope.apolaczenie
         });
