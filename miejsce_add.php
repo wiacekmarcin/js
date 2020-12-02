@@ -8,17 +8,17 @@ mysqli_set_charset($con, "utf8");
 
 $id = $_POST['id'];
 $kod = $_POST['kod'];
-$name = $_POST['name'];
+$nazwa = $_POST['nazwa'];
 $id_pomieszczenie = $_POST['id_pomieszczenie'];
-$description = $_POST['description'];
+$opis = $_POST['opis'];
 $zbiorcze = $_POST['zbiorcze'];
 $polaczenie = $_POST['polaczenie'];
 
 if ($id == -1) {
-    $query = "INSERT INTO `miejsce`(`id`, `name`, `description`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`) ";
-    $query.= "VALUES (NULL, '" . $name . "', '" . $description . "', " . $zbiorcze . ", " . $id_pomieszczenie . ", '" . $kod . "', " . $polaczenie . ");";
+    $query = "INSERT INTO `miejsce`(`id`, `name`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`) ";
+    $query.= "VALUES (NULL, '" . $nazwa . "', '" . $opis . "', " . $zbiorcze . ", " . $id_pomieszczenie . ", '" . $kod . "', " . $polaczenie . ");";
 } else {
-    $query = "UPDATE `miejsce` SET `name`='". $name . "', `description`='" . $description . "'. `zbiorcze`=" . $zbiorcze . ",`id_pomieszczenie`=";
+    $query = "UPDATE `miejsce` SET `nazwa`='". $nazwa . "', `opis`='" . $opis . "'. `zbiorcze`=" . $zbiorcze . ",`id_pomieszczenie`=";
     $query .= $id_pomieszczenie . "`kod`='" . $kod . "',`polaczenie`=" . $polaczenie . " WHERE `id` = " . $id . ";";
 }
 
