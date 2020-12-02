@@ -6,5 +6,6 @@ app.controller('miejsceview-ctrl', ['$scope','$routeParams', '$http', function($
         $scope.wewnetrzne =  response.data.wewnetrzne;
         $scope.przewody = response.data.przewody;
         $scope.zyly = response.data.zyly;
+        $scope.zakonczenia = response.data.zakonczenia;
     });
 }]);

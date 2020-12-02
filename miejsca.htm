@@ -2,7 +2,7 @@
 
     <p>
     <a href="index.html">Powrót</a> <a href="#!/miejsca/-1">Wszystkie</a> <a href="#!/miejsca/0">Zbiorcze</a> 
-    <a ng-repeat-start="item in pomieszczenia" href="#!/miejsca/{{item.id}}">{{item.name}}</a><span ng-repeat-end> </span> 
+    <a ng-repeat-start="item in pomieszczenia" href="#!/miejsca/{{item.id}}">{{item.nazwa}}</a><span ng-repeat-end> </span> 
     <!-- 
     <a href="#!/miejsca/2">WC</a> <a href="#!/miejsca/3">Sypialnia</a> <a href="#!/miejsca/4">Pokój</a> 	
     <a href="#!/miejsca/5">Pracownia</a> <a href="#!/miejsca/6">Salon</a> <a href="#!/miejsca/7">Kuchnia</a> 
@@ -17,9 +17,9 @@
             <th>Opis</th><th>Przewody</th><th>Zb.</th><th>Poł.</th><th>Akcje</th></tr>
         <tr ng-repeat-start="place in places" ng-style='$odd ? {"background-color": "#f1f1f1"} : {"background-color": "#ffffff"}'>
             <td style="text-align: left;"><a href="#!/miejsce_view/{{ place.id }}">{{place.kod}}</a></td>
-            <td style="text-align: left;">{{ place.name }}</td>
+            <td style="text-align: left;">{{ place.nazwa }}</td>
             <td style="text-align: left;" ng-show="show_place"><a href="#!/miejsca/{{ place.id_pomieszczenie }}">{{ place.pomieszczenie }}</a></td>
-            <td style="text-align: left;">{{ place.description }}</td>
+            <td style="text-align: left;">{{ place.opis }}</td>
             <td style="text-align: left;;"> {{ place.kable.length }} : <span ng-repeat="p in place.kable"><a href="#!/przewod/{{p}}">{{p}}</a>, </span></td>
             <td style="text-align: center;">{{ place.zbiorcze }}</td>
             <td style="text-align: center;">{{ place.polaczenie }}</td>
@@ -30,7 +30,7 @@
             <td><input type="text" ng-model="ename"></td>
             <td >
                 <select ng-model="epomieszczenie">
-                    <option ng-repeat="item in pomieszczenia" value="{{item.id}}" ng-selected="item.id==epomieszczenie">{{item.name}}</option>
+                    <option ng-repeat="item in pomieszczenia" value="{{item.id}}" ng-selected="item.id==epomieszczenie">{{item.nazwa}}</option>
                 </select>
             </td>
             <td><input type="text" ng-model="edescription"></td>
@@ -54,7 +54,7 @@
             <td><input type="text" ng-model="aname"></td>
             <td ng-show="show_place">
                 <select ng-model="apomieszczenie">
-                    <option ng-repeat="item in pomieszczenia" value="{{item.id}}" >{{item.name}}</option>
+                    <option ng-repeat="item in pomieszczenia" value="{{item.id}}" >{{item.nazwa}}</option>
                 </select>
             </td>
             <td><input type="text" ng-model="adescription"></td>
