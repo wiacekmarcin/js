@@ -55,7 +55,7 @@ $query = "SELECT `id`, `opis`, `ilosc_zyl` FROM `przewod` WHERE `id` in" . $prze
 $result = mysqli_query($con, $query);
 $przewody = array();
 while($row = mysqli_fetch_array($result)) {
-    $przewody[$row['id']] = array("desc" => $row["opis"], "ilosc_zyl" => $row["ilosc_zyl"]);
+    $przewody[$row['id']] = array("opis" => $row["opis"], "ilosc_zyl" => $row["ilosc_zyl"]);
 }
 
 $query = "SELECT `id`, `kolor_id`, `przewod_id`, `opis`, `kolor`, `html` FROM `ZylaWidok` WHERE `przewod_id` in " . $przewodyid . " ORDER by `przewod_id`, `kolor`";
