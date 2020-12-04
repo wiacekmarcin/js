@@ -1,59 +1,92 @@
 <div class="container" ng-controller="przewody-ctrl">
     <p>
         <span><button ng-click="choose(-1, 'Wszystkie');">Wszystkie</button> </span>
-        <span ng-repeat="zb in zbiorcze"><button ng-click="choose(zb.id, zb.name);">{{zb.name}}</button> </span>
+        <span ng-repeat="zb in miejsca | toArray:true | orderBy:'+nazwa'"><button ng-if="zb.zbiorcze!=0 || zb.polaczenie!=0" ng-click="choose(zb.id, zb.pomieszczenie + ' : ' + zb.nazwa);">{{zb.nazwa}}</button> </span>
     </p>
-    <h4>{{selectZbiorcze == -1 ? "Wszystkie" : chooseName}}</h4>
+    <h4>{{selectZbiorcze == -1 ? "Wszystkie" : chooseName}} </h4>
     <button ng-click="setDetailsAll()">{{ detailsAll ? "Ukryj " : "Pokaż "}} wszystkie</button> </span>
-    <table>
-        <tr><th>Nr przewodu</th><th>Opis</th><th>Ilość żył</th><th ng-show="selectZbiorcze == -1">Miejsce 1</th><th>Miejsce 2</th><th>Akcje</th></tr>
-        <tr ng-repeat-start="wire in wires" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
+
+    <table >
+
+        <tr><th> Nr przewodu </th><th> Opis </th><th> Ilość żył </th>
+            <th ng-show="selectZbiorcze == -1"> Miejsce początkowe </th><th> Miejsce końcowe </th>
+            <th> Akcje </th>
+        </tr>
+        <tr ng-repeat-start="wire in przewody" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'
+        ng-show = "selectZbiorcze == miejsca_przewody[wire.id][1].miejsce_id || selectZbiorcze == miejsca_przewody[wire.id][0].miejsce_id || selectZbiorcze == -1"
+        >
             <td style="text-align: center;">{{wire.id }}</td>
-            <td style="text-align: left;">{{ wire.descr }}</td>
-            <td style="text-align: center;">{{ wire.ilosc_zyl }}</td>
-            <td style="text-align: left;" ng-show="selectZbiorcze == -1">{{ wire.miejsce1 }}</td>
-            <td style="text-align: left;">{{ wire.miejsce2 }} ( {{ wire.mid2 }} )</td>
+            <td style="text-align: left;">{{ wire.opis }}</td>
+            <td style="text-align: center;">{{ wire.ilosc_zyl }}
+            </td>
+            <td style="text-align: left;" ng-show="selectZbiorcze == -1">
+                {{ miejsca[miejsca_przewody[wire.id][0].miejsce_id].pomieszczenie }} : 
+                {{ miejsca[miejsca_przewody[wire.id][0].miejsce_id].nazwa }}</td>
+            <td style="text-align: left;" ng-show="selectZbiorcze == -1">
+                {{ miejsca[miejsca_przewody[wire.id][1].miejsce_id].pomieszczenie }} : 
+                {{ miejsca[miejsca_przewody[wire.id][1].miejsce_id].nazwa }}</td>
+            <td style="text-align: left;" ng-show="selectZbiorcze != -1 && miejsca_przewody[wire.id][0].miejsce_id != selectZbiorcze">
+                {{ miejsca[miejsca_przewody[wire.id][0].miejsce_id].pomieszczenie }} : 
+                {{ miejsca[miejsca_przewody[wire.id][0].miejsce_id].nazwa }}</td>
+            <td style="text-align: left;" ng-show="selectZbiorcze != -1 && miejsca_przewody[wire.id][1].miejsce_id != selectZbiorcze">
+                {{ miejsca[miejsca_przewody[wire.id][1].miejsce_id].pomieszczenie }} : 
+                {{ miejsca[miejsca_przewody[wire.id][1].miejsce_id].nazwa }}</td>
+            <td style="text-align: left;" 
+                ng-show="selectZbiorcze != -1 && miejsca_przewody[wire.id][0].miejsce_id == miejsca_przewody[wire.id][1].miejsce_id">
+                {{ chooseName }}</td>
             <td style="text-align: center;"> <div class="btn-group">
-                <button ng-click="seteditPlace(wire.id)">Edytuj</button>
-                <button ng-click="setDetails(wire.id)">Szczegóły</button></div>
+                <div style="display: flex;"><button ng-click="seteditPlace(wire)">Edytuj</button>&nbsp;<button ng-click="setDetails(wire)">Szczegóły</button></div>
             </td>
         </tr>
-        <tr ng-show="detailsAll || (detailsId == wire.id)" style="background-color: honeydew;">
-            <td></td>
-            <td>
+        <tr ng-show="detailsAll || detailsId == wire" style="background-color: honeydew;">
+            <td colspan="{{ selectZbiorcze == -1 ? 5 : 4 }}">
                 <table>
                     <tr ng-repeat="zyla in zyly[wire.id]">
                         <td>{{zyla.zid}}</td>
                         <td>{{$index+1}}</td>
-                        <td ng-style='{"background-color": "{{zyla.chtml}}"}'>&nbsp;</td>
-                        <td>{{zyla.cname}}</td>
+                        <td ng-style='{"background-color": "{{zyla.html}}"}'>&nbsp;</td>
+                        <td>{{zyla.kolor}}</td>
                         <td>{{zyla.opis}}</td>
                     </tr>
                 </table>
             </td>
+            <td><button ng-click="setDetails(-1)">Ukryj</button></td>
+        </tr>
+        <tr ng-repeat-end ng-show="editRow.id == wire.id">
+            <td></td>
+            <td><input type="text" ng-model="editRow.opis"></td>
+            <td><input type="number" min="1" max="16" string-to-number ng-model="editRow.ilosc_zyl"></td>
+            <td style="text-align: left;" ng-show="selectZbiorcze == -1">
+                <select ng-options="item as item.nazwa group by item.pomieszczenie for item in miejsca | toArray:true | orderBy:['pomieszczenie', 'nazwa']" 
+                ng-model = "editRow.miejsce_id1" ></select>
+            </td>
+            <td style="text-align: left;">
+                <select ng-options="item as item.nazwa group by item.pomieszczenie for item in miejsca | toArray:true | orderBy:['pomieszczenie', 'nazwa']" 
+                ng-model = "editRow.miejsce_id2" ></select>
+            </td>
+            <td><div style="display: flex;"><button ng-click="saveEdit()">Zachowaj</button>&nbsp;<button ng-click="cancelEdit()">Anuluj</button></div></td>
+        </tr> 
+        <tr>
+            <td></td>
+            <td></td>
             <td></td>
             <td ng-show="selectZbiorcze == -1"></td>
             <td></td>
-            <td><button ng-click="setDetails(-1)">Ukryj</button></td>
+            <td><button ng-click="addAdd()">Dodaj</button></td>
         </tr>
-        <tr ng-repeat-end ng-show="editRow == wire.id">
-            <td></td>
-            <td><input type="text" ng-model="edescr" value="{{ wire.descr }}"></td>
-            <td></td>
-            <td> </td>
-            <td></td>
-            <td></td>
-        </tr> 
+        <tr ng-show="addRow.add">
+            <td><input type="text" ng-model="addRow.id"></td>
+            <td><input type="text" ng-model="addRow.opis"></td>
+            <td><input type="number" min="1" max="16" string-to-number ng-model="addRow.ilosc_zyl"></td>
+            <td style="text-align: left;" ng-show="selectZbiorcze == -1">
+                <select ng-options="item as item.nazwa group by item.pomieszczenie for item in miejsca | toArray:true | orderBy:['pomieszczenie', 'nazwa']" 
+                ng-model = "addRow.miejsce_id1" ></select>
+            </td>
+            <td style="text-align: left;">
+                <select ng-options="item as item.nazwa group by item.pomieszczenie for item in miejsca | toArray:true | orderBy:['pomieszczenie', 'nazwa']" 
+                ng-model = "addRow.miejsce_id2" ></select>
+            </td>
+            <td><div style="display: flex;"><button ng-click="saveAdd()">Zachowaj</button>&nbsp;<button ng-click="cancelAdd()">Anuluj</button></div></td>
+        </tr>
     </table>
 </div>
-<!--
-'id' => $pid,
-'descr' => $row['pdescription'],
-'miejsce1' => $namepom1, 
-'miejsce2' => $namepom2, 
-'mid1' => $mid1,
-'mid2' => $mid2,
-'zbiorcze1' => $zbiorcze1,
-'zbiorcze2' => $zbiorcze2,
-'ilosc_zyl' => $row['ilosc_zyl']
--->
