@@ -15,6 +15,7 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             $scope.zyly = response.data.zyly;
             $scope.miejsca = response.data.miejsca;
             $scope.zakonczenie1 = response.data.zakonczenie1;
+            $scope.zakonczenie2 = response.data.zakonczenie2;
             var BreakException = {};
             for (var i=0; i < $scope.przewody.length; i++) {
                 if ($scope.przewody[i].id == $scope.addRow.id) {
