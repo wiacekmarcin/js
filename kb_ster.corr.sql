@@ -1899,12 +1899,58 @@ INSERT INTO `polaczenie` (`id`, `miejsce_id`, `opis`) VALUES
 (4, 91, 'Przewód 13'),
 (5, 34, 'Przewód 42');
 
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `zlacze_kolejnosc`
+--
+
+DROP TABLE IF EXISTS `zlacze_kolejnosc`;
+CREATE TABLE `zlacze_kolejnosc` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `zakonczenie_id` smallint(5) UNSIGNED NOT NULL,
+  `zyla_id` smallint(5) UNSIGNED NOT NULL,
+  `pos` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+--
+-- RELACJE DLA TABELI `zlacze_kolejnosc`:
+--   `zyla_id`
+--       `zyla` -> `id`
+--    `zakonczenie_id`
+--       `zakonczenie` -> `id`
+--
+
+--
+-- Tabela Truncate przed wstawieniem `zlacze_kolejnosc`
+--
+
+TRUNCATE TABLE `zlacze_kolejnosc`;
+--
+-- Zrzut danych tabeli `zlacze_kolejnosc`
+--
+
+--
+-- AUTO_INCREMENT dla tabeli `zlacze_kolejnosc`
+--
+ALTER TABLE `zlacze_kolejnosc`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
+
+--
+-- Indeksy dla tabeli `zlacze_kolejnosc`
+--
+ALTER TABLE `zlacze_kolejnosc`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `zakonczenie_id` (`zlacze_id`),
+  ADD KEY `zyla_id` (`zyla_id`);
 
 
-
-
-
-
+--
+-- Ograniczenia dla tabeli `zlacze_kolejnosc`
+--
+ALTER TABLE `zlacze_kolejnosc`
+  ADD CONSTRAINT `zlkolzakfg1` FOREIGN KEY (`zakonczenie_id`) REFERENCES `zakonczenie` (`id`),
+  ADD CONSTRAINT `zlkolzylfg2` FOREIGN KEY (`zyla_id`) REFERENCES `zyla` (`id`);
 
 
 COMMIT;

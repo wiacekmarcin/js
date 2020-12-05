@@ -53,7 +53,7 @@ CREATE TABLE `PolaczenieZylaWidok` (
 -- Struktura tabeli dla tabeli `polaczenie_zyla`
 --
 
-DROP TABLE IF EXISTS `polaczenie_zyla`;
+DROP TABLE IF EXISTS `polaczeniezyl`;
 CREATE TABLE `polaczenie_zyla` (
   `id` smallint(6) NOT NULL,
   `polaczenie_id` smallint(6) NOT NULL,
@@ -308,36 +308,6 @@ CREATE TABLE `ZlaczeView` (
 ,`przewod_id` tinyint(3) unsigned
 );
 
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `zlacze_kolejnosc`
---
-
-DROP TABLE IF EXISTS `zlacze_kolejnosc`;
-CREATE TABLE `zlacze_kolejnosc` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `zlacze_id` smallint(5) UNSIGNED NOT NULL,
-  `zyla_id` smallint(5) UNSIGNED NOT NULL,
-  `pos` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
-
---
--- RELACJE DLA TABELI `zlacze_kolejnosc`:
---   `zlacze_id`
---       `zlacze` -> `id`
---   `zyla_id`
---       `zyla` -> `id`
---
-
---
--- Tabela Truncate przed wstawieniem `zlacze_kolejnosc`
---
-
-TRUNCATE TABLE `zlacze_kolejnosc`;
---
--- Zrzut danych tabeli `zlacze_kolejnosc`
---
 
 INSERT INTO `zlacze_kolejnosc` (`id`, `zlacze_id`, `zyla_id`, `pos`) VALUES
 (1, 1, 1, 1),
@@ -694,13 +664,7 @@ ALTER TABLE `urzadzenie_polaczenie`
 
 
 
---
--- Indeksy dla tabeli `zlacze_kolejnosc`
---
-ALTER TABLE `zlacze_kolejnosc`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `zlacze_id` (`zlacze_id`),
-  ADD KEY `zyla_id` (`zyla_id`);
+
 
 
 
@@ -786,12 +750,7 @@ ALTER TABLE `urzadzenie_polaczenie`
 
 
 
---
--- Ograniczenia dla tabeli `zlacze_kolejnosc`
---
-ALTER TABLE `zlacze_kolejnosc`
-  ADD CONSTRAINT `fkkol_fg1` FOREIGN KEY (`zlacze_id`) REFERENCES `zlacze` (`id`),
-  ADD CONSTRAINT `fkkol_fg2` FOREIGN KEY (`zyla_id`) REFERENCES `zyla` (`id`);
+
 
 
 

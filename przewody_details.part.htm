@@ -1,0 +1,16 @@
+<div ng-if="miejsce_przewod.przewod_miejsce_id_zlacze">
+    <p>{{miejsce_przewod.nazwa}} : {{miejsce_przewod.etykieta}}</p>
+    <!-- {{miejsc_przewod.przewod_miejsce_id_zlacze}} -->
+    <table class="table table-condensed">
+        <tr ng-repeat="zk1 in zakonczenie1[miejsce_przewod.przewod_miejsce_id_zlacze]">
+            <!-- <td>{{zk1.zyla_id}}</td> -->
+            <td>{{$index+1}}</td>
+            <td ng-style='{"background-color": "{{zk1.html}}"}'>&nbsp;</td>
+            <td>{{zk1.kolor}}</td>
+        </tr>
+    </table>
+</div>
+
+<div ng-if="miejsce_przewod.przewod_miejsce_id_zlacze === undefined">
+    <a href="#!/zakonczenie_add/{{miejsce_przewod.przewod_miejsce_id}}">Dodaj zakonczenie</a>
+</div>
