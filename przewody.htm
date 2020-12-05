@@ -17,7 +17,7 @@
                 selectZbiorcze == miejsca_przewody[wire.id][0].miejsce_id || 
                 selectZbiorcze == -1"
         >
-            <td style="text-align: center;">{{wire.id }}</td>
+            <td style="text-align: center; font-size: xx-large;">{{wire.id }}</td>
             <td style="text-align: left;">{{ wire.opis }}</td>
             <td style="text-align: center;">{{ wire.ilosc_zyl }}</td>
             <td style="text-align: left;" 
@@ -53,8 +53,9 @@
                 <p>Żyly</p>
                 <table class="table table-condensed">
                     <tr ng-repeat="zyla in zyly[wire.id]">
-                        <!-- <td>{{zyla.zyla_id}}</td> -->
+                        
                         <td>{{$index+1}}</td>
+                        <td>{{zyla.zyla_id}}</td> 
                         <td ng-style='{"background-color": "{{zyla.html}}"}'>&nbsp;</td>
                         <td>{{zyla.kolor}}</td>
                         <td>{{zyla.opis}}</td>

@@ -1,16 +1,45 @@
-<div ng-if="miejsce_przewod.przewod_miejsce_id_zlacze">
+<div ng-if="miejsce_przewod.zakonczenie_id !== undefined && miejsce_przewod.zakonczenie_id !== null">
     <p>{{miejsce_przewod.nazwa}} : {{miejsce_przewod.etykieta}}</p>
+
     <!-- {{miejsc_przewod.przewod_miejsce_id_zlacze}} -->
     <table class="table table-condensed">
-        <tr ng-repeat="zk1 in zakonczenie1[miejsce_przewod.przewod_miejsce_id_zlacze]">
+        <tr ng-repeat="zak1 in zakonczenie1[miejsce_przewod.przewod_miejsce_id]">
             <!-- <td>{{zk1.zyla_id}}</td> -->
             <td>{{$index+1}}</td>
-            <td ng-style='{"background-color": "{{zk1.html}}"}'>&nbsp;</td>
-            <td>{{zk1.kolor}}</td>
+            <td ng-style='{"background-color": "{{zak1.html}}"}'>&nbsp;</td>
+            <td>{{zak1.kolor}}</td>
+        </tr>
+    </table>
+    
+    <table class="table table-condensed" ng-init="zyly2 = zakonczenie2[miejsce_przewod.przewod_miejsce_id]">
+        <tr ng-repeat="zyla in zyly[wire.id]" >
+            <td>{{$index+1}}</td>
+            <td>{{zyla.zyla_id}}</td>
+            <td ng-style='{"background-color": "{{zyla.html}}"}'>&nbsp;</td>
+            <td>{{zyla.kolor}}</td>
+            <td>&lt;-&gt;</td>
+            <td ng-if="zyly2[zyla.zyla_id].length == 1">{{zyly2[zyla.zyla_id][0].zyla_id_1}} - {{zyly2[zyla.zyla_id][0].zyla_id_2}}</td></td>
+            <td ng-if="zyly2[zyla.zyla_id].length == 1"  ng-style='{"background-color": "{{zyly2[zyla.zyla_id][0].html2}}"}'>&nbsp;</td>
+            <td ng-if="zyly2[zyla.zyla_id].length == 1">{{zyly2[zyla.zyla_id][0].kolor2}}</td>
+            <td ng-if="zyly2[zyla.zyla_id].length == 1">{{zyly2[zyla.zyla_id][0].przewod_id2}}</td>
+            <td ng-if="zyly2[zyla.zyla_id].length == 1">{{zyly2[zyla.zyla_id][0].opis2}}</td>
+            <td ng-if="zyly2[zyla.zyla_id].length > 1" colspan="4">
+
+                <table class="table table-bordered" ng-init="zyly3 = zyly2[zyla.zyla_id]">
+                    <tr ng-repeat="zyla3 in zyly3">
+                        <td ng-style='{"background-color": "{{zyla3.html2}}"}'>&nbsp;</td>
+                        <td>{{zyla3.kolor2}}</td> 
+                        <td>{{zyla3.przewod_id2}}</td>
+                        <td>{{zyla3.opis2}}</td>            
+                    </tr>
+                </table>
+            </td>
         </tr>
     </table>
 </div>
 
-<div ng-if="miejsce_przewod.przewod_miejsce_id_zlacze === undefined">
+
+<div ng-if="miejsce_przewod.zakonczenie_id === undefined || miejsce_przewod.zakonczenie_id === null">
     <a href="#!/zakonczenie_add/{{miejsce_przewod.przewod_miejsce_id}}">Dodaj zakonczenie</a>
 </div>
+
