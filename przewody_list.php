@@ -19,6 +19,7 @@ while($row = mysqli_fetch_array($result)) {
         $prevpprzew = $row["przewod_id"];
     }
     array_push($przemiejscarr[$row["przewod_id"]], array(
+        "id" => $row["zid"],
         "przewod_miejsce_id" => $row["przewod_miejsce_id"],
         "przewod_miejsce_id_zlacze" => $row["przewod_miejsce_id_zlacze"],
         "miejsce_id" => $row["miejsce_id"],
@@ -73,12 +74,30 @@ while($row = mysqli_fetch_array($result)) {
     ));
 }
 
+$query = "SELECT `zkid`, `zakonczenie_id`, `przewod_miejsce_id`, `zyla_id`, `pos`, `zid`, `kolor_id`, `przewod_id`, `opis`, `kolor`, `html` FROM `ZlaczeKolejnoscView` WHERE 1";
+$prevzak = -1;
+$zakarr1 = array();
+$result = mysqli_query($con, $query);
+while($row = mysqli_fetch_array($result)) {
+    if ($row["przewod_miejsce_id"] != $prevzak) {
+        $zakarr1[$row["przewod_miejsce_id"]] = array();
+        $prevzak = $row["przewod_miejsce_id"];
+    }
+    array_push($zakarr1[$row["przewod_miejsce_id"]], array(
+        "zyla_id" => $row["zyla_id"],
+        "kolor" => $row["kolor"],
+        "html" => $row["html"],
+    ));
+}
+
+
 
 $opt = array(
     'miejsca_przewody' => $przemiejscarr,
     'przewody' => $przewodyarr,
     'zyly' => $zylyarr,
-    'miejsca' => $miejscearr
+    'miejsca' => $miejscearr,
+    "zakonczenie1" => $zakarr1
 );
 
 echo json_encode($opt);
