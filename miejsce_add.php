@@ -22,5 +22,7 @@ if ($id == -1) {
     $query .= $id_pomieszczenie . "`kod`='" . $kod . "',`polaczenie`=" . $polaczenie . " WHERE `id` = " . $id . ";";
 }
 
-print($query);
+$result = mysqli_query($con, $query);
+echo  ($result ? '-OK ' : '-ERR ' . $query);
+mysqli_close($con);
 ?>

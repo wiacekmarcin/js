@@ -14,13 +14,29 @@
     <table>
         <tr>
             <th>Kod</th><th>Nazwa</th><th ng-show="show_place">Miejsce</th>
-            <th>Opis</th><th>Przewody</th><th>Zb.</th><th>Poł.</th><th>Akcje</th></tr>
+            <th>Opis</th><th>Przewody</th><th>Zb.</th><th>Poł.</th><th>Akcje</th>
+        </tr>
         <tr ng-repeat-start="place in places" ng-style='$odd ? {"background-color": "#f1f1f1"} : {"background-color": "#ffffff"}'>
             <td style="text-align: left;"><a href="#!/miejsce_view/{{ place.id }}">{{place.kod}}</a></td>
-            <td style="text-align: left;">{{ place.nazwa }}</td>
+            <td style="text-align: left;"><a href="#!/miejsce_view/{{ place.id}}">{{ place.nazwa }}</a></td>
             <td style="text-align: left;" ng-show="show_place"><a href="#!/miejsca/{{ place.id_pomieszczenie }}">{{ place.pomieszczenie }}</a></td>
             <td style="text-align: left;">{{ place.opis }}</td>
-            <td style="text-align: left;;"> {{ place.kable.length }} : <span ng-repeat="p in place.kable"><a href="#!/przewod/{{p}}">{{p}}</a>, </span></td>
+            <td style="text-align: left;;"> 
+                <p ng-if="place.kable.length > 0">
+                    Przewody ({{ place.kable.length }}) :<span ng-repeat="p in place.kable"><a href="#!/przewod/{{p}}">{{p}}</a>, </span>
+                 </p>
+                 <p ng-if="zakonczenia[place.id]['1'].length > 0">
+                     Wtyczki ({{ zakonczenia[place.id]["1"].length }}) :<span ng-repeat="p in zakonczenia[place.id]['1']">
+                        <a href="#!/zakonczenia/{{p.id}}">{{p.etykieta}} ({{p.przewod_id}})</a>, </span>
+                </p>
+                <p ng-if="zakonczenia[place.id]['2'].length > 0">
+                    Połączenia ({{ zakonczenia[place.id]["2"].length }}) :<span ng-repeat="p in zakonczenia[place.id]['2']">
+                    <a href="#!/zakonczenia/{{p.id}}">{{p.etykieta}} ({{p.przewod_id}})</a>, </span>
+                </p>
+                <p ng-if="zakonczenia[place.id]['3'].length > 0">Urządzenia ({{ zakonczenia[place.id]["3"].length }}) :<span ng-repeat="p in zakonczenia[place.id]['3']">
+                    <a href="#!/zakonczenia/{{p.id}}">{{p.etykieta}} ({{p.przewod_id}})</a>, </span>
+                </p>
+            </td>
             <td style="text-align: center;">{{ place.zbiorcze }}</td>
             <td style="text-align: center;">{{ place.polaczenie }}</td>
             <td style="text-align: center;"><button ng-click="editPlace(place)">Edytuj</button></td>
