@@ -1,6 +1,6 @@
 app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
     $scope.selectZbiorcze = -1;
-    $scope.wires = [];
+
     $scope.detailsAll = false;
 
     $scope.editRow = {'id' : -1};
@@ -10,43 +10,26 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
     var get = function() {
 
         $http.get("przewody_list.php").then(function(response) { 
-            $scope.miejsca_przewody = response.data.miejsca_przewody;
+
             $scope.przewody = response.data.przewody;
-            $scope.zyly = response.data.zyly;
-            $scope.miejsca = response.data.miejsca;
+            $scope.prze = response.data.przewod;
+            $scope.zyla = response.data.zyla;
+            $scope.miej = response.data.miejsce;
+            $scope.przew_miej = response.data.przewod_miejsce;
             $scope.zakonczenie1 = response.data.zakonczenie1;
             $scope.zakonczenie2 = response.data.zakonczenie2;
             var BreakException = {};
             for (var i=0; i < $scope.przewody.length; i++) {
-                if ($scope.przewody[i].id == $scope.addRow.id) {
+                if ($scope.przewody[i] == $scope.addRow.id) {
                     $scope.addRow.id +=  1;
                 } else {
                     i = $scope.przewody.length;
                 }
             }
-            /*
-            try {
-                $scope.przewody.forEach(function(value, key, przewody) {
-                    if (value.id == $scope.addRow.id) {
-                        
-                    } else {
-                        throw BreakException;
-                    }
-                });
-            } catch (e) {
-                if (e !== BreakException) throw e;
-            }
-            */
-
-            //$scope.choose(-1);
         });
     };
 
     get();
-
-    $scope.myFilter = function (item) { 
-        return item.zbiorcze == 1 || item.polaczenie == 1; 
-    };
 
     $scope.choose = function(id, name) {
         $scope.selectZbiorcze = id;
@@ -61,14 +44,36 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
         $scope.detailsAll = !$scope.detailsAll;
     };
     
-    $scope.seteditPlace = function(row) {
-        $scope.editRow = row;
-        if ($scope.selectZbiorcze != -1) {
-            $scope.editRow.miejsce_id1 = $scope.selectZbiorcze;
-        } else {
-            $scope.editRow.miejsce_id1 = $scope.miejsca[$scope.miejsca_przewody[row.id][0].miejsce_id];
+    $scope.isShowWire = function(wire_id) {
+        return $scope.selectZbiorcze == -1 ||
+                $scope.prze[wire_id]["miejsca"][0]["mid"] == $scope.selectZbiorcze ||
+                $scope.prze[wire_id]["miejsca"][1]["mid"] == $scope.selectZbiorcze;
+    }
+
+
+    $scope.showtd1 = function(wire_id) {
+        return $scope.prze[wire_id]["miejsca"][0]["mid"] == $scope.selectZbiorcze;
+    }
+
+    $scope.showtd2 = function(wire_id) {
+        return $scope.prze[wire_id]["miejsca"][1]["mid"] == $scope.selectZbiorcze;
+    }
+    
+    $scope.showtd3 = function(wire_id) {
+        return $scope.prze[wire_id]["miejsca"][0]["mid"] != $scope.selectZbiorcze;
+    }
+    $scope.showtd4 = function(wire_id) {
+        return $scope.prze[wire_id]["miejsca"][1]["mid"] != $scope.selectZbiorcze;
+    }
+
+    $scope.seteditPlace = function(pid) {
+        $scope.editRow = {
+            "id" : pid,
+            "opis" : $scope.prze[pid].opis,
+            "il_zyl" : $scope.prze[pid].il_zyl,
+            "miejsce_id1" : $scope.miej[$scope.prze[pid]["miejsca"][0].mid],
+            "miejsce_id2" : $scope.miej[$scope.prze[pid]["miejsca"][1].mid],
         }
-        $scope.editRow.miejsce_id2 = $scope.miejsca[$scope.miejsca_przewody[row.id][1].miejsce_id];
     };
 
     $scope.cancelEdit = function() {
@@ -80,10 +85,13 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             "edit" : "true",
             "id" : $scope.editRow.id,
             "opis" : $scope.editRow.opis,
-            "ilosc_zyl" : $scope.editRow.ilosc_zyl,
-            "miejsce_id_1" : $scope.editRow.miejsce_id1.id,
-            "miejsce_id_2" : $scope.editRow.miejsce_id2.id
+            "ilosc_zyl" : $scope.editRow.il_zyl,
+            "miejsce_id_1" : $scope.editRow.miejsce_id1.$key,
+            "miejsce_id_2" : $scope.editRow.miejsce_id2.$key,
+            "pmid_1" : $scope.przew_miej[$scope.editRow.id][$scope.editRow.miejsce_id1.$key],
+            "pmid_2" : $scope.przew_miej[$scope.editRow.id][$scope.editRow.miejsce_id2.$key]
         })
+        $scope.editRow = {'id' : -1};
     };
 
     $scope.addAdd = function() {
@@ -96,9 +104,12 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             "id" : $scope.addRow.id,
             "opis" : $scope.addRow.opis,
             "ilosc_zyl" : $scope.addRow.ilosc_zyl,
-            "miejsce_id_1" : $scope.addRow.miejsce_id1.id,
-            "miejsce_id_2" : $scope.addRow.miejsce_id2.id
-        })
+            "miejsce_id_1" : $scope.addRow.miejsce_id1.$key,
+            "miejsce_id_2" : $scope.addRow.miejsce_id2.$key,
+            "pmid_1" : -1,
+            "pmid_2" : -1,
+        });
+        
     };
 
     $scope.cancelAdd = function() {
