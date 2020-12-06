@@ -2,9 +2,10 @@ app.controller('miejsca-ctrl', ['$scope','$routeParams', '$http', function($scop
     var mid = $routeParams.id;
     $scope.edit_place = -1;
     $scope.add_place = false;
-    $http.get("miejsca_list.php?pid="+ mid).then(function(response) { 
+    $http.get("miejsca_list.php?mid="+ mid).then(function(response) { 
         $scope.places = response.data.miejsca;
         $scope.pomieszczenia = response.data.pomieszczenia;
+        $scope.zakonczenia = response.data.zakonczenia;
 
         if (mid == -1) {
             $scope.title = "Wszystkie";
@@ -103,15 +104,5 @@ app.controller('miejsca-ctrl', ['$scope','$routeParams', '$http', function($scop
     }
 }]);
 
-/*
-                                    'name' => $row['name'], 
-                                    'pomieszczenie' => $row['pomieszczenie'], 
-                                    'id_pomieszczenie' => $row['id_pomieszczenie'], 
-                                    'description' => $row['description'], 
-                                    'zbiorcze' => $row['zbiorcze'], 
-                                    'kod' => $row['kod'], 
-                                    'polaczenie' => $row['polaczenie'],
-                                    'kable' => array()
-                                    
-*/                                    
+                                   
 
