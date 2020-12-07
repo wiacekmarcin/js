@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 06 Gru 2020, 20:48
+-- Czas generowania: 07 Gru 2020, 07:06
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -922,6 +922,40 @@ INSERT INTO `rodzaj_zakonczenia` (`id`, `nazwa`, `kod`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `urzadzenie_zakonczenie`
+--
+
+CREATE TABLE `urzadzenie_zakonczenie` (
+  `id` smallint UNSIGNED NOT NULL,
+  `zakonczenie_id` smallint UNSIGNED NOT NULL,
+  `zyla_id` smallint UNSIGNED NOT NULL,
+  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `kolor_id` tinyint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+--
+-- Zrzut danych tabeli `urzadzenie_zakonczenie`
+--
+
+INSERT INTO `urzadzenie_zakonczenie` (`id`, `zakonczenie_id`, `zyla_id`, `opis`, `kolor_id`) VALUES
+(1, 52, 270, 'Zasilanie +5V', 4),
+(2, 52, 271, 'Sygnał czujnika', 8),
+(3, 52, 272, 'Masa', 7),
+(4, 53, 273, 'Zasilanie +5V', 4),
+(5, 53, 274, 'Sygnał czujnika', 8),
+(6, 53, 275, 'Masa', 7),
+(7, 54, 276, 'Zasilanie +5V', 4),
+(8, 54, 277, 'Sygnał czujnika', 8),
+(9, 54, 278, 'Masa ', 7),
+(10, 55, 279, 'Zasilanie +5V', 4),
+(11, 55, 280, 'Sygnał czujnika', 8),
+(12, 55, 281, 'Masa ', 7),
+(13, 56, 314, 'Masa', 1),
+(14, 56, 315, 'Styk', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Zastąpiona struktura widoku `WewnetrzneKableView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
@@ -998,7 +1032,29 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (48, '41-42-43-44-45-46-47', 90, 2),
 (49, '41-42-43-44-45-46-47', 91, 2),
 (50, '41-42-43-44-45-46-47', 93, 2),
-(51, '41-42-43-44-45-46-47', 95, 2);
+(51, '41-42-43-44-45-46-47', 95, 2),
+(52, 'Czujnik temperatury ogrz. wodne ściana w salonie', 20, 3),
+(53, 'Czujnik temperatury ogrz. wodnego podłoga w kuchni', 22, 3),
+(54, 'Czujnik temperatury ogrz. wodnego podłoga w łazience', 23, 3),
+(55, 'Czujnik temperatury przy pompie', 26, 3),
+(56, 'Kontaktron od drzwiczek rewizyjnych', 40, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `ZakonczenieView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `ZakonczenieView` (
+`etykieta` text
+,`id` smallint unsigned
+,`kod` varchar(1)
+,`miejsce_id` tinyint unsigned
+,`nazwa` text
+,`przewod_id` tinyint unsigned
+,`przewod_miejsce_id` smallint unsigned
+,`rodzaj_zakonczenia` tinyint(1)
+);
 
 -- --------------------------------------------------------
 
@@ -1755,6 +1811,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 -- --------------------------------------------------------
 
 --
+-- Struktura widoku `ZakonczenieView`
+--
+DROP TABLE IF EXISTS `ZakonczenieView`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczenieView`  AS  select `zakonczenie`.`id` AS `id`,`zakonczenie`.`etykieta` AS `etykieta`,`zakonczenie`.`przewod_miejsce_id` AS `przewod_miejsce_id`,`zakonczenie`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`,`przewod_miejsce`.`przewod_id` AS `przewod_id`,`przewod_miejsce`.`miejsce_id` AS `miejsce_id`,`rodzaj_zakonczenia`.`nazwa` AS `nazwa`,`rodzaj_zakonczenia`.`kod` AS `kod` from ((`zakonczenie` left join `przewod_miejsce` on((`przewod_miejsce`.`id` = `zakonczenie`.`przewod_miejsce_id`))) left join `rodzaj_zakonczenia` on((`rodzaj_zakonczenia`.`id` = `zakonczenie`.`rodzaj_zakonczenia`))) ;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura widoku `ZewnetrzneKableView`
 --
 DROP TABLE IF EXISTS `ZewnetrzneKableView`;
@@ -1834,6 +1899,15 @@ ALTER TABLE `rodzaj_zakonczenia`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeksy dla tabeli `urzadzenie_zakonczenie`
+--
+ALTER TABLE `urzadzenie_zakonczenie`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `zakonczenie_id` (`zakonczenie_id`),
+  ADD KEY `zyla_id` (`zyla_id`),
+  ADD KEY `kolor_id` (`kolor_id`);
+
+--
 -- Indeksy dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
@@ -1898,10 +1972,16 @@ ALTER TABLE `rodzaj_zakonczenia`
   MODIFY `id` tinyint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT dla tabeli `urzadzenie_zakonczenie`
+--
+ALTER TABLE `urzadzenie_zakonczenie`
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT dla tabeli `zyla`
@@ -1933,6 +2013,14 @@ ALTER TABLE `polaczenie_zyla`
 ALTER TABLE `przewod_miejsce`
   ADD CONSTRAINT `pmmiefg` FOREIGN KEY (`miejsce_id`) REFERENCES `miejsce` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `pmprzefg` FOREIGN KEY (`przewod_id`) REFERENCES `przewod` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Ograniczenia dla tabeli `urzadzenie_zakonczenie`
+--
+ALTER TABLE `urzadzenie_zakonczenie`
+  ADD CONSTRAINT `urzazakkolfg` FOREIGN KEY (`kolor_id`) REFERENCES `kolor` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `urzazakozayfg` FOREIGN KEY (`zyla_id`) REFERENCES `zyla` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `urzazakzakofg` FOREIGN KEY (`zakonczenie_id`) REFERENCES `zakonczenie` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Ograniczenia dla tabeli `zakonczenie`
