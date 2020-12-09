@@ -1,0 +1,32 @@
+<div ng-controller="zakonczenieedit-ctrl">
+<p>
+    <!-- <label>Zid</label> {{ zakonczenie.zid }} <br> -->
+    <label>Nazwa zakończenia</label> {{ zakonczenie.etykieta }} <br>
+    <!-- <label>pmid</label> {{ zakonczenie.pmid }} <br> -->
+    <!-- <label>rodzaj_zakonczenia</label> {{ zakonczenie.rodzaj_zakonczenia }} <br> -->
+    <label>Rodzaj zakończenia</label> {{ zakonczenie.znazwa }} <br>
+    <!-- <label>zkod</label> {{ zakonczenie.zkod }} <br> -->
+    <label>Miejsce</label> {{ zakonczenie.mnazwa }} <br>
+    <label>Opis miejca</label> {{ zakonczenie.mopis }} <br>
+    <label>Zbiorcze</label> {{ zakonczenie.zbiorcze }} <br>
+    <!-- <label>mkod</label> {{ zakonczenie.mkod }} <br> -->
+    <label>Połączenie</label> {{ zakonczenie.polaczenie }} <br>
+    <label>Pomieszczenie</label> {{ zakonczenie.pomieszczenie }} <br>
+    <label>Nr przewodu</label> {{ zakonczenie.przewod_id }} <br>
+    <label>Opis przewodu</label> {{ zakonczenie.popis }} <br>
+    <label>Ilość zył</label> {{ zakonczenie.ilosc_zyl }} <br>
+</p>    
+<table>
+    <tr ng-repeat="z in zyly">
+        <td>{{z.id}}</td>
+        <td ng-style="{'background-color': '{{z.html}}'}" >&nbsp;</td>
+        <td>{{z.kolor}}</td>
+        <td>{{z.opis}}</td>
+        <td>-</td>
+        <td><select ng-options="kol as kol.nazwa for kol in kolory" ng-model="urzadzenie[z.id].kolor"></select></td>
+        <td><input type="text" ng-model="urzadzenie[z.id].opis"></select></td>
+    </tr>
+
+</table>
+</div>
+
