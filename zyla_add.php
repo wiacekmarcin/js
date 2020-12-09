@@ -1,4 +1,6 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
 error_reporting( E_ALL );
 ini_set('display_errors', 1);
 require_once "database.php";
@@ -11,14 +13,14 @@ $przewody = array();
 $isrow = true;
 while($isrow) {
     $tmp = array();
-    $query = "SELECT `id`, `description`, `ilosc_zyl` FROM `przewod` LIMIT " . 50*$index . ",  50";
+    $query = "SELECT `id`, `opis`, `ilosc_zyl` FROM `przewod` LIMIT " . 50*$index . ",  50";
     $result = mysqli_query($con, $query);
     $isrow = false;
     while($row = mysqli_fetch_array($result)) {
         $isrow = true;
         array_push($tmp, array(
             'id' => $row['id'],
-            'descr' => $row['description'],
+            'descr' => $row['opis'],
             'ilosc_zyl' => $row['ilosc_zyl']
         ));
     }    
@@ -26,13 +28,13 @@ while($isrow) {
     array_push($przewody, $tmp);
 }
 
-$query = "SELECT `id`, `name`, `html` FROM `KolorView` WHERE 1";
+$query = "SELECT `id`, `nazwa`, `html` FROM `KolorView` WHERE 1";
 $result = mysqli_query($con, $query);
 $colors = array();
 while($row = mysqli_fetch_array($result)) {
     array_push($colors, array(
             'id' => $row['id'],
-            'cname' => $row['name'],
+            'cname' => $row['nazwa'],
             'html' => $row['html']
     ));
 }    
