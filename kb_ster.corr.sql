@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 07 Gru 2020, 07:06
+-- Czas generowania: 09 Gru 2020, 23:59
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -62,9 +62,9 @@ INSERT INTO `kolor` (`id`, `nazwa`, `html`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `KolorView` (
-`html` text
-,`id` tinyint unsigned
+`id` tinyint unsigned
 ,`nazwa` text
+,`html` text
 );
 
 -- --------------------------------------------------------
@@ -203,13 +203,13 @@ INSERT INTO `miejsce` (`id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `k
 --
 CREATE TABLE `MiejsceView` (
 `id` tinyint unsigned
-,`id_pomieszczenie` tinyint unsigned
-,`kod` varchar(16)
 ,`nazwa` text
 ,`opis` text
+,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
-,`zbiorcze` tinyint(1)
 );
 
 -- --------------------------------------------------------
@@ -219,18 +219,18 @@ CREATE TABLE `MiejsceView` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `PolaczenieZylaWidok` (
-`html1` text
-,`html2` text
-,`id` smallint unsigned
-,`kolor1` text
-,`kolor2` text
-,`opis1` text
-,`opis2` text
-,`przewod_id1` tinyint unsigned
-,`przewod_id2` tinyint unsigned
-,`zakonczenie_id` smallint unsigned
+`id` smallint unsigned
 ,`zyla_id_1` smallint unsigned
 ,`zyla_id_2` smallint unsigned
+,`zakonczenie_id` smallint unsigned
+,`przewod_id1` tinyint unsigned
+,`opis1` text
+,`kolor1` text
+,`html1` text
+,`przewod_id2` tinyint unsigned
+,`opis2` text
+,`kolor2` text
+,`html2` text
 );
 
 -- --------------------------------------------------------
@@ -553,15 +553,15 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `PrzewodMiejsceZakonczenieView` (
-`etykieta` text
-,`kod` varchar(1)
-,`miejsce_id` tinyint unsigned
-,`nazwa` text
-,`przewod_id` tinyint unsigned
-,`przewod_miejsce_id` smallint unsigned
+`zid` smallint unsigned
+,`etykieta` text
 ,`przewod_miejsce_id_zlacze` smallint unsigned
 ,`rodzaj_zakonczenia` tinyint(1)
-,`zid` smallint unsigned
+,`przewod_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`przewod_miejsce_id` smallint unsigned
+,`nazwa` text
+,`kod` varchar(1)
 );
 
 -- --------------------------------------------------------
@@ -674,7 +674,7 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 (91, 45, 34),
 (92, 45, 36),
 (93, 46, 34),
-(94, 46, 35),
+(94, 46, 50),
 (95, 47, 34),
 (96, 47, 35),
 (97, 48, 2),
@@ -930,28 +930,29 @@ CREATE TABLE `urzadzenie_zakonczenie` (
   `zakonczenie_id` smallint UNSIGNED NOT NULL,
   `zyla_id` smallint UNSIGNED NOT NULL,
   `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
-  `kolor_id` tinyint UNSIGNED NOT NULL
+  `kolor_id` tinyint UNSIGNED NOT NULL,
+  `pos` tinyint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `urzadzenie_zakonczenie`
 --
 
-INSERT INTO `urzadzenie_zakonczenie` (`id`, `zakonczenie_id`, `zyla_id`, `opis`, `kolor_id`) VALUES
-(1, 52, 270, 'Zasilanie +5V', 4),
-(2, 52, 271, 'Sygnał czujnika', 8),
-(3, 52, 272, 'Masa', 7),
-(4, 53, 273, 'Zasilanie +5V', 4),
-(5, 53, 274, 'Sygnał czujnika', 8),
-(6, 53, 275, 'Masa', 7),
-(7, 54, 276, 'Zasilanie +5V', 4),
-(8, 54, 277, 'Sygnał czujnika', 8),
-(9, 54, 278, 'Masa ', 7),
-(10, 55, 279, 'Zasilanie +5V', 4),
-(11, 55, 280, 'Sygnał czujnika', 8),
-(12, 55, 281, 'Masa ', 7),
-(13, 56, 314, 'Masa', 1),
-(14, 56, 315, 'Styk', 1);
+INSERT INTO `urzadzenie_zakonczenie` (`id`, `zakonczenie_id`, `zyla_id`, `opis`, `kolor_id`, `pos`) VALUES
+(1, 52, 270, 'Zasilanie +5V', 4, 1),
+(2, 52, 271, 'Sygnał czujnika', 8, 2),
+(3, 52, 272, 'Masa', 7, 3),
+(4, 53, 273, 'Zasilanie +5V', 4, 1),
+(5, 53, 274, 'Sygnał czujnika', 8, 2),
+(6, 53, 275, 'Masa', 7, 3),
+(7, 54, 276, 'Zasilanie +5V', 4, 1),
+(8, 54, 277, 'Sygnał czujnika', 8, 2),
+(9, 54, 278, 'Masa ', 7, 3),
+(10, 55, 279, 'Zasilanie +5V', 4, 1),
+(11, 55, 280, 'Sygnał czujnika', 8, 2),
+(12, 55, 281, 'Masa ', 7, 3),
+(13, 56, 314, 'Masa', 1, 2),
+(14, 56, 315, 'Styk', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -960,9 +961,9 @@ INSERT INTO `urzadzenie_zakonczenie` (`id`, `zakonczenie_id`, `zyla_id`, `opis`,
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `WewnetrzneKableView` (
-`c` bigint
+`przewod_id` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`przewod_id` tinyint unsigned
+,`c` bigint
 );
 
 -- --------------------------------------------------------
@@ -1037,7 +1038,8 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (53, 'Czujnik temperatury ogrz. wodnego podłoga w kuchni', 22, 3),
 (54, 'Czujnik temperatury ogrz. wodnego podłoga w łazience', 23, 3),
 (55, 'Czujnik temperatury przy pompie', 26, 3),
-(56, 'Kontaktron od drzwiczek rewizyjnych', 40, 3);
+(56, 'Kontaktron od drzwiczek rewizyjnych', 40, 3),
+(57, 'Czujnik ruchu WC', 54, 3);
 
 -- --------------------------------------------------------
 
@@ -1046,14 +1048,39 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZakonczenieView` (
-`etykieta` text
-,`id` smallint unsigned
-,`kod` varchar(1)
-,`miejsce_id` tinyint unsigned
-,`nazwa` text
-,`przewod_id` tinyint unsigned
+`id` smallint unsigned
+,`etykieta` text
 ,`przewod_miejsce_id` smallint unsigned
 ,`rodzaj_zakonczenia` tinyint(1)
+,`przewod_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`nazwa` text
+,`kod` varchar(1)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `ZakonczePrzewodMiejsce`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `ZakonczePrzewodMiejsce` (
+`zid` smallint unsigned
+,`etykieta` text
+,`przewod_miejsce_id` smallint unsigned
+,`rodzaj_zakonczenia` tinyint(1)
+,`przewod_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`znazwa` text
+,`zkod` varchar(1)
+,`mnazwa` text
+,`mopis` text
+,`zbiorcze` tinyint(1)
+,`mkod` varchar(16)
+,`polaczenie` tinyint(1)
+,`pomieszczenie` text
+,`popis` text
+,`ilosc_zyl` tinyint unsigned
 );
 
 -- --------------------------------------------------------
@@ -1063,9 +1090,9 @@ CREATE TABLE `ZakonczenieView` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZewnetrzneKableView` (
-`c` bigint
+`przewod_id` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`przewod_id` tinyint unsigned
+,`c` bigint
 );
 
 -- --------------------------------------------------------
@@ -1075,17 +1102,17 @@ CREATE TABLE `ZewnetrzneKableView` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZlaczeKolejnoscView` (
-`html` text
-,`kolor` text
-,`kolor_id` tinyint unsigned
-,`opis` text
-,`pos` tinyint
-,`przewod_id` tinyint unsigned
-,`przewod_miejsce_id` smallint unsigned
+`zkid` int unsigned
 ,`zakonczenie_id` smallint unsigned
-,`zid` smallint unsigned
-,`zkid` int unsigned
 ,`zyla_id` smallint unsigned
+,`pos` tinyint
+,`przewod_miejsce_id` smallint unsigned
+,`zid` smallint unsigned
+,`kolor_id` tinyint unsigned
+,`przewod_id` tinyint unsigned
+,`opis` text
+,`kolor` text
+,`html` text
 );
 
 -- --------------------------------------------------------
@@ -1755,12 +1782,12 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZylaWidok` (
-`html` text
-,`id` smallint unsigned
-,`kolor` text
+`id` smallint unsigned
 ,`kolor_id` tinyint unsigned
-,`opis` text
 ,`przewod_id` tinyint unsigned
+,`opis` text
+,`kolor` text
+,`html` text
 );
 
 -- --------------------------------------------------------
@@ -1816,6 +1843,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 DROP TABLE IF EXISTS `ZakonczenieView`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczenieView`  AS  select `zakonczenie`.`id` AS `id`,`zakonczenie`.`etykieta` AS `etykieta`,`zakonczenie`.`przewod_miejsce_id` AS `przewod_miejsce_id`,`zakonczenie`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`,`przewod_miejsce`.`przewod_id` AS `przewod_id`,`przewod_miejsce`.`miejsce_id` AS `miejsce_id`,`rodzaj_zakonczenia`.`nazwa` AS `nazwa`,`rodzaj_zakonczenia`.`kod` AS `kod` from ((`zakonczenie` left join `przewod_miejsce` on((`przewod_miejsce`.`id` = `zakonczenie`.`przewod_miejsce_id`))) left join `rodzaj_zakonczenia` on((`rodzaj_zakonczenia`.`id` = `zakonczenie`.`rodzaj_zakonczenia`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `ZakonczePrzewodMiejsce`
+--
+DROP TABLE IF EXISTS `ZakonczePrzewodMiejsce`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczePrzewodMiejsce`  AS  select `ZakonczenieView`.`id` AS `zid`,`ZakonczenieView`.`etykieta` AS `etykieta`,`ZakonczenieView`.`przewod_miejsce_id` AS `przewod_miejsce_id`,`ZakonczenieView`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`,`ZakonczenieView`.`przewod_id` AS `przewod_id`,`ZakonczenieView`.`miejsce_id` AS `miejsce_id`,`ZakonczenieView`.`nazwa` AS `znazwa`,`ZakonczenieView`.`kod` AS `zkod`,`MiejsceView`.`nazwa` AS `mnazwa`,`MiejsceView`.`opis` AS `mopis`,`MiejsceView`.`zbiorcze` AS `zbiorcze`,`MiejsceView`.`kod` AS `mkod`,`MiejsceView`.`polaczenie` AS `polaczenie`,`MiejsceView`.`pomieszczenie` AS `pomieszczenie`,`przewod`.`opis` AS `popis`,`przewod`.`ilosc_zyl` AS `ilosc_zyl` from ((`ZakonczenieView` left join `MiejsceView` on((`MiejsceView`.`id` = `ZakonczenieView`.`miejsce_id`))) left join `przewod` on((`przewod`.`id` = `ZakonczenieView`.`przewod_id`))) where (0 <> 1) ;
 
 -- --------------------------------------------------------
 
@@ -1905,7 +1941,8 @@ ALTER TABLE `urzadzenie_zakonczenie`
   ADD PRIMARY KEY (`id`),
   ADD KEY `zakonczenie_id` (`zakonczenie_id`),
   ADD KEY `zyla_id` (`zyla_id`),
-  ADD KEY `kolor_id` (`kolor_id`);
+  ADD KEY `kolor_id` (`kolor_id`),
+  ADD KEY `pos` (`pos`);
 
 --
 -- Indeksy dla tabeli `zakonczenie`
@@ -1981,7 +2018,7 @@ ALTER TABLE `urzadzenie_zakonczenie`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT dla tabeli `zyla`
