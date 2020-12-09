@@ -19,7 +19,7 @@ $query = "SELECT count(*) FROM `zyla` WHERE 1 ";
 $result = mysqli_query($con, $query);
 $cntZyla = $result->fetch_array()[0];
 
-$query = "SELECT count(*) FROM `zlacze` WHERE 1 ";
+$query = "SELECT count(*) FROM `zakonczenie` WHERE 1 ";
 $result = mysqli_query($con, $query);
 $cntZlacze = $result->fetch_array()[0];
 
@@ -35,13 +35,43 @@ $query = "SELECT sum(`ilosc_zyl`) FROM `przewod` WHERE 1 ";
 $result = mysqli_query($con, $query);
 $cntAllZyl = $result->fetch_array()[0];
 
+$query = "select count(r.id) from (SELECT `z`.`przewod_id` as id, count(`z`.`przewod_id` ) as `cnt` ";
+$query .= "FROM `zyla` `z` WHERE 1 GROUP BY `z`.`przewod_id`) as r";
+$result = mysqli_query($con, $query);
+$cntDescrPrzew = $result->fetch_array()[0];
+
+$query = "SELECT `nazwa`, count(`nazwa`) as ilosc FROM `ZakonczenieView` WHERE 1 GROUP by `nazwa` ";
+$zakoarray = array();
+$result = mysqli_query($con, $query);
+while($row = $result->fetch_array()) {
+    array_push($zakoarray, array(
+        "nazwa" => $row["nazwa"],
+        "ilosc" => $row["ilosc"]
+    ));
+}
+
+$query = "SELECT kolor, count(kolor) as cnt FROM `ZylaWidok` WHERE 1 GROUP BY kolor ORDER BY cnt DESC ";
+$kolory = array();
+
+$result = mysqli_query($con, $query);
+while($row = $result->fetch_array()) {
+    array_push($kolory, array(
+        "nazwa" => $row["kolor"],
+        "ilosc" => $row["cnt"],
+    ));
+}
+
 $outp = "{";
 $outp .= '"przewod":"'  . $cntPrz . '",';
 $outp .= '"zyla":"'      . $cntZyla        . '",';
 $outp .= '"zlacze":"'    . $cntZlacze     . '",';
 $outp .= '"zewn_przew":"'    . $cntPzew     . '",';
 $outp .= '"wewn_przew":"'    . $cntPwew     . '",';
-$outp .= '"zyla_all":"'     . $cntAllZyl .  '"}';
+$outp .= '"zyla_all":"'     . $cntAllZyl .  '",';
+$outp .= '"przewod_opis":"'     . $cntDescrPrzew .  '",';
+$outp .= '"zakonczenia":' . json_encode($zakoarray) . ",";
+$outp .= '"kolory":' . json_encode($kolory);
+$outp .= "}";
 $con->close();
 
 echo($outp);

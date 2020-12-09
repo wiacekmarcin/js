@@ -1,4 +1,6 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
 error_reporting( E_ALL );
 ini_set('display_errors', 1);
 require_once "database.php";
@@ -13,15 +15,15 @@ if (isset($_GET['pid'])) {
     $pid = $_GET['pid'];
 }
 
-$query = "SELECT `id`, `color_id`, `opis`, `name`, `html` FROM `ZylaWidok` WHERE `przewod_id` = $pid ORDER by `id`";
+$query = "SELECT `id`, `kolor_id`, `przewod_id`, `opis`, `kolor`, `html` FROM `ZylaWidok` WHERE `przewod_id` = $pid ORDER by `id`";
 $result = mysqli_query($con, $query);
 $zyly = array();
 while($row = mysqli_fetch_array($result)) {
     array_push($zyly, array(
             'id' => $row['id'],
-            'cid' => $row['color_id'],
+            'cid' => $row['kolor_id'],
             'opis' => $row['opis'],
-            'cname' => $row['name'],
+            'cname' => $row['kolor'],
             'html' => $row['html']
     ));
 }    

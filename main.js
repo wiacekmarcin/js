@@ -8,5 +8,8 @@ app.controller('main-ctrl', function($scope, $http) {
           $scope.zlacze = response.data.zlacze;
           $scope.zewn_przew = response.data.zewn_przew;
           $scope.wewn_przew = response.data.wewn_przew;
+          $scope.zakonczenia = response.data.zakonczenia;
+          $scope.kolory = response.data.kolory;
+          $scope.przewod_opis = response.data.przewod_opis;
         });
 });

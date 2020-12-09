@@ -1,11 +1,27 @@
 <div ng-controller="main-ctrl">
     <p>
         Liczba wszystkich kabli : {{ przewod }}<br>
+        <ul>
+            <li>
+              Zewnetrznych {{zewn_przew}}      
+            </li>
+            <li>
+                Wewnetrznych {{wewn_przew}}      
+            </li>
+            <li>
+                Opisanych {{przewod_opis}}
+            </li>
+        </ul>
         Liczba opisanych żył : {{ zyla }}<br>
         Liczba wszystkich żył : {{ zyla_all }}<br>
-        Liczba wszystkich złącz : {{ zlacze }}<br>
-        Liczba wszystkich zewnetrznych kabli : {{ zewn_przew }}<br>
-        Liczba wszystkich wewnetrznych kabli : {{ wewn_przew }}<br>
+        <ul>
+            <li ng-repeat="item in kolory track by $index">{{item.nazwa}} : {{item.ilosc}}</li>
+        </ul>
+        Liczba wszystkich złącz : {{ 2*przewod }}<br>
+        Liczba opisanych złącz : {{ zlacze }}<br>
+        <ul>
+            <li ng-repeat="item in zakonczenia track by $index">{{item.nazwa}} : {{item.ilosc}}</li>
+        </ul>
     </p>
 </div>
 

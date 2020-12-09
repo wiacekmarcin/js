@@ -74,6 +74,8 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             "il_zyl" : $scope.prze[pid].il_zyl,
             "miejsce_id1" : $scope.miej[$scope.prze[pid]["miejsca"][0].mid],
             "miejsce_id2" : $scope.miej[$scope.prze[pid]["miejsca"][1].mid],
+            "pmid_1" : $scope.prze[pid]["miejsca"][0].pmid,
+            "pmid_2" : $scope.prze[pid]["miejsca"][1].pmid,
         }
     };
 
@@ -89,8 +91,8 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             "ilosc_zyl" : $scope.editRow.il_zyl,
             "miejsce_id_1" : $scope.editRow.miejsce_id1.$key,
             "miejsce_id_2" : $scope.editRow.miejsce_id2.$key,
-            "pmid_1" : $scope.przew_miej[$scope.editRow.id][$scope.editRow.miejsce_id1.$key],
-            "pmid_2" : $scope.przew_miej[$scope.editRow.id][$scope.editRow.miejsce_id2.$key]
+            "pmid_1" : $scope.editRow.pmid_1,
+            "pmid_2" : $scope.editRow.pmid_2
         })
         $scope.editRow = {'id' : -1};
     };
