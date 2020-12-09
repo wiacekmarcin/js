@@ -1,0 +1,10 @@
+<div ng-controller="zakonczenieadd-ctrl">
+
+    <form novalidate class="simple-form">
+        <label>Etykieta </label> <input type="text" ng-model="zakonczenie.nazwa" /><br />
+        <label>Rodzaj zakończenia </label>
+          <select ng-options="rzak as rzak.nazwa for rzak in rodzaj_zakonczenia" ng-model="zakonczenie.rodzaj" ></select><br />
+        <input type="button" ng-click="reset()" value="Czyść" />
+        <input type="submit" ng-click="update(zakonczenie)" value="Zachowaj" />
+      </form>
+</div>

@@ -29,10 +29,11 @@ if ($edit == "true") {
 }
 
 $count = count($queries);
+
 $err = 0;
 for ($i = 0; $i < $count; $i++) {
     if (!mysqli_query($con, $queries[$i])) {
-        print ("ERR : " . $quieries);
+        print ("ERR : " . $queries[$i]);
         $err = 1;
     }
 }

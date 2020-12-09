@@ -30,4 +30,7 @@ app.config(function($routeProvider) {
     .when("/zyla_add/:id", {
         templateUrl: 'zyla_add.htm',    
     })
+    .when("/zakonczenie_add/:id", {
+        templateUrl: 'zakonczenie_add.htm',    
+    })
 });
