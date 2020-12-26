@@ -11,7 +11,7 @@ function($scope, $routeParams, $location, $http) {
     $scope.update = function(zakonczenie) {
         var params = { "zid" : $scope.zid,
                     "pmid" : $scope.pmid,
-                    "etykieta" : zakonczenie.nazwa,
+                    "etykieta" : zakonczenie.etykieta,
                     "rodzaj_zakonczenia" : zakonczenie.rodzaj.id };
         sendData(params);
     };

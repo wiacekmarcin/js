@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 09 Gru 2020, 23:59
+-- Czas generowania: 26 Gru 2020, 23:01
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -21,6 +21,32 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `kb_ster_dbg`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `elementy_plytki`
+--
+
+CREATE TABLE `elementy_plytki` (
+  `id` smallint UNSIGNED NOT NULL,
+  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `rodzaj_zakonczenia_id` tinyint UNSIGNED NOT NULL,
+  `plytka_id` tinyint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `elementy_plytki_piny`
+--
+
+CREATE TABLE `elementy_plytki_piny` (
+  `id` smallint UNSIGNED NOT NULL,
+  `element_plytki_id` smallint UNSIGNED NOT NULL,
+  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `pos` tinyint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- --------------------------------------------------------
 
@@ -215,6 +241,18 @@ CREATE TABLE `MiejsceView` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `plytki`
+--
+
+CREATE TABLE `plytki` (
+  `id` tinyint UNSIGNED NOT NULL,
+  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `miejsce_id` tinyint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Zastąpiona struktura widoku `PolaczenieZylaWidok`
 -- (Zobacz poniżej rzeczywisty widok)
 --
@@ -232,6 +270,29 @@ CREATE TABLE `PolaczenieZylaWidok` (
 ,`kolor2` text
 ,`html2` text
 );
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `polaczenie_plytka`
+--
+
+CREATE TABLE `polaczenie_plytka` (
+  `id` smallint UNSIGNED NOT NULL,
+  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `polaczenie_plytka_polaczenie`
+--
+
+CREATE TABLE `polaczenie_plytka_polaczenie` (
+  `id` smallint UNSIGNED NOT NULL,
+  `polaczenie_plytka_id` smallint UNSIGNED NOT NULL,
+  `elementy_plytki_piny_id` smallint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- --------------------------------------------------------
 
@@ -544,6 +605,10 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (155, 'Zasialnie przekaźników do gniazd', 10),
 (156, 'Zasialnie przekaźników dla oświetlania', 10),
 (157, 'Zasilanie expander 0x100 i kabli 77 i 78', 8),
+(158, 'Zasilanie konwertetów RS232<->TTL', 4),
+(159, 'RS232 (WC)', 4),
+(160, 'RS232 x2', 4),
+(161, 'RS232x2', 4),
 (200, 'Zasilanie +24V, impulsy od licznika energi', 8);
 
 -- --------------------------------------------------------
@@ -896,7 +961,15 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 (313, 156, 26),
 (314, 156, 26),
 (315, 157, 26),
-(316, 157, 26);
+(316, 157, 26),
+(317, 158, 1),
+(318, 158, 1),
+(319, 159, 1),
+(320, 159, 1),
+(321, 160, 1),
+(322, 160, 1),
+(323, 161, 1),
+(324, 161, 1);
 
 -- --------------------------------------------------------
 
@@ -907,17 +980,74 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 CREATE TABLE `rodzaj_zakonczenia` (
   `id` tinyint NOT NULL,
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
-  `kod` varchar(1) NOT NULL
+  `kod` varchar(1) NOT NULL,
+  `przewod` tinyint(1) NOT NULL,
+  `plytka` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Zrzut danych tabeli `rodzaj_zakonczenia`
 --
 
-INSERT INTO `rodzaj_zakonczenia` (`id`, `nazwa`, `kod`) VALUES
-(1, 'Wtyczka', 'W'),
-(2, 'Połączenie', 'P'),
-(3, 'Urządzenie', 'U');
+INSERT INTO `rodzaj_zakonczenia` (`id`, `nazwa`, `kod`, `przewod`, `plytka`) VALUES
+(1, 'Wtyczka', 'W', 1, 0),
+(2, 'Połączenie kabli', 'K', 1, 0),
+(3, 'Urządzenie', 'U', 1, 1),
+(4, 'Połączenie płytki', 'P', 1, 1),
+(5, 'Złącze', 'Z', 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `urzadzenia_plytkowe`
+--
+
+CREATE TABLE `urzadzenia_plytkowe` (
+  `id` tinyint UNSIGNED NOT NULL,
+  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `ilosc_pin` tinyint NOT NULL,
+  `miejsce_id` tinyint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+--
+-- Zrzut danych tabeli `urzadzenia_plytkowe`
+--
+
+INSERT INTO `urzadzenia_plytkowe` (`id`, `nazwa`, `ilosc_pin`, `miejsce_id`) VALUES
+(1, 'Ekspander portów I/O 0x00', 13, 2),
+(2, 'Ekspander portów I/O 0x01', 13, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `urzadzenia_plytkowe_pin`
+--
+
+CREATE TABLE `urzadzenia_plytkowe_pin` (
+  `id` smallint UNSIGNED NOT NULL,
+  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `pos` tinyint NOT NULL,
+  `urzadzenie_plytkowe_id` tinyint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+--
+-- Zrzut danych tabeli `urzadzenia_plytkowe_pin`
+--
+
+INSERT INTO `urzadzenia_plytkowe_pin` (`id`, `nazwa`, `pos`, `urzadzenie_plytkowe_id`) VALUES
+(1, 'P0', 1, 1),
+(2, 'P1', 2, 1),
+(3, 'P2', 3, 1),
+(4, 'P3', 4, 1),
+(5, 'P4', 5, 1),
+(6, 'P5', 6, 1),
+(7, 'P6', 7, 1),
+(8, 'P7', 8, 1),
+(9, 'INT', 9, 1),
+(10, 'VCC', 10, 1),
+(11, 'GND', 11, 1),
+(12, 'SDA', 12, 1),
+(13, 'SCL', 13, 1);
 
 -- --------------------------------------------------------
 
@@ -1057,6 +1187,215 @@ CREATE TABLE `ZakonczenieView` (
 ,`nazwa` text
 ,`kod` varchar(1)
 );
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `zakonczenie_zyly`
+--
+
+CREATE TABLE `zakonczenie_zyly` (
+  `id` int NOT NULL,
+  `zakonczenie_id` smallint UNSIGNED NOT NULL,
+  `zyla_id` smallint UNSIGNED NOT NULL,
+  `pos` tinyint NOT NULL,
+  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+--
+-- Zrzut danych tabeli `zakonczenie_zyly`
+--
+
+INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`) VALUES
+(1, 1, 1, 1, '1'),
+(2, 1, 2, 2, '2'),
+(3, 1, 3, 3, '3'),
+(4, 1, 4, 4, '4'),
+(5, 1, 5, 5, '5'),
+(6, 1, 6, 6, '6'),
+(7, 1, 7, 7, '7'),
+(8, 1, 8, 8, '8'),
+(9, 2, 9, 1, '1'),
+(10, 2, 10, 2, '2'),
+(11, 2, 11, 3, '3'),
+(12, 2, 12, 4, '4'),
+(13, 2, 13, 5, '5'),
+(14, 2, 14, 6, '6'),
+(15, 2, 15, 7, '7'),
+(16, 2, 16, 8, '8'),
+(17, 3, 17, 1, '1'),
+(18, 3, 18, 2, '2'),
+(19, 3, 19, 3, '3'),
+(20, 3, 20, 4, '4'),
+(21, 3, 21, 5, '5'),
+(22, 3, 22, 6, '6'),
+(23, 3, 23, 7, '7'),
+(24, 3, 24, 8, '8'),
+(25, 4, 25, 1, '1'),
+(26, 4, 26, 2, '2'),
+(27, 4, 27, 3, '3'),
+(28, 4, 28, 4, '4'),
+(29, 5, 29, 1, '1'),
+(30, 5, 30, 2, '2'),
+(31, 6, 31, 1, '1'),
+(32, 6, 32, 2, '2'),
+(33, 6, 33, 3, '3'),
+(34, 6, 34, 4, '4'),
+(35, 7, 35, 1, '1'),
+(36, 7, 36, 2, '2'),
+(37, 7, 37, 3, '3'),
+(38, 8, 38, 1, '1'),
+(39, 8, 39, 2, '2'),
+(40, 8, 40, 3, '3'),
+(41, 9, 41, 1, '1'),
+(42, 9, 42, 2, '2'),
+(43, 9, 43, 3, '3'),
+(44, 9, 44, 4, '4'),
+(45, 9, 45, 5, '5'),
+(46, 9, 46, 6, '6'),
+(47, 9, 47, 7, '7'),
+(48, 9, 48, 8, '8'),
+(49, 10, 49, 1, '1'),
+(50, 10, 50, 2, '2'),
+(51, 10, 51, 3, '3'),
+(52, 10, 52, 4, '4'),
+(53, 10, 53, 5, '5'),
+(54, 10, 54, 6, '6'),
+(55, 10, 55, 7, '7'),
+(56, 10, 56, 8, '8'),
+(57, 11, 57, 1, '1'),
+(58, 11, 58, 2, '2'),
+(59, 11, 59, 3, '3'),
+(60, 11, 60, 4, '4'),
+(61, 11, 61, 5, '5'),
+(62, 11, 62, 6, '6'),
+(63, 11, 63, 7, '7'),
+(64, 11, 64, 8, '8'),
+(65, 12, 65, 1, '1'),
+(66, 12, 69, 2, '2'),
+(67, 12, 66, 3, '3'),
+(68, 12, 67, 4, '4'),
+(69, 12, 68, 5, '5'),
+(70, 12, 70, 6, '6'),
+(71, 12, 71, 7, '7'),
+(72, 12, 72, 8, '8'),
+(73, 13, 73, 1, '1'),
+(74, 13, 74, 2, '2'),
+(75, 13, 75, 3, '3'),
+(76, 13, 76, 4, '4'),
+(77, 14, 77, 3, '3'),
+(78, 15, 80, 1, '1'),
+(79, 15, 81, 2, '2'),
+(80, 15, 82, 3, '3'),
+(81, 15, 83, 4, '4'),
+(82, 15, 84, 5, '5'),
+(83, 15, 85, 6, '6'),
+(84, 15, 86, 7, '7'),
+(85, 15, 87, 8, '8'),
+(86, 15, 88, 12, '12'),
+(87, 15, 89, 11, '11'),
+(88, 15, 90, 10, '10'),
+(89, 15, 91, 9, '9'),
+(90, 16, 10, 1, '1'),
+(91, 16, 14, 2, '2'),
+(92, 16, 16, 3, '3'),
+(93, 16, 15, 4, '4'),
+(94, 16, 13, 5, '5'),
+(95, 16, 12, 6, '6'),
+(96, 16, 11, 7, '7'),
+(97, 16, 9, 8, '8'),
+(98, 17, 92, 1, '1'),
+(99, 17, 93, 2, '2'),
+(100, 17, 94, 3, '3'),
+(101, 17, 95, 4, '4'),
+(102, 17, 96, 5, '5'),
+(103, 17, 97, 6, '6'),
+(104, 17, 98, 7, '7'),
+(105, 17, 99, 8, '8'),
+(106, 17, 100, 9, '9'),
+(107, 17, 101, 10, '10'),
+(108, 17, 102, 11, '11'),
+(109, 17, 103, 12, '12'),
+(110, 19, 114, 1, '1'),
+(111, 19, 113, 2, '2'),
+(112, 19, 115, 3, '3'),
+(113, 19, 112, 4, '4'),
+(114, 18, 121, 1, '1'),
+(115, 18, 120, 2, '2'),
+(116, 18, 119, 3, '3'),
+(117, 18, 118, 4, '4'),
+(118, 18, 117, 5, '5'),
+(119, 18, 116, 6, '6'),
+(120, 14, 79, 1, '1'),
+(121, 14, 78, 2, '2'),
+(122, 20, 323, 1, '1'),
+(123, 20, 322, 2, '2'),
+(124, 20, 321, 3, '3'),
+(125, 20, 320, 4, '4'),
+(126, 20, 319, 5, '5'),
+(127, 20, 318, 6, '6'),
+(128, 20, 317, 7, '7'),
+(129, 20, 316, 8, '8'),
+(130, 21, 328, 1, '1'),
+(131, 21, 329, 2, '2'),
+(132, 21, 330, 3, '3'),
+(133, 21, 331, 4, '4'),
+(134, 21, 332, 5, '5'),
+(135, 21, 333, 6, '6'),
+(136, 22, 324, 1, '1'),
+(137, 22, 325, 2, '2'),
+(138, 22, 326, 3, '3'),
+(139, 22, 327, 4, '4'),
+(140, 23, 344, 1, '1'),
+(141, 23, 345, 2, '2'),
+(142, 23, 346, 3, '3'),
+(143, 23, 347, 4, '4'),
+(144, 23, 348, 5, '5'),
+(145, 23, 349, 6, '6'),
+(146, 23, 350, 7, '7'),
+(147, 23, 351, 8, '8'),
+(148, 24, 334, 1, '1'),
+(149, 24, 335, 2, '2'),
+(150, 24, 336, 3, '3'),
+(151, 24, 337, 4, '4'),
+(152, 24, 338, 5, '5'),
+(153, 24, 339, 6, '6'),
+(154, 24, 340, 7, '7'),
+(155, 24, 341, 8, '8'),
+(156, 24, 342, 9, '9'),
+(157, 24, 343, 10, '10'),
+(158, 25, 352, 1, '1'),
+(159, 25, 353, 2, '2'),
+(160, 25, 354, 3, '3'),
+(161, 25, 355, 4, '4'),
+(162, 26, 356, 1, '1'),
+(163, 26, 357, 2, '2'),
+(164, 26, 358, 3, '3'),
+(165, 26, 359, 4, '4'),
+(166, 26, 360, 5, '5'),
+(167, 26, 361, 6, '6'),
+(168, 26, 362, 7, '7'),
+(169, 26, 363, 8, '8'),
+(170, 26, 364, 9, '9'),
+(171, 26, 365, 10, '10'),
+(172, 27, 366, 1, '1'),
+(173, 27, 367, 2, '2'),
+(174, 27, 368, 3, '3'),
+(175, 27, 369, 4, '4'),
+(176, 27, 370, 5, '5'),
+(177, 27, 371, 6, '6'),
+(178, 27, 372, 7, '7'),
+(179, 27, 373, 8, '8'),
+(180, 27, 374, 9, '9'),
+(181, 27, 375, 10, '10'),
+(182, 29, 104, 1, '1'),
+(183, 29, 105, 2, '2'),
+(184, 29, 106, 3, '3'),
+(185, 29, 107, 4, '4'),
+(186, 28, 108, 1, '1'),
+(187, 28, 109, 2, '2'),
+(188, 28, 110, 3, '3'),
+(189, 28, 111, 4, '4');
 
 -- --------------------------------------------------------
 
@@ -1387,10 +1726,10 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (44, 3, 34, 'TX'),
 (45, 6, 34, 'Sygnał Nocy'),
 (46, 5, 34, 'Sygnał wieczora (pomarańczowy)'),
-(47, 1, 34, 'Sygnał dla wiatraka'),
-(48, 8, 34, 'Sygnał zapalonego światła'),
-(49, 8, 35, 'user 1'),
-(50, 1, 35, 'user 2'),
+(47, 1, 34, 'Sygnał OFF'),
+(48, 8, 34, 'Sygnał ON'),
+(49, 8, 35, 'Wyjście światło'),
+(50, 1, 35, 'Wyjście wiatrak'),
 (51, 6, 35, 'Sygnał dla przekaźnika 5'),
 (52, 5, 35, 'Sygnał dla przekaźnika 6'),
 (53, 4, 35, 'Podświetlenie włączników'),
@@ -1420,27 +1759,27 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (77, 1, 40, 'Klawisz '),
 (78, 3, 40, 'GND'),
 (79, 2, 40, 'Podświetlenie włącznika'),
-(80, 6, 48, 'User 1'),
-(81, 9, 48, 'User 2'),
+(80, 6, 48, 'Wyjście światło 0x01.5'),
+(81, 9, 48, 'Wyjście wiatrak 0x01.6'),
 (82, 2, 48, '-'),
 (83, 10, 48, '-'),
 (84, 12, 48, 'Sygnał od lokalnego czujnika temperatury'),
 (85, 7, 48, 'Pin1 do gabarytu'),
 (86, 11, 48, 'Pin2 do gabarytu'),
 (87, 4, 48, 'Pin3 do gabarytu'),
-(88, 5, 48, 'Przekaźnik 4 (zawór)'),
-(89, 3, 48, 'Przekaźnik 3 (lustro)'),
-(90, 1, 48, 'Przekaźnik 2 (światło)'),
-(91, 8, 48, 'Przekaźnik 1 (regał)'),
-(92, 11, 49, 'Sygnał wejściowy czujnika ruchu'),
-(93, 12, 49, 'Sygnał wejściowy czujnika zbliżeniowego'),
-(94, 10, 49, 'Sygnał wejściowy kontaktron'),
-(95, 2, 49, 'Sygnałwejściowy klawisza włącznika światła'),
+(88, 5, 48, 'Przekaźnik 4 (zawór) 0x01,1'),
+(89, 3, 48, 'Przekaźnik 3 (lustro) 0x01.2'),
+(90, 1, 48, 'Przekaźnik 2 (światło) 0x01.3'),
+(91, 8, 48, 'Przekaźnik 1 (regał) 0x01.4'),
+(92, 11, 49, 'Sygnał wejściowy czujnika ruchu 0x00.1'),
+(93, 12, 49, 'Sygnał wejściowy czujnika zbliżeniowego 0x00.2'),
+(94, 10, 49, 'Sygnał wejściowy kontaktron 0x00.3'),
+(95, 2, 49, 'Sygnałwejściowy klawisza włącznika światła 0x00.4'),
 (96, 4, 49, '+5V'),
-(97, 8, 49, 'Sygnał wyjściowy światło'),
-(98, 1, 49, 'Sygnał wyjściowy wiatrak'),
-(99, 5, 49, 'Sygnał wejściowy wieczoru'),
-(100, 6, 49, 'Sygnał wejściowy nocy'),
+(97, 8, 49, 'Sygnał wejściowy ON 0x00.7'),
+(98, 1, 49, 'Sygnał wejściowy OFF 0x00.8'),
+(99, 5, 49, 'Sygnał wejściowy wieczoru 0x00.5'),
+(100, 6, 49, 'Sygnał wejściowy nocy 0x00.6'),
 (101, 3, 49, 'TX'),
 (102, 9, 49, 'RX'),
 (103, 7, 49, 'GND'),
@@ -1885,6 +2224,21 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 
 --
+-- Indeksy dla tabeli `elementy_plytki`
+--
+ALTER TABLE `elementy_plytki`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `rodzaj_zakonczenia_id` (`rodzaj_zakonczenia_id`),
+  ADD KEY `plytka_id` (`plytka_id`);
+
+--
+-- Indeksy dla tabeli `elementy_plytki_piny`
+--
+ALTER TABLE `elementy_plytki_piny`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `element_plytki_id` (`element_plytki_id`);
+
+--
 -- Indeksy dla tabeli `kolor`
 --
 ALTER TABLE `kolor`
@@ -1898,6 +2252,27 @@ ALTER TABLE `miejsce`
   ADD KEY `zbiorcze` (`zbiorcze`),
   ADD KEY `id_pomieszczenie` (`id_pomieszczenie`),
   ADD KEY `polaczenie` (`polaczenie`);
+
+--
+-- Indeksy dla tabeli `plytki`
+--
+ALTER TABLE `plytki`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `miejsce_id` (`miejsce_id`);
+
+--
+-- Indeksy dla tabeli `polaczenie_plytka`
+--
+ALTER TABLE `polaczenie_plytka`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `polaczenie_plytka_polaczenie`
+--
+ALTER TABLE `polaczenie_plytka_polaczenie`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `polaczenie_plytka_id` (`polaczenie_plytka_id`),
+  ADD KEY `elementy_plytki_piny_id` (`elementy_plytki_piny_id`);
 
 --
 -- Indeksy dla tabeli `polaczenie_zyla`
@@ -1932,7 +2307,24 @@ ALTER TABLE `przewod_miejsce`
 -- Indeksy dla tabeli `rodzaj_zakonczenia`
 --
 ALTER TABLE `rodzaj_zakonczenia`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `przewod` (`przewod`),
+  ADD KEY `plytka` (`plytka`);
+
+--
+-- Indeksy dla tabeli `urzadzenia_plytkowe`
+--
+ALTER TABLE `urzadzenia_plytkowe`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `miejsce_id` (`miejsce_id`);
+
+--
+-- Indeksy dla tabeli `urzadzenia_plytkowe_pin`
+--
+ALTER TABLE `urzadzenia_plytkowe_pin`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pos` (`pos`),
+  ADD KEY `urzadzenie_plytkowe_id` (`urzadzenie_plytkowe_id`);
 
 --
 -- Indeksy dla tabeli `urzadzenie_zakonczenie`
@@ -1961,6 +2353,14 @@ ALTER TABLE `zlacze_kolejnosc`
   ADD KEY `zyla_id` (`zyla_id`);
 
 --
+-- Indeksy dla tabeli `zakonczenie_zyly`
+--
+ALTER TABLE `zakonczenie_zyly`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `zakonczenie_id` (`zakonczenie_id`),
+  ADD KEY `zyla_id` (`zyla_id`);
+
+--
 -- Indeksy dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
@@ -1973,6 +2373,18 @@ ALTER TABLE `zyla`
 --
 
 --
+-- AUTO_INCREMENT dla tabeli `elementy_plytki`
+--
+ALTER TABLE `elementy_plytki`
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT dla tabeli `elementy_plytki_piny`
+--
+ALTER TABLE `elementy_plytki_piny`
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT dla tabeli `kolor`
 --
 ALTER TABLE `kolor`
@@ -1983,6 +2395,24 @@ ALTER TABLE `kolor`
 --
 ALTER TABLE `miejsce`
   MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+
+--
+-- AUTO_INCREMENT dla tabeli `plytki`
+--
+ALTER TABLE `plytki`
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
+--
+ALTER TABLE `polaczenie_plytka`
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
+--
+ALTER TABLE `polaczenie_plytka_polaczenie`
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
@@ -2000,13 +2430,25 @@ ALTER TABLE `pomieszczenie`
 -- AUTO_INCREMENT dla tabeli `przewod_miejsce`
 --
 ALTER TABLE `przewod_miejsce`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=317;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=325;
 
 --
 -- AUTO_INCREMENT dla tabeli `rodzaj_zakonczenia`
 --
 ALTER TABLE `rodzaj_zakonczenia`
-  MODIFY `id` tinyint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` tinyint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT dla tabeli `urzadzenia_plytkowe`
+--
+ALTER TABLE `urzadzenia_plytkowe`
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT dla tabeli `urzadzenia_plytkowe_pin`
+--
+ALTER TABLE `urzadzenia_plytkowe_pin`
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT dla tabeli `urzadzenie_zakonczenie`
@@ -2037,6 +2479,12 @@ ALTER TABLE `miejsce`
   ADD CONSTRAINT `miejsce_pom_fgkey` FOREIGN KEY (`id_pomieszczenie`) REFERENCES `pomieszczenie` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
+-- Ograniczenia dla tabeli `polaczenie_plytka`
+--
+ALTER TABLE `polaczenie_plytka`
+  ADD CONSTRAINT `polaczenie_plytka_ibfk_1` FOREIGN KEY (`id`) REFERENCES `polaczenie_plytka_polaczenie` (`polaczenie_plytka_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
 -- Ograniczenia dla tabeli `polaczenie_zyla`
 --
 ALTER TABLE `polaczenie_zyla`
@@ -2050,6 +2498,18 @@ ALTER TABLE `polaczenie_zyla`
 ALTER TABLE `przewod_miejsce`
   ADD CONSTRAINT `pmmiefg` FOREIGN KEY (`miejsce_id`) REFERENCES `miejsce` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `pmprzefg` FOREIGN KEY (`przewod_id`) REFERENCES `przewod` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Ograniczenia dla tabeli `urzadzenia_plytkowe`
+--
+ALTER TABLE `urzadzenia_plytkowe`
+  ADD CONSTRAINT `urzaplymieidfg` FOREIGN KEY (`miejsce_id`) REFERENCES `miejsce` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Ograniczenia dla tabeli `urzadzenia_plytkowe_pin`
+--
+ALTER TABLE `urzadzenia_plytkowe_pin`
+  ADD CONSTRAINT `urzadzenia_plytkowe_pin_ibfk_1` FOREIGN KEY (`urzadzenie_plytkowe_id`) REFERENCES `urzadzenia_plytkowe` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Ograniczenia dla tabeli `urzadzenie_zakonczenie`
@@ -2072,6 +2532,7 @@ ALTER TABLE `zakonczenie`
 ALTER TABLE `zlacze_kolejnosc`
   ADD CONSTRAINT `zlkolzakfg` FOREIGN KEY (`zakonczenie_id`) REFERENCES `zakonczenie` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `zlkolzyfg` FOREIGN KEY (`zyla_id`) REFERENCES `zyla` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 
 --
 -- Ograniczenia dla tabeli `zyla`
