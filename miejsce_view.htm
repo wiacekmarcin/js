@@ -1,13 +1,18 @@
 <div class="container" ng-controller="miejsceview-ctrl">
-
-    <label class=>Miejsce id : </label> <span>{{miejsce.id}}</span><br>
-    <label>Kod : </label> <span>{{miejsce.kod}}</span><br>
-    <label>Nazwa : </label> <span>{{miejsce.nazwa}}</span><br>
-    <label>Opis : </label> <span>{{miejsce.opis}}</span><br>
-    <label>Pomiesczenie :</label> <span>{{miejsce.pomieszczenie}}</span><br>
-    <label>Zbiorcze : </label> <span>{{miejsce.zb}}</span><br>
-    <label>Połączenie : </label> <span>{{miejsce.pol}}</span><br>
-
+    <div style="display: inline-block;" ng-if="miejsce.zb == 1">
+        <img ng-src="img/{{miejsce.kod}}.jpg" alt="Description" 
+        style="border: 1px; width:auto; height:180px; 
+            vertical-align: text-bottom;"/>
+    </div>
+    <div class="td" style="display: inline-block;">
+        <label class=>Miejsce id : </label> <span>{{miejsce.id}}</span><br>
+        <label>Kod : </label> <span>{{miejsce.kod}}</span><br>
+        <label>Nazwa : </label> <span>{{miejsce.nazwa}}</span><br>
+        <label>Opis : </label> <span>{{miejsce.opis}}</span><br>
+        <label>Pomiesczenie :</label> <span>{{miejsce.pomieszczenie}}</span><br>
+        <label>Zbiorcze : </label> <span>{{miejsce.zb}}</span><br>
+        <label>Połączenie : </label> <span>{{miejsce.pol}}</span><br>
+    </div>
     <hr>
 
     <h4>Zewnetrzne</h4>
