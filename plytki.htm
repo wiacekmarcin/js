@@ -1,0 +1,60 @@
+<div class="container" ng-controller="plytki-ctrl">
+
+    <table class="table">
+        <tr>
+            <th> Nazwa </th>
+            <th> Miejsce </th>
+            <th>Urządzenia</th>
+            <th> Akcje </th>
+        </tr>
+        <tr ng-repeat-start="pl in plytki" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'
+        >
+            <td>
+                {{pl.nazwa}}
+            </td>
+            <td>
+                {{pl.pomieszczenie}} : {{pl.miejsce_nazwa}}
+            </td>
+            <td>
+                <span ng-repeat="u in urzadzenia[pl.id]">{{u.nazwa}}, </span>
+            </td>
+            <td>
+                <div style="display: flex;"><button ng-click="setEdit(pl)">Edytuj</button></div>
+            </td>
+        </tr>
+        <tr ng-repeat-end ng-show="editRow.id == pl.id">
+            <td>
+                <input type="text" ng-model="editRow.nazwa">
+            </td>
+            <td>
+                <select ng-options="item as item.nazwa group by item.pomie for item in miej | toArray:true | orderBy:['pomie', 'nazwa']" 
+                ng-model = "editRow.miejsce_id" ></select>
+            </td>
+            <td></td>
+            <td>
+                <div style="display: flex;"><button ng-click="saveEdit()">Zachowaj</button>&nbsp;<button ng-click="cancelEdit()">Anuluj</button></div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <button ng-click="addAdd()">Dodaj</button>
+            </td>
+        </tr>
+        <tr ng-show="addRow.add">
+            <td>
+                <input type="text" ng-model="addRow.nazwa">
+            </td>
+            <td>
+                <select ng-options="item as item.nazwa group by item.pomie for item in miej | toArray:true | orderBy:['pomie', 'nazwa']" 
+                ng-model = "addRow.miejsce_id" ></select>
+            </td>
+            <td></td>
+            <td>
+                <div style="display: flex;"><button ng-click="saveAdd()">Zachowaj</button>&nbsp;<button ng-click="cancelAdd()">Anuluj</button></div>
+            </td>
+        </tr>
+</div>
+
