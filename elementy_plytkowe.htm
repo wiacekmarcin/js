@@ -1,0 +1,81 @@
+<div class="container" ng-controller="elementy_plytkowe-ctrl">
+
+    <table class="table">
+        <tr>
+            <th> Nazwa </th>
+            <th> Ilość pinów </th>
+            <th> Płytka </th>
+            <th> Miejsce </th>
+            <th> Akcje </th>
+        </tr>
+        <tr ng-repeat-start="urz in urzadzenia" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'
+        >
+            <td>
+                {{urz.nazwa}}
+            </td>
+            <td>
+                {{urz.ilosc_pin}}
+            </td>
+            <td>
+                {{urz.plytka}}
+            </td>
+            <td>
+                {{urz.pomieszczenie}} : {{urz.miejsce_nazwa}}
+            </td>
+            <td>
+                <div style="display: flex;"><button ng-click="setEdit(urz)">Edytuj</button>&nbsp;<button ng-click="setDetails(urz.id)">Szczegóły</button></div>
+            </td>
+        </tr>
+        <tr ng-show="editRow.id == urz.id">
+            <td>
+                <input type="text" ng-model="editRow.nazwa">
+            </td>
+            <td>
+                <input type="number" min="1" max="50" string-to-number ng-model="editRow.ilosc_pin">
+            </td>
+            <td colspan="2">
+                <select ng-options="item as item.plytka group by item.nazwa for item in plytki | toArray:true | orderBy:['pomie', 'nazwa', 'plytka']" 
+                ng-model = "editRow.plytka_id" ></select>
+            </td>
+            <td>
+                <div style="display: flex;"><button ng-click="saveEdit()">Zachowaj</button>&nbsp;<button ng-click="cancelEdit()">Anuluj</button></div>
+            </td>
+        </tr>
+        <tr ng-repeat-end ng-show="showRowId == urz.id">
+            <td colspan="4">
+
+            </td>
+            <td>
+                <button ng-click="setDetails(-1)">Ukryj</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                <button ng-click="addAdd()">Dodaj</button>
+            </td>
+        </tr>
+        <tr ng-show="addRow.add">
+            <td>
+                <input type="text" ng-model="addRow.nazwa">
+            </td>
+            <td>
+                <input type="number" min="1" max="50" string-to-number ng-model="addRow.ilosc_pin">
+            </td>
+            <td colspan="2">
+                <select ng-options="item as item.nazwa group by item.pomie for item in miej | toArray:true | orderBy:['pomie', 'nazwa']" 
+                ng-model = "addRow.miejsce_id" ></select>
+            </td>
+            <td>
+                <div style="display: flex;"><button ng-click="saveAdd()">Zachowaj</button>&nbsp;<button ng-click="cancelAdd()">Anuluj</button></div>
+            </td>
+        </tr>
+</div>
+
