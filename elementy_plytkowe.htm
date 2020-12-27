@@ -4,17 +4,21 @@
         <tr>
             <th> Nazwa </th>
             <th> Ilość pinów </th>
+            <th> Nazwa urządzenia</th>
             <th> Płytka </th>
             <th> Miejsce </th>
             <th> Akcje </th>
         </tr>
-        <tr ng-repeat-start="urz in urzadzenia" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'
+        <tr ng-repeat-start="urz in elementy" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'
         >
             <td>
                 {{urz.nazwa}}
             </td>
             <td>
                 {{urz.ilosc_pin}}
+            </td>
+            <td>
+                {{urz.urzadzenie}}
             </td>
             <td>
                 {{urz.plytka}}
@@ -33,6 +37,10 @@
             <td>
                 <input type="number" min="1" max="50" string-to-number ng-model="editRow.ilosc_pin">
             </td>
+            <td>
+                <select ng-options="item as item.nazwa for item in rodzaj | toArray:true " 
+                ng-model = "editRow.rodzaj_id" ></select>
+            </td>
             <td colspan="2">
                 <select ng-options="item as item.plytka group by item.nazwa for item in plytki | toArray:true | orderBy:['pomie', 'nazwa', 'plytka']" 
                 ng-model = "editRow.plytka_id" ></select>
@@ -42,14 +50,40 @@
             </td>
         </tr>
         <tr ng-repeat-end ng-show="showRowId == urz.id">
-            <td colspan="4">
-
+            <td colspan="5">
+                <table class="table" ng-show="chDetails == 0">
+                    <tr><th>Pozycja</th><th>Nazwa</th></tr>
+                    <tr ng-repeat="p in pins">
+                        <td>{{p.pos}}</td>
+                        <td>{{p.nazwa}}</td>
+                    </tr>
+                </table>
+                <table class="table" ng-show="chDetails == 1">
+                    <tr><th>Pozycja</th><th>Nazwa</th></tr>
+                    <tr ng-repeat="p in pins">
+                        <td>{{p.pos}}</td>
+                        <td><input type="text" ng-model="edit_pins[p.id].nazwa"> </td>
+                    </tr>
+                </table>
+                <table class="table" ng-show="chDetails == 2">
+                    <tr><th>Pozycja</th><th>Nazwa</th></tr>
+                    <tr ng-repeat="p in pins">
+                        <td><input type="number" min="1" max="50" string-to-number ng-model="edit_pins[p.id].pos"></td>
+                        <td>{{p.nazwa}}</td>
+                    </tr>
+                </table>
             </td>
             <td>
-                <button ng-click="setDetails(-1)">Ukryj</button>
+                <button ng-click="setDetails(-1)">Ukryj</button><br>
+                <button ng-click="setChDetails(0)">Anuluj edycję</button><br>
+                <button ng-click="setChDetails(1)">Edycja nazw</button><br>
+                <button ng-click="setChDetails(2)">Edycja pozycji</button><br>
+                <button ng-click="savePins(urz.id)">Zachowaj</button><br>
             </td>
         </tr>
         <tr>
+            <td>
+            </td>
             <td>
             </td>
             <td>
@@ -69,9 +103,13 @@
             <td>
                 <input type="number" min="1" max="50" string-to-number ng-model="addRow.ilosc_pin">
             </td>
+            <td>
+                <select ng-options="item as item.nazwa for item in rodzaj | toArray:true " 
+                ng-model = "addRow.rodzaj_id" ></select>
+            </td>
             <td colspan="2">
-                <select ng-options="item as item.nazwa group by item.pomie for item in miej | toArray:true | orderBy:['pomie', 'nazwa']" 
-                ng-model = "addRow.miejsce_id" ></select>
+                <select ng-options="item as item.plytka group by item.nazwa for item in plytki | toArray:true | orderBy:['pomie', 'nazwa', 'plytka']" 
+                ng-model = "addRow.plytka_id" ></select>
             </td>
             <td>
                 <div style="display: flex;"><button ng-click="saveAdd()">Zachowaj</button>&nbsp;<button ng-click="cancelAdd()">Anuluj</button></div>

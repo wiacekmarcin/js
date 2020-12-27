@@ -8,17 +8,19 @@ ini_set('display_errors', 1);
 $con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con, "utf8");
 
-$query = "SELECT `id`, `nazwa`, `ilosc_pin`, `plytka_id`, `pnazwa`, `miejsce_id`, `mnazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, ";
-$query .= "`kod`, `polaczenie`, `pomieszczenie` FROM `UrzadzeniaPlytkoweView` WHERE 1";
+$query = "SELECT `id`, `nazwa`, `ilosc_pin`, `plytka_id`, `pnazwa`, `urzadzenie_nazwa`, `miejsce_id`, `mnazwa`, `opis`, `zbiorcze`, ";
+$query .= "`id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie`, `urzadzenie_rodzaj_id`, `urzadzenie_rodzaj_kod` FROM `ElementyPlytkoweView` WHERE 1";
 
-$urzadzenia = array();
+$elementy = array();
 $result = mysqli_query($con, $query);
 while($row = mysqli_fetch_array($result)) {
-    array_push($urzadzenia, array(
+    array_push($elementy, array(
         "id" => $row["id"],
         "nazwa" => $row["nazwa"],
         "plytka_id" => $row["plytka_id"],
         "plytka" => $row["pnazwa"],
+        "urzadzenie" => $row["urzadzenie_nazwa"],
+        "element_rodzaj_id" => $row["urzadzenie_rodzaj_id"],
         "miejsce_id" => $row["miejsce_id"],
         "miejsce_nazwa" => $row["mnazwa"],
         "ilosc_pin" => $row["ilosc_pin"],
@@ -51,10 +53,21 @@ while($row = mysqli_fetch_array($result)) {
     );
 }
 
+$rodzajarray = array();
+$query = "SELECT `id`, `nazwa`  FROM `rodzaj_zakonczenia` WHERE `plytka` = 1";
+$result = mysqli_query($con, $query);
+while($row = mysqli_fetch_array($result)) {
+    $rodzajarray[$row['id']] = array(
+        "nazwa" => $row['nazwa'],
+    );
+}
+
+
 $opt = array(
-    'urzadzenia' => $urzadzenia,
+    'elementy' => $elementy,
     'miejsce' => $miejscearray,
-    'plytki' => $plytkiarray
+    'plytki' => $plytkiarray,
+    'rodzaj' => $rodzajarray
 );
 
 echo json_encode($opt);
