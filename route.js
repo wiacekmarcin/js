@@ -36,4 +36,10 @@ app.config(function($routeProvider) {
     .when("/zakonczenie_edit/:id", {
         templateUrl: 'zakonczenie_edit.htm',    
     })
+    .when("/elementy_plytkowe", {
+        templateUrl: 'elementy_plytkowe.htm',    
+    })
+    .when("/plytki", {
+        templateUrl: 'plytki.htm',    
+    })
 });
