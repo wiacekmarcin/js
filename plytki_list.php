@@ -25,7 +25,7 @@ while($row = mysqli_fetch_array($result)) {
         "miejsce_nazwa" => $row["mnazwa"],
         "pomieszczenie" => $row["pomieszczenie"],
     ));
-    $urzadzenia[$row["id"]] = array();
+    $elementy[$row["id"]] = array();
 }
 
 
@@ -33,7 +33,7 @@ $query = "SELECT `id`, `nazwa`, `ilosc_pin`, `plytka_id` FROM `elementy_plytkowe
 $result = mysqli_query($con, $query);
 
 while($row = mysqli_fetch_array($result)) {
-    array_push($urzadzenia[$row["plytka_id"]], 
+    array_push($elementy[$row["plytka_id"]], 
         array(
             "id" => $row["id"],
             "nazwa" => $row["nazwa"],
@@ -59,7 +59,7 @@ while($row = mysqli_fetch_array($result)) {
 $opt = array(
     'plytki' => $plytki,
     'miejsce' => $miejscearray,
-    'urzadzenia' => $urzadzenia
+    'elementy' => $elementy
 );
 
 echo json_encode($opt);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 27 Gru 2020, 17:00
+-- Czas generowania: 27 Gru 2020, 23:28
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -21,6 +21,33 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `kb_ster_test`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `ElementyPlytkoweView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `ElementyPlytkoweView` (
+`id` tinyint unsigned
+,`nazwa` text
+,`ilosc_pin` tinyint
+,`plytka_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`pnazwa` text
+,`urzadzenie_rodzaj_id` tinyint
+,`urzadzenie_nazwa` text
+,`urzadzenie_rodzaj_kod` varchar(1)
+,`urzadzenie_plytka` tinyint(1)
+,`urzadzenie_przewod` tinyint(1)
+,`mnazwa` text
+,`opis` text
+,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
+,`polaczenie` tinyint(1)
+,`pomieszczenie` text
+);
 
 -- --------------------------------------------------------
 
@@ -54,14 +81,14 @@ CREATE TABLE `elementy_plytkowe_pin` (
   `id` smallint UNSIGNED NOT NULL,
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `pos` tinyint NOT NULL,
-  `urzadzenie_plytkowe_id` tinyint UNSIGNED NOT NULL
+  `element_plytkowy_id` tinyint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `elementy_plytkowe_pin`
 --
 
-INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `urzadzenie_plytkowe_id`) VALUES
+INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`) VALUES
 (1, 'P0', 1, 1),
 (2, 'P1', 2, 1),
 (3, 'P2', 3, 1),
@@ -74,7 +101,20 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `urzadzenie_plytkowe_
 (10, 'VCC', 10, 1),
 (11, 'GND', 11, 1),
 (12, 'SDA', 12, 1),
-(13, 'SCL', 13, 1);
+(13, 'SCL', 13, 1),
+(14, 'P0', 1, 2),
+(15, 'P1', 2, 2),
+(16, 'P2', 3, 2),
+(17, 'P3', 4, 2),
+(18, 'P4', 5, 2),
+(19, 'P5', 6, 2),
+(20, 'P6', 7, 2),
+(21, 'P7', 8, 2),
+(22, 'INT', 9, 2),
+(23, 'VCC', 10, 2),
+(24, 'GND', 11, 2),
+(25, 'SDA', 12, 2),
+(26, 'SCL', 13, 2);
 
 -- --------------------------------------------------------
 
@@ -1057,28 +1097,6 @@ INSERT INTO `rodzaj_zakonczenia` (`id`, `nazwa`, `kod`, `przewod`, `plytka`) VAL
 -- --------------------------------------------------------
 
 --
--- Zastąpiona struktura widoku `UrzadzeniaPlytkoweView`
--- (Zobacz poniżej rzeczywisty widok)
---
-CREATE TABLE `UrzadzeniaPlytkoweView` (
-`id` tinyint unsigned
-,`nazwa` text
-,`ilosc_pin` tinyint
-,`plytka_id` tinyint unsigned
-,`miejsce_id` tinyint unsigned
-,`pnazwa` text
-,`mnazwa` text
-,`opis` text
-,`zbiorcze` tinyint(1)
-,`id_pomieszczenie` tinyint unsigned
-,`kod` varchar(16)
-,`polaczenie` tinyint(1)
-,`pomieszczenie` text
-);
-
--- --------------------------------------------------------
-
---
 -- Struktura tabeli dla tabeli `urzadzenie_zakonczenie`
 --
 
@@ -1931,6 +1949,15 @@ CREATE TABLE `ZylaWidok` (
 -- --------------------------------------------------------
 
 --
+-- Struktura widoku `ElementyPlytkoweView`
+--
+DROP TABLE IF EXISTS `ElementyPlytkoweView`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkoweView`  AS  select `elementy_plytkowe`.`id` AS `id`,`elementy_plytkowe`.`nazwa` AS `nazwa`,`elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`,`elementy_plytkowe`.`plytka_id` AS `plytka_id`,`plytki`.`miejsce_id` AS `miejsce_id`,`plytki`.`nazwa` AS `pnazwa`,`rodzaj_zakonczenia`.`id` AS `urzadzenie_rodzaj_id`,`rodzaj_zakonczenia`.`nazwa` AS `urzadzenie_nazwa`,`rodzaj_zakonczenia`.`kod` AS `urzadzenie_rodzaj_kod`,`rodzaj_zakonczenia`.`plytka` AS `urzadzenie_plytka`,`rodzaj_zakonczenia`.`przewod` AS `urzadzenie_przewod`,`MiejsceView`.`nazwa` AS `mnazwa`,`MiejsceView`.`opis` AS `opis`,`MiejsceView`.`zbiorcze` AS `zbiorcze`,`MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`,`MiejsceView`.`kod` AS `kod`,`MiejsceView`.`polaczenie` AS `polaczenie`,`MiejsceView`.`pomieszczenie` AS `pomieszczenie` from (((`elementy_plytkowe` left join `plytki` on((`plytki`.`id` = `elementy_plytkowe`.`plytka_id`))) left join `MiejsceView` on((`plytki`.`miejsce_id` = `MiejsceView`.`id`))) left join `rodzaj_zakonczenia` on((`elementy_plytkowe`.`rodzaj_urzadzenia` = `rodzaj_zakonczenia`.`id`))) ;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura widoku `KolorView`
 --
 DROP TABLE IF EXISTS `KolorView`;
@@ -1972,15 +1999,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 DROP TABLE IF EXISTS `PrzewodMiejsceZakonczenieView`;
 
 CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PrzewodMiejsceZakonczenieView`  AS  select `z`.`id` AS `zid`,`z`.`etykieta` AS `etykieta`,`z`.`przewod_miejsce_id` AS `przewod_miejsce_id_zlacze`,`z`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`,`pm`.`przewod_id` AS `przewod_id`,`pm`.`miejsce_id` AS `miejsce_id`,`pm`.`id` AS `przewod_miejsce_id`,`rz`.`nazwa` AS `nazwa`,`rz`.`kod` AS `kod` from ((`przewod_miejsce` `pm` left join `zakonczenie` `z` on((`pm`.`id` = `z`.`przewod_miejsce_id`))) left join `rodzaj_zakonczenia` `rz` on((`rz`.`id` = `z`.`rodzaj_zakonczenia`))) where (0 <> 1) order by `pm`.`miejsce_id`,`pm`.`przewod_id`,`z`.`rodzaj_zakonczenia`,`z`.`etykieta` ;
-
--- --------------------------------------------------------
-
---
--- Struktura widoku `UrzadzeniaPlytkoweView`
---
-DROP TABLE IF EXISTS `UrzadzeniaPlytkoweView`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `UrzadzeniaPlytkoweView`  AS  select `elementy_plytkowe`.`id` AS `id`,`elementy_plytkowe`.`nazwa` AS `nazwa`,`elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`,`elementy_plytkowe`.`plytka_id` AS `plytka_id`,`plytki`.`miejsce_id` AS `miejsce_id`,`plytki`.`nazwa` AS `pnazwa`,`MiejsceView`.`nazwa` AS `mnazwa`,`MiejsceView`.`opis` AS `opis`,`MiejsceView`.`zbiorcze` AS `zbiorcze`,`MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`,`MiejsceView`.`kod` AS `kod`,`MiejsceView`.`polaczenie` AS `polaczenie`,`MiejsceView`.`pomieszczenie` AS `pomieszczenie` from ((`elementy_plytkowe` left join `plytki` on((`plytki`.`id` = `elementy_plytkowe`.`plytka_id`))) left join `MiejsceView` on((`plytki`.`miejsce_id` = `MiejsceView`.`id`))) ;
 
 -- --------------------------------------------------------
 
@@ -2044,7 +2062,7 @@ ALTER TABLE `elementy_plytkowe`
 ALTER TABLE `elementy_plytkowe_pin`
   ADD PRIMARY KEY (`id`),
   ADD KEY `pos` (`pos`),
-  ADD KEY `urzadzenie_plytkowe_id` (`urzadzenie_plytkowe_id`);
+  ADD KEY `urzadzenie_plytkowe_id` (`element_plytkowy_id`);
 
 --
 -- Indeksy dla tabeli `kolor`
@@ -2161,13 +2179,13 @@ ALTER TABLE `zyla`
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe`
 --
 ALTER TABLE `elementy_plytkowe`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe_pin`
 --
 ALTER TABLE `elementy_plytkowe_pin`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT dla tabeli `kolor`
@@ -2255,7 +2273,7 @@ ALTER TABLE `elementy_plytkowe`
 -- Ograniczenia dla tabeli `elementy_plytkowe_pin`
 --
 ALTER TABLE `elementy_plytkowe_pin`
-  ADD CONSTRAINT `elementy_plytkowe_pin_ibfk_1` FOREIGN KEY (`urzadzenie_plytkowe_id`) REFERENCES `elementy_plytkowe` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `elementy_plytkowe_pin_ibfk_1` FOREIGN KEY (`element_plytkowy_id`) REFERENCES `elementy_plytkowe` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ograniczenia dla tabeli `miejsce`

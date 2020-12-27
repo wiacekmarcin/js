@@ -16,7 +16,7 @@
                 {{pl.pomieszczenie}} : {{pl.miejsce_nazwa}}
             </td>
             <td>
-                <span ng-repeat="u in urzadzenia[pl.id]">{{u.nazwa}}, </span>
+                <span ng-repeat="u in elementy[pl.id]">{{u.nazwa}}, </span>
             </td>
             <td>
                 <div style="display: flex;"><button ng-click="setEdit(pl)">Edytuj</button></div>

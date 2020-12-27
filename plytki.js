@@ -10,7 +10,7 @@ app.controller('plytki-ctrl', ['$scope', '$http', function($scope, $http) {
 
         $http.get("plytki_list.php").then(function(response) { 
             $scope.plytki = response.data.plytki;
-            $scope.urzadzenia = response.data.urzadzenia;
+            $scope.elementy = response.data.elementy;
             $scope.miej = response.data.miejsce;
         });
     };
