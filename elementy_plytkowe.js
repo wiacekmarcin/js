@@ -66,7 +66,7 @@ app.controller('elementy_plytkowe-ctrl', ['$scope', '$http', function($scope, $h
             "ilosc_pinow" : $scope.editRow.ilosc_pin,
             "remove_pin" : $scope.ilosc_pinow == $scope.editRow.ilosc_pinow,
             "rodzaj_id" : $scope.editRow.rodzaj_id.$key,
-            "płytka_id" : $scope.editRow.plytka_id.$key,
+            "plyta_id" : $scope.editRow.plytka_id.$key,
         })
         $scope.editRow = {'id' : -1};
     };
