@@ -52,8 +52,9 @@
         <tr ng-repeat-end ng-show="showRowId == urz.id">
             <td colspan="5">
                 <table class="table" ng-show="chDetails == 0">
-                    <tr><th>Pozycja</th><th>Nazwa</th></tr>
+                    <tr><th>Id</th></th><th>Pozycja</th><th>Nazwa</th></tr>
                     <tr ng-repeat="p in pins">
+                        <td>{{p.id}}</td>
                         <td>{{p.pos}}</td>
                         <td>{{p.nazwa}}</td>
                     </tr>
