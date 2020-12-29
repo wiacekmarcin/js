@@ -1,0 +1,49 @@
+<div class="container" ng-controller="polaczenia_plytkowe-ctrl">
+    <p>
+        <label>Wybierz płytkę</label>
+        <select ng-options="item as item.nazwa group by item.miejsce for item in plytki | toArray:true | orderBy:['pomie', 'miejsce', 'nazwa']" 
+                ng-model = "plytka_id" >
+                <optgroup label="Wszystkie">
+                    <option value="0">Wszystkie</option>    
+                </optgroup> 
+        </select>
+    </p>
+
+    <p ng-show="plytka_id == 0">
+        <table class="table" ng-repeat-start="(pomieszczenie, miejscelist) in plytkilist">
+            <caption>{{pomieszczenie}}</caption>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Płytka</th>
+                    <th>Ilość</th>
+                    <th>Nazwane połączenia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat-start = "(miejsce,plytki_id) in miejscelist" 
+                    style="background-color: #D3D3D3">
+                    <td colspan="4">{{miejsce}}</td>
+                </tr>
+                <tr ng-repeat="pid in plytki_id" 
+                    ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'  >
+                    <td>{{pid}}</td>
+                    <td>{{plytki[pid].nazwa}}</td>
+                    <td>{{ilosc_pin[pid] || 0}}</td>
+                    <td>
+                        <span ng-repeat="pol in polaczenia[pid]">
+                            &nbsp;<span style="border : 1px solid black">&nbsp;{{pol.nazwa}}&nbsp;</span>&nbsp;
+                        </span>
+                    </td>
+                </tr>
+                <tr ng-repeat-end ng-if="false"></tr>
+            </tbody>
+        </table>
+        <hr ng-repeat-end>
+    </p>
+
+    <p ng-show="plytka_id > 0">
+
+    </p>
+
+</div>

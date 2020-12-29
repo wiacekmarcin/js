@@ -39,6 +39,9 @@ app.config(function($routeProvider) {
     .when("/elementy_plytkowe", {
         templateUrl: 'elementy_plytkowe.htm',    
     })
+    .when("/polaczenia_plytkowe", {
+        templateUrl: 'polaczenia_plytkowe.htm',    
+    })
     .when("/plytki", {
         templateUrl: 'plytki.htm',    
     })
