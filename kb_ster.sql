@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 28 Gru 2020, 23:46
+-- Czas generowania: 29 Gru 2020, 23:00
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -25,28 +25,51 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Zastąpiona struktura widoku `ElementyPlytkowePolaczeniaPinView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `ElementyPlytkowePolaczeniaPinView` (
+`id` smallint unsigned
+,`polaczenie_plytka_id` smallint unsigned
+,`elementy_plytkowe_piny_id` smallint unsigned
+,`pinnazwa` text
+,`pos` tinyint
+,`element_plytkowy_id` tinyint unsigned
+,`elemnazwa` text
+,`ilosc_pin` tinyint
+,`plytka_id` tinyint unsigned
+,`rodzaj_urzadzenia` tinyint unsigned
+,`rodznazwa` text
+,`kod` varchar(1)
+,`przewod` tinyint(1)
+,`plytka` tinyint(1)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Zastąpiona struktura widoku `ElementyPlytkoweView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ElementyPlytkoweView` (
 `id` tinyint unsigned
-,`id_pomieszczenie` tinyint unsigned
-,`ilosc_pin` tinyint
-,`kod` varchar(16)
-,`miejsce_id` tinyint unsigned
-,`mnazwa` text
 ,`nazwa` text
-,`opis` text
+,`ilosc_pin` tinyint
 ,`plytka_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
 ,`pnazwa` text
-,`polaczenie` tinyint(1)
-,`pomieszczenie` text
+,`urzadzenie_rodzaj_id` tinyint
 ,`urzadzenie_nazwa` text
+,`urzadzenie_rodzaj_kod` varchar(1)
 ,`urzadzenie_plytka` tinyint(1)
 ,`urzadzenie_przewod` tinyint(1)
-,`urzadzenie_rodzaj_id` tinyint
-,`urzadzenie_rodzaj_kod` varchar(1)
+,`mnazwa` text
+,`opis` text
 ,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
+,`polaczenie` tinyint(1)
+,`pomieszczenie` text
 );
 
 -- --------------------------------------------------------
@@ -228,9 +251,9 @@ INSERT INTO `kolor` (`id`, `nazwa`, `html`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `KolorView` (
-`html` text
-,`id` tinyint unsigned
+`id` tinyint unsigned
 ,`nazwa` text
+,`html` text
 );
 
 -- --------------------------------------------------------
@@ -369,13 +392,13 @@ INSERT INTO `miejsce` (`id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `k
 --
 CREATE TABLE `MiejsceView` (
 `id` tinyint unsigned
-,`id_pomieszczenie` tinyint unsigned
-,`kod` varchar(16)
 ,`nazwa` text
 ,`opis` text
+,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
-,`zbiorcze` tinyint(1)
 );
 
 -- --------------------------------------------------------
@@ -386,15 +409,15 @@ CREATE TABLE `MiejsceView` (
 --
 CREATE TABLE `PlytkaMiejsceView` (
 `id` tinyint unsigned
-,`id_pomieszczenie` tinyint unsigned
-,`kod` varchar(16)
+,`nazwa` text
 ,`miejsce_id` tinyint unsigned
 ,`mnazwa` text
-,`nazwa` text
 ,`opis` text
+,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
-,`zbiorcze` tinyint(1)
 );
 
 -- --------------------------------------------------------
@@ -427,18 +450,18 @@ INSERT INTO `plytki` (`id`, `nazwa`, `miejsce_id`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `PolaczenieZylaWidok` (
-`html1` text
-,`html2` text
-,`id` smallint unsigned
-,`kolor1` text
-,`kolor2` text
-,`opis1` text
-,`opis2` text
-,`przewod_id1` tinyint unsigned
-,`przewod_id2` tinyint unsigned
-,`zakonczenie_id` smallint unsigned
+`id` smallint unsigned
 ,`zyla_id_1` smallint unsigned
 ,`zyla_id_2` smallint unsigned
+,`zakonczenie_id` smallint unsigned
+,`przewod_id1` tinyint unsigned
+,`opis1` text
+,`kolor1` text
+,`html1` text
+,`przewod_id2` tinyint unsigned
+,`opis2` text
+,`kolor2` text
+,`html2` text
 );
 
 -- --------------------------------------------------------
@@ -838,15 +861,15 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `PrzewodMiejsceZakonczenieView` (
-`etykieta` text
-,`kod` varchar(1)
-,`miejsce_id` tinyint unsigned
-,`nazwa` text
-,`przewod_id` tinyint unsigned
-,`przewod_miejsce_id` smallint unsigned
+`zid` smallint unsigned
+,`etykieta` text
 ,`przewod_miejsce_id_zlacze` smallint unsigned
 ,`rodzaj_zakonczenia` tinyint(1)
-,`zid` smallint unsigned
+,`przewod_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`przewod_miejsce_id` smallint unsigned
+,`nazwa` text
+,`kod` varchar(1)
 );
 
 -- --------------------------------------------------------
@@ -1258,9 +1281,9 @@ INSERT INTO `urzadzenie_zakonczenie` (`id`, `zakonczenie_id`, `zyla_id`, `opis`,
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `WewnetrzneKableView` (
-`c` bigint
+`przewod_id` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`przewod_id` tinyint unsigned
+,`c` bigint
 );
 
 -- --------------------------------------------------------
@@ -1345,14 +1368,14 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZakonczenieView` (
-`etykieta` text
-,`id` smallint unsigned
-,`kod` varchar(1)
-,`miejsce_id` tinyint unsigned
-,`nazwa` text
-,`przewod_id` tinyint unsigned
+`id` smallint unsigned
+,`etykieta` text
 ,`przewod_miejsce_id` smallint unsigned
 ,`rodzaj_zakonczenia` tinyint(1)
+,`przewod_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`nazwa` text
+,`kod` varchar(1)
 );
 
 -- --------------------------------------------------------
@@ -1571,22 +1594,22 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZakonczePrzewodMiejsce` (
-`etykieta` text
-,`ilosc_zyl` tinyint unsigned
+`zid` smallint unsigned
+,`etykieta` text
+,`przewod_miejsce_id` smallint unsigned
+,`rodzaj_zakonczenia` tinyint(1)
+,`przewod_id` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`mkod` varchar(16)
+,`znazwa` text
+,`zkod` varchar(1)
 ,`mnazwa` text
 ,`mopis` text
+,`zbiorcze` tinyint(1)
+,`mkod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
 ,`popis` text
-,`przewod_id` tinyint unsigned
-,`przewod_miejsce_id` smallint unsigned
-,`rodzaj_zakonczenia` tinyint(1)
-,`zbiorcze` tinyint(1)
-,`zid` smallint unsigned
-,`zkod` varchar(1)
-,`znazwa` text
+,`ilosc_zyl` tinyint unsigned
 );
 
 -- --------------------------------------------------------
@@ -1596,9 +1619,9 @@ CREATE TABLE `ZakonczePrzewodMiejsce` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZewnetrzneKableView` (
-`c` bigint
+`przewod_id` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`przewod_id` tinyint unsigned
+,`c` bigint
 );
 
 -- --------------------------------------------------------
@@ -2060,13 +2083,22 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZylaWidok` (
-`html` text
-,`id` smallint unsigned
-,`kolor` text
+`id` smallint unsigned
 ,`kolor_id` tinyint unsigned
-,`opis` text
 ,`przewod_id` tinyint unsigned
+,`opis` text
+,`kolor` text
+,`html` text
 );
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `ElementyPlytkowePolaczeniaPinView`
+--
+DROP TABLE IF EXISTS `ElementyPlytkowePolaczeniaPinView`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkowePolaczeniaPinView`  AS  select `polaczenie_plytka_polaczenie`.`id` AS `id`,`polaczenie_plytka_polaczenie`.`polaczenie_plytka_id` AS `polaczenie_plytka_id`,`polaczenie_plytka_polaczenie`.`elementy_plytkowe_piny_id` AS `elementy_plytkowe_piny_id`,`elementy_plytkowe_pin`.`nazwa` AS `pinnazwa`,`elementy_plytkowe_pin`.`pos` AS `pos`,`elementy_plytkowe_pin`.`element_plytkowy_id` AS `element_plytkowy_id`,`elementy_plytkowe`.`nazwa` AS `elemnazwa`,`elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`,`elementy_plytkowe`.`plytka_id` AS `plytka_id`,`elementy_plytkowe`.`rodzaj_urzadzenia` AS `rodzaj_urzadzenia`,`rodzaj_zakonczenia`.`nazwa` AS `rodznazwa`,`rodzaj_zakonczenia`.`kod` AS `kod`,`rodzaj_zakonczenia`.`przewod` AS `przewod`,`rodzaj_zakonczenia`.`plytka` AS `plytka` from (((`polaczenie_plytka_polaczenie` left join `elementy_plytkowe_pin` on((`polaczenie_plytka_polaczenie`.`elementy_plytkowe_piny_id` = `elementy_plytkowe_pin`.`id`))) left join `elementy_plytkowe` on((`elementy_plytkowe_pin`.`element_plytkowy_id` = `elementy_plytkowe`.`id`))) left join `rodzaj_zakonczenia` on((`elementy_plytkowe`.`rodzaj_urzadzenia` = `rodzaj_zakonczenia`.`id`))) where (0 <> 1) order by `polaczenie_plytka_polaczenie`.`polaczenie_plytka_id`,`elementy_plytkowe_pin`.`pos` ;
 
 -- --------------------------------------------------------
 
