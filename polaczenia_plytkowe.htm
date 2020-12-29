@@ -1,16 +1,22 @@
 <div class="container" ng-controller="polaczenia_plytkowe-ctrl">
-    <p>
+    
+    <div ng-show="plyta_id.$key == 0">
         <label>Wybierz płytkę</label>
         <select ng-options="item as item.nazwa group by item.miejsce for item in plytki | toArray:true | orderBy:['pomie', 'miejsce', 'nazwa']" 
-                ng-model = "plytka_id" >
+                ng-model = "plytka_id" 
+                ng-change = "selectPlytka(true)">
                 <optgroup label="Wszystkie">
                     <option value="0">Wszystkie</option>    
                 </optgroup> 
         </select>
-    </p>
+    </div>
 
-    <p ng-show="plytka_id == 0">
-        <table class="table" ng-repeat-start="(pomieszczenie, miejscelist) in plytkilist">
+    <div ng-show="plyta_id.$key > 0">
+        <input type="button" ng-click="selectPlytka(false)" value="Pokaż wszystkie"></input>
+    </div>
+
+    <div ng-show="plyta_id.$key == 0">
+        <table  class="table" ng-repeat-start="(pomieszczenie, miejscelist) in plytkilist">
             <caption>{{pomieszczenie}}</caption>
             <thead>
                 <tr>
@@ -40,10 +46,80 @@
             </tbody>
         </table>
         <hr ng-repeat-end>
-    </p>
+    </div>
 
-    <p ng-show="plytka_id > 0">
+    <div ng-show="plyta_id.$key > 0">
+        <label>Pomieszczenie: </label> <b>{{plyta_id.pomie}}</b><br>
+        <label>Miejce: </label> <b>{{plyta_id.miejsce}}</b><br>
+        <label>Nazwa: </label> <b>{{plyta_id.nazwa}}</b><br>
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Nazwa</th>
+                <th>Lista połączeń</th>
+                <th>Akcje</th>
+            </tr>
+            <tr ng-repeat-start=" pol in polaczenia[plyta_id.$key]"
+            ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
+                <td>
+                    {{pol.id}}
+                </td>
+                <td>
+                    {{pol.nazwa}}
+                </td>
+                <td>
+                    <table class="table stripped" ng-if="polaczenienazwane[pol.id].length > 0">
+                        <tr style="font:small">
+                            <th>Nazwa elementu</th>
+                            <th>Nazwa pinu</th>
+                            <th>Rodzaj złącza</th>
+                            <th>Pozycja pinu</th>
+                        </tr>
+                        <tr ng-repeat="pin in polaczenienazwane[pol.id]" style="font:small"
+                        ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
+                            <td>{{pin.elemnazwa}}</td>
+                            <td>{{pin.pinnazwa}}</td>
+                            <td>{{pin.rodznazwa}}</td>
+                            <td>{{pin.pos}}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <input type="button" ng-click="addPin(pol.id)" value="Edytuj"></input>
+                    <input type="button" ng-click="addPin(pol.id)" value="Dodaj połączenie"></input>
+                </td>
+            </tr>
+            <tr ng-repeat-end ng-show="editRow.id == pol.id">
+                <td colspan="3">
 
-    </p>
+                </td>
+                <td>
+                    <input type="button" ng-click="addPin(pol.id)" value="Anuluj"></input>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td><input type="button" ng-click="addPolaczenie(true)" value="Dodaj"></input></td>
+            </tr>
+            <tr ng-show="addPolaczenie">
+                <td></td>
+                <td><input type="text" ng-model="nowa_nazwa_polaczenia"></td>
+                <td></td>
+                <td><input type="button" ng-click="addPin(false)" value="Anuluj"></input>
+                    <input type="button" ng-click="addPin(true)" value="Zachowaj"></input></td>
+            </tr>
+        </table>
 
+        
+    </div>
 </div>
+
+<!--
+"id" => $row["id"],
+"pinpid" => $row["elementy_plytkowe_piny_id"],
+"pinnazwa" => $row["pinnazwa"],
+"pos" => $row["pos"],
+"elemnazwa" => $row["elemnazwa"],
+"rodznazwa" => $row["rodznazwa"],
+"rodz_kod" => $row["kod"]
+-->
