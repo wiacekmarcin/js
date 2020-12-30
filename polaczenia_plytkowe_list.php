@@ -47,7 +47,7 @@ while($row = mysqli_fetch_array($result)) {
 
 
 $polaczeniaarray = array();
-$query = "SELECT `id`, `nazwa`, `plytka_id` FROM `polaczenie_plytka` WHERE 1 ORDER BY `plytka_id`";
+$query = "SELECT `id`, `nazwa`, `plytka_id` FROM `polaczenie_plytka` WHERE 1 ORDER BY `plytka_id`, `nazwa`";
 $prevplytkaid = -1;
 $result = mysqli_query($con, $query);
 while($row = mysqli_fetch_array($result)) {
@@ -93,13 +93,34 @@ while($row = mysqli_fetch_array($result)) {
     ));
 }
 
+$query = "SELECT `id`, `pinnazwa`, `pos`, `element_plytkowy_id`, `elementnazwa`, `ilosc_pin`, `plytka_id`, `rodzaj_urzadzenia` ";
+$query .= "FROM `ElementyPlytkowePinView` WHERE 1";
+$prevplytkaid = -1;
+$result = mysqli_query($con, $query);
+$pins = array();
+while($row = mysqli_fetch_array($result)) {
+    if ($prevplytkaid != $row["plytka_id"]) {
+        $prevplytkaid = $row["plytka_id"];
+        $pins[$row["plytka_id"]] = array();
+    }
+    array_push($pins[$row["plytka_id"]],
+        array(
+            "id" => $row["id"],
+            "pinnazwa" => $row["pinnazwa"],
+            "elementnazwa" => $row["elementnazwa"],
+            "pos" => $row["pos"]
+    ));
+}
+
+
 
 $opt = array(
     'plytki' => $plytkiarray,
     'plytkilist' => $plytkilist,
     'polaczenia' => $polaczeniaarray,
     'ilosc_pin' => $polaczeniapincntarray,
-    'polaczenienazwane' => $polaczenienazwane
+    'polaczenienazwane' => $polaczenienazwane,
+    'pins' => $pins 
 );
 
 echo json_encode($opt);
