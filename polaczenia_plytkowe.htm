@@ -85,23 +85,39 @@
                     </table>
                 </td>
                 <td>
-                    <input type="button" ng-click="addPin(pol.id)" value="Edytuj"></input>
-                    <input type="button" ng-click="addPin(pol.id)" value="Dodaj połączenie"></input>
+                    <input ng-show="editRow.id != pol.id && polRow.id != pol.id" type="button" ng-click="editPin(pol)" value="Edytuj"></input>
+                    <input ng-show="editRow.id != pol.id && polRow.id != pol.id" type="button" ng-click="addPolaczenie(pol.id)" value="Dodaj połączenie"></input>
+                </td>
+            </tr>
+            <tr ng-show="polRow.id == pol.id" >
+                <td></td>
+                <td></td>
+                <td>
+                    <select ng-options="item as (item.pos +'. '+ item.pinnazwa) group by item.elementnazwa for item in pins[plyta_id.$key] | toArray:true " 
+                    ng-model="polRow.pinid" 
+                    >
+
+                    </select>
+                </td>
+                <td>
+                    <input type="button" ng-click="savePolaczenie()" value="Zachowaj"></input>
+                    <input type="button" ng-click="addPolaczenie(-1)" value="Anuluj"></input>
                 </td>
             </tr>
             <tr ng-repeat-end ng-show="editRow.id == pol.id">
-                <td colspan="3">
-
-                </td>
+                <td></td>
+                <td><input type="text" ng-model="editRow.nazwa"></td>
+                <td></td>
                 <td>
-                    <input type="button" ng-click="addPin(pol.id)" value="Anuluj"></input>
+                    <input type="button" ng-click="savePin()" value="Zachowaj"></input>
+                    <input type="button" ng-click="editPin({'id':-1, 'nazwa' : ''})" value="Anuluj"></input>
                 </td>
             </tr>
-            <tr>
+            <tr ng-show="!addPol">
                 <td colspan="3"></td>
-                <td><input type="button" ng-click="addPolaczenie(true)" value="Dodaj"></input></td>
+                <td><input type="button" ng-click="addNazwanyPin(true)" value="Dodaj"></input></td>
             </tr>
-            <tr ng-show="addPolaczenie">
+            <tr ng-show="addPol">
                 <td></td>
                 <td><input type="text" ng-model="nowa_nazwa_polaczenia"></td>
                 <td></td>
