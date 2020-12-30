@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 29 Gru 2020, 23:00
+-- Czas generowania: 30 Gru 2020, 01:44
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -21,6 +21,23 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `kb_ster_test`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `ElementyPlytkowePinView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `ElementyPlytkowePinView` (
+`id` smallint unsigned
+,`pinnazwa` text
+,`pos` tinyint
+,`element_plytkowy_id` tinyint unsigned
+,`elementnazwa` text
+,`ilosc_pin` tinyint
+,`plytka_id` tinyint unsigned
+,`rodzaj_urzadzenia` tinyint unsigned
+);
 
 -- --------------------------------------------------------
 
@@ -156,12 +173,12 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`
 (34, 'brązowy jasny cpu 9', 8, 5),
 (35, 'szary -', 9, 5),
 (36, 'pomaranczowy -', 10, 5),
-(37, 'zielony 0x01.6', 11, 5),
-(38, 'brązowy 0x01.5', 12, 5),
+(37, 'zielony 0x01.5', 11, 5),
+(38, 'brązowy 0x01.4', 12, 5),
 (39, 'brązowy 0x00.5', 1, 6),
 (40, 'fioletowy 0x00.4', 2, 6),
-(41, 'biały 0x01.5', 3, 6),
-(42, 'żółty 0x01.4', 4, 6),
+(41, 'biały 0x00.7', 3, 6),
+(42, 'żółty 0x00.6', 4, 6),
 (43, 'pomarańczowy 0x00.3', 5, 6),
 (44, 'szary 0x00.2', 6, 6),
 (45, 'jasno brązowy 0x00.1', 7, 6),
@@ -493,7 +510,22 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (10, '0x00.P7', 2),
 (11, '0x00.INT', 2),
 (12, 'GND', 2),
-(13, '5V', 2);
+(13, '5V', 2),
+(14, 'TTL RX', 2),
+(15, 'TTL TX', 2),
+(16, 'RS RX', 2),
+(17, 'RS TX', 2),
+(18, '0x01.INT', 2),
+(19, '0x01.P0', 2),
+(20, '0x01.P1', 2),
+(21, '0x01.P2', 2),
+(22, '0x01.P3', 2),
+(23, '0x01.P4', 2),
+(24, '0x01.P5', 2),
+(25, '0x01.P6', 2),
+(26, '0x01.P7', 2),
+(27, 'CPU9', 2);
+
 
 -- --------------------------------------------------------
 
@@ -535,7 +567,46 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 (21, 13, 55),
 (22, 13, 23),
 (23, 13, 82),
-(24, 13, 10);
+(24, 13, 10),
+(25, 16, 65),
+(26, 17, 66),
+(27, 15, 67),
+(28, 15, 61),
+(29, 14, 68),
+(30, 14, 62),
+(31, 3, 46),
+(32, 3, 1),
+(33, 4, 2),
+(34, 4, 45),
+(35, 5, 16),
+(36, 5, 44),
+(37, 6, 4),
+(38, 6, 43),
+(39, 7, 5),
+(40, 7, 40),
+(41, 8, 6),
+(42, 8, 39),
+(43, 9, 7),
+(44, 10, 8),
+(45, 9, 42),
+(46, 10, 41),
+(47, 18, 22),
+(48, 19, 14),
+(49, 19, 30),
+(50, 20, 15),
+(51, 20, 29),
+(52, 21, 16),
+(53, 21, 28),
+(54, 22, 17),
+(55, 22, 27),
+(56, 23, 18),
+(57, 23, 38),
+(58, 24, 19),
+(59, 24, 37),
+(60, 25, 20),
+(61, 26, 21),
+(62, 27, 78),
+(63, 27, 34);
 
 -- --------------------------------------------------------
 
@@ -2094,6 +2165,15 @@ CREATE TABLE `ZylaWidok` (
 -- --------------------------------------------------------
 
 --
+-- Struktura widoku `ElementyPlytkowePinView`
+--
+DROP TABLE IF EXISTS `ElementyPlytkowePinView`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkowePinView`  AS  select `elementy_plytkowe_pin`.`id` AS `id`,`elementy_plytkowe_pin`.`nazwa` AS `pinnazwa`,`elementy_plytkowe_pin`.`pos` AS `pos`,`elementy_plytkowe_pin`.`element_plytkowy_id` AS `element_plytkowy_id`,`elementy_plytkowe`.`nazwa` AS `elementnazwa`,`elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`,`elementy_plytkowe`.`plytka_id` AS `plytka_id`,`elementy_plytkowe`.`rodzaj_urzadzenia` AS `rodzaj_urzadzenia` from (`elementy_plytkowe_pin` left join `elementy_plytkowe` on((`elementy_plytkowe_pin`.`element_plytkowy_id` = `elementy_plytkowe`.`id`))) where (0 <> 1) order by `elementy_plytkowe`.`plytka_id`,`elementy_plytkowe`.`nazwa`,`elementy_plytkowe_pin`.`pos` ;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura widoku `ElementyPlytkowePolaczeniaPinView`
 --
 DROP TABLE IF EXISTS `ElementyPlytkowePolaczeniaPinView`;
@@ -2364,13 +2444,13 @@ ALTER TABLE `plytki`
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
 --
 ALTER TABLE `polaczenie_plytka`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_plytka_polaczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
