@@ -8,100 +8,83 @@ require_once "database.php";
 $con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con, "utf8");
 
-$mid = -1;
+$query = "SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` ";
+$query .= "FROM `MiejsceView` WHERE 1 ORDER BY `pomieszczenie`, `nazwa`";
 
-
-#SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` FROM `MiejsceView` WHERE 1
-if (isset($_GET['mid'])) {
-    $mid = intval($_GET['mid']);
-    if ($mid == 0) {
-            $query = "SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` FROM ";
-            $query.= "`MiejsceView` WHERE `zbiorcze`=1 ORDER BY `pomieszczenie`, `nazwa`";
-    } else if ($mid > 0) {
-            $query = "SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` ";
-            $query.= "FROM `MiejsceView` WHERE `id_pomieszczenie`=$mid ORDER BY `nazwa`";
-    } else {
-        $query = "SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` FROM `MiejsceView`";
+$previdpom = -1;
+$result = mysqli_query($con, $query);
+$miejsca = array();
+$pomieszczenia = array();
+while($row = mysqli_fetch_array($result)) {
+    if ($previdpom != $row["id_pomieszczenie"]) {
+        $previdpom = $row["id_pomieszczenie"];
+        array_push($pomieszczenia, array(
+            "id" => $row["id_pomieszczenie"],
+            "nazwa" => $row["pomieszczenie"]
+        ));
+        $miejsca[$row["id_pomieszczenie"]] = array();
     }
-} else {
-    $query = "SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` FROM `MiejsceView`";
+
+    array_push($miejsca[$row["id_pomieszczenie"]], array(
+        "id" => $row["id"],
+        "nazwa" => $row["nazwa"],
+        "kod" => $row["kod"],
+        "opis" => $row["opis"],
+        "zbiorcze" => $row["zbiorcze"],
+        "polaczenie" => $row["polaczenie"],
+    ));
 }
 
-
+$query = "SELECT DISTINCT `przewod_id`, `miejsce_id` FROM `przewod_miejsce` WHERE 1 order by `miejsce_id`, `przewod_id` ";
+$previdmiejsca = -1;
 $result = mysqli_query($con, $query);
-$miejscaarray = array();
+$przewody = array();
+while($row = mysqli_fetch_array($result)) {
+    if ($previdmiejsca != $row["miejsce_id"]) {
+        $previdmiejsca = $row["miejsce_id"];
+        $przewody[$row["miejsce_id"]] = array();
+    }
+    array_push($przewody[$row["miejsce_id"]], $row["przewod_id"]);
+}
+
+$query = "SELECT DISTINCT `etykieta`, `rodzaj_zakonczenia`, `miejsce_id` FROM ";
+$query .= "`ZakonczenieView` WHERE 1 ORDER BY `miejsce_id`, `rodzaj_zakonczenia` ";
+
+$previdmiejsca = -1;
+$result = mysqli_query($con, $query);
 $zakonczenia = array();
 while($row = mysqli_fetch_array($result)) {
-	array_push($miejscaarray, array( 'id' => $row['id'], 
-                                    'nazwa' => $row['nazwa'], 
-                                    'pomieszczenie' => $row['pomieszczenie'], 
-                                    'id_pomieszczenie' => $row['id_pomieszczenie'], 
-                                    'opis' => $row['opis'], 
-                                    'zbiorcze' => $row['zbiorcze'], 
-                                    'kod' => $row['kod'], 
-                                    'polaczenie' => $row['polaczenie'],
-                                    'kable' => array()
-                                    ));
-    $zakonczenia[$row["id"]] = array(1 => [],
-                                2 => [],
-                                3 => []);
-}
-
-//rozdaj zakonczenia
-$count = count($miejscaarray);
-$prev = -1;
-
-for ($i = 0; $i < $count; $i++) {
-
-    $query = "SELECT `pm`.`przewod_id` as `kid`, `p`.`opis` as `descr`, `p`.`ilosc_zyl` as `cnt` ";
-    $query .= "FROM `przewod_miejsce` `pm` LEFT JOIN `przewod` `p` on `p`.`id` = `pm`.`przewod_id` WHERE `pm`.`miejsce_id` = ". $miejscaarray[$i]['id'];
-    $query .= " ORDER BY `pm`.`przewod_id`";
-    
-    $result = mysqli_query($con, $query);
-	$k = '';
-    $j = 0;
-    
-	while($row = mysqli_fetch_array($result)) {
-        if ($prev != $row['kid']) {
-            $prev = $row['kid'];
-            array_push($miejscaarray[$i]['kable'], $row['kid']);
-            $k = $k . '<a href="edit_kabel.php?id=' . $row['kid'] . '">' . $row['kid'] . '</a>, ';
-        }
-		$j += 1;
-	}
-	$k = $j . " : " . $k;
-	//$miejscaarray[$i]['kable'] = $k;
-    
-}
-
-$query = "SELECT `id`, `nazwa` FROM `pomieszczenie` WHERE 1 ";
-$result = mysqli_query($con, $query);
-
-$pomieszczeniaarray = array();
-while($row = mysqli_fetch_array($result)) {
-    array_push($pomieszczeniaarray,
-            array( "id" => $row['id'],
-                "nazwa" => $row['nazwa']));
-}
-//print_r($queiry);
-$query = "SELECT `id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakonczenia`, `przewod_id`, `miejsce_id`, `nazwa`, `kod` ";
-$query .= "FROM `ZakonczenieView` ORDER BY `miejsce_id`,`rodzaj_zakonczenia`, `etykieta` ";
-$result = mysqli_query($con, $query);
-
-while($row = mysqli_fetch_array($result)) {
-    if ($mid != -1 && $mid == $row["miejsce_id"]) {
-        array_push($zakonczenia[$row["miejsce_id"]][$row["rodzaj_zakonczenia"]], array(
-            "id" => $row["id"],
-            "etykieta" => $row["etykieta"],
-            "przewod_id" => $row["przewod_id"]
-        ));
+    if ($previdmiejsca != $row["miejsce_id"]) {
+        $previdmiejsca = $row["miejsce_id"];
+        $zakonczenia[$row["miejsce_id"]] = array(
+            "1" => array(),
+            "2" => array(),
+            "3" => array(),
+            "4" => array(),
+            "5" => array(),
+            "6" => array(),
+            "7" => array(),
+            "8" => array(),
+            "9" => array(),
+        );
     }
+    array_push($zakonczenia[$row["miejsce_id"]][$row["rodzaj_zakonczenia"]], $row["etykieta"]);
 }
+
+$query = "SELECT `id`, `nazwa`  FROM `rodzaj_zakonczenia` WHERE 1";
+$result = mysqli_query($con, $query);
+$rodzaj = array();
+while($row = mysqli_fetch_array($result)) {
+    $rodzaj[$row["id"]] = $row["nazwa"];
+}
+
 
 $opt = array(
-    "miejsca" => $miejscaarray,
-    "pomieszczenia" => $pomieszczeniaarray,
-    "zakonczenia" => $zakonczenia
+    "miejsca" => $miejsca,
+    "pomieszczenia" => $pomieszczenia,
+    "przewody" => $przewody,
+    "zakonczenia" => $zakonczenia,
+    "rodzaj" => $rodzaj
 );
 echo json_encode ($opt);
 mysqli_close($con);

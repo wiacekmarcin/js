@@ -1,17 +1,55 @@
 <div class="container" ng-controller="miejsca-ctrl">
 
     <p>
-    <a href="index.html">Powrót</a> <a href="#!/miejsca/-1">Wszystkie</a> <a href="#!/miejsca/0">Zbiorcze</a> 
-    <a ng-repeat-start="item in pomieszczenia" href="#!/miejsca/{{item.id}}">{{item.nazwa}}</a><span ng-repeat-end> </span> 
-    <!-- 
-    <a href="#!/miejsca/2">WC</a> <a href="#!/miejsca/3">Sypialnia</a> <a href="#!/miejsca/4">Pokój</a> 	
-    <a href="#!/miejsca/5">Pracownia</a> <a href="#!/miejsca/6">Salon</a> <a href="#!/miejsca/7">Kuchnia</a> 
-    <a href="#!/miejsca/8">Łazienka</a> <a href="#!/miejsca/9">Jadalnia</a>
-    -->
+    <input type="button" ng-click="wybierzPomieszczenie(0)" value="Wszystkie"> 
+    <input type="button" ng-click="wybierzPomieszczenieZbiorcze(0)" value="Zbiorcze">
+    <input type="button" ng-click="wybierzPomieszczenieZbiorcze(0)" value="Polaczenia"><br>
+    <input type="button" ng-click="wybierzPomieszczenie(pom.id)" value="{{pom.nazwa}}" ng-repeat="pom in pomieszczenia">
+    
     </p>
     <hr>
     <h4>{{title}}</h4>
-    <table>
+    <table ng-repeat-start="pom in pomieszczenia" ng-show="sel_pom_id == pom.id || sel_pom_id == 0"
+        class="table">
+        <caption ng-if="sel_pom_id == 0">{{pom.nazwa}}</caption>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nazwa</th>
+                <th>Opis</th>
+                <th>Przewody</th>
+                <th>Zakończenia</th>
+                <th>Zbiorcze</th>
+                <th>Polaczenia</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="miejsce in miejsca[pom.id]" 
+                ng-style='$odd ? {"background-color": "#f1f1f1"} : {"background-color": "#ffffff"}'>
+                <td>{{miejsce.id}}</td>
+                <td>{{miejsce.nazwa}}</td>
+                <td>{{miejsce.opis}}</td>
+                <td><span ng-show="przewody[miejsce.id].length > 0" >Przewody ({{przewody[miejsce.id].length}}) : </span>  
+                    <span ng-repeat="p in przewody[miejsce.id]">{{p}}, </span></td>
+                <td>
+                    <p ng-repeat="r in rodzaj | toArray:true" ng-if="zakonczenia[miejsce.id][r.$key].length > 0">
+                         <span>{{r.$value}}</span> (<span>{{zakonczenia[miejsce.id][r.$key].length}}</span>)
+                         <span ng-repeat="z in zakonczenia[miejsce.id][r.$key] | orderBy : '+'">{{z}}, </span>
+                    </p>
+                </td>
+                <td>{{miejsce.zbiorcze}}</td>
+                <td>{{miejsce.polaczenie}}</td>
+                <td></td>
+            </tr>
+            <tr ng-repeat-end ng-show="false">
+
+            </tr>    
+        </tbody>
+    </table>
+    <hr ng-repeat-end>    
+        
+        <!--
         <tr>
             <th>Kod</th><th>Nazwa</th><th ng-show="show_place">Miejsce</th>
             <th>Opis</th><th>Przewody</th><th>Zb.</th><th>Poł.</th><th>Akcje</th>
@@ -84,6 +122,7 @@
             <td><button ng-click="addnewPlace()">Zapisz</button><button ng-click="canceladdPlace()">Anuluj</button></td>
         </tr>
     </table>
+    -->        
 </div>
 <!--
         $scope.edit_place = row.id;
