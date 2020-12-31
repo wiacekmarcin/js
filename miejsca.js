@@ -1,28 +1,26 @@
 app.controller('miejsca-ctrl', ['$scope','$routeParams', '$http', function($scope, $routeParams, $http) {
-    var mid = $routeParams.id;
     $scope.edit_place = -1;
     $scope.add_place = false;
-    $http.get("miejsca_list.php?mid="+ mid).then(function(response) { 
-        $scope.places = response.data.miejsca;
-        $scope.pomieszczenia = response.data.pomieszczenia;
-        $scope.zakonczenia = response.data.zakonczenia;
+    $scope.sel_pom_id = 0;
+    var get = function() {
+        $http.get("miejsca_list.php").then(function(response) { 
 
-        if (mid == -1) {
+            $scope.miejsca = response.data.miejsca;
+            $scope.pomieszczenia = response.data.pomieszczenia;
+            $scope.zakonczenia = response.data.zakonczenia;
+            $scope.przewody = response.data.przewody;
+            $scope.rodzaj = response.data.rodzaj;
+
             $scope.title = "Wszystkie";
-            $scope.show_place = true;
-        } else if (mid == 0) {
-            $scope.title = "Zbiorcze";
-            $scope.show_place = true;
-        } else {
-            $scope.show_place = false;
-            for (var i=0; i < $scope.pomieszczenia.length; i++) {
-                if ($scope.pomieszczenia[i].id == mid) {
-                    $scope.title = $scope.pomieszczenia[i].nazwa;
-                    break;
-                }
-            }
-        }
-    });
+        });
+    };
+
+    get();
+
+    $scope.wybierzPomieszczenie = function(pid) {
+        $scope.sel_pom_id = 1;
+    }
+
 
     $scope.editPlace = function(row) {
         $scope.edit_place = row.id;
