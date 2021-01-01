@@ -10,7 +10,7 @@
 #include "util.h"
 
 #define SENSORS
-
+//#define DEBUG
 
 constexpr unsigned short DELAY = 200; //50;
 constexpr unsigned long TIMEBEFORESLEEP = SEC(5);
@@ -96,6 +96,7 @@ void printTemperature(DeviceAddress deviceAddress)
 unsigned long tik = 0;
 
 unsigned long timeInt = 0L;
+
 void keyPressedOnPCF8574()
 {
     cli();
@@ -103,6 +104,7 @@ void keyPressedOnPCF8574()
         timeInt = millis();  
     cntLoop = CNTMAXLOOP;
     sei();
+    Serial.println('-');
 }
 
 void mydelay(unsigned long ms)
@@ -111,7 +113,7 @@ void mydelay(unsigned long ms)
 
 	while (ms > 0 && !cntLoop) {
 		yield();
-		while ( ms > 0 && (micros() - start) >= 1000) {
+		while ( ms > 0 && (micros() - start) >= 1000 && !cntLoop) {
 			ms--;
 			start += 1000;
 		}
@@ -155,5 +157,11 @@ void loop() {
         mydelay(60L*1000); //co 1min
         sensors.requestTemperatures(); // Send the command to get temperatures
         printTemperature(insideThermometer);
+        Serial.println('+');
+#ifdef DEBUG        
+        expWejscia.get(millis(), 0);
+        expWejscia.print();
+#endif        
+
     }
 }

@@ -4,7 +4,7 @@
 #include <PCF8574.h>
 
 #include "in.h"
-#define DEBUG
+//#define DEBUG
 class Wejscia {
 public:
     Wejscia(void (*fun)());
@@ -32,6 +32,8 @@ private:
     static constexpr uint8_t KLAWISZ = 3;
     static constexpr uint8_t WIECZOR =4;
     static constexpr uint8_t NOC = 5;
+    //static constexpr uint8_t OFF = 6;
+    //static constexpr uint8_t ON = 7;
     
     //static constexpr uint8_t CZ_POZ_WODY = 6;
     static constexpr uint8_t lenWej = 6; //7

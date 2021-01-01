@@ -34,14 +34,15 @@ void Wejscia::init()
 void Wejscia::get(unsigned long timeInt, unsigned int timeAfterInt) 
 {
     static uint8_t inSave = 0;
-    Serial.println(millis(),DEC);
+    
     uint8_t inD = wejscia.digitalReadAll();
     if (inD != inSave) {
         inSave = inD;
+        Serial.print("mls=");
+        Serial.println(millis(),DEC);
         Serial.print("IN=");
         Serial.println(inD, BIN);
     }
-    
 
     wl.ustaw(MASK(inD, KLAWISZ), timeInt, timeAfterInt);
     czBl.ustaw(MASK(inD, CZ_R_LUSTRO), timeInt, timeAfterInt);

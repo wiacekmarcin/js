@@ -125,7 +125,7 @@ bool Swiatlo::set(unsigned long mls)
             lustroJakoSwiatlo = true;
             zapalLustro(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
         }
-        return;
+        return true;
     }
 
     if (!onS && onL && w.nacisnietyDrugiRaz() && lustroJakoSwiatlo) {
@@ -150,12 +150,12 @@ bool Swiatlo::set(unsigned long mls)
             zgasLustro();
         }
         lustroJakoSwiatlo = false;
-        return;
+        return true;
     } 
 
     if (!lustroJakoSwiatlo && !onL && l.czyRuch()) {
         zapalLustro(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
-        return;
+        return true;
     }
 
     if (!onL && !onS && c.czyRuch()) {
@@ -165,7 +165,7 @@ bool Swiatlo::set(unsigned long mls)
         } else {
             zapalSwiatlo(L_MIN(3));
         }
-        return;    
+        return true;    
     }
     
     if (onS && c.czyRuch()) {
@@ -174,7 +174,7 @@ bool Swiatlo::set(unsigned long mls)
         } else {
             przedluzSwiatlo(L_MIN(3));
         }
-        return;    
+        return true;    
     }
     
     if (onL && c.czyRuch() && lustroJakoSwiatlo) {
@@ -183,7 +183,7 @@ bool Swiatlo::set(unsigned long mls)
         } else {
             przedluzLustro(L_MIN(3));
         }
-        return;    
+        return true;    
     }
 
     return true;

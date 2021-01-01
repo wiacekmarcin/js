@@ -4,7 +4,7 @@
 #include <PCF8574.h>
 #include "util.h"
 
-#define DEBUG
+//#define DEBUG
 /**
  * Podstawowa klasa dla wlacznika, czujnika ruchu i czujnia zblizeniowego
  * funkcje ustaw - ustawia wartosc odczytana z pcf8572 i tutaj trzeba zrobic

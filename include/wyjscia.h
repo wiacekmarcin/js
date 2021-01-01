@@ -2,7 +2,7 @@
 #define __WYJSCIA_H__
 
 #include <PCF8574.h>
-#define DEBUG
+//#define DEBUG
 class Wyjscia {
 public:
     Wyjscia();
