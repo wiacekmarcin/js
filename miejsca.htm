@@ -1,21 +1,22 @@
 <div class="container" ng-controller="miejsca-ctrl">
 
     <p>
-    <input type="button" ng-click="wybierzPomieszczenie(0)" value="Wszystkie"> 
-    <input type="button" ng-click="wybierzPomieszczenieZbiorcze(0)" value="Zbiorcze">
-    <input type="button" ng-click="wybierzPomieszczenieZbiorcze(0)" value="Polaczenia"><br>
-    <input type="button" ng-click="wybierzPomieszczenie(pom.id)" value="{{pom.nazwa}}" ng-repeat="pom in pomieszczenia">
+
+    <a href="#!/miejsca/0" >Wszystkie</a> 
+    <a href="#!/miejsca/-1" >Zbiorcze</a> 
+    <a href="#!/miejsca/-2" >Połączenia przewodów</a> 
+    <a href="#!/miejsca/{{pom.id}}" ng-repeat="pom in pomieszczenia track by pom.id"> {{pom.nazwa}} </a> 
     
     </p>
-    <hr>
+    <p>
     <h4>{{title}}</h4>
-    <table ng-repeat-start="pom in pomieszczenia" ng-show="sel_pom_id == pom.id || sel_pom_id == 0"
-        class="table">
-        <caption ng-if="sel_pom_id == 0">{{pom.nazwa}}</caption>
+
+    <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Nazwa</th>
+                <th ng-if="pid == 0">Pomieszczenie</th>
                 <th>Opis</th>
                 <th>Przewody</th>
                 <th>Zakończenia</th>
@@ -25,112 +26,71 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat-start="miejsce in miejsca[pom.id]" 
+            <tr ng-repeat-start="miejsce in miejsca track by miejsce.id" 
                 ng-style='$odd ? {"background-color": "#f1f1f1"} : {"background-color": "#ffffff"}'>
-                <td>{{miejsce.id}}</td>
+                <td>{{miejsce.id}}<br><span style="font-size: x-small;">{{miejsce.kod}}</span></td>
                 <td>{{miejsce.nazwa}}</td>
+                <td ng-if="pid == 0">{{miejsce.pomieszczenie}}</td>
                 <td>{{miejsce.opis}}</td>
                 <td><span ng-show="przewody[miejsce.id].length > 0" >Przewody ({{przewody[miejsce.id].length}}) : </span>  
-                    <span ng-repeat="p in przewody[miejsce.id]">{{p}}, </span></td>
+                    <span ng-repeat="p in przewody[miejsce.id] track by $index">{{p}}, </span>
+                </td>
                 <td>
-                    <p ng-repeat="r in rodzaj | toArray:true" ng-if="zakonczenia[miejsce.id][r.$key].length > 0">
-                         <span>{{r.$value}}</span> (<span>{{zakonczenia[miejsce.id][r.$key].length}}</span>)
-                         <span ng-repeat="z in zakonczenia[miejsce.id][r.$key] | orderBy : '+'">{{z}}, </span>
+                    
+
+                    <p ng-repeat="r in rodzaj track by $index| toArray:true" ng-if="zakonczenia[miejsce.id][r.$key].length > 0">
+                        <span>{{r.$value}}</span>
+                        (<span>{{zakonczenia[miejsce.id][r.$key].length}}</span>)
+                        <span ng-repeat="z in zakonczenia[miejsce.id][r.$key] track by $index | orderBy : '+'">{{z}}, </span> 
                     </p>
                 </td>
                 <td>{{miejsce.zbiorcze}}</td>
                 <td>{{miejsce.polaczenie}}</td>
-                <td></td>
+                <td>
+                    <input type="button" ng-click="editPlace(miejsce)" value="Edytuj">
+                </td>
             </tr>
-            <tr ng-repeat-end ng-show="false">
-
+            <tr ng-repeat-end ng-if="editRow.id == miejsce.id">
+                <td><input type="text" ng-model="editRow.kod"></td>
+                <td><input type="text" ng-model="editRow.nazwa"></td>
+                <td ng-if="pid == 0">
+                    <select ng-options="item as item.nazwa for item in pomieszczenia track by item.id" ng-model="editRow.pom"></select>
+                </td>
+                <td><input type="text" ng-model="editRow.opis"></td>
+                <td></td>
+                <td></td>
+                
+                <td><select ng-options="zb for zb in ['0','1']" ng-model=editRow.zbiorcze></select></td>
+                <td><select ng-options="po for po in ['0','1']" ng-model=editRow.polaczenie></select></td>
+                
+                <td>
+                    <input type="button" ng-click="saveEditPlace()" value="Zachowaj">
+                    <input type="button" ng-click="cancelEdit()" value="Anuluj">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="{{ pid == 0 ? 8 : 7 }}"></td>
+                <td><input type="button" ng-click="addPlace()" value="Dodaj"></td>
+            </tr>
+            <tr ng-if="addRow.id == -1">
+                <td><input type="text" ng-model="addRow.kod"></td>
+                <td><input type="text" ng-model="addRow.nazwa"></td>
+                <td ng-if="pid == 0">
+                    <select ng-options="item as item.nazwa for item in pomieszczenia track by item.id" ng-model="addRow.pom"></select>
+                </td>
+                <td><input type="text" ng-model="addRow.opis"></td>
+                <td></td>
+                <td></td>
+                
+                <td><select ng-options="zb for zb in ['0','1']" ng-model=addRow.zbiorcze></select></td>
+                <td><select ng-options="po for po in ['0','1']" ng-model=addRow.polaczenie></select></td>
+                
+                <td>
+                    <input type="button" ng-click="saveAddPlace()" value="Zachowaj">
+                    <input type="button" ng-click="cancelAdd()" value="Anuluj">
+                </td>
             </tr>    
         </tbody>
     </table>
-    <hr ng-repeat-end>    
-        
-        <!--
-        <tr>
-            <th>Kod</th><th>Nazwa</th><th ng-show="show_place">Miejsce</th>
-            <th>Opis</th><th>Przewody</th><th>Zb.</th><th>Poł.</th><th>Akcje</th>
-        </tr>
-        <tr ng-repeat-start="place in places" ng-style='$odd ? {"background-color": "#f1f1f1"} : {"background-color": "#ffffff"}'>
-            <td style="text-align: left;"><a href="#!/miejsce_view/{{ place.id }}">{{place.kod}}</a></td>
-            <td style="text-align: left;"><a href="#!/miejsce_view/{{ place.id}}">{{ place.nazwa }}</a></td>
-            <td style="text-align: left;" ng-show="show_place"><a href="#!/miejsca/{{ place.id_pomieszczenie }}">{{ place.pomieszczenie }}</a></td>
-            <td style="text-align: left;">{{ place.opis }}</td>
-            <td style="text-align: left;;"> 
-                <p ng-if="place.kable.length > 0">
-                    Przewody ({{ place.kable.length }}) :<span ng-repeat="p in place.kable"><a href="#!/przewod/{{p}}">{{p}}</a>, </span>
-                 </p>
-                 <p ng-if="zakonczenia[place.id]['1'].length > 0">
-                     Wtyczki ({{ zakonczenia[place.id]["1"].length }}) :<span ng-repeat="p in zakonczenia[place.id]['1']">
-                        <a href="#!/zakonczenia/{{p.id}}">{{p.etykieta}} ({{p.przewod_id}})</a>, </span>
-                </p>
-                <p ng-if="zakonczenia[place.id]['2'].length > 0">
-                    Połączenia ({{ zakonczenia[place.id]["2"].length }}) :<span ng-repeat="p in zakonczenia[place.id]['2']">
-                    <a href="#!/zakonczenia/{{p.id}}">{{p.etykieta}} ({{p.przewod_id}})</a>, </span>
-                </p>
-                <p ng-if="zakonczenia[place.id]['3'].length > 0">Urządzenia ({{ zakonczenia[place.id]["3"].length }}) :<span ng-repeat="p in zakonczenia[place.id]['3']">
-                    <a href="#!/zakonczenia/{{p.id}}">{{p.etykieta}} ({{p.przewod_id}})</a>, </span>
-                </p>
-            </td>
-            <td style="text-align: center;">{{ place.zbiorcze }}</td>
-            <td style="text-align: center;">{{ place.polaczenie }}</td>
-            <td style="text-align: center;"><button ng-click="editPlace(place)">Edytuj</button></td>
-        </tr>
-        <tr ng-repeat-end ng-show="edit_place == place.id" style="background-color: aquamarine;">
-            <td><input type="text" ng-model="ekod"></td>
-            <td><input type="text" ng-model="ename"></td>
-            <td >
-                <select ng-model="epomieszczenie">
-                    <option ng-repeat="item in pomieszczenia" value="{{item.id}}" ng-selected="item.id==epomieszczenie">{{item.nazwa}}</option>
-                </select>
-            </td>
-            <td><input type="text" ng-model="edescription"></td>
-            <td></td>
-            <td><select ng-model="ezbiorcze"><option value="0" ng-selected="ezbiorcze==0">0</option><option value="1" ng-selected="ezbiorcze==1">1</option></select></td>
-            <td><select ng-model="epolaczenie"><option value="0" ng-selected="epolaczenie==0">0</option><option value="1" ng-selected="epolaczenie==1">1</option></select></td>
-            <td><button ng-click="savePlace()">Zapisz</button><button ng-click="canceleditPlace()">Anuluj</button></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td ng-show="show_place"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><button ng-click="addPlace()">Dodaj</button></td>
-        </tr>
-        <tr ng-repeat-end ng-show="add_place" style="background-color: aqua;">
-            <td><input type="text" ng-model="akod"></td>
-            <td><input type="text" ng-model="aname"></td>
-            <td ng-show="show_place">
-                <select ng-model="apomieszczenie">
-                    <option ng-repeat="item in pomieszczenia" value="{{item.id}}" >{{item.nazwa}}</option>
-                </select>
-            </td>
-            <td><input type="text" ng-model="adescription"></td>
-            <td></td>
-            <td>
-                <select ng-model="azbiorcze"><option value="0" selected>0</option><option value="1">1</option></select>
-            </td>
-            <td>
-                <select ng-model="apolaczenie"><option value="0" selected>0</option><option value="1">1</option></select>
-            </td>
-            <td><button ng-click="addnewPlace()">Zapisz</button><button ng-click="canceladdPlace()">Anuluj</button></td>
-        </tr>
-    </table>
-    -->        
-</div>
-<!--
-        $scope.edit_place = row.id;
-        $scope.ename = row.name;
-        $scope.eid_pomiesczenie = row.id_pomiesczenie;
-        $scope.edescription = row.description;
-        $scope.ekod = row.kod;
-        $scope.epolaczenia = row.polaczenie;
-        $scope.ezbiorcze = row.zbiorcze;
--->
-
+    </p>
+</div>        

@@ -8,31 +8,42 @@ require_once "database.php";
 $con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con, "utf8");
 
-$query = "SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` ";
-$query .= "FROM `MiejsceView` WHERE 1 ORDER BY `pomieszczenie`, `nazwa`";
+$mid = $_GET["pid"];
 
-$previdpom = -1;
+$query = "SELECT `id`, `nazwa` FROM `pomieszczenie` WHERE 1 ORDER BY `nazwa`";
 $result = mysqli_query($con, $query);
-$miejsca = array();
 $pomieszczenia = array();
 while($row = mysqli_fetch_array($result)) {
-    if ($previdpom != $row["id_pomieszczenie"]) {
-        $previdpom = $row["id_pomieszczenie"];
-        array_push($pomieszczenia, array(
-            "id" => $row["id_pomieszczenie"],
-            "nazwa" => $row["pomieszczenie"]
-        ));
-        $miejsca[$row["id_pomieszczenie"]] = array();
-    }
-
-    array_push($miejsca[$row["id_pomieszczenie"]], array(
+    array_push($pomieszczenia, array(
         "id" => $row["id"],
-        "nazwa" => $row["nazwa"],
-        "kod" => $row["kod"],
-        "opis" => $row["opis"],
-        "zbiorcze" => $row["zbiorcze"],
-        "polaczenie" => $row["polaczenie"],
+        "nazwa" => $row["nazwa"]
     ));
+}
+
+$query = "SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` ";
+$query .= "FROM `MiejsceView` WHERE 1 ORDER BY `nazwa`";
+
+$result = mysqli_query($con, $query);
+$miejsca = array();
+
+while($row = mysqli_fetch_array($result)) {
+    $ins = False;
+    if (($mid > 0 && $row["id_pomieszczenie"] == $mid) || 
+        $mid == 0 ||
+        ($mid == -1 && $row["zbiorcze"] == 1) ||
+        ($mid == -2 && $row["polaczenie"] == 1) ) {
+        
+        array_push($miejsca, array(
+            "id" => $row["id"],
+            "nazwa" => $row["nazwa"],
+            "kod" => $row["kod"],
+            "opis" => $row["opis"],
+            "zbiorcze" => $row["zbiorcze"],
+            "polaczenie" => $row["polaczenie"],
+            "pomieszczenie" => $row["pomieszczenie"],
+            "id_pomieszczenie" => $row["id_pomieszczenie"],
+        ));
+    }
 }
 
 $query = "SELECT DISTINCT `przewod_id`, `miejsce_id` FROM `przewod_miejsce` WHERE 1 order by `miejsce_id`, `przewod_id` ";
