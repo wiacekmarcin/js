@@ -6,7 +6,7 @@ app.config(function($routeProvider) {
     .when("/kolory", {
         templateUrl : "kolory.htm"
     })
-    .when("/miejsca", {
+    .when("/miejsca/:id", {
         templateUrl: 'miejsca.htm',    
     })
     .when("/przewody", {
