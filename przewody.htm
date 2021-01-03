@@ -35,12 +35,14 @@
                 </a>
             </td>
             <td style="text-align: left;" ng-show="showtd3(pid)">
+                {{prze[pid].miejsca[0].pmid}}.
                 <a href="#!/miejsce_view/{{prze[pid].miejsca[0].mid}}">
                     {{ miej[prze[pid].miejsca[0].mid].pomie }} : 
                     {{ miej[prze[pid].miejsca[0].mid].nazwa }}
                 </a>
             </td>
             <td style="text-align: left;" ng-show="showtd4(pid)">
+                {{prze[pid].miejsca[1].pmid}}.
                 <a href="#!/miejsce_view/{{prze[pid].miejsca[1].mid}}">
                     {{ miej[prze[pid].miejsca[1].mid].pomie }} : 
                     {{ miej[prze[pid].miejsca[1].mid].nazwa }}
@@ -53,7 +55,7 @@
         <tr  ng-if="editRow.id == pid && isShowWire(pid)">
             <td></td>
             <td><input type="text" ng-model="editRow.opis"></td>
-            <td><input type="number" min="1" max="16" string-to-number ng-model="editRow.il_zyl"></td>
+            <td><input type="number" min="1" max="16" string-to-number ng-model="editRow.ilosc_zyl"></td>
             <td style="text-align: left;" ng-if="showtd1(pid)">{{editRow.miejsce_id1.pomie}} : {{editRow.miejsce_id1.nazwa}}</td>
             <td style="text-align: left;" ng-if="showtd2(pid)">{{editRow.miejsce_id2.pomie}} : {{editRow.miejsce_id2.nazwa}}</td>
             
@@ -69,11 +71,8 @@
         </tr> 
         <tr ng-repeat-end ng-if="isShowWire(pid) && (detailsAll || detailsId == pid)" style="background-color: honeydew;">
             <td colspan="3">
-                <p>Żyly</p>
                 <table class="table table-condensed" ng-if="prze[pid].zyly.length > 0" >
                     <tr ng-repeat="zid in prze[pid].zyly">
-                        
-                        <td>{{$index+1}}</td>
                         <td>{{zid}}</td>
                         <td ng-style='{"background-color": "{{zyla[zid].html}}"}'>&nbsp;</td>
                         <td>{{zyla[zid].kolor}}</td>
@@ -84,22 +83,22 @@
             </td>
             <td style="text-align: left;" 
                 ng-if="showtd1(pid)">
-                <div ng-init = "miejsce = prze[pid].miejsca[0]"
+                <div ng-init = "miejsce = prze[pid].miejsca[0]; zakoncznienie = zakonczenie;"
                 ng-include = "'przewody_details.part.htm'"></div>
             </td>
             <td style="text-align: left;" 
                 ng-if="showtd2(pid)">
-                <div ng-init = "miejsce = prze[pid].miejsca[1]"
+                <div ng-init = "miejsce = prze[pid].miejsca[1]; zakoncznienie = zakonczenie;"
                 ng-include = "'przewody_details.part.htm'"></div>
             </td>
             <td style="text-align: left;" 
                 ng-if="showtd3(pid)">
-                <div ng-init = "miejsce = prze[pid].miejsca[0]"
+                <div ng-init = "miejsce = prze[pid].miejsca[0]; zakoncznienie = zakonczenie;"
                 ng-include = "'przewody_details.part.htm'"></div>
             </td>
             <td style="text-align: left;" 
                 ng-if="showtd4(pid)">
-                <div ng-init = "miejsce = prze[pid].miejsca[1]; przewod=pid;"
+                <div ng-init = "miejsce = prze[pid].miejsca[1]; zakoncznienie = zakonczenie;"
                 ng-include = "'przewody_details.part.htm'"></div>
             </td>
             <td><button ng-click="setDetails(-1)">Ukryj</button></td>
