@@ -16,7 +16,7 @@ while($row = mysqli_fetch_array($result)) {
     array_push($przewodyindexarray, $row["id"]);
     $przewodyarray[$row['id']] = array(
         "opis" => $row["opis"],
-        "il_zyl" => $row["ilosc_zyl"],
+        "ilosc_zyl" => $row["ilosc_zyl"],
         "miejsca" => array(),
         "zyly" => array()
     );
@@ -80,64 +80,71 @@ while($row = mysqli_fetch_array($result)) {
     $przewod_miejsce[$row["przewod_id"]][$row["miejsce_id"]] = $row["id"];
 };
 
-$query = "SELECT `zkid`, `zakonczenie_id`, `przewod_miejsce_id`, `zyla_id`, `pos`, `zid`, `przewod_id`, `opis`, `kolor`, `html` ";
-$query .= "FROM `ZlaczeKolejnoscView` WHERE 1";
-$prevzak = -1;
-$zakarr1 = array();
+
+$query = "SELECT `zzid`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`, `zid`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakonczenia` ";
+$query .= "FROM `ZakonczenieZylyView` WHERE 1 ORDER BY `przewod_miejsce_id`, `pos`";
+$prevpmid = -1;
+$zakarr = array();
 $result = mysqli_query($con, $query);
+
 while($row = mysqli_fetch_array($result)) {
-    if ($row["przewod_miejsce_id"] != $prevzak) {
-        $zakarr1[$row["przewod_miejsce_id"]] = array();
-        $prevzak = $row["przewod_miejsce_id"];
+    if ($row["przewod_miejsce_id"] != $prevpmid) {
+        $zakarr[$row["przewod_miejsce_id"]] = array();
+        $prevpmid = $row["przewod_miejsce_id"];
     }
-    array_push($zakarr1[$row["przewod_miejsce_id"]], array(
+    array_push($zakarr[$row["przewod_miejsce_id"]], array(
         "zyla_id" => $row["zyla_id"],
-        "kolor" => $row["kolor"],
         "pos" => $row["pos"],
         "opis" => $row["opis"],
-        "html" => $row["html"],
+        "id" => $row["zzid"],
+        "zakonczenie_id" => $row["zakonczenie_id"]
     ));
 }
 
+
 $query = "SELECT `id`, `zyla_id_1`, `zyla_id_2`, `zakonczenie_id` FROM `polaczenie_zyla` ORDER BY `zakonczenie_id`, `zyla_id_1` ";
 $prevzik = -1;
-$zakarr2 = array();
+$arraypolaczenie = array();
 $result = mysqli_query($con, $query);
 $prevzyla= -1;
 while($row = mysqli_fetch_array($result)) {
     if ($prevzik  != $row["zakonczenie_id"]) {
-        $zakarr2[$row["zakonczenie_id"]] = array();
+        $arraypolaczenie[$row["zakonczenie_id"]] = array();
         $prevzik  = $row["zakonczenie_id"];
         $prevzyla= -1;
     }
     if  ($prevzyla != $row["zyla_id_1"]) {
-        $zakarr2[$row["zakonczenie_id"]][$row["zyla_id_1"]] = array();
+        $arraypolaczenie[$row["zakonczenie_id"]][$row["zyla_id_1"]] = array();
         $prevzyla = $row["zyla_id_1"];
     }
 
-    array_push($zakarr2[$row["zakonczenie_id"]][$row["zyla_id_1"]], $row["zyla_id_2"]);
+    array_push($arraypolaczenie[$row["zakonczenie_id"]][$row["zyla_id_1"]], $row["zyla_id_2"]);
 
 }
 
+/*
 $query = "SELECT `urzadzenie_zakonczenie`.`id`, `urzadzenie_zakonczenie`.`zakonczenie_id`, `urzadzenie_zakonczenie`.`zyla_id`, ";
 $query .= "`urzadzenie_zakonczenie`.`opis`, `kolor`.`nazwa`, `kolor`.`html` ";
 $query .= "FROM `urzadzenie_zakonczenie` LEFT JOIN `kolor` ON `kolor`.`id` = `urzadzenie_zakonczenie`.`kolor_id` ";
 $query .= "ORDER by `urzadzenie_zakonczenie`.`zakonczenie_id` ";
 $prevzik = -1;
-$zakarr3 = array();
+*/
+$arrayurzadzenia = array();
+/*
 $result = mysqli_query($con, $query);
 while($row = mysqli_fetch_array($result)) {
     if ($prevzik  != $row["zakonczenie_id"]) {
-        $zakarr3[$row["zakonczenie_id"]] = array();
+        $arrayurzadzenia[$row["zakonczenie_id"]] = array();
         $prevzik  = $row["zakonczenie_id"];
     }
-    array_push($zakarr3[$row["zakonczenie_id"]], array(
+    array_push($arrayurzadzenia[$row["zakonczenie_id"]], array(
         "id" => $row["zyla_id"],
         "opis" => $row["opis"],
         "kolor" => $row["nazwa"],
         "html" => $row["html"]
     ));
 }
+*/
 
 $opt = array(
     'przewody' => $przewodyindexarray,
@@ -145,9 +152,9 @@ $opt = array(
     'zyla' => $zylyarray,
     'miejsce' => $miejscearray,
     'przewod_miejsce' => $przewod_miejsce,
-    "zakonczenie1" => $zakarr1,
-    "zakonczenie2" => $zakarr2,
-    "zakonczenie3" => $zakarr3
+    "zakonczenie" => $zakarr,
+    "polaczenia" => $arraypolaczenie,
+    "urzadzenia" => $arrayurzadzenia
 );
 
 echo json_encode($opt);

@@ -16,9 +16,10 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             $scope.zyla = response.data.zyla;
             $scope.miej = response.data.miejsce;
             $scope.przew_miej = response.data.przewod_miejsce;
-            $scope.zakonczenie1 = response.data.zakonczenie1;
-            $scope.zakonczenie2 = response.data.zakonczenie2;
-            $scope.zakonczenie3 = response.data.zakonczenie3;
+            $scope.zakonczenie = response.data.zakonczenie;
+            $scope.polaczenia = response.data.polaczenia;
+            $scope.urzadzenia = response.data.urzadzenia;
+
             var BreakException = {};
             for (var i=0; i < $scope.przewody.length; i++) {
                 if ($scope.przewody[i] == $scope.addRow.id) {
@@ -71,7 +72,7 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
         $scope.editRow = {
             "id" : pid,
             "opis" : $scope.prze[pid].opis,
-            "il_zyl" : $scope.prze[pid].il_zyl,
+            "ilosc_zyl" : $scope.prze[pid].ilosc_zyl,
             "miejsce_id1" : $scope.miej[$scope.prze[pid]["miejsca"][0].mid],
             "miejsce_id2" : $scope.miej[$scope.prze[pid]["miejsca"][1].mid],
             "pmid_1" : $scope.prze[pid]["miejsca"][0].pmid,
@@ -88,7 +89,7 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             "edit" : "true",
             "id" : $scope.editRow.id,
             "opis" : $scope.editRow.opis,
-            "ilosc_zyl" : $scope.editRow.il_zyl,
+            "ilosc_zyl" : $scope.editRow.ilosc_zyl,
             "miejsce_id_1" : $scope.editRow.miejsce_id1.$key,
             "miejsce_id_2" : $scope.editRow.miejsce_id2.$key,
             "pmid_1" : $scope.editRow.pmid_1,

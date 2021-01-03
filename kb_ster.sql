@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 30 Gru 2020, 01:44
+-- Czas generowania: 03 Sty 2021, 12:45
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -524,8 +524,8 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (24, '0x01.P5', 2),
 (25, '0x01.P6', 2),
 (26, '0x01.P7', 2),
-(27, 'CPU9', 2);
-
+(27, '', 2),
+(28, 'CPU9', 2);
 
 -- --------------------------------------------------------
 
@@ -605,8 +605,8 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 (59, 24, 37),
 (60, 25, 20),
 (61, 26, 21),
-(62, 27, 78),
-(63, 27, 34);
+(62, 28, 78),
+(63, 28, 34);
 
 -- --------------------------------------------------------
 
@@ -718,6 +718,18 @@ INSERT INTO `polaczenie_zyla` (`id`, `zyla_id_1`, `zyla_id_2`, `zakonczenie_id`)
 (118, 417, 432, 45),
 (119, 433, 416, 51),
 (120, 416, 433, 45);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `polaczenie_zyla2`
+--
+
+CREATE TABLE `polaczenie_zyla2` (
+  `id` smallint UNSIGNED NOT NULL,
+  `zakonczenie_zyly_id` smallint UNSIGNED NOT NULL,
+  `zyla_id` smallint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- --------------------------------------------------------
 
@@ -1313,41 +1325,6 @@ INSERT INTO `rodzaj_zakonczenia` (`id`, `nazwa`, `kod`, `przewod`, `plytka`) VAL
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `urzadzenie_zakonczenie`
---
-
-CREATE TABLE `urzadzenie_zakonczenie` (
-  `id` smallint UNSIGNED NOT NULL,
-  `zakonczenie_id` smallint UNSIGNED NOT NULL,
-  `zyla_id` smallint UNSIGNED NOT NULL,
-  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
-  `kolor_id` tinyint UNSIGNED NOT NULL,
-  `pos` tinyint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
-
---
--- Zrzut danych tabeli `urzadzenie_zakonczenie`
---
-
-INSERT INTO `urzadzenie_zakonczenie` (`id`, `zakonczenie_id`, `zyla_id`, `opis`, `kolor_id`, `pos`) VALUES
-(1, 52, 270, 'Zasilanie +5V', 4, 1),
-(2, 52, 271, 'Sygnał czujnika', 8, 2),
-(3, 52, 272, 'Masa', 7, 3),
-(4, 53, 273, 'Zasilanie +5V', 4, 1),
-(5, 53, 274, 'Sygnał czujnika', 8, 2),
-(6, 53, 275, 'Masa', 7, 3),
-(7, 54, 276, 'Zasilanie +5V', 4, 1),
-(8, 54, 277, 'Sygnał czujnika', 8, 2),
-(9, 54, 278, 'Masa ', 7, 3),
-(10, 55, 279, 'Zasilanie +5V', 4, 1),
-(11, 55, 280, 'Sygnał czujnika', 8, 2),
-(12, 55, 281, 'Masa ', 7, 3),
-(13, 56, 314, 'Masa', 1, 2),
-(14, 56, 315, 'Styk', 1, 1);
-
--- --------------------------------------------------------
-
---
 -- Zastąpiona struktura widoku `WewnetrzneKableView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
@@ -1452,11 +1429,29 @@ CREATE TABLE `ZakonczenieView` (
 -- --------------------------------------------------------
 
 --
+-- Zastąpiona struktura widoku `ZakonczenieZylyView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `ZakonczenieZylyView` (
+`zzid` int unsigned
+,`zakonczenie_id` smallint unsigned
+,`zyla_id` smallint unsigned
+,`pos` tinyint
+,`opis` text
+,`zid` smallint unsigned
+,`etykieta` text
+,`przewod_miejsce_id` smallint unsigned
+,`rodzaj_zakonczenia` tinyint(1)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `zakonczenie_zyly`
 --
 
 CREATE TABLE `zakonczenie_zyly` (
-  `id` int NOT NULL,
+  `id` int UNSIGNED NOT NULL,
   `zakonczenie_id` smallint UNSIGNED NOT NULL,
   `zyla_id` smallint UNSIGNED NOT NULL,
   `pos` tinyint NOT NULL,
@@ -1656,7 +1651,21 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (186, 28, 108, 1, '1'),
 (187, 28, 109, 2, '2'),
 (188, 28, 110, 3, '3'),
-(189, 28, 111, 4, '4');
+(189, 28, 111, 4, '4'),
+(190, 52, 270, 1, 'Zasilanie +5V'),
+(191, 52, 271, 2, 'Sygnał czujnika'),
+(192, 52, 272, 3, 'Masa'),
+(193, 53, 273, 1, 'Zasilanie +5V'),
+(194, 53, 274, 2, 'Sygnał czujnika'),
+(195, 53, 275, 3, 'Masa'),
+(196, 54, 276, 1, 'Zasilanie +5V'),
+(197, 54, 277, 2, 'Sygnał czujnika'),
+(198, 54, 278, 3, 'Masa '),
+(199, 55, 279, 1, 'Zasilanie +5V'),
+(200, 55, 280, 2, 'Sygnał czujnika'),
+(201, 55, 281, 3, 'Masa '),
+(202, 56, 314, 2, 'Masa'),
+(203, 56, 315, 1, 'Styk');
 
 -- --------------------------------------------------------
 
@@ -2255,6 +2264,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 -- --------------------------------------------------------
 
 --
+-- Struktura widoku `ZakonczenieZylyView`
+--
+DROP TABLE IF EXISTS `ZakonczenieZylyView`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczenieZylyView`  AS  select `zakonczenie_zyly`.`id` AS `zzid`,`zakonczenie_zyly`.`zakonczenie_id` AS `zakonczenie_id`,`zakonczenie_zyly`.`zyla_id` AS `zyla_id`,`zakonczenie_zyly`.`pos` AS `pos`,`zakonczenie_zyly`.`opis` AS `opis`,`zakonczenie`.`id` AS `zid`,`zakonczenie`.`etykieta` AS `etykieta`,`zakonczenie`.`przewod_miejsce_id` AS `przewod_miejsce_id`,`zakonczenie`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia` from (`zakonczenie_zyly` left join `zakonczenie` on((`zakonczenie_zyly`.`zakonczenie_id` = `zakonczenie`.`id`))) where (0 <> 1) ;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura widoku `ZakonczePrzewodMiejsce`
 --
 DROP TABLE IF EXISTS `ZakonczePrzewodMiejsce`;
@@ -2345,6 +2363,14 @@ ALTER TABLE `polaczenie_zyla`
   ADD KEY `zakonczenie_id` (`zakonczenie_id`);
 
 --
+-- Indeksy dla tabeli `polaczenie_zyla2`
+--
+ALTER TABLE `polaczenie_zyla2`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `zakonczenie_zyly_id` (`zakonczenie_zyly_id`),
+  ADD KEY `zyla_id` (`zyla_id`);
+
+--
 -- Indeksy dla tabeli `pomieszczenie`
 --
 ALTER TABLE `pomieszczenie`
@@ -2371,16 +2397,6 @@ ALTER TABLE `rodzaj_zakonczenia`
   ADD PRIMARY KEY (`id`),
   ADD KEY `przewod` (`przewod`),
   ADD KEY `plytka` (`plytka`);
-
---
--- Indeksy dla tabeli `urzadzenie_zakonczenie`
---
-ALTER TABLE `urzadzenie_zakonczenie`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `zakonczenie_id` (`zakonczenie_id`),
-  ADD KEY `zyla_id` (`zyla_id`),
-  ADD KEY `kolor_id` (`kolor_id`),
-  ADD KEY `pos` (`pos`);
 
 --
 -- Indeksy dla tabeli `zakonczenie`
@@ -2444,7 +2460,7 @@ ALTER TABLE `plytki`
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
 --
 ALTER TABLE `polaczenie_plytka`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
@@ -2457,6 +2473,12 @@ ALTER TABLE `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_zyla`
   MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+
+--
+-- AUTO_INCREMENT dla tabeli `polaczenie_zyla2`
+--
+ALTER TABLE `polaczenie_zyla2`
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT dla tabeli `pomieszczenie`
@@ -2477,16 +2499,16 @@ ALTER TABLE `rodzaj_zakonczenia`
   MODIFY `id` tinyint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT dla tabeli `urzadzenie_zakonczenie`
---
-ALTER TABLE `urzadzenie_zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
---
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
   MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+
+--
+-- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
+--
+ALTER TABLE `zakonczenie_zyly`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=204;
 
 --
 -- AUTO_INCREMENT dla tabeli `zyla`
@@ -2549,14 +2571,6 @@ ALTER TABLE `polaczenie_zyla`
 ALTER TABLE `przewod_miejsce`
   ADD CONSTRAINT `pmmiefg` FOREIGN KEY (`miejsce_id`) REFERENCES `miejsce` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `pmprzefg` FOREIGN KEY (`przewod_id`) REFERENCES `przewod` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
---
--- Ograniczenia dla tabeli `urzadzenie_zakonczenie`
---
-ALTER TABLE `urzadzenie_zakonczenie`
-  ADD CONSTRAINT `urzazakkolfg` FOREIGN KEY (`kolor_id`) REFERENCES `kolor` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `urzazakozayfg` FOREIGN KEY (`zyla_id`) REFERENCES `zyla` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `urzazakzakofg` FOREIGN KEY (`zakonczenie_id`) REFERENCES `zakonczenie` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Ograniczenia dla tabeli `zakonczenie`
