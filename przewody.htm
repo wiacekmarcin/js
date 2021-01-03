@@ -27,26 +27,54 @@
             <td style="text-align: left;"  ng-show="showtd1(pid)">
                 <a href="#!/miejsce_view/{{prze[pid].miejsca[0].mid}}">
                     {{ chooseName }} 
+                </a> <br>
+                <a href="#!/zakonczenie_add/{{prze[pid].miejsca[0].pmid}}"
+                        ng-if="prze[pid].miejsca[0].zakid === undefined || prze[pid].miejsca[0].zakid === null"
+                    >Dodaj zakonczenie
                 </a>
+                <span ng-if="prze[pid].miejsca[0].zakid !== undefined && prze[pid].miejsca[0].zakid !== null">
+                        {{prze[pid].miejsca[0].zakid}}. {{prze[pid].miejsca[0].r_naz}} : {{prze[pid].miejsca[0].etyk}}
+                </span>
             </td>
             <td style="text-align: left;" ng-show="showtd2(pid)">
                 <a href="#!/miejsce_view/{{prze[pid].miejsca[1].mid}}">
                     {{ chooseName }} 
+                </a> <br>
+                <a href="#!/zakonczenie_add/{{prze[pid].miejsca[1].pmid}}"
+                        ng-if="prze[pid].miejsca[1].zakid === undefined || prze[pid].miejsca[1].zakid === null"
+                    >Dodaj zakonczenie
                 </a>
+                <span ng-if="prze[pid].miejsca[1].zakid !== undefined && prze[pid].miejsca[1].zakid !== null">
+                    {{prze[pid].miejsca[1].zakid}}. {{prze[pid].miejsca[1].r_naz}} : {{prze[pid].miejsca[1].etyk}}
+                </span>
             </td>
             <td style="text-align: left;" ng-show="showtd3(pid)">
                 {{prze[pid].miejsca[0].pmid}}.
                 <a href="#!/miejsce_view/{{prze[pid].miejsca[0].mid}}">
                     {{ miej[prze[pid].miejsca[0].mid].pomie }} : 
-                    {{ miej[prze[pid].miejsca[0].mid].nazwa }}
+                    {{ miej[prze[pid].miejsca[0].mid].nazwa }} 
+                </a> <br>
+                <a href="#!/zakonczenie_add/{{prze[pid].miejsca[0].pmid}}"
+                        ng-if="prze[pid].miejsca[0].zakid === undefined || prze[pid].miejsca[0].zakid === null"
+                    >Dodaj zakonczenie
                 </a>
+                <span ng-if="prze[pid].miejsca[0].zakid !== undefined && prze[pid].miejsca[0].zakid !== null">
+                        {{prze[pid].miejsca[0].zakid}}. {{prze[pid].miejsca[0].r_naz}} : {{prze[pid].miejsca[0].etyk}}
+                </span>    
             </td>
             <td style="text-align: left;" ng-show="showtd4(pid)">
                 {{prze[pid].miejsca[1].pmid}}.
                 <a href="#!/miejsce_view/{{prze[pid].miejsca[1].mid}}">
                     {{ miej[prze[pid].miejsca[1].mid].pomie }} : 
-                    {{ miej[prze[pid].miejsca[1].mid].nazwa }}
+                    {{ miej[prze[pid].miejsca[1].mid].nazwa }} 
+                </a><br>
+                <a href="#!/zakonczenie_add/{{prze[pid].miejsca[1].pmid}}"
+                        ng-if="prze[pid].miejsca[1].zakid === undefined || prze[pid].miejsca[1].zakid === null"
+                    >Dodaj zakonczenie
                 </a>
+                <span ng-if="prze[pid].miejsca[1].zakid !== undefined && prze[pid].miejsca[1].zakid !== null">
+                    {{prze[pid].miejsca[1].zakid}}. {{prze[pid].miejsca[1].r_naz}} : {{prze[pid].miejsca[1].etyk}}
+                </span>
             </td>
             <td style="text-align: center;"> <div class="btn-group">
                 <div style="display: flex;"><button ng-click="seteditPlace(pid)">Edytuj</button>&nbsp;<button ng-click="setDetails(pid)">Szczegóły</button></div>
