@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 03 Sty 2021, 12:45
+-- Czas generowania: 03 Sty 2021, 22:50
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -467,18 +467,6 @@ INSERT INTO `plytki` (`id`, `nazwa`, `miejsce_id`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `PolaczenieZylaWidok` (
-`id` smallint unsigned
-,`zyla_id_1` smallint unsigned
-,`zyla_id_2` smallint unsigned
-,`zakonczenie_id` smallint unsigned
-,`przewod_id1` tinyint unsigned
-,`opis1` text
-,`kolor1` text
-,`html1` text
-,`przewod_id2` tinyint unsigned
-,`opis2` text
-,`kolor2` text
-,`html2` text
 );
 
 -- --------------------------------------------------------
@@ -616,120 +604,255 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 
 CREATE TABLE `polaczenie_zyla` (
   `id` smallint UNSIGNED NOT NULL,
-  `zyla_id_1` smallint UNSIGNED NOT NULL,
-  `zyla_id_2` smallint UNSIGNED NOT NULL,
-  `zakonczenie_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `zakonczenie_zyly_id` smallint UNSIGNED NOT NULL,
+  `zyla_id` smallint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `polaczenie_zyla`
 --
 
-INSERT INTO `polaczenie_zyla` (`id`, `zyla_id_1`, `zyla_id_2`, `zakonczenie_id`) VALUES
-(1, 4, 400, 30),
-(2, 400, 4, 31),
-(3, 1, 398, 30),
-(4, 398, 1, 31),
-(5, 2, 399, 30),
-(6, 399, 2, 31),
-(7, 3, 401, 30),
-(8, 401, 3, 31),
-(9, 5, 404, 30),
-(10, 404, 5, 32),
-(11, 6, 402, 30),
-(12, 402, 6, 32),
-(13, 7, 405, 30),
-(14, 405, 7, 32),
-(15, 8, 403, 30),
-(16, 403, 8, 32),
-(17, 257, 278, 33),
-(18, 278, 257, 37),
-(19, 258, 277, 33),
-(20, 277, 258, 37),
-(21, 259, 276, 33),
-(22, 276, 259, 37),
-(23, 260, 275, 33),
-(24, 275, 260, 36),
-(27, 262, 273, 33),
-(28, 273, 262, 36),
-(31, 263, 272, 33),
-(32, 272, 263, 35),
-(33, 265, 270, 33),
-(34, 270, 265, 35),
-(35, 256, 315, 33),
-(36, 315, 256, 39),
-(39, 269, 314, 34),
-(40, 314, 269, 39),
-(43, 266, 281, 34),
-(44, 281, 266, 38),
-(45, 267, 280, 34),
-(46, 280, 267, 38),
-(47, 268, 279, 34),
-(48, 279, 268, 38),
-(49, 264, 271, 33),
-(50, 271, 264, 35),
-(53, 261, 274, 33),
-(54, 274, 261, 36),
-(55, 282, 290, 40),
-(56, 290, 282, 41),
-(57, 283, 291, 40),
-(58, 291, 283, 41),
-(59, 284, 292, 40),
-(60, 292, 284, 42),
-(61, 285, 293, 40),
-(62, 293, 285, 42),
-(63, 286, 294, 40),
-(64, 294, 286, 42),
-(65, 287, 295, 40),
-(66, 295, 287, 43),
-(67, 288, 296, 40),
-(68, 296, 288, 43),
-(69, 289, 297, 40),
-(70, 297, 289, 43),
-(71, 411, 418, 45),
-(72, 418, 411, 46),
-(75, 419, 411, 46),
-(76, 411, 419, 45),
-(77, 420, 413, 46),
-(78, 413, 420, 45),
-(79, 421, 414, 46),
-(80, 414, 421, 45),
-(81, 422, 413, 48),
-(82, 413, 422, 45),
-(83, 423, 412, 48),
-(84, 412, 423, 45),
-(85, 424, 411, 48),
-(86, 411, 424, 45),
-(87, 425, 411, 48),
-(88, 411, 425, 45),
-(97, 426, 415, 49),
-(98, 415, 426, 45),
-(99, 427, 416, 49),
-(100, 416, 427, 45),
-(101, 428, 411, 50),
-(102, 411, 428, 45),
-(103, 429, 411, 50),
-(104, 411, 429, 45),
-(105, 430, 413, 50),
-(106, 413, 430, 45),
-(107, 431, 410, 50),
-(108, 410, 431, 45),
-(117, 432, 417, 51),
-(118, 417, 432, 45),
-(119, 433, 416, 51),
-(120, 416, 433, 45);
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `polaczenie_zyla2`
---
-
-CREATE TABLE `polaczenie_zyla2` (
-  `id` smallint UNSIGNED NOT NULL,
-  `zakonczenie_zyly_id` smallint UNSIGNED NOT NULL,
-  `zyla_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+INSERT INTO `polaczenie_zyla` (`id`, `zakonczenie_zyly_id`, `zyla_id`) VALUES
+(1, 204, 4),
+(2, 204, 400),
+(3, 205, 1),
+(4, 205, 398),
+(5, 206, 8),
+(6, 206, 403),
+(7, 207, 2),
+(8, 207, 399),
+(9, 208, 7),
+(10, 208, 405),
+(11, 209, 3),
+(12, 209, 401),
+(13, 210, 6),
+(14, 210, 402),
+(15, 211, 5),
+(16, 211, 404),
+(17, 212, 400),
+(18, 212, 4),
+(19, 213, 401),
+(20, 213, 3),
+(21, 214, 399),
+(22, 214, 2),
+(23, 215, 398),
+(24, 215, 1),
+(25, 216, 402),
+(26, 216, 6),
+(27, 217, 405),
+(28, 217, 7),
+(29, 218, 403),
+(30, 218, 8),
+(31, 219, 404),
+(32, 219, 5),
+(33, 220, 260),
+(34, 220, 275),
+(35, 221, 256),
+(36, 221, 315),
+(37, 222, 265),
+(38, 222, 270),
+(39, 223, 263),
+(40, 223, 272),
+(41, 224, 264),
+(42, 224, 271),
+(43, 225, 262),
+(44, 225, 273),
+(45, 226, 261),
+(46, 226, 274),
+(47, 227, 259),
+(48, 227, 276),
+(49, 228, 258),
+(50, 228, 277),
+(51, 229, 257),
+(52, 229, 278),
+(53, 230, 268),
+(54, 230, 279),
+(55, 231, 269),
+(56, 231, 314),
+(57, 232, 267),
+(58, 232, 280),
+(59, 233, 266),
+(60, 233, 281),
+(61, 234, 271),
+(62, 234, 264),
+(63, 235, 272),
+(64, 235, 263),
+(65, 236, 270),
+(66, 236, 265),
+(67, 237, 274),
+(68, 237, 261),
+(69, 238, 273),
+(70, 238, 262),
+(71, 239, 275),
+(72, 239, 260),
+(73, 240, 276),
+(74, 240, 259),
+(75, 241, 277),
+(76, 241, 258),
+(77, 242, 278),
+(78, 242, 257),
+(79, 243, 281),
+(80, 243, 266),
+(81, 244, 280),
+(82, 244, 267),
+(83, 245, 279),
+(84, 245, 268),
+(85, 246, 314),
+(86, 246, 269),
+(87, 247, 315),
+(88, 247, 256),
+(89, 248, 283),
+(90, 248, 291),
+(91, 249, 289),
+(92, 249, 297),
+(93, 250, 288),
+(94, 250, 296),
+(95, 251, 287),
+(96, 251, 295),
+(97, 252, 286),
+(98, 252, 294),
+(99, 253, 285),
+(100, 253, 293),
+(101, 254, 284),
+(102, 254, 292),
+(103, 255, 282),
+(104, 255, 290),
+(105, 256, 291),
+(106, 256, 283),
+(107, 257, 290),
+(108, 257, 282),
+(109, 258, 293),
+(110, 258, 285),
+(111, 259, 292),
+(112, 259, 284),
+(113, 260, 294),
+(114, 260, 286),
+(115, 261, 295),
+(116, 261, 287),
+(117, 262, 296),
+(118, 262, 288),
+(119, 263, 297),
+(120, 263, 289),
+(121, 264, 416),
+(122, 264, 433),
+(123, 265, 417),
+(124, 265, 432),
+(125, 266, 410),
+(126, 266, 431),
+(127, 267, 413),
+(128, 267, 430),
+(129, 268, 411),
+(130, 268, 429),
+(131, 269, 411),
+(132, 269, 428),
+(133, 270, 416),
+(134, 270, 427),
+(135, 271, 415),
+(136, 271, 426),
+(137, 272, 411),
+(138, 272, 425),
+(139, 273, 411),
+(140, 273, 424),
+(141, 274, 412),
+(142, 274, 423),
+(143, 275, 413),
+(144, 275, 420),
+(145, 276, 411),
+(146, 276, 418),
+(147, 277, 411),
+(148, 277, 419),
+(149, 278, 414),
+(150, 278, 421),
+(151, 279, 413),
+(152, 279, 422),
+(153, 280, 418),
+(154, 280, 411),
+(155, 281, 419),
+(156, 281, 411),
+(157, 282, 421),
+(158, 282, 414),
+(159, 283, 420),
+(160, 283, 413),
+(161, 284, 424),
+(162, 284, 411),
+(163, 285, 422),
+(164, 285, 413),
+(165, 286, 423),
+(166, 286, 412),
+(167, 287, 425),
+(168, 287, 411),
+(169, 288, 427),
+(170, 288, 416),
+(171, 289, 426),
+(172, 289, 415),
+(173, 290, 429),
+(174, 290, 411),
+(175, 291, 430),
+(176, 291, 413),
+(177, 292, 428),
+(178, 292, 411),
+(179, 293, 431),
+(180, 293, 410),
+(181, 294, 432),
+(182, 294, 417),
+(183, 295, 433),
+(184, 295, 416),
+(185, 264, 411),
+(186, 264, 418),
+(187, 264, 419),
+(188, 264, 424),
+(189, 264, 425),
+(190, 264, 428),
+(191, 264, 429),
+(192, 265, 420),
+(193, 265, 422),
+(194, 265, 430),
+(195, 265, 413),
+(196, 266, 416),
+(197, 266, 427),
+(198, 266, 433),
+(199, 267, 412),
+(200, 267, 423),
+(201, 268, 414),
+(202, 268, 421),
+(203, 269, 410),
+(204, 269, 431),
+(205, 270, 415),
+(206, 270, 426),
+(207, 271, 417),
+(208, 271, 432),
+(209, 272, 418),
+(210, 272, 411),
+(211, 273, 419),
+(212, 273, 411),
+(213, 274, 420),
+(214, 274, 413),
+(215, 275, 421),
+(216, 275, 414),
+(217, 276, 424),
+(218, 276, 411),
+(219, 277, 425),
+(220, 277, 411),
+(221, 278, 422),
+(222, 278, 413),
+(223, 279, 423),
+(224, 279, 412),
+(225, 280, 428),
+(226, 280, 411),
+(227, 281, 429),
+(228, 281, 411),
+(229, 282, 430),
+(230, 282, 413),
+(231, 283, 431),
+(232, 283, 410),
+(233, 284, 433),
+(234, 284, 416),
+(235, 285, 432),
+(236, 285, 417),
+(237, 286, 427),
+(238, 286, 416),
+(239, 287, 426),
+(240, 287, 415);
 
 -- --------------------------------------------------------
 
@@ -1395,19 +1518,20 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (41, '13-14-15-16', 29, 2),
 (42, '13-14-15-16', 32, 2),
 (43, '13-14-15-16', 33, 2),
-(44, '41-42-43-44-45-46-47', 84, 2),
-(45, '41-42-43-44-45-46-47', 86, 2),
-(46, '41-42-43-44-45-46-47', 88, 2),
-(48, '41-42-43-44-45-46-47', 90, 2),
-(49, '41-42-43-44-45-46-47', 91, 2),
-(50, '41-42-43-44-45-46-47', 93, 2),
-(51, '41-42-43-44-45-46-47', 95, 2),
+(44, 'Czujnik temperatury w podłodze w WC', 66, 3),
+(45, '42-43-44-45-46-47', 86, 2),
+(46, '42-43-44-45-46-47', 88, 2),
+(48, '42-43-44-45-46-47', 90, 2),
+(49, '42-43-44-45-46-47', 91, 2),
+(50, '42-43-44-45-46-47', 93, 2),
+(51, '42-43-44-45-46-47', 95, 2),
 (52, 'Czujnik temperatury ogrz. wodne ściana w salonie', 20, 3),
 (53, 'Czujnik temperatury ogrz. wodnego podłoga w kuchni', 22, 3),
 (54, 'Czujnik temperatury ogrz. wodnego podłoga w łazience', 23, 3),
 (55, 'Czujnik temperatury przy pompie', 26, 3),
 (56, 'Kontaktron od drzwiczek rewizyjnych', 40, 3),
-(57, 'Czujnik ruchu WC', 54, 3);
+(57, 'Czujnik ruchu WC', 54, 3),
+(58, 'Czujnik temperatury w podłodze w Holu', 67, 3);
 
 -- --------------------------------------------------------
 
@@ -1665,7 +1789,91 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (200, 55, 280, 2, 'Sygnał czujnika'),
 (201, 55, 281, 3, 'Masa '),
 (202, 56, 314, 2, 'Masa'),
-(203, 56, 315, 1, 'Styk');
+(203, 56, 315, 1, 'Styk'),
+(204, 30, 4, 1, '21.1'),
+(205, 30, 1, 2, '21.4'),
+(206, 30, 8, 3, '22.3'),
+(207, 30, 2, 4, '21.3'),
+(208, 30, 7, 5, '22.2'),
+(209, 30, 3, 6, '21.2'),
+(210, 30, 6, 7, '22.1'),
+(211, 30, 5, 8, '22.4'),
+(212, 31, 400, 1, '20.1'),
+(213, 31, 401, 2, '20.6'),
+(214, 31, 399, 3, '20.4'),
+(215, 31, 398, 4, '20.3'),
+(216, 32, 402, 1, '20.7'),
+(217, 32, 405, 2, '20.5'),
+(218, 32, 403, 3, '20.3'),
+(219, 32, 404, 4, '20.8'),
+(220, 33, 260, 1, 'GND czuj. podł. temp. kuch'),
+(221, 33, 256, 2, 'Kontaktron'),
+(222, 33, 265, 3, '+5V czuj. śc. temp. sal'),
+(223, 33, 263, 4, 'GND czuj. śc. temp. sal'),
+(224, 33, 264, 5, 'Sygnał czuj. śc. temp. sal'),
+(225, 33, 262, 6, '+5V czuj. podł. temp. kuch'),
+(226, 33, 261, 7, 'Sygnał czuj. podł. temp. kuch'),
+(227, 33, 259, 8, '+5V czuj. podł. temp. łaz.'),
+(228, 33, 258, 9, 'Sygnał czuj. podł. temp. łaz.'),
+(229, 33, 257, 10, 'GND czuj. podł. temp. łaz.'),
+(230, 34, 268, 1, '+5V czuj. temp. i wilg. pompa'),
+(231, 34, 269, 2, 'GND kontaktronu'),
+(232, 34, 267, 3, 'Sygnał czuj. temp. i wilg. pompa'),
+(233, 34, 266, 4, 'GND czuj. temp. i wilg. pompa'),
+(234, 35, 271, 1, 'Sygnał'),
+(235, 35, 272, 2, 'GND'),
+(236, 35, 270, 3, '+5V'),
+(237, 36, 274, 1, 'Sygnał'),
+(238, 36, 273, 2, '+5V'),
+(239, 36, 275, 3, 'GND'),
+(240, 37, 276, 1, '+5V'),
+(241, 37, 277, 2, 'Sygnał'),
+(242, 37, 278, 3, 'GND'),
+(243, 38, 281, 1, 'GND'),
+(244, 38, 280, 2, 'Sygnał'),
+(245, 38, 279, 3, '+5V'),
+(246, 39, 314, 1, 'GND'),
+(247, 39, 315, 2, 'Styk'),
+(248, 40, 283, 1, 'Sygnał'),
+(249, 40, 289, 2, 'GND'),
+(250, 40, 288, 3, 'Sygnał'),
+(251, 40, 287, 4, '+5V'),
+(252, 40, 286, 5, 'GND'),
+(253, 40, 285, 6, 'Sygnał'),
+(254, 40, 284, 7, '+5V'),
+(255, 40, 282, 8, 'GND'),
+(256, 41, 291, 1, 'Sygnał'),
+(257, 41, 290, 2, 'GND'),
+(258, 42, 293, 1, 'Sygnał'),
+(259, 42, 292, 2, '+5V'),
+(260, 42, 294, 3, 'GND'),
+(261, 43, 295, 1, '+5V'),
+(262, 43, 296, 2, 'Sygnał'),
+(263, 43, 297, 3, 'GND'),
+(264, 86, 411, 1, 'GND czuj.'),
+(265, 86, 413, 2, '+5V czuj'),
+(266, 86, 416, 3, 'GND kont.'),
+(267, 86, 412, 4, 'Sygnał cz.r pracownia'),
+(268, 86, 414, 5, 'Sygnał cz. r. hol'),
+(269, 86, 410, 6, 'Sygnał cz. r. pokój'),
+(270, 86, 415, 7, 'Kontakt. pracownia'),
+(271, 86, 417, 8, 'Kontakt. pokój'),
+(272, 88, 418, 1, 'GND czuj.'),
+(273, 88, 419, 2, 'GND czuj.'),
+(274, 88, 420, 3, '+5V czuj'),
+(275, 88, 421, 4, 'Sygnał cz. r. hol'),
+(276, 90, 424, 1, 'GND czuj.'),
+(277, 90, 425, 2, 'GND czuj.'),
+(278, 90, 422, 3, '+5V czuj'),
+(279, 90, 423, 4, 'Sygnał cz.r pracownia'),
+(280, 93, 428, 1, 'GND czuj.'),
+(281, 93, 429, 2, 'GND czuj.'),
+(282, 93, 430, 3, '+5V czuj'),
+(283, 93, 431, 4, 'Sygnał cz. r. pokój'),
+(284, 95, 433, 1, 'GND kont.'),
+(285, 95, 432, 2, 'Kontakt. pokój'),
+(286, 91, 427, 1, 'GND kont.'),
+(287, 91, 426, 2, 'Kontakt. pracownia');
 
 -- --------------------------------------------------------
 
@@ -2358,15 +2566,6 @@ ALTER TABLE `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_zyla`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `zyla_id_1` (`zyla_id_1`),
-  ADD KEY `zyla_id_2` (`zyla_id_2`),
-  ADD KEY `zakonczenie_id` (`zakonczenie_id`);
-
---
--- Indeksy dla tabeli `polaczenie_zyla2`
---
-ALTER TABLE `polaczenie_zyla2`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `zakonczenie_zyly_id` (`zakonczenie_zyly_id`),
   ADD KEY `zyla_id` (`zyla_id`);
 
@@ -2472,13 +2671,7 @@ ALTER TABLE `polaczenie_plytka_polaczenie`
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
 --
 ALTER TABLE `polaczenie_zyla`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
-
---
--- AUTO_INCREMENT dla tabeli `polaczenie_zyla2`
---
-ALTER TABLE `polaczenie_zyla2`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
 
 --
 -- AUTO_INCREMENT dla tabeli `pomieszczenie`
@@ -2502,13 +2695,13 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=204;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=288;
 
 --
 -- AUTO_INCREMENT dla tabeli `zyla`
@@ -2556,14 +2749,6 @@ ALTER TABLE `polaczenie_plytka`
 ALTER TABLE `polaczenie_plytka_polaczenie`
   ADD CONSTRAINT `polnazwaplytkafg` FOREIGN KEY (`polaczenie_plytka_id`) REFERENCES `polaczenie_plytka` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `polpolplytkapinfg` FOREIGN KEY (`elementy_plytkowe_piny_id`) REFERENCES `elementy_plytkowe_pin` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
---
--- Ograniczenia dla tabeli `polaczenie_zyla`
---
-ALTER TABLE `polaczenie_zyla`
-  ADD CONSTRAINT `polzylazakfg` FOREIGN KEY (`zakonczenie_id`) REFERENCES `zakonczenie` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `polzylazy1fg` FOREIGN KEY (`zyla_id_1`) REFERENCES `zyla` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `polzylazy2fg` FOREIGN KEY (`zyla_id_2`) REFERENCES `zyla` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Ograniczenia dla tabeli `przewod_miejsce`
