@@ -1,6 +1,4 @@
 <div ng-if="miejsce.zakid !== undefined && miejsce.zakid !== null">
-    <p>{{miejsce.zakid}}. {{miejsce.r_naz}} : {{miejsce.etyk}}</p>
-
     <table class="table table-condensed" >
         <tr ng-repeat="zak1 in zakonczenie[miejsce.pmid] track by $index">
             <td>{{zak1.pos}}</td>
@@ -8,7 +6,7 @@
             <td ng-style='{"background-color": "{{zyla[zak1.zyla_id].html}}"}'>&nbsp;</td>
             <td>{{zyla[zak1.zyla_id].kolor}}</td>
             <td>{{zak1.opis}}</td>
-            <td ng-if="miejsce.r_kod == 'K'">
+            <td ng-if="miejsce.r_kod == 'K'>
                 <div ng-repeat="zylapol in polaczenia[zak1.id]" ng-if="zylapol != zak1.zyla_id">
                     {{zylapol}} 
                     <span style="font-weight: bold;">{{zyla[zylapol].pid}}</span> 
@@ -58,9 +56,3 @@
     </table>
     -->
 </div>
-
-
-<div ng-if="miejsce.zakid === undefined || miejsce.zakid === null">
-    <a href="#!/zakonczenie_add/{{miejsce.pmid}}">Dodaj zakonczenie</a>
-</div>
-
