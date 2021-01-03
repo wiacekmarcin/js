@@ -56,9 +56,9 @@ while($row = mysqli_fetch_array($result)) {
 $query = "SELECT `id`, `przewod_id`, `opis`, `kolor`, `html` FROM `ZylaWidok` WHERE 1 ORdER by `przewod_id`";
 $result = mysqli_query($con, $query);
 $zylyarray = array();
+
 while($row = mysqli_fetch_array($result)) {
     array_push($przewodyarray[$row['przewod_id']]["zyly"], $row["id"]);
-
     $zylyarray[$row['id']] = array(
         "kolor" => $row['kolor'],
         "opis" => $row['opis'],
@@ -102,23 +102,17 @@ while($row = mysqli_fetch_array($result)) {
 }
 
 
-$query = "SELECT `id`, `zyla_id_1`, `zyla_id_2`, `zakonczenie_id` FROM `polaczenie_zyla` ORDER BY `zakonczenie_id`, `zyla_id_1` ";
+$query = "SELECT `id`, `zakonczenie_zyly_id`, `zyla_id` FROM `polaczenie_zyla` WHERE 1 ORDER by `zakonczenie_zyly_id`";
 $prevzik = -1;
 $arraypolaczenie = array();
 $result = mysqli_query($con, $query);
-$prevzyla= -1;
 while($row = mysqli_fetch_array($result)) {
-    if ($prevzik  != $row["zakonczenie_id"]) {
-        $arraypolaczenie[$row["zakonczenie_id"]] = array();
-        $prevzik  = $row["zakonczenie_id"];
-        $prevzyla= -1;
+    if ($prevzik  != $row["zakonczenie_zyly_id"]) {
+        $arraypolaczenie[$row["zakonczenie_zyly_id"]] = array();
+        $prevzik  = $row["zakonczenie_zyly_id"];
     }
-    if  ($prevzyla != $row["zyla_id_1"]) {
-        $arraypolaczenie[$row["zakonczenie_id"]][$row["zyla_id_1"]] = array();
-        $prevzyla = $row["zyla_id_1"];
-    }
-
-    array_push($arraypolaczenie[$row["zakonczenie_id"]][$row["zyla_id_1"]], $row["zyla_id_2"]);
+    
+    array_push($arraypolaczenie[$row["zakonczenie_zyly_id"]], $row["zyla_id"]);
 
 }
 
