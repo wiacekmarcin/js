@@ -24,9 +24,25 @@ while($row = mysqli_fetch_array($result)) {
     ));
 }
 
+$query = "SELECT `wtyczka_id`, `zlacze_id`, `epid`, `epnazwa`, `eppos`, `zyla_id`, `zzpos`, `zzopis`, `zzetykieta`, `zid`, `kolor_id`, ";
+$query .= "`przewod_id`, `opis`, `kolor`, `html` FROM `ZlaczeWtyczkaView` WHERE `zlacze_id` = $id";
+
+$zyly = array();
+$result = mysqli_query($con, $query);
+while($row = mysqli_fetch_array($result)) {
+    $zyly[$row["epid"]] = array(
+        "zyla_id" => $row["zyla_id"],
+        "zzetykieta" => $row["zzetykieta"],
+        "przewod_id" => $row["przewod_id"],
+        "opis" => $row["opis"],
+        "kolor" => $row["kolor"],
+        "html" => $row["html"],
+    );
+}
 
 $opt = array(
     'pins' => $piny,
+    'zyly' => $zyly,
 );
 
 echo json_encode($opt);

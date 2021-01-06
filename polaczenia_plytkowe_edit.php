@@ -16,7 +16,7 @@ $queries = array();
 
 if ($id != -1) {
     array_push($queries, 
-        "UPDATE `polaczenie_plytka` SET `nazwa`='$nazwa' WHERE `id` = $plytka_id"
+        "UPDATE `polaczenie_plytka` SET `nazwa`='$nazwa' WHERE `id` = $id"
     );
 } else {
     array_push($queries, 
@@ -29,13 +29,13 @@ $count = count($queries);
 $err = 0;
 for ($i = 0; $i < $count; $i++) {
     if (!mysqli_query($con, $queries[$i])) {
-        print ("ERR : " . $queries[$i]);
+        echo json_encode("ERR : " . $queries[$i]);
         $err = 1;
     }
 }
 
 
 if ($err == 0)
-    print ("OK");
+    echo json_encode("OK : " . $queries[0]);
 mysqli_close($con);
 ?>

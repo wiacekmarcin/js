@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 03 Sty 2021, 23:57
+-- Czas generowania: 06 Sty 2021, 01:38
 -- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
 -- Wersja PHP: 7.4.3
 
@@ -117,7 +117,25 @@ INSERT INTO `elementy_plytkowe` (`id`, `nazwa`, `ilosc_pin`, `plytka_id`, `rodza
 (7, 'Przewód 148', 4, 2, 4),
 (8, 'Przewód 147', 4, 2, 4),
 (9, 'Konwerter RS <-> TTL', 8, 2, 3),
-(10, 'Arduino pro micro 16 MHz 5V', 24, 2, 3);
+(10, 'Arduino pro micro 16 MHz 5V', 24, 2, 3),
+(11, 'Konwerter 0.5A 24/5V', 4, 1, 3),
+(12, 'A', 8, 1, 5),
+(13, 'B', 4, 1, 5),
+(14, 'C', 2, 1, 5),
+(15, 'D', 8, 1, 5),
+(16, 'E', 3, 1, 5),
+(17, 'F', 12, 1, 5),
+(18, 'G', 4, 1, 5),
+(19, 'H', 4, 1, 5),
+(20, 'I', 3, 1, 5),
+(21, 'J', 8, 1, 5),
+(22, 'K', 12, 1, 5),
+(23, 'L', 3, 1, 5),
+(24, 'M', 8, 1, 5),
+(25, 'N', 8, 1, 5),
+(26, 'O', 8, 1, 5),
+(27, 'P', 8, 1, 5),
+(28, 'czujnik temperatury DS1820', 3, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -226,7 +244,117 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`
 (87, '15 (SCLK)', 21, 10),
 (88, '14 (MISO)', 22, 10),
 (89, '16 (MOSI)', 23, 10),
-(90, '10 (A10)', 24, 10);
+(90, '10 (A10)', 24, 10),
+(91, 'SHON', 1, 11),
+(92, 'Vin (24V)', 2, 11),
+(93, 'GND', 3, 11),
+(94, 'Vout (5V)', 4, 11),
+(95, '24V', 1, 12),
+(96, 'A.2-F.12', 2, 12),
+(97, 'A.3-F.11', 3, 12),
+(98, 'A.4-F.10', 4, 12),
+(99, 'A.5-F.9', 5, 12),
+(100, 'A.6-F.8', 6, 12),
+(101, 'A.7-F.7', 7, 12),
+(102, 'A.8-F.6', 8, 12),
+(103, 'Sygnał czujnik ruchu', 1, 13),
+(104, '5V', 2, 13),
+(105, 'GND', 3, 13),
+(106, 'GND', 4, 13),
+(107, 'Styk kontakt.', 1, 14),
+(108, 'GND', 2, 14),
+(109, '5V ogrz', 1, 15),
+(110, 'D.2-H.3', 2, 15),
+(111, 'D.3-H.2', 3, 15),
+(112, 'GND', 4, 15),
+(113, 'D.5-0.2', 5, 15),
+(114, 'D.6-N.3', 6, 15),
+(115, 'D.7-I.2', 7, 15),
+(116, 'D.8-E.2', 8, 15),
+(117, '5V ogrz', 1, 16),
+(118, 'E.2-D.8', 2, 16),
+(119, 'GND', 3, 16),
+(120, 'F.1-B.1', 1, 17),
+(121, 'F.2-G.1', 2, 17),
+(122, 'F.3-C.1', 3, 17),
+(123, 'F.4-L.3', 4, 17),
+(124, '5V', 5, 17),
+(125, 'F.6-A.8', 6, 17),
+(126, 'F.7-A.7', 7, 17),
+(127, 'F.8-A.6', 8, 17),
+(128, 'F.9-A.5', 9, 17),
+(129, 'F.10-A.4', 10, 17),
+(130, 'F.11-A.3', 11, 17),
+(131, 'F.12-A.2', 12, 17),
+(132, 'Sygnał czujnika zbliżeniowego', 1, 18),
+(133, '5V', 2, 18),
+(134, 'GND', 3, 18),
+(135, 'GND', 4, 18),
+(136, 'GND', 1, 19),
+(137, 'H.2-D.3', 2, 19),
+(138, 'H.3-D.2', 3, 19),
+(139, '5V ogrz', 4, 19),
+(140, 'GND', 1, 20),
+(141, 'I.2-D.7', 2, 20),
+(142, '5V ogrz', 3, 20),
+(143, 'GND', 1, 21),
+(144, '5V ogrz', 2, 21),
+(145, 'J.3-P.4', 3, 21),
+(146, 'J.4-P.3', 4, 21),
+(147, 'J.5-K.12', 5, 21),
+(148, 'J.6-K.11', 6, 21),
+(149, 'J.7-K.10', 7, 21),
+(150, 'J.8-K.9', 8, 21),
+(151, 'K.1-P.1', 1, 22),
+(152, 'K.2-P.2', 2, 22),
+(153, 'K.3', 3, 22),
+(154, 'K.4', 4, 22),
+(155, 'K.5', 5, 22),
+(156, 'K.6-O.8', 6, 22),
+(157, 'K.7-O.7', 7, 22),
+(158, 'K.8-O.6', 8, 22),
+(159, 'K.9-J.8', 9, 22),
+(160, 'K.10-J.7', 10, 22),
+(161, 'K.11-J.6', 11, 22),
+(162, 'K.12-J.5', 12, 22),
+(163, 'Podświetlenie wł.', 1, 23),
+(164, 'GND', 2, 23),
+(165, 'Klawisz wł', 3, 23),
+(166, 'M.1', 1, 24),
+(167, 'M.2', 2, 24),
+(168, 'M.3', 3, 24),
+(169, 'M.4', 4, 24),
+(170, 'M.5', 5, 24),
+(171, 'M.6', 6, 24),
+(172, 'M.7', 7, 24),
+(173, 'M.8', 8, 24),
+(174, '5V ogrz', 1, 25),
+(175, '5V', 2, 25),
+(176, 'N.3-O.6', 3, 25),
+(177, 'GND', 4, 25),
+(178, 'N.5-P.8', 5, 25),
+(179, 'N.6-P.7', 6, 25),
+(180, 'N.7-P.6', 7, 25),
+(181, 'Podświetlenie', 8, 25),
+(182, '-', 1, 26),
+(183, '-', 2, 26),
+(184, '-', 3, 26),
+(185, 'GND', 4, 26),
+(186, 'GND', 5, 26),
+(187, 'O.6-K.8', 6, 26),
+(188, 'O.7-K.7', 7, 26),
+(189, 'O.8-K.6', 8, 26),
+(190, 'P.1-K.1', 1, 27),
+(191, 'P.2-K.2', 2, 27),
+(192, 'P.3-J.4', 3, 27),
+(193, 'P.4-J.3', 4, 27),
+(194, 'Podświetlenie', 5, 27),
+(195, 'P.6-N.7', 6, 27),
+(196, 'P.7-N.6', 7, 27),
+(197, 'P.8-N.5', 8, 27),
+(198, 'GND', 1, 28),
+(199, 'Sygnał', 2, 28),
+(200, '5V', 3, 28);
 
 -- --------------------------------------------------------
 
@@ -463,15 +591,6 @@ INSERT INTO `plytki` (`id`, `nazwa`, `miejsce_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Zastąpiona struktura widoku `PolaczenieZylaWidok`
--- (Zobacz poniżej rzeczywisty widok)
---
-CREATE TABLE `PolaczenieZylaWidok` (
-);
-
--- --------------------------------------------------------
-
---
 -- Struktura tabeli dla tabeli `polaczenie_plytka`
 --
 
@@ -512,8 +631,41 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (24, '0x01.P5', 2),
 (25, '0x01.P6', 2),
 (26, '0x01.P7', 2),
-(27, '', 2),
-(28, 'CPU9', 2);
+(27, '5V ogrz.', 1),
+(28, 'CPU9', 2),
+(29, 'GND', 1),
+(30, '5V', 1),
+(31, '24V', 1),
+(32, 'A2-F12', 1),
+(33, 'A3-F11', 1),
+(34, 'A4-F10', 1),
+(35, 'A5-F9', 1),
+(36, 'A6-F8', 1),
+(37, 'A7-F7', 1),
+(38, 'A8-F6', 1),
+(39, 'Włącznik', 1),
+(40, 'Kontaktron', 1),
+(41, 'Podświetlenie', 1),
+(42, 'D2-H3', 1),
+(43, 'Cz. ruchu', 1),
+(44, 'Cz. zbliż.', 1),
+(45, 'D3-H2', 1),
+(46, 'D8-E2', 1),
+(47, 'D7-I2', 1),
+(48, 'N7-P6', 1),
+(49, 'N6-P7', 1),
+(50, 'N5-P8', 1),
+(51, 'K1-P1', 1),
+(52, 'K2-P2', 1),
+(53, 'K6-O8', 1),
+(54, 'K7-O7', 1),
+(55, 'K8-O6', 1),
+(56, 'J8-K9', 1),
+(57, 'J7-K10', 1),
+(58, 'J6-K11', 1),
+(59, 'J5-K12', 1),
+(60, 'J4-P3', 1),
+(61, 'J3-P4', 1);
 
 -- --------------------------------------------------------
 
@@ -594,7 +746,98 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 (60, 25, 20),
 (61, 26, 21),
 (62, 28, 78),
-(63, 28, 34);
+(63, 28, 34),
+(64, 29, 105),
+(65, 29, 106),
+(66, 29, 134),
+(67, 29, 135),
+(68, 29, 108),
+(69, 29, 112),
+(70, 29, 136),
+(71, 29, 119),
+(72, 29, 140),
+(73, 29, 164),
+(74, 29, 185),
+(75, 29, 186),
+(76, 29, 143),
+(77, 29, 177),
+(78, 29, 198),
+(79, 29, 93),
+(80, 30, 124),
+(81, 30, 104),
+(82, 30, 200),
+(83, 27, 109),
+(84, 27, 117),
+(85, 27, 139),
+(86, 27, 142),
+(87, 27, 144),
+(88, 27, 174),
+(89, 30, 133),
+(90, 30, 94),
+(91, 30, 175),
+(92, 31, 95),
+(93, 31, 92),
+(94, 32, 96),
+(95, 32, 131),
+(96, 33, 97),
+(97, 33, 130),
+(98, 34, 98),
+(99, 34, 129),
+(100, 35, 99),
+(101, 35, 128),
+(102, 36, 100),
+(103, 36, 127),
+(104, 37, 101),
+(105, 37, 126),
+(106, 38, 102),
+(107, 38, 125),
+(108, 39, 123),
+(109, 40, 122),
+(110, 40, 107),
+(111, 39, 165),
+(112, 41, 181),
+(113, 41, 194),
+(114, 41, 163),
+(115, 43, 103),
+(116, 43, 120),
+(117, 42, 138),
+(118, 42, 110),
+(119, 44, 121),
+(120, 44, 132),
+(121, 45, 137),
+(122, 45, 110),
+(123, 46, 116),
+(124, 46, 118),
+(125, 47, 115),
+(126, 47, 141),
+(127, 61, 145),
+(128, 61, 193),
+(129, 60, 146),
+(130, 60, 192),
+(131, 59, 147),
+(132, 59, 162),
+(133, 58, 148),
+(134, 58, 161),
+(135, 57, 149),
+(136, 57, 160),
+(137, 56, 150),
+(138, 56, 159),
+(139, 51, 151),
+(140, 51, 190),
+(141, 52, 152),
+(142, 52, 191),
+(143, 53, 156),
+(144, 53, 187),
+(145, 54, 157),
+(146, 54, 188),
+(147, 55, 158),
+(148, 55, 187),
+(149, 50, 178),
+(150, 50, 197),
+(151, 49, 179),
+(152, 49, 196),
+(153, 48, 180),
+(154, 48, 195);
 
 -- --------------------------------------------------------
 
@@ -1758,20 +2001,20 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (217, 32, 405, 2, '20.5'),
 (218, 32, 403, 3, '20.3'),
 (219, 32, 404, 4, '20.8'),
-(220, 33, 260, 1, 'GND czuj. podł. temp. kuch'),
+(220, 33, 260, 1, 'GND'),
 (221, 33, 256, 2, 'Kontaktron'),
-(222, 33, 265, 3, '+5V czuj. śc. temp. sal'),
-(223, 33, 263, 4, 'GND czuj. śc. temp. sal'),
-(224, 33, 264, 5, 'Sygnał czuj. śc. temp. sal'),
-(225, 33, 262, 6, '+5V czuj. podł. temp. kuch'),
-(226, 33, 261, 7, 'Sygnał czuj. podł. temp. kuch'),
-(227, 33, 259, 8, '+5V czuj. podł. temp. łaz.'),
-(228, 33, 258, 9, 'Sygnał czuj. podł. temp. łaz.'),
-(229, 33, 257, 10, 'GND czuj. podł. temp. łaz.'),
-(230, 34, 268, 1, '+5V czuj. temp. i wilg. pompa'),
+(222, 33, 265, 3, '+5V'),
+(223, 33, 263, 4, 'GND'),
+(224, 33, 264, 5, 'Sygnał'),
+(225, 33, 262, 6, '+5V'),
+(226, 33, 261, 7, 'Sygnał'),
+(227, 33, 259, 8, '+5V'),
+(228, 33, 258, 9, 'Sygnał'),
+(229, 33, 257, 10, 'GND'),
+(230, 34, 268, 1, '+5V'),
 (231, 34, 269, 2, 'GND kontaktronu'),
-(232, 34, 267, 3, 'Sygnał czuj. temp. i wilg. pompa'),
-(233, 34, 266, 4, 'GND czuj. temp. i wilg. pompa'),
+(232, 34, 267, 3, 'Sygnał'),
+(233, 34, 266, 4, 'GND'),
 (234, 35, 271, 1, 'Sygnał'),
 (235, 35, 272, 2, 'GND'),
 (236, 35, 270, 3, '+5V'),
@@ -1786,14 +2029,14 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (245, 38, 279, 3, '+5V'),
 (246, 39, 314, 1, 'GND'),
 (247, 39, 315, 2, 'Styk'),
-(248, 40, 283, 1, 'Styk kontakt.'),
-(249, 40, 289, 2, 'GND cz. r. lewy'),
-(250, 40, 288, 3, 'Sygnał cz. r. lewy'),
-(251, 40, 287, 4, '+5V cz. r. lewy'),
-(252, 40, 286, 5, 'GND cz. r. prawy'),
-(253, 40, 285, 6, 'Sygnał cz. r. prawy'),
-(254, 40, 284, 7, '+5V cz. r. prawy'),
-(255, 40, 282, 8, 'GND kontakt.'),
+(248, 40, 283, 1, 'Sygnał'),
+(249, 40, 289, 2, 'GND'),
+(250, 40, 288, 3, 'Sygnał'),
+(251, 40, 287, 4, '+5V'),
+(252, 40, 286, 5, 'GND'),
+(253, 40, 285, 6, 'Sygnał'),
+(254, 40, 284, 7, '+5V'),
+(255, 40, 282, 8, 'GND'),
 (256, 41, 291, 1, 'Sygnał'),
 (257, 41, 290, 2, 'GND'),
 (258, 42, 293, 1, 'Sygnał'),
@@ -1863,6 +2106,64 @@ CREATE TABLE `ZewnetrzneKableView` (
 ,`miejsce_id` tinyint unsigned
 ,`c` bigint
 );
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `ZlaczeWtyczkaView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `ZlaczeWtyczkaView` (
+`wtyczka_id` smallint unsigned
+,`zlacze_id` tinyint unsigned
+,`epid` smallint unsigned
+,`epnazwa` text
+,`eppos` tinyint
+,`zyla_id` smallint unsigned
+,`zzpos` tinyint
+,`zzopis` text
+,`zzetykieta` text
+,`zid` smallint unsigned
+,`kolor_id` tinyint unsigned
+,`przewod_id` tinyint unsigned
+,`opis` text
+,`kolor` text
+,`html` text
+);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `zlacze_wtyczka`
+--
+
+CREATE TABLE `zlacze_wtyczka` (
+  `id` smallint UNSIGNED NOT NULL,
+  `wtyczka_id` smallint UNSIGNED NOT NULL,
+  `zlacze_id` tinyint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+--
+-- Zrzut danych tabeli `zlacze_wtyczka`
+--
+
+INSERT INTO `zlacze_wtyczka` (`id`, `wtyczka_id`, `zlacze_id`) VALUES
+(1, 1, 26),
+(2, 2, 21),
+(3, 3, 24),
+(4, 4, 13),
+(5, 5, 14),
+(6, 6, 18),
+(7, 7, 20),
+(8, 8, 16),
+(9, 9, 12),
+(10, 10, 27),
+(11, 11, 15),
+(12, 12, 25),
+(13, 13, 19),
+(14, 14, 23),
+(15, 15, 22),
+(16, 17, 17);
 
 -- --------------------------------------------------------
 
@@ -2388,15 +2689,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 -- --------------------------------------------------------
 
 --
--- Struktura widoku `PolaczenieZylaWidok`
---
-DROP TABLE IF EXISTS `PolaczenieZylaWidok`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PolaczenieZylaWidok`  AS  select `polaczenie_zyla`.`id` AS `id`,`polaczenie_zyla`.`zyla_id_1` AS `zyla_id_1`,`polaczenie_zyla`.`zyla_id_2` AS `zyla_id_2`,`polaczenie_zyla`.`zakonczenie_id` AS `zakonczenie_id`,`z1`.`przewod_id` AS `przewod_id1`,`z1`.`opis` AS `opis1`,`z1`.`kolor` AS `kolor1`,`z1`.`html` AS `html1`,`z2`.`przewod_id` AS `przewod_id2`,`z2`.`opis` AS `opis2`,`z2`.`kolor` AS `kolor2`,`z2`.`html` AS `html2` from ((`polaczenie_zyla` left join `ZylaWidok` `z1` on((`z1`.`id` = `polaczenie_zyla`.`zyla_id_1`))) left join `ZylaWidok` `z2` on((`z2`.`id` = `polaczenie_zyla`.`zyla_id_2`))) ;
-
--- --------------------------------------------------------
-
---
 -- Struktura widoku `PrzewodMiejsceZakonczenieView`
 --
 DROP TABLE IF EXISTS `PrzewodMiejsceZakonczenieView`;
@@ -2447,6 +2739,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 DROP TABLE IF EXISTS `ZewnetrzneKableView`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZewnetrzneKableView`  AS  select `przewod_miejsce`.`przewod_id` AS `przewod_id`,`przewod_miejsce`.`miejsce_id` AS `miejsce_id`,count(`przewod_miejsce`.`przewod_id`) AS `c` from `przewod_miejsce` group by `przewod_miejsce`.`miejsce_id`,`przewod_miejsce`.`przewod_id` having (`c` = 1) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `ZlaczeWtyczkaView`
+--
+DROP TABLE IF EXISTS `ZlaczeWtyczkaView`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZlaczeWtyczkaView`  AS  select `zw`.`wtyczka_id` AS `wtyczka_id`,`zw`.`zlacze_id` AS `zlacze_id`,`ep`.`id` AS `epid`,`ep`.`nazwa` AS `epnazwa`,`ep`.`pos` AS `eppos`,`zz`.`zyla_id` AS `zyla_id`,`zz`.`pos` AS `zzpos`,`zz`.`opis` AS `zzopis`,`zz`.`etykieta` AS `zzetykieta`,`z`.`id` AS `zid`,`z`.`kolor_id` AS `kolor_id`,`z`.`przewod_id` AS `przewod_id`,`z`.`opis` AS `opis`,`z`.`kolor` AS `kolor`,`z`.`html` AS `html` from (((`zlacze_wtyczka` `zw` left join `elementy_plytkowe_pin` `ep` on((`ep`.`element_plytkowy_id` = `zw`.`zlacze_id`))) left join `ZakonczenieZylyView` `zz` on(((`zz`.`zakonczenie_id` = `zw`.`wtyczka_id`) and (`ep`.`pos` = `zz`.`pos`)))) left join `ZylaWidok` `z` on((`z`.`id` = `zz`.`zyla_id`))) where (0 <> 1) ;
 
 -- --------------------------------------------------------
 
@@ -2566,6 +2867,14 @@ ALTER TABLE `zakonczenie_zyly`
   ADD KEY `zyla_id` (`zyla_id`);
 
 --
+-- Indeksy dla tabeli `zlacze_wtyczka`
+--
+ALTER TABLE `zlacze_wtyczka`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `zlacze_id` (`wtyczka_id`,`zlacze_id`),
+  ADD KEY `zlawtyzlafg` (`zlacze_id`);
+
+--
 -- Indeksy dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
@@ -2581,13 +2890,13 @@ ALTER TABLE `zyla`
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe`
 --
 ALTER TABLE `elementy_plytkowe`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe_pin`
 --
 ALTER TABLE `elementy_plytkowe_pin`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=201;
 
 --
 -- AUTO_INCREMENT dla tabeli `kolor`
@@ -2611,13 +2920,13 @@ ALTER TABLE `plytki`
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
 --
 ALTER TABLE `polaczenie_plytka`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_plytka_polaczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
@@ -2647,13 +2956,19 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
   MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=288;
+
+--
+-- AUTO_INCREMENT dla tabeli `zlacze_wtyczka`
+--
+ALTER TABLE `zlacze_wtyczka`
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT dla tabeli `zyla`
@@ -2721,6 +3036,13 @@ ALTER TABLE `przewod_miejsce`
 ALTER TABLE `zakonczenie`
   ADD CONSTRAINT `zaprmifg` FOREIGN KEY (`przewod_miejsce_id`) REFERENCES `przewod_miejsce` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `zarozlfg` FOREIGN KEY (`rodzaj_zakonczenia`) REFERENCES `rodzaj_zakonczenia` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Ograniczenia dla tabeli `zlacze_wtyczka`
+--
+ALTER TABLE `zlacze_wtyczka`
+  ADD CONSTRAINT `zlawtyczzlafg` FOREIGN KEY (`wtyczka_id`) REFERENCES `zakonczenie` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `zlawtyzlafg` FOREIGN KEY (`zlacze_id`) REFERENCES `elementy_plytkowe` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Ograniczenia dla tabeli `zyla`

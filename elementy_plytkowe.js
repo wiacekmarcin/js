@@ -49,6 +49,7 @@ app.controller('elementy_plytkowe-ctrl', ['$scope', '$http', function($scope, $h
         
         $http.get("elementy_plytkowe_pin_list.php?id="+did).then(function(response) { 
             $scope.pins = response.data.pins;
+            $scope.zyly = response.data.zyly;
             for (var i = 0; i < $scope.pins.length; i++) {
                 $scope.edit_pins[$scope.pins[i].id] = {
                     "nazwa" : $scope.pins[i].nazwa,
