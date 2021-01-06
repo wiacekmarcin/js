@@ -1,8 +1,9 @@
 #include "in.h"
 
-Wlacznik::Wlacznik() : ValueBase(), m_cntPush(0), m_timeInt(0), m_timePush(0), m_timeHold(0)
+Wlacznik::Wlacznik() : ValueBase(), m_cntPush(0), m_timeInt(0), m_timePush(0), m_timeHold(0) 
 {
-    
+    m_prev = 1;
+    m_val = 1;
 }
     
 void Wlacznik::clearState() 
@@ -75,7 +76,8 @@ void Wlacznik::print() const
 #endif
 CzujkaZblizeniowa::CzujkaZblizeniowa() : m_timeSig(0), m_timeHold(0), m_ruch(false), m_wykrytoRuch(false)
 {
-
+    m_prev = 1;
+    m_val = 1;
 }
 
 void CzujkaZblizeniowa::ustaw(uint8_t value, unsigned long timeInt, unsigned int timeAfterInt)
@@ -89,7 +91,7 @@ void CzujkaZblizeniowa::ustaw(uint8_t value, unsigned long timeInt, unsigned int
     Serial.println(m_val,DEC);
 #endif    
     m_prev = m_val;
-    m_val = (value == HIGH); 
+    m_val = (value == LOW); 
 
     if (m_val && !m_prev) {
         m_timeSig = timeAfterInt;
@@ -99,6 +101,7 @@ void CzujkaZblizeniowa::ustaw(uint8_t value, unsigned long timeInt, unsigned int
     }
     else if (m_val && m_prev) {
         m_timeHold = timeAfterInt - m_timeSig;
+        m_ruch = true;
     }
     else if (!m_val && m_prev) {
         m_timeHold = 0;
@@ -118,6 +121,8 @@ void CzujkaZblizeniowa::ustaw(uint8_t value, unsigned long timeInt, unsigned int
     } else if (m_timeHold > czasDlugiegoZblizenia && m_wykrytoDlugiRuch) {
         m_wykrytoDlugiRuch = false;
     }
+
+    //print();
 }
 #ifdef DEBUG
 void CzujkaZblizeniowa::print() const
@@ -167,7 +172,8 @@ void CzujkaZblizeniowa::czysc()
 
 CzujkaRuchu::CzujkaRuchu() : m_timelastMove(0), m_prevtimelastMove(0), m_ruch(false)
 {
-    
+    m_prev = 0;
+    m_val = 0;
 }
 
 void CzujkaRuchu::ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt)
@@ -182,6 +188,7 @@ void CzujkaRuchu::ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAft
     } else if (m_ruch) {
         m_ruch = false;
     }
+    //print();
 }
 #ifdef DEBUG
 void CzujkaRuchu::print() const 
@@ -223,7 +230,8 @@ void CzujkaRuchu::czysc()
 
 Drzwi::Drzwi() : ValueBase(), m_otwarte(false), m_timeOpen(0), m_timeClose(0), m_otworzone(false)
 {
-
+    m_prev = 1;
+    m_val = 1;
 }
 
 

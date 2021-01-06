@@ -72,6 +72,7 @@ void setup() {
   
 
     cntLoop = 0;
+    delay(1000);
     expWejscia.get(0, 0);
 }
 
@@ -88,8 +89,10 @@ void printTemperature(DeviceAddress deviceAddress)
     Serial.println("Error: Could not read temperature data");
     return;
   }
-  Serial.print("Temp C: ");
-  Serial.println(tempC);
+  //Serial.print("Temp C: ");
+  //Serial.println(tempC);
+  //expWejscia.get();
+
 }
 
 
@@ -104,7 +107,7 @@ void keyPressedOnPCF8574()
         timeInt = millis();  
     cntLoop = CNTMAXLOOP;
     sei();
-    Serial.println('-');
+    //Serial.println('-');
 }
 
 void mydelay(unsigned long ms)
@@ -150,14 +153,15 @@ void loop() {
         if (cntLoop == 0) {
             expWejscia.czysc();
         }
-
+        //Serial.print('*');
     } else if (expWyjscia.tiktok()) {
         mydelay(1000); //co 1s
+        //Serial.print('+');
     } else {
+        //Serial.println(' ');
         mydelay(60L*1000); //co 1min
         sensors.requestTemperatures(); // Send the command to get temperatures
         printTemperature(insideThermometer);
-        Serial.println('+');
 #ifdef DEBUG        
         expWejscia.get(millis(), 0);
         expWejscia.print();

@@ -22,12 +22,13 @@ public:
 
     void print();
 
+    void get();
 private:
     
     PCF8574 wejscia;
 
-    static constexpr uint8_t CZ_R_LUSTRO = 0;
     static constexpr uint8_t CZ_R_WC = 1;
+    static constexpr uint8_t CZ_R_LUSTRO = 0;
     static constexpr uint8_t DRZWI = 2;
     static constexpr uint8_t KLAWISZ = 3;
     static constexpr uint8_t WIECZOR =4;
