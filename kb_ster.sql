@@ -32,7 +32,7 @@ CREATE TABLE `ElementyPlytkowePinView` (
 `id` smallint unsigned
 ,`pinnazwa` text
 ,`pos` tinyint
-,`element_plytkowy_id` tinyint unsigned
+,`element_plytkowy_id` smallint unsigned
 ,`elementnazwa` text
 ,`ilosc_pin` tinyint
 ,`plytka_id` tinyint unsigned
@@ -51,7 +51,7 @@ CREATE TABLE `ElementyPlytkowePolaczeniaPinView` (
 ,`elementy_plytkowe_piny_id` smallint unsigned
 ,`pinnazwa` text
 ,`pos` tinyint
-,`element_plytkowy_id` tinyint unsigned
+,`element_plytkowy_id` smallint unsigned
 ,`elemnazwa` text
 ,`ilosc_pin` tinyint
 ,`plytka_id` tinyint unsigned
@@ -69,7 +69,7 @@ CREATE TABLE `ElementyPlytkowePolaczeniaPinView` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ElementyPlytkoweView` (
-`id` tinyint unsigned
+`id` smallint unsigned
 ,`nazwa` text
 ,`ilosc_pin` tinyint
 ,`plytka_id` tinyint unsigned
@@ -96,7 +96,7 @@ CREATE TABLE `ElementyPlytkoweView` (
 --
 
 CREATE TABLE `elementy_plytkowe` (
-  `id` tinyint UNSIGNED NOT NULL,
+  `id` smallint UNSIGNED NOT NULL,
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `ilosc_pin` tinyint NOT NULL,
   `plytka_id` tinyint UNSIGNED NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE `elementy_plytkowe_pin` (
   `id` smallint UNSIGNED NOT NULL,
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `pos` tinyint NOT NULL,
-  `element_plytkowy_id` tinyint UNSIGNED NOT NULL
+  `element_plytkowy_id` smallint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
@@ -2115,7 +2115,7 @@ CREATE TABLE `ZewnetrzneKableView` (
 --
 CREATE TABLE `ZlaczeWtyczkaView` (
 `wtyczka_id` smallint unsigned
-,`zlacze_id` tinyint unsigned
+,`zlacze_id` smallint unsigned
 ,`epid` smallint unsigned
 ,`epnazwa` text
 ,`eppos` tinyint
@@ -2140,7 +2140,7 @@ CREATE TABLE `ZlaczeWtyczkaView` (
 CREATE TABLE `zlacze_wtyczka` (
   `id` smallint UNSIGNED NOT NULL,
   `wtyczka_id` smallint UNSIGNED NOT NULL,
-  `zlacze_id` tinyint UNSIGNED NOT NULL
+  `zlacze_id` smallint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
@@ -2890,7 +2890,7 @@ ALTER TABLE `zyla`
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe`
 --
 ALTER TABLE `elementy_plytkowe`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe_pin`
