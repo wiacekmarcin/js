@@ -2,6 +2,7 @@
 
     <table class="table">
         <tr>
+            <th>Id</th>
             <th> Nazwa </th>
             <th> Ilość pinów </th>
             <th> Nazwa urządzenia</th>
@@ -11,6 +12,9 @@
         </tr>
         <tr ng-repeat-start="urz in elementy" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'
         >
+            <td>
+                {{urz.id}}
+            </td>
             <td>
                 {{urz.nazwa}}
             </td>
@@ -32,6 +36,9 @@
         </tr>
         <tr ng-show="editRow.id == urz.id">
             <td>
+
+            </td>
+            <td>
                 <input type="text" ng-model="editRow.nazwa">
             </td>
             <td>
@@ -50,6 +57,7 @@
             </td>
         </tr>
         <tr ng-repeat-end ng-show="showRowId == urz.id">
+            <td></td>
             <td colspan="5">
                 <table class="table" ng-show="chDetails == 0">
                     <tr><th>Id</th></th><th>Pozycja</th><th>Nazwa</th></tr>
@@ -57,8 +65,16 @@
                         <td>{{p.id}}</td>
                         <td>{{p.pos}}</td>
                         <td>{{p.nazwa}}</td>
+                        <td>-</td>
+                        <td>{{zyly[p.id].zyla_id}}</td>
+                        <td>{{zyly[p.id].zzetykieta}}</td>
+                        <td>{{zyly[p.id].przewod_id}}</td>
+                        <td>{{zyly[p.id].opis}}</td>
+                        <td>{{zyly[p.id].kolor}}</td>
+                        <td ng-style='{"background-color": "{{zyly[p.id].html}}"}'>&nbsp;</td>
                     </tr>
                 </table>
+
                 <table class="table" ng-show="chDetails == 1">
                     <tr><th>Pozycja</th><th>Nazwa</th></tr>
                     <tr ng-repeat="p in pins">
@@ -94,10 +110,15 @@
             <td>
             </td>
             <td>
+            </td>
+            <td>
                 <button ng-click="addAdd()">Dodaj</button>
             </td>
         </tr>
         <tr ng-show="addRow.add">
+            <td>
+
+            </td>
             <td>
                 <input type="text" ng-model="addRow.nazwa">
             </td>

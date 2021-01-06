@@ -31,7 +31,7 @@ for ($i = 0; $i < $count; $i++) {
 
 
 if ($err == 0)
-    print ("OK");
+    echo json_encode("OK");
 mysqli_close($con);
 ?>
 
