@@ -3,9 +3,11 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
 
     $scope.detailsAll = false;
 
+    $scope.editzyla = -1;
     $scope.editRow = {'id' : -1};
     $scope.addRow = {'id' : 1, "add" : false};
-    
+    $scope.editkolor = false;
+    $scope.editopis = false;
 
     var get = function() {
 
@@ -146,7 +148,18 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
         }, function error(response) {
             alert("Nie Udało się") ;
         });
-    }
+    };
 
+    $scope.setEditZylaOpis = function (przewod_id)
+    {
+        $scope.editzyla = przewod_id;
+        $scope.editopis = przewod_id != -1;
+    };
+
+    $scope.setEditZylaKolor = function (przewod_id)
+    {
+        $scope.editzyla = przewod_id;
+        $scope.editkolor = przewod_id != -1;
+    };
 }]);
 

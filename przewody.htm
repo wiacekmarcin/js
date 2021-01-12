@@ -129,7 +129,10 @@
                 <div ng-init = "miejsce = prze[pid].miejsca[1]; zakoncznienie = zakonczenie;"
                 ng-include = "'przewody_details.part.htm'"></div>
             </td>
-            <td><button ng-click="setDetails(-1)">Ukryj</button></td>
+            <td><button ng-click="setDetails(-1)">Ukryj</button>
+                <button ng-click="setEditZyla()">Edytuj żyły</button>
+                <button ng-click="setDetails(-1)">Ukryj</button>
+            </td>
         </tr>
 
         <tr>
