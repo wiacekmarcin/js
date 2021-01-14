@@ -107,7 +107,14 @@
                         <td>{{zyla[zid].opis}}</td>
                     </tr>
                 </table>
-                <a href="#!/zyla_add/pid" ng-if="prze[pid].zyly.length == 0">Dodaj żyly do przewodu</a>
+                <a href="#!/zyla_add/{{pid}}" ng-if="prze[pid].zyly.length == 0 && addzylypid == -1">Dodaj żyly do przewodu</a>
+                <table class="table table-condensed" ng-if="prze[pid].zyly.length == 0 && addzylypid == pid" >
+                    <tr ng-repeat="zadd in zylyadd">
+                        
+                        <td>   </td>
+                        <td><input type="text" ng-model="zylyadd[zadd.id].opis">
+                    </tr>
+                </table>
             </td>
             <td style="text-align: left;" 
                 ng-if="showtd1(pid)">
@@ -129,7 +136,10 @@
                 <div ng-init = "miejsce = prze[pid].miejsca[1]; zakoncznienie = zakonczenie;"
                 ng-include = "'przewody_details.part.htm'"></div>
             </td>
-            <td><button ng-click="setDetails(-1)">Ukryj</button></td>
+            <td><button ng-click="setDetails(-1)">Ukryj</button>
+                <button ng-click="setAddZyly(pid)">Dodaj żyly</button>
+                <button ng-click="setAddZyly(-1)">Anuluj dodawanie żyl</button>
+            </td>
         </tr>
 
         <tr>

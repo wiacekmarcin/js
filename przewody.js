@@ -5,7 +5,8 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
 
     $scope.editRow = {'id' : -1};
     $scope.addRow = {'id' : 1, "add" : false};
-    
+    $scope.addzylypid = -1;
+    $scope.zylyadd = [];
 
     var get = function() {
 
@@ -146,7 +147,17 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
         }, function error(response) {
             alert("Nie Udało się") ;
         });
-    }
+    };
+
+    $scope.setAddZyly = function(pid) {
+        $scope.addzylypid = pid;
+        $scope.zylyadd = [];
+        if (pid != -1) {
+            for (var i = 0; i< $scope.prze[pid].ilosc_zyl; i++) {
+                $scope.zylyadd.push({"id" : -(i+1), "opis" : "", "kolor_id" : 0});
+            }
+        }
+    };
 
 }]);
 
