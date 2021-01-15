@@ -15,8 +15,8 @@ app.config(function($routeProvider) {
     .when("/miejsce_view/:id", {
         templateUrl: 'miejsce_view.htm',    
     })
-    .when("/zlacza", {
-        templateUrl: 'zlacza.htm',    
+    .when("/urzadzenia_kablowe", {
+        templateUrl: 'urzadzenia_kablowe.htm',    
     })
     .when("/zlacze_add", {
         templateUrl: 'zlacze_add.htm',    
