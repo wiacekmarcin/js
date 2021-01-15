@@ -99,12 +99,17 @@
         </tr> 
         <tr ng-repeat-end ng-if="isShowWire(pid) && (detailsAll || detailsId == pid)" style="background-color: honeydew;">
             <td colspan="3">
-                <table class="table table-condensed" ng-if="prze[pid].zyly.length > 0" >
+
+                <table class="table table-condensed" ng-if="prze[pid].zyly.length > 0">
                     <tr ng-repeat="zid in prze[pid].zyly">
                         <td>{{zid}}</td>
                         <td ng-style='{"background-color": "{{zyla[zid].html}}"}'>&nbsp;</td>
-                        <td>{{zyla[zid].kolor}}</td>
+                        <td ng-show="editzyla == -1">{{zyla[zid].kolor}}</td>
+                        <td ng-if="editzyla == pid">
+                            <select ng-options="item.id as item.kolor for item in kolory" ng-model="zylaedit[zid].kolor_id"></select>
+                        </td>
                         <td>{{zyla[zid].opis}}</td>
+                        <td ng-if="editzyla == pid"><input type="text" ng-model="zylaedit[zid].opis"></td>
                     </tr>
                 </table>
                 <a href="#!/zyla_add/pid" ng-if="prze[pid].zyly.length == 0">Dodaj żyly do przewodu</a>
@@ -129,9 +134,11 @@
                 <div ng-init = "miejsce = prze[pid].miejsca[1]; zakoncznienie = zakonczenie;"
                 ng-include = "'przewody_details.part.htm'"></div>
             </td>
-            <td><button ng-click="setDetails(-1)">Ukryj</button>
-                <button ng-click="setEditZyla()">Edytuj żyły</button>
-                <button ng-click="setDetails(-1)">Ukryj</button>
+            <td><button ng-click="setDetails(-1)">Ukryj</button><br>
+                <hr>
+                <button ng-click="setEditZyla(pid)">Edycja żył</button><br>
+                <button ng-click="setEditZyla(-1)">Anuluj edycję żył</button><br>
+                <button ng-click="saveEditZyla(pid)">Zachowaj edycję żył</button>
             </td>
         </tr>
 

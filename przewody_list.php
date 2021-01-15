@@ -53,7 +53,7 @@ while($row = mysqli_fetch_array($result)) {
     ));
 }
 
-$query = "SELECT `id`, `przewod_id`, `opis`, `kolor`, `html` FROM `ZylaWidok` WHERE 1 ORdER by `przewod_id`";
+$query = "SELECT `id`, `przewod_id`, `opis`, `kolor`, `html`, `kolor_id` FROM `ZylaWidok` WHERE 1 ORdER by `przewod_id`";
 $result = mysqli_query($con, $query);
 $zylyarray = array();
 
@@ -63,7 +63,8 @@ while($row = mysqli_fetch_array($result)) {
         "kolor" => $row['kolor'],
         "opis" => $row['opis'],
         "html" => $row['html'],
-        "pid" => $row["przewod_id"]
+        "pid" => $row["przewod_id"],
+        "kolor_id" => $row["kolor_id"]
     );
 }
 
@@ -140,6 +141,17 @@ while($row = mysqli_fetch_array($result)) {
 }
 */
 
+$query = "SELECT `id`, `nazwa`, `html`  FROM `KolorView` ";
+$result = mysqli_query($con, $query);
+$kolory = array();
+while($row = mysqli_fetch_array($result)) {
+    array_push($kolory, array(
+        "id" => $row["id"],
+        "kolor" => $row["nazwa"],
+        "html" => $row["html"]
+    ));
+}
+
 $opt = array(
     'przewody' => $przewodyindexarray,
     'przewod' => $przewodyarray,
@@ -148,7 +160,8 @@ $opt = array(
     'przewod_miejsce' => $przewod_miejsce,
     "zakonczenie" => $zakarr,
     "polaczenia" => $arraypolaczenie,
-    "urzadzenia" => $arrayurzadzenia
+    "urzadzenia" => $arrayurzadzenia,
+    "kolory" => $kolory
 );
 
 echo json_encode($opt);
