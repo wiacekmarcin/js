@@ -10,8 +10,8 @@ if (isset($_POST['count']))
 	$count = $_POST['count'];
 
 for ($i = 0 ; $i < $count; $i++) {
-	array_push($params , array('color_id' => $_POST['color_' . $i],
-								'descr' => $_POST['descr_' . $i],
+	array_push($params , array('kolor_id' => $_POST['kolor_' . $i],
+								'opis' => $_POST['opis_' . $i],
 								'id' => $_POST['id_' . $i],
 								'przewod_id' => $_POST['przewod'],
 	));
@@ -20,9 +20,9 @@ for ($i = 0 ; $i < $count; $i++) {
 $query = '';
 for ($i = 0 ; $i < $count; $i++) {
 	if ($params[$i]['id'] == -1) {
-		$query = "INSERT INTO `zyla`(`id`, `color_id`, `przewod_id`, `opis`) VALUES (NULL, " . $params[$i]['color_id'] . ", " . $params[$i]['przewod_id'] . ", \"" . $params[$i]['descr'] . "\");";
+		$query = "INSERT INTO `zyla`(`id`, `kolor_id`, `przewod_id`, `opis`) VALUES (NULL, " . $params[$i]['kolor_id'] . ", " . $params[$i]['przewod_id'] . ", \"" . $params[$i]['opis'] . "\");";
 	} else {
-		$query = "UPDATE `zyla` SET `color_id`=" . $params[$i]['color_id'] . ", `opis`= \"" . $params[$i]['descr'] . "\" WHERE `id` = " . $params[$i]['id']. ";";
+		$query = "UPDATE `zyla` SET `kolor_id`=" . $params[$i]['kolor_id'] . ", `opis`= \"" . $params[$i]['opis'] . "\" WHERE `id` = " . $params[$i]['id']. ";";
     }
     $result = mysqli_query($con, $query);
     echo $i . ($result ? '-OK ' : '-ERR ');
