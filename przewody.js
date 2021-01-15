@@ -9,6 +9,8 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
     $scope.editkolor = false;
     $scope.editopis = false;
 
+
+    $scope.zylaedit =  {}
     var get = function() {
 
         $http.get("przewody_list.php").then(function(response) { 
@@ -21,6 +23,7 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             $scope.zakonczenie = response.data.zakonczenie;
             $scope.polaczenia = response.data.polaczenia;
             $scope.urzadzenia = response.data.urzadzenia;
+            $scope.kolory = response.data.kolory;
 
             var BreakException = {};
             for (var i=0; i < $scope.przewody.length; i++) {
@@ -150,16 +153,32 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
         });
     };
 
-    $scope.setEditZylaOpis = function (przewod_id)
+    $scope.setEditZyla = function (przewod_id)
     {
         $scope.editzyla = przewod_id;
-        $scope.editopis = przewod_id != -1;
+        if ($scope.prze[przewod_id]) {
+            for (var z in $scope.prze[przewod_id]["zyly"]) {
+                $scope.zylaedit[$scope.prze[przewod_id]["zyly"][z]] = $scope.zyla[$scope.prze[przewod_id]["zyly"][z]];
+            }
+        } else{
+            
+        }
     };
 
-    $scope.setEditZylaKolor = function (przewod_id)
-    {
-        $scope.editzyla = przewod_id;
-        $scope.editkolor = przewod_id != -1;
-    };
+    $scope.saveEditZyla = function(przewod_id) {
+        params = {};
+        var i = 0;
+        if ($scope.prze[przewod_id]) {
+            for (var z in $scope.prze[przewod_id]["zyly"]) {
+                params["id_" + i] = $scope.prze[przewod_id]["zyly"][z];
+                params["kolor_" + i] =  $scope.zylaedit[$scope.prze[przewod_id]["zyly"][z]].kolor_id;
+                params["opis_" + i] =  $scope.zylaedit[$scope.prze[przewod_id]["zyly"][z]].opis;
+                i += 1;
+            }
+        }
+        params["przewod"] = przewod_id;
+        params["count"] = i;
+    }
+
 }]);
 
