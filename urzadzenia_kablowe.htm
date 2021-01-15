@@ -4,7 +4,7 @@
         <tr>
             <th>Id</th>
             <th> Nazwa </th>
-            <th> Ilość pinów </th>
+            <th> Ilość pinów / żył </th>
             <th> Nazwa urządzenia</th>
             <th> Przewód </th>
             <th> Miejsce </th>
@@ -28,7 +28,7 @@
                 {{urz.przewod_id}}
             </td>
             <td>
-                {{urz.pomieszczenie}} : {{urz.miejsce_nazwa}}
+                {{urz.pomieszczenie}} : {{urz.miejsce}}
             </td>
             <td>
                 <div style="display: flex;"><button ng-click="setEdit(urz)">Edytuj</button>&nbsp;<button ng-click="setDetails(urz.id)">Szczegóły</button></div>
@@ -49,8 +49,8 @@
                 ng-model = "editRow.rodzaj_id" ></select>
             </td>
             <td colspan="2">
-                <select ng-options="item as item.plytka group by item.nazwa for item in plytki | toArray:true | orderBy:['pomie', 'nazwa', 'plytka']" 
-                ng-model = "editRow.plytka_id" ></select>
+                <select ng-options="item.zid as item.etykieta group by item.miejsce for item in przewodmiejsce  | orderBy:['etykieta']" 
+                ng-model = "editRow.zakonczenie_id" ></select>
             </td>
             <td>
                 <div style="display: flex;"><button ng-click="saveEdit()">Zachowaj</button>&nbsp;<button ng-click="cancelEdit()">Anuluj</button></div>
