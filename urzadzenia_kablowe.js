@@ -1,6 +1,7 @@
 app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', function($scope, $http) {
 
     $scope.editRow = { id : -1};
+    $scope.addRow = { id : 0 };
 
     $http.get("urzadzenia_kablowe_list.php").then(function(response) { 
         $scope.urzadzenia = response.data.urzadzenia;
@@ -38,18 +39,19 @@ app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', function($scope, $
             "id" : $scope.addRow.id,
             "nazwa" : $scope.addRow.nazwa,
             "ilosc_pinow" : $scope.addRow.ilosc_pin,
-            "rodzaj_id" : $scope.addRow.rodzaj_id.$key,
-            "remove_pin" : false,
-            "plyta_id" : $scope.addRow.plytka_id.$key,
+            "rodzaj" : $scope.addRow.rodzaj_id.$key,
+            "przewod_miejsce_id" : -1*$scope.addRow.zakonczenie_id,
+            "zakonczenie_id" : -1,
         });
     };
 
     $scope.cancelAdd = function() {
-        $scope.addRow.add = false;
-        $scope.addRow.nazwa = '';
-        $scope.miejsce_id = null;
+        $scope.addRow = { "id" : 0 };
     };
 
+    $scope.addAdd = function() {
+        $scope.addRow = { "id" : -1 };
+    }
 
     var toparams = function (obj) {
         var p = [];

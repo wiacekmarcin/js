@@ -31,7 +31,8 @@
                 {{urz.pomieszczenie}} : {{urz.miejsce}}
             </td>
             <td>
-                <div style="display: flex;"><button ng-click="setEdit(urz)">Edytuj</button>&nbsp;<button ng-click="setDetails(urz.id)">Szczegóły</button></div>
+                <div style="display: flex;"><button ng-click="setEdit(urz)">Edytuj</button>&nbsp;
+                    <button ng-click="setDetails(urz.id)">Szczegóły</button></div>
             </td>
         </tr>
         <tr ng-show="editRow.id == urz.id">
@@ -115,7 +116,7 @@
                 <button ng-click="addAdd()">Dodaj</button>
             </td>
         </tr>
-        <tr ng-show="addRow.add">
+        <tr ng-show="addRow.id == -1">
             <td>
 
             </td>
@@ -130,8 +131,8 @@
                 ng-model = "addRow.rodzaj_id" ></select>
             </td>
             <td colspan="2">
-                <select ng-options="item as item.plytka group by item.nazwa for item in plytki | toArray:true | orderBy:['pomie', 'nazwa', 'plytka']" 
-                ng-model = "addRow.plytka_id" ></select>
+                <select ng-options="item.zid as item.etykieta group by item.miejsce for item in przewodmiejsce  | orderBy:['etykieta']" 
+                ng-model = "addRow.zakonczenie_id" ></select>
             </td>
             <td>
                 <div style="display: flex;"><button ng-click="saveAdd()">Zachowaj</button>&nbsp;<button ng-click="cancelAdd()">Anuluj</button></div>
