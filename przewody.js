@@ -2,7 +2,7 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
     $scope.selectZbiorcze = -1;
 
     $scope.detailsAll = false;
-
+    $scope.addzylypid = -1;
     $scope.editzyla = -1;
     $scope.editRow = {'id' : -1};
     $scope.addRow = {'id' : 1, "add" : false};
@@ -156,6 +156,10 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
     $scope.setEditZyla = function (przewod_id)
     {
         $scope.editzyla = przewod_id;
+        if (przewod_id == -1) {
+            return;
+        }
+        
         if ($scope.prze[przewod_id]) {
             for (var z in $scope.prze[przewod_id]["zyly"]) {
                 $scope.zylaedit[$scope.prze[przewod_id]["zyly"][z]] = $scope.zyla[$scope.prze[przewod_id]["zyly"][z]];
@@ -178,7 +182,48 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
         }
         params["przewod"] = przewod_id;
         params["count"] = i;
+        sendData2(params);
     }
 
+    var sendData2 = function(params) {
+        $http({
+            method: 'POST',
+            url: "zyla_ins.php",
+            data: toparams(params),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then( function success(response) {
+            $scope.setEditZyla(-1);
+            $scope.newZyla(-1);
+            get();
+        }, function error(response) {
+            alert("Nie Udało się") ;
+        });
+    };
+
+    $scope.newZyla = function(pid) {
+        $scope.addzylypid = pid;
+        $scope.zylyaddID = [];
+        $scope.zylyadd = {}
+        if (pid == -1)
+            return;
+        for (var z = 0 ; z < $scope.prze[pid].ilosc_zyl; z+=1) {
+            $scope.zylyaddID.push(-(z+1));
+            $scope.zylyadd[-(z+1)]={id : -(z+1), opis : '', kolor_id : 0};   
+        }
+    };
+
+    $scope.saveNewZyla = function(pid) {
+        params = {};
+        var i = 0;
+        for (var z = 0 ; z < $scope.prze[pid].ilosc_zyl; z+=1) {
+            params["id_" + i] = -1;
+            params["kolor_" + i] =  $scope.zylyadd[-(z+1)].kolor_id;
+            params["opis_" + i] =  $scope.zylyadd[-(z+1)].opis;
+            i += 1;
+        }
+        params["przewod"] = pid;
+        params["count"] = i;
+        sendData2(params);
+    }
 }]);
 
