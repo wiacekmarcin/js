@@ -114,10 +114,11 @@
                 </table>
                 <a href="#!/zyla_add/{{pid}}" ng-if="prze[pid].zyly.length == 0 && addzylypid == -1">Dodaj żyly do przewodu</a>
                 <table class="table table-condensed" ng-if="prze[pid].zyly.length == 0 && addzylypid == pid" >
-                    <tr ng-repeat="zadd in zylyadd">
-                        
-                        <td>   </td>
-                        <td><input type="text" ng-model="zylyadd[zadd.id].opis">
+                    <tr ng-repeat="zadd in zylyaddID">
+                        <td>
+                            <select ng-options="item.id as item.kolor for item in kolory" ng-model="zylyadd[zadd].kolor_id"></select>
+                        </td>
+                        <td><input type="text" ng-model="zylyadd[zadd].opis">
                     </tr>
                 </table>
             </td>
@@ -143,9 +144,12 @@
             </td>
             <td><button ng-click="setDetails(-1)">Ukryj</button><br>
                 <hr>
-                <button ng-click="setEditZyla(pid)">Edycja żył</button><br>
-                <button ng-click="setEditZyla(-1)">Anuluj edycję żył</button><br>
-                <button ng-click="saveEditZyla(pid)">Zachowaj edycję żył</button>
+                <button ng-show="editzyla == -1" ng-click="setEditZyla(pid)">Edycja żył</button><br>
+                <button ng-show="editzyla != -1" ng-click="setEditZyla(-1)">Anuluj edycję żył</button><br>
+                <button ng-show="editzyla != -1" ng-click="saveEditZyla(pid)">Zachowaj edycję żył</button>
+                <button ng-show="prze[pid].zyly.length == 0 && addzylypid == -1" ng-click="newZyla(pid)">Dodaj żyły</button>
+                <button ng-show="prze[pid].zyly.length == 0 && addzylypid != -1" ng-click="saveNewZyla(pid)">Zachowaj nowe żyły</button>
+                <button ng-show="prze[pid].zyly.length == 0 && addzylypid != -1" ng-click="newZyla(-1)">Anuluj nowe żyły</button>
             </td>
         </tr>
 
