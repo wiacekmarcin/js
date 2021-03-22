@@ -2,8 +2,12 @@ app.controller('zakonczenieadd-ctrl', ['$scope', '$routeParams', '$location', '$
 function($scope, $routeParams, $location, $http) {
     $scope.pmid = $routeParams.id;
     $scope.zid = -1;
-    $http.get("zakonczenie_add.php").then(function(response) { 
+    $http.get("zakonczenie_add.php?pmid="+$scope.pmid).then(function(response) { 
         $scope.rodzaj_zakonczenia = response.data.rodzaj_zakonczenia;
+        $scope.przewod = response.data.zakonczenie[0].przewod;
+        $scope.popis = response.data.zakonczenie[0].popis;
+        $scope.miejse = response.data.zakonczenie[0].miejsce;
+        $scope.ilosc = response.data.zakonczenie[0].ilosc;
     });
 
     $scope.master = {};
@@ -11,8 +15,10 @@ function($scope, $routeParams, $location, $http) {
     $scope.update = function(zakonczenie) {
         var params = { "zid" : $scope.zid,
                     "pmid" : $scope.pmid,
-                    "etykieta" : zakonczenie.etykieta,
-                    "rodzaj_zakonczenia" : zakonczenie.rodzaj.id };
+                    "etykieta" : zakonczenie.nazwa,
+                    "rodzaj_zakonczenia" : zakonczenie.rodzaj.id,
+                    "ilosc_pinow" : zakonczenie.ilosc_pinow
+                };
         sendData(params);
     };
 
@@ -38,8 +44,9 @@ function($scope, $routeParams, $location, $http) {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then( function success(response) {
             $scope.reset();
-            var zik = response.data.zik;
+            var zik = response.data.zid;
             console.log("zik");
+            $location.path("zakonczenie_piny_add/" + zik);
         }, function error(response) {
             alert("Nie Udało się") ;
         });

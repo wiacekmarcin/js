@@ -68,11 +68,30 @@ while($row = mysqli_fetch_array($result)) {
     ));
 }
 
+$query = "SELECT `id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis` FROM `zakonczenie_zyly` WHERE 1";
+$result = mysqli_query($con, $query);
+$pins = array();
+$prevuid = -1;
+while($row = mysqli_fetch_array($result)) {
+    $uid = $row["zakonczenie_id"];
+    if ($uid != $prevuid) {
+        $prevuid = $uid;
+        $pins[$uid] = array();   
+    }
+    array_push($pins[$uid], array(
+        'id' => $row['id'],
+        'zyla_id' => $row['zyla_id'],
+        'pos' => $row['pos'],
+        'opis' => $row['opis']   
+    ));
+}
+
 
 $opt = array(
     'urzadzenia' => $urzadzenia,
     "rodzaj" => $rodzajarray,
     "przewodmiejsce" => $przewodmiejscearray,
+    "pins" => $pins
 
 );
 

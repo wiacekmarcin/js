@@ -1,9 +1,15 @@
 <div ng-controller="zakonczenieadd-ctrl">
 
+  <label>Nr przewdodu</label><div>{{przewod}}</div>
+  <label>Opis</label><div>{{popis}}</div>
+  <label>Miejsce</label><div>{{miejse}}</div>
+  <label>Ilość pinów</label><div>{{ilosc}}</div>
+
     <form novalidate class="simple-form">
         <label>Etykieta </label> <input type="text" ng-model="zakonczenie.nazwa" /><br />
         <label>Rodzaj zakończenia </label>
           <select ng-options="rzak as rzak.nazwa for rzak in rodzaj_zakonczenia" ng-model="zakonczenie.rodzaj" ></select><br />
+        <label>Ilość pinów</label>  <input type="number" ng-model="zakonczenie.ilosc_pinow" /><br />
         <input type="button" ng-click="reset()" value="Czyść" />
         <input type="submit" ng-click="update(zakonczenie)" value="Zachowaj" />
       </form>

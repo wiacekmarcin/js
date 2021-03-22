@@ -1,0 +1,21 @@
+<div ng-controller="zakonczeniepinyadd-ctrl">
+
+    <label>Nr przewdodu</label><div>{{zakonczenie.przewod}}</div>
+    <label>Opis</label><div>{{zakonczenie.popis}}</div>
+    <label>Miejsce</label><div>{{zakonczenie.miejse}}</div>
+    <label>Ilość pinów</label><div>{{zakonczenie.ilosc}}</div>
+  
+
+    <table >
+        <tr><th>Pos</th><th>Opis</th><th >Żyła</th></tr>
+        <tr ng-repeat="item in zakonczeniazyly track by $index">
+        <td>{{item.pos}}</td>
+        <td><input type="text" ng-model="item.opis"/></td>
+        <td><select ng-options="zyla as zyla.kolor + ' ' + zyla.opis for zyla in zyly" ng-model="item.zyla" ></select><br /></td>
+        </tr>
+    </table>
+      <form novalidate class="simple-form">
+          <input type="button" ng-click="reset()" value="Czyść" />
+          <input type="submit" ng-click="update(zakonczenie)" value="Zachowaj" />
+        </form>
+  </div>

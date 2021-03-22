@@ -7,6 +7,7 @@ app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', function($scope, $
         $scope.urzadzenia = response.data.urzadzenia;
         $scope.rodzaj = response.data.rodzaj;
         $scope.przewodmiejsce = response.data.przewodmiejsce;
+        $scope.allpins = response.data.pins;
     });
 
     
@@ -73,6 +74,12 @@ app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', function($scope, $
         }, function error(response) {
             alert("Nie Udało się") ;
         });
+    };
+
+    $scope.setDetails = function (uid) {
+        $scope.showRowId = uid;
+        $scope.chDetails = 0;
+        $scope.pins = $scope.allpins[uid];
     };
 
 }]);
