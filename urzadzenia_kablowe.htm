@@ -75,6 +75,22 @@
                         <td ng-style='{"background-color": "{{zyly[p.id].html}}"}'>&nbsp;</td>
                     </tr>
                 </table>
+                
+                <table class="table" ng-show="chDetails == 0 && len(pins) < len(zyly[p.id])">
+                    <tr><th>Id</th></th><th>Pozycja</th><th>Nazwa</th></tr>
+                    <tr ng-repeat="p in pins">
+                        <td></td>
+                        <td>{{$index}}</td>
+                        <td><td><input type="text" ng-model="edit_pins[$index].nazwa"> </td></td>
+                        <td>-</td>
+                        <td>{{zyly[p.id].zyla_id}}</td>
+                        <td>{{zyly[p.id].zzetykieta}}</td>
+                        <td>{{zyly[p.id].przewod_id}}</td>
+                        <td>{{zyly[p.id].opis}}</td>
+                        <td>{{zyly[p.id].kolor}}</td>
+                        <td ng-style='{"background-color": "{{zyly[p.id].html}}"}'>&nbsp;</td>
+                    </tr>
+                </table>
 
                 <table class="table" ng-show="chDetails == 1">
                     <tr><th>Pozycja</th><th>Nazwa</th></tr>

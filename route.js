@@ -33,6 +33,9 @@ app.config(function($routeProvider) {
     .when("/zakonczenie_add/:id", {
         templateUrl: 'zakonczenie_add.htm',    
     })
+    .when("/zakonczenie_piny_add/:id", {
+        templateUrl: 'zakonczenie_piny_add.htm',    
+    })
     .when("/zakonczenie_edit/:id", {
         templateUrl: 'zakonczenie_edit.htm',    
     })
