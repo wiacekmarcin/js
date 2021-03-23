@@ -7,6 +7,8 @@ function($scope, $routeParams, $location, $http) {
         $scope.zyly = response.data.zyly;
         $scope.zakonczeniazylyOrg = response.data.zakonczeniaz_zyly;
 
+        $scope.zyly.push({id:-1, kolor_id:0, opis:'Brak żyly', kolor:"nieoznaczony", html:'gray'});
+
         var zyly = {};
         for (var i = 0; i < $scope.zyly.length; i++) {
             zyly[$scope.zyly[i].id] = $scope.zyly[i];
@@ -20,15 +22,55 @@ function($scope, $routeParams, $location, $http) {
             });
         }
 
-        for (var i = 0; i < $scope.zyly.zakonczeniazylyOrg; i++) {
-            var item = $scope.zyly.zakonczeniazylyOrg[i];
+        for (var i = 0; i < $scope.zakonczeniazylyOrg.length; i++) {
+            var item = $scope.zakonczeniazylyOrg[i];
             $scope.zakonczeniazyly[item.pos-1].opis = item.opis;
             $scope.zakonczeniazyly[item.pos-1].zyla_id = item.zyla_id;
             $scope.zakonczeniazyly[item.pos-1].id = item.id;
             $scope.zakonczeniazyly[item.pos-1].zyla = zyly[item.zyla_id];
-
+            $scope.zakonczeniazyly[item.pos-1].pos = item.pos;
         }
 
     });
+
+    $scope.savePins = function() {
+        params = { length: $scope.zakonczeniazyly.length, zkid: $scope.zid};        
+        for (var i = 0; i < $scope.zakonczeniazylyOrg.length; i++) {
+            var item = $scope.zakonczeniazyly[i];
+            params["opis_" + i] = item.opis;
+            params["zyla_id_" + i] = item.zyla_id;
+            params["id_" + i] = item.id;
+            params["pos_"+i] = item.pos;
+
+        }
+        sendData(toparams(params));
+    }
+
+    $scope.reset = function() {
+        $location.path("index.html");
+    }
+
+    var toparams = function (obj) {
+        var p = [];
+        for (var key in obj) {
+            p.push(key + '=' + encodeURIComponent(obj[key]));
+        }
+        return p.join('&');
+    };
+    
+
+    var sendData = function(params) {
+        $http({
+            method: 'POST',
+            url: "elementy_plytkowe_ins.php",
+            data: toparams(params),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then( function success(response) {
+            $scope.cancelAdd();
+            get();
+        }, function error(response) {
+            alert("Nie Udało się") ;
+        });
+    };
 
 }]);
