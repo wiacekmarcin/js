@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 15 Sty 2021, 17:52
--- Wersja serwera: 8.0.22-0ubuntu0.20.04.3
+-- Czas generowania: 23 Mar 2021, 06:29
+-- Wersja serwera: 8.0.23-0ubuntu0.20.04.1
 -- Wersja PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -135,7 +135,22 @@ INSERT INTO `elementy_plytkowe` (`id`, `nazwa`, `ilosc_pin`, `plytka_id`, `rodza
 (25, 'N', 8, 1, 5),
 (26, 'O', 8, 1, 5),
 (27, 'P', 8, 1, 5),
-(28, 'czujnik temperatury DS1820', 3, 1, 3);
+(28, 'czujnik temperatury DS1820', 3, 1, 3),
+(29, 'Ekspander portów 0x00', 20, 6, 3),
+(30, 'Ekspander portów 0x00 - zasilanie', 5, 6, 3),
+(31, 'Ekspander portów 0x01', 20, 6, 3),
+(32, 'Ekspander portów 0x01 - zasilanie', 5, 6, 3),
+(33, 'A', 10, 6, 5),
+(34, 'B', 6, 6, 5),
+(35, 'C', 6, 6, 5),
+(36, 'D', 12, 6, 5),
+(37, 'E', 12, 6, 5),
+(38, 'F', 4, 6, 5),
+(39, 'H', 8, 6, 5),
+(40, 'K Ekspander 0x00', 20, 6, 5),
+(41, 'L Ekspander 0x01', 20, 6, 5),
+(42, 'M Ekspander 0x00', 5, 6, 4),
+(43, 'N Ekspander 0x01', 5, 6, 4);
 
 -- --------------------------------------------------------
 
@@ -354,7 +369,165 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`
 (197, 'P.8-N.5', 8, 27),
 (198, 'GND', 1, 28),
 (199, 'Sygnał', 2, 28),
-(200, '5V', 3, 28);
+(200, '5V', 3, 28),
+(256, 'GND', 1, 29),
+(257, 'GND', 2, 29),
+(258, 'B0', 3, 29),
+(259, 'A0', 4, 29),
+(260, 'B1', 5, 29),
+(261, 'A1', 6, 29),
+(262, 'B2', 7, 29),
+(263, 'A2', 8, 29),
+(264, 'B3', 9, 29),
+(265, 'A3', 10, 29),
+(266, 'B4', 11, 29),
+(267, 'A4', 12, 29),
+(268, 'B5', 13, 29),
+(269, 'A5', 14, 29),
+(270, 'B6', 15, 29),
+(271, 'A6', 16, 29),
+(272, 'B7', 17, 29),
+(273, 'A7', 18, 29),
+(274, '+5V', 19, 29),
+(275, '+5V', 20, 29),
+(276, 'INT 0X00', 1, 30),
+(277, 'SCL', 2, 30),
+(278, 'SDA', 3, 30),
+(279, 'GND', 4, 30),
+(280, '+5V', 5, 30),
+(281, 'GND', 1, 31),
+(282, 'GND', 2, 31),
+(283, 'B0', 3, 31),
+(284, 'A0', 4, 31),
+(285, 'B1', 5, 31),
+(286, 'A1', 6, 31),
+(287, 'B2', 7, 31),
+(288, 'A2', 8, 31),
+(289, 'B3', 9, 31),
+(290, 'A3', 10, 31),
+(291, 'B4', 11, 31),
+(292, 'A4', 12, 31),
+(293, 'B5', 13, 31),
+(294, 'A5', 14, 31),
+(295, 'B6', 15, 31),
+(296, 'A6', 16, 31),
+(297, 'B7', 17, 31),
+(298, 'A7', 18, 31),
+(299, '+5V', 19, 31),
+(300, '+5V', 20, 31),
+(301, 'INT 0X01', 1, 32),
+(302, 'SCL', 2, 32),
+(303, 'SDA', 3, 32),
+(304, 'GND', 4, 32),
+(305, '+5V', 5, 32),
+(306, 'GND', 1, 33),
+(307, 'przekaźnik 1', 2, 33),
+(308, 'przekaźnik 2', 3, 33),
+(309, 'przekaźnik 3', 4, 33),
+(310, 'przekaźnik 4', 5, 33),
+(311, 'przekaźnik 5', 6, 33),
+(312, 'przekaźnik 6', 7, 33),
+(313, 'przekaźnik 7', 8, 33),
+(314, 'przekaźnik 8', 9, 33),
+(315, '+5V', 10, 33),
+(316, 'GND', 1, 34),
+(317, 'Przekaźnik 1', 2, 34),
+(318, 'Przekaźnik 2', 3, 34),
+(319, 'Przekaźnik 3', 4, 34),
+(320, 'Przekaźnik 4', 5, 34),
+(321, '+5V', 6, 34),
+(322, 'GND', 1, 35),
+(323, 'PWM kanał 1', 2, 35),
+(324, 'PWM kanał 2', 3, 35),
+(325, 'Przekaźnik 1', 4, 35),
+(326, 'Przekaźnik 2', 5, 35),
+(327, '+5V', 6, 35),
+(328, 'GND', 1, 36),
+(329, 'GND', 2, 36),
+(330, '-', 3, 36),
+(331, '-', 4, 36),
+(332, '-', 5, 36),
+(333, '-', 6, 36),
+(334, '-', 7, 36),
+(335, '-', 8, 36),
+(336, '-', 9, 36),
+(337, '-', 10, 36),
+(338, 'GND', 11, 36),
+(339, 'GND', 12, 36),
+(340, 'GND', 1, 37),
+(341, 'GND', 2, 37),
+(342, '-', 3, 37),
+(343, '-', 4, 37),
+(344, '-', 5, 37),
+(345, '-', 6, 37),
+(346, '-', 7, 37),
+(347, '-', 8, 37),
+(348, '-', 9, 37),
+(349, '-', 10, 37),
+(350, 'GND', 11, 37),
+(351, 'GND', 12, 37),
+(356, 'GND', 1, 38),
+(357, '3.2', 2, 38),
+(358, '3.3', 3, 38),
+(359, '+5V', 4, 38),
+(360, '+5V', 1, 39),
+(361, 'GND', 2, 39),
+(362, '3.3', 3, 39),
+(363, '3.2', 4, 39),
+(364, 'SDA', 5, 39),
+(365, 'SCL', 6, 39),
+(366, 'INT 0x01', 7, 39),
+(367, 'INT 0x00', 8, 39),
+(368, 'GND', 1, 40),
+(369, 'GND', 2, 40),
+(370, 'B0', 3, 40),
+(371, 'A0', 4, 40),
+(372, 'B1', 5, 40),
+(373, 'A1', 6, 40),
+(374, 'B2', 7, 40),
+(375, 'A2', 8, 40),
+(376, 'B3', 9, 40),
+(377, 'A3', 10, 40),
+(378, 'B4', 11, 40),
+(379, 'A4', 12, 40),
+(380, 'B5', 13, 40),
+(381, 'A5', 14, 40),
+(382, 'B6', 15, 40),
+(383, 'A6', 16, 40),
+(384, 'B7', 17, 40),
+(385, 'A7', 18, 40),
+(386, '+5V', 19, 40),
+(387, '+5V', 20, 40),
+(388, 'GND', 1, 41),
+(389, 'GND', 2, 41),
+(390, 'B0', 3, 41),
+(391, 'A0', 4, 41),
+(392, 'B1', 5, 41),
+(393, 'A1', 6, 41),
+(394, 'B2', 7, 41),
+(395, 'A2', 8, 41),
+(396, 'B3', 9, 41),
+(397, 'A3', 10, 41),
+(398, 'B4', 11, 41),
+(399, 'A4', 12, 41),
+(400, 'B5', 13, 41),
+(401, 'A5', 14, 41),
+(402, 'B6', 15, 41),
+(403, 'A6', 16, 41),
+(404, 'B7', 17, 41),
+(405, 'A7', 18, 41),
+(406, '+5V', 19, 41),
+(407, '+5V', 20, 41),
+(408, 'INT 0x00', 1, 42),
+(409, 'SCL', 2, 42),
+(410, 'SDA', 3, 42),
+(411, 'GND', 4, 42),
+(412, '+5V', 5, 42),
+(413, 'INT 0x01', 1, 43),
+(414, 'SCL', 2, 43),
+(415, 'SDA', 3, 43),
+(416, 'GND', 4, 43),
+(417, '+5V', 5, 43);
 
 -- --------------------------------------------------------
 
@@ -532,6 +705,28 @@ INSERT INTO `miejsce` (`id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `k
 -- --------------------------------------------------------
 
 --
+-- Zastąpiona struktura widoku `MiejscePrzewodView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `MiejscePrzewodView` (
+`id` smallint unsigned
+,`id_pomieszczenie` tinyint unsigned
+,`ilosc_zyl` tinyint unsigned
+,`kod` varchar(16)
+,`mid` tinyint unsigned
+,`nazwa` text
+,`opis` text
+,`pid` tinyint unsigned
+,`polaczenie` tinyint(1)
+,`pomieszczenie` text
+,`popis` text
+,`ppid` tinyint unsigned
+,`zbiorcze` tinyint(1)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Zastąpiona struktura widoku `MiejsceView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
@@ -586,7 +781,9 @@ INSERT INTO `plytki` (`id`, `nazwa`, `miejsce_id`) VALUES
 (2, 'Płytka z procesorem', 2),
 (3, 'Płytka rozdzielcza', 22),
 (4, 'Płytka z procesorem', 22),
-(5, 'Płytka rozdzielcza', 23);
+(5, 'Płytka rozdzielcza', 23),
+(6, 'Płytka A I/O', 26),
+(7, 'Płytka B I/O', 26);
 
 -- --------------------------------------------------------
 
@@ -665,7 +862,45 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (58, 'J6-K11', 1),
 (59, 'J5-K12', 1),
 (60, 'J4-P3', 1),
-(61, 'J3-P4', 1);
+(61, 'J3-P4', 1),
+(62, 'GND', 6),
+(63, '+5V', 6),
+(64, 'SDA', 6),
+(65, 'SCL', 6),
+(66, 'INT 0X00', 6),
+(67, 'INT 0x01', 6),
+(68, '3.2-158.4', 6),
+(69, '3.3-158.3', 6),
+(70, '145.3-1b7', 6),
+(71, '145.4-1b6', 6),
+(72, '145.5-1b5', 6),
+(73, '145.6-1b4', 6),
+(74, '145.7-1b3', 6),
+(75, '145.8-1b2', 6),
+(76, '145.9-1b1', 6),
+(77, '145.10-1b0', 6),
+(78, '146.3-1a7', 6),
+(79, '146.4-1a6', 6),
+(80, '146.5-1a5', 6),
+(81, '146.6-1a4', 6),
+(82, '146.7-1a3', 6),
+(83, '146.8-1a2', 6),
+(84, '146.9-1a1', 6),
+(85, '146.10-1a0', 6),
+(86, '2.2-0b0', 6),
+(87, '2.3-0b1', 6),
+(88, '2.4-0b2', 6),
+(89, '2.5-0b3', 6),
+(90, '2.6-0b4', 6),
+(91, '2.7-0b5', 6),
+(92, '2.8-0b6', 6),
+(93, '2.9-0b7', 6),
+(94, '1.2-0a3', 6),
+(95, '1.3-0a2', 6),
+(96, '1.4-0a1', 6),
+(97, '1.5-0a0', 6),
+(98, '3.4-0a6', 6),
+(99, '3.5-0a5', 6);
 
 -- --------------------------------------------------------
 
@@ -837,7 +1072,113 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 (151, 49, 179),
 (152, 49, 196),
 (153, 48, 180),
-(154, 48, 195);
+(154, 48, 195),
+(155, 62, 306),
+(156, 62, 316),
+(157, 62, 322),
+(158, 62, 328),
+(159, 62, 329),
+(160, 62, 338),
+(161, 62, 339),
+(162, 62, 340),
+(163, 62, 341),
+(164, 62, 350),
+(165, 62, 351),
+(166, 62, 356),
+(167, 62, 361),
+(168, 62, 368),
+(169, 62, 369),
+(170, 62, 388),
+(171, 62, 389),
+(172, 62, 411),
+(173, 62, 416),
+(174, 63, 315),
+(175, 63, 321),
+(176, 63, 327),
+(177, 63, 359),
+(178, 63, 360),
+(179, 63, 386),
+(180, 63, 387),
+(181, 63, 406),
+(182, 63, 407),
+(183, 63, 412),
+(184, 63, 417),
+(185, 64, 410),
+(186, 64, 415),
+(187, 64, 364),
+(188, 65, 365),
+(189, 65, 409),
+(190, 65, 414),
+(191, 66, 367),
+(192, 66, 408),
+(193, 67, 366),
+(194, 67, 413),
+(195, 68, 323),
+(196, 68, 357),
+(197, 68, 363),
+(198, 69, 324),
+(199, 69, 358),
+(200, 69, 362),
+(201, 70, 330),
+(202, 70, 404),
+(203, 71, 331),
+(204, 71, 402),
+(205, 72, 332),
+(206, 72, 400),
+(207, 73, 333),
+(208, 73, 398),
+(209, 74, 334),
+(210, 74, 396),
+(211, 75, 335),
+(212, 75, 394),
+(213, 76, 336),
+(214, 76, 392),
+(215, 77, 337),
+(216, 77, 390),
+(217, 78, 342),
+(218, 78, 405),
+(219, 79, 343),
+(220, 79, 403),
+(221, 80, 344),
+(222, 80, 401),
+(223, 81, 345),
+(224, 81, 399),
+(225, 82, 346),
+(226, 82, 397),
+(227, 83, 347),
+(228, 83, 395),
+(229, 84, 348),
+(230, 84, 393),
+(231, 85, 349),
+(232, 85, 391),
+(233, 86, 307),
+(234, 86, 258),
+(235, 87, 308),
+(236, 87, 372),
+(237, 88, 309),
+(238, 88, 374),
+(239, 89, 310),
+(240, 89, 376),
+(241, 90, 311),
+(242, 90, 378),
+(243, 91, 312),
+(244, 91, 380),
+(245, 92, 313),
+(246, 92, 382),
+(247, 93, 314),
+(248, 93, 384),
+(249, 94, 317),
+(250, 94, 377),
+(251, 98, 325),
+(252, 98, 383),
+(253, 99, 326),
+(254, 99, 381),
+(255, 95, 318),
+(256, 95, 375),
+(257, 96, 319),
+(258, 96, 373),
+(259, 97, 320),
+(260, 97, 371);
 
 -- --------------------------------------------------------
 
@@ -1236,23 +1577,23 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (142, 'Salon, do ukrytej puszki w salonie dla rolet', 8),
 (143, 'Jadalnia, kabel oznakowany jako jadalnia w rozdzielni głównej', 8),
 (144, 'Salon, kabel oznakowany jako salon, być może dochodzi do TV', 8),
-(145, 'Lazienka - kabel w puszcze do włacznikow', 10),
-(146, 'Lazienka, pokoje kabel do wlacznikow', 10),
+(145, 'Lazienka - kabel w puszcze do włacznikow', 12),
+(146, 'Lazienka, pokoje kabel do wlacznikow', 12),
 (147, 'WC procesor, zasilanie i i2c układu wejścia/wyjścia 0x01', 4),
 (148, 'WC procesor, zasilanie i i2c układu wejścia/wyjścia 0x00', 4),
 (149, 'WC sufit zasilanie 4 przekaźników', 6),
 (150, 'WC sufit, zasilanie 2 przekaźników', 4),
-(151, 'Rozdzielnia pokój, zasilanie i i2c dla expnadera 0x100', 4),
+(151, 'Rozdzielnia pokój, zasilanie i i2c dla expnadera 0x010', 4),
 (152, 'Rozdzielnia pokój, zasilanie i i2c dla przekaźników oświetlenia.', 8),
 (153, 'Zasilanie i sterowanie przekażnikami ogrzewania', 10),
 (154, 'Zasialnie przekaźników dla wiatrakó', 4),
 (155, 'Zasialnie przekaźników do gniazd', 10),
 (156, 'Zasialnie przekaźników dla oświetlania', 10),
-(157, 'Zasilanie expander 0x100 i kabli 77 i 78', 8),
-(158, 'Zasilanie konwertetów RS232<->TTL', 4),
-(159, 'RS232 (WC)', 4),
-(160, 'RS232 x2', 4),
-(161, 'RS232x2', 4),
+(157, 'Zasilanie expander 0x000', 4),
+(158, 'Łącznik płytki A z procesorem', 8),
+(159, 'Zasilanie dolnej części płytki A', 4),
+(160, 'Zasilanie ekspandera 0x001', 6),
+(161, 'Masa dolnej i górnej płytki A', 2),
 (200, 'Zasilanie +24V, impulsy od licznika energi', 8);
 
 -- --------------------------------------------------------
@@ -1606,14 +1947,14 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 (314, 156, 26),
 (315, 157, 26),
 (316, 157, 26),
-(317, 158, 1),
-(318, 158, 1),
-(319, 159, 1),
-(320, 159, 1),
-(321, 160, 1),
-(322, 160, 1),
-(323, 161, 1),
-(324, 161, 1);
+(317, 158, 26),
+(318, 158, 26),
+(319, 159, 26),
+(320, 159, 26),
+(321, 160, 26),
+(322, 160, 26),
+(323, 161, 26),
+(324, 161, 26);
 
 -- --------------------------------------------------------
 
@@ -1727,7 +2068,10 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (55, 'Czujnik temperatury przy pompie', 26, 3, 0),
 (56, 'Kontaktron od drzwiczek rewizyjnych', 40, 3, 0),
 (57, 'Czujnik ruchu WC', 54, 3, 0),
-(58, 'Czujnik temperatury w podłodze w Holu', 67, 3, 0);
+(58, 'Czujnik temperatury w podłodze w Holu', 67, 3, 0),
+(59, 'A', 5, 1, 10),
+(60, 'Przewody pokój A', 291, 3, 12),
+(61, 'B', 3, 1, 6);
 
 -- --------------------------------------------------------
 
@@ -2406,10 +2750,10 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (218, 5, 64, 'Zasilacz LED'),
 (219, 4, 1, '+5V'),
 (220, 7, 1, 'GND'),
-(221, 6, 1, 'Lampka 1'),
-(222, 1, 1, 'Lampka 2'),
-(223, 3, 1, 'Lampka 3'),
-(224, 9, 1, 'Lampka 4'),
+(221, 6, 1, 'Lampka 1 tył lewy'),
+(222, 1, 1, 'Lampka 2 tył prawy'),
+(223, 3, 1, 'Lampka 3 przód lewy'),
+(224, 9, 1, 'Lampka 4 przód prawy'),
 (225, 4, 2, '+5V'),
 (226, 7, 2, 'GND'),
 (227, 3, 2, 'Światło nad lustrem prawe'),
@@ -2618,7 +2962,38 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (430, 5, 46, '+5V'),
 (431, 8, 46, 'Sygnał'),
 (432, 3, 47, 'Sygnał'),
-(433, 1, 47, 'GND');
+(433, 1, 47, 'GND'),
+(434, 1, 60, '-'),
+(435, 1, 60, '-'),
+(436, 2, 60, 'Sygnał od kontaktronu'),
+(437, 3, 60, 'GND'),
+(438, 4, 61, '+5V'),
+(439, 1, 61, 'Sygnał od temperatury kuchnia'),
+(440, 8, 61, 'Sygnał od temperatury salon'),
+(441, 6, 61, 'Ogrzewanie kuchni'),
+(442, 9, 61, 'Ogrzewanie salon'),
+(443, 3, 61, 'GND'),
+(444, 1, 62, '-'),
+(445, 8, 62, '-'),
+(446, 9, 62, 'Temperatura kuchnia'),
+(447, 4, 62, '+5V'),
+(448, 3, 62, 'Sygnał kuchnia'),
+(449, 5, 62, '+5V'),
+(450, 6, 62, 'GND'),
+(451, 7, 62, 'GND'),
+(452, 4, 66, '+5V zasilanie'),
+(453, 6, 66, 'Ogrzewanie salon'),
+(454, 9, 66, 'Ogrzewanie kuchnia'),
+(455, 7, 66, 'GND'),
+(456, 4, 67, '+5V'),
+(457, 1, 67, 'Listwa LED sufit przy jadalni'),
+(458, 8, 67, 'Listwa LED sufit przy lodówce'),
+(459, 9, 67, 'Listwa LED 1 przy drzwiach'),
+(460, 3, 67, 'Listwa LED  drzwi 2'),
+(461, 7, 67, 'GND'),
+(462, 4, 68, '+5V'),
+(463, 5, 68, 'Zasilanie zasilacza 12V'),
+(464, 7, 68, 'GND');
 
 -- --------------------------------------------------------
 
@@ -2670,6 +3045,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 DROP TABLE IF EXISTS `KolorView`;
 
 CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `KolorView`  AS  select `kolor`.`id` AS `id`,`kolor`.`nazwa` AS `nazwa`,`kolor`.`html` AS `html` from `kolor` order by `kolor`.`nazwa` ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `MiejscePrzewodView`
+--
+DROP TABLE IF EXISTS `MiejscePrzewodView`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `MiejscePrzewodView`  AS  select `przewod_miejsce`.`id` AS `id`,`przewod_miejsce`.`przewod_id` AS `pid`,`przewod_miejsce`.`miejsce_id` AS `mid`,`MiejsceView`.`nazwa` AS `nazwa`,`MiejsceView`.`opis` AS `opis`,`MiejsceView`.`zbiorcze` AS `zbiorcze`,`MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`,`MiejsceView`.`kod` AS `kod`,`MiejsceView`.`polaczenie` AS `polaczenie`,`MiejsceView`.`pomieszczenie` AS `pomieszczenie`,`przewod`.`id` AS `ppid`,`przewod`.`opis` AS `popis`,`przewod`.`ilosc_zyl` AS `ilosc_zyl` from ((`przewod_miejsce` left join `MiejsceView` on((`MiejsceView`.`id` = `przewod_miejsce`.`miejsce_id`))) left join `przewod` on((`przewod`.`id` = `przewod_miejsce`.`przewod_id`))) where (0 <> 1) ;
 
 -- --------------------------------------------------------
 
@@ -2893,13 +3277,13 @@ ALTER TABLE `zyla`
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe`
 --
 ALTER TABLE `elementy_plytkowe`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe_pin`
 --
 ALTER TABLE `elementy_plytkowe_pin`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=201;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=508;
 
 --
 -- AUTO_INCREMENT dla tabeli `kolor`
@@ -2917,19 +3301,19 @@ ALTER TABLE `miejsce`
 -- AUTO_INCREMENT dla tabeli `plytki`
 --
 ALTER TABLE `plytki`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
 --
 ALTER TABLE `polaczenie_plytka`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_plytka_polaczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=261;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
@@ -2959,7 +3343,7 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
@@ -2977,7 +3361,7 @@ ALTER TABLE `zlacze_wtyczka`
 -- AUTO_INCREMENT dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=434;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=465;
 
 --
 -- Ograniczenia dla zrzutów tabel
