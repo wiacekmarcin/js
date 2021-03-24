@@ -34,16 +34,16 @@ function($scope, $routeParams, $location, $http) {
     });
 
     $scope.savePins = function() {
-        params = { length: $scope.zakonczeniazyly.length, zkid: $scope.zid};        
-        for (var i = 0; i < $scope.zakonczeniazylyOrg.length; i++) {
+        params = { 'length': $scope.zakonczeniazyly.length, 'zkid': $scope.zid};        
+        for (var i = 0; i < $scope.zakonczeniazyly.length; i++) {
             var item = $scope.zakonczeniazyly[i];
             params["opis_" + i] = item.opis;
-            params["zyla_id_" + i] = item.zyla_id;
+            params["zyla_id_" + i] = item.zyla.id;
             params["id_" + i] = item.id;
-            params["pos_"+i] = item.pos;
+            params["pos_" + i] = item.pos;
 
         }
-        sendData(toparams(params));
+        sendData(params);
     }
 
     $scope.reset = function() {
@@ -62,12 +62,11 @@ function($scope, $routeParams, $location, $http) {
     var sendData = function(params) {
         $http({
             method: 'POST',
-            url: "elementy_plytkowe_ins.php",
+            url: "zakonczenie_piny_add_ins.php",
             data: toparams(params),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then( function success(response) {
-            $scope.cancelAdd();
-            get();
+            $scope.reset();
         }, function error(response) {
             alert("Nie Udało się") ;
         });
