@@ -8,7 +8,7 @@ $zid=$_POST["zid"];
 $etykieta = $_POST["etykieta"];
 $pmid = $_POST["pmid"];
 $rodzaj = $_POST["rodzaj_zakonczenia"];
-$ilosc_pinow = $_POST["ilosc_pinow"];
+$ilosc_pinow = $_POST["ilosc_pin"];
 
 if ($zid == -1) {
     $query = "INSERT INTO `zakonczenie`(`id`, `etykieta`, `przewod_miejsce_id`, ";
@@ -18,7 +18,6 @@ if ($zid == -1) {
 
 }
 
-print $query;
 $result = mysqli_query($con, $query);
 if ($zid == -1)
     $zid = $con->insert_id;

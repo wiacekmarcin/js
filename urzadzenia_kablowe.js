@@ -1,4 +1,4 @@
-app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', function($scope, $http) {
+app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
 
     $scope.editRow = { id : -1};
     $scope.addRow = { id : 0 };
@@ -31,6 +31,7 @@ app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', function($scope, $
 
     $scope.saveEdit = function() {
         $scope.editRow.rodzaj = $scope.editRow.rodzaj_id.$key;
+
         sendData($scope.editRow);
     }
 
@@ -39,7 +40,7 @@ app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', function($scope, $
             "edit" : "false",
             "id" : $scope.addRow.id,
             "nazwa" : $scope.addRow.nazwa,
-            "ilosc_pinow" : $scope.addRow.ilosc_pin,
+            "ilosc_pin" : $scope.addRow.ilosc_pin,
             "rodzaj" : $scope.addRow.rodzaj_id.$key,
             "przewod_miejsce_id" : -1*$scope.addRow.zakonczenie_id,
             "zakonczenie_id" : -1,
@@ -82,4 +83,7 @@ app.controller('urzadzenia_kablowe-ctrl', ['$scope', '$http', function($scope, $
         $scope.pins = $scope.allpins[uid];
     };
 
+    $scope.setPinsEdit = function (uid) {
+        $location.path("zakonczenie_piny_add/" + uid);
+    }
 }]);
