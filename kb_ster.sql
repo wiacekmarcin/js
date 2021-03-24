@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 23 Mar 2021, 06:29
+-- Czas generowania: 24 Mar 2021, 21:19
 -- Wersja serwera: 8.0.23-0ubuntu0.20.04.1
 -- Wersja PHP: 7.4.3
 
@@ -29,13 +29,13 @@ SET time_zone = "+00:00";
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ElementyPlytkowePinView` (
-`element_plytkowy_id` smallint unsigned
-,`elementnazwa` text
-,`id` smallint unsigned
-,`ilosc_pin` tinyint
+`id` smallint unsigned
 ,`pinnazwa` text
-,`plytka_id` tinyint unsigned
 ,`pos` tinyint
+,`element_plytkowy_id` smallint unsigned
+,`elementnazwa` text
+,`ilosc_pin` tinyint
+,`plytka_id` tinyint unsigned
 ,`rodzaj_urzadzenia` tinyint unsigned
 );
 
@@ -46,20 +46,20 @@ CREATE TABLE `ElementyPlytkowePinView` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ElementyPlytkowePolaczeniaPinView` (
-`element_plytkowy_id` smallint unsigned
-,`elementy_plytkowe_piny_id` smallint unsigned
-,`elemnazwa` text
-,`id` smallint unsigned
-,`ilosc_pin` tinyint
-,`kod` varchar(1)
-,`pinnazwa` text
-,`plytka` tinyint(1)
-,`plytka_id` tinyint unsigned
+`id` smallint unsigned
 ,`polaczenie_plytka_id` smallint unsigned
+,`elementy_plytkowe_piny_id` smallint unsigned
+,`pinnazwa` text
 ,`pos` tinyint
-,`przewod` tinyint(1)
+,`element_plytkowy_id` smallint unsigned
+,`elemnazwa` text
+,`ilosc_pin` tinyint
+,`plytka_id` tinyint unsigned
 ,`rodzaj_urzadzenia` tinyint unsigned
 ,`rodznazwa` text
+,`kod` varchar(1)
+,`przewod` tinyint(1)
+,`plytka` tinyint(1)
 );
 
 -- --------------------------------------------------------
@@ -70,23 +70,23 @@ CREATE TABLE `ElementyPlytkowePolaczeniaPinView` (
 --
 CREATE TABLE `ElementyPlytkoweView` (
 `id` smallint unsigned
-,`id_pomieszczenie` tinyint unsigned
-,`ilosc_pin` tinyint
-,`kod` varchar(16)
-,`miejsce_id` tinyint unsigned
-,`mnazwa` text
 ,`nazwa` text
-,`opis` text
+,`ilosc_pin` tinyint
 ,`plytka_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
 ,`pnazwa` text
-,`polaczenie` tinyint(1)
-,`pomieszczenie` text
+,`urzadzenie_rodzaj_id` tinyint
 ,`urzadzenie_nazwa` text
+,`urzadzenie_rodzaj_kod` varchar(1)
 ,`urzadzenie_plytka` tinyint(1)
 ,`urzadzenie_przewod` tinyint(1)
-,`urzadzenie_rodzaj_id` tinyint
-,`urzadzenie_rodzaj_kod` varchar(1)
+,`mnazwa` text
+,`opis` text
 ,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
+,`polaczenie` tinyint(1)
+,`pomieszczenie` text
 );
 
 -- --------------------------------------------------------
@@ -569,9 +569,9 @@ INSERT INTO `kolor` (`id`, `nazwa`, `html`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `KolorView` (
-`html` text
-,`id` tinyint unsigned
+`id` tinyint unsigned
 ,`nazwa` text
+,`html` text
 );
 
 -- --------------------------------------------------------
@@ -710,18 +710,18 @@ INSERT INTO `miejsce` (`id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `k
 --
 CREATE TABLE `MiejscePrzewodView` (
 `id` smallint unsigned
-,`id_pomieszczenie` tinyint unsigned
-,`ilosc_zyl` tinyint unsigned
-,`kod` varchar(16)
+,`pid` tinyint unsigned
 ,`mid` tinyint unsigned
 ,`nazwa` text
 ,`opis` text
-,`pid` tinyint unsigned
+,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
-,`popis` text
 ,`ppid` tinyint unsigned
-,`zbiorcze` tinyint(1)
+,`popis` text
+,`ilosc_zyl` tinyint unsigned
 );
 
 -- --------------------------------------------------------
@@ -732,13 +732,13 @@ CREATE TABLE `MiejscePrzewodView` (
 --
 CREATE TABLE `MiejsceView` (
 `id` tinyint unsigned
-,`id_pomieszczenie` tinyint unsigned
-,`kod` varchar(16)
 ,`nazwa` text
 ,`opis` text
+,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
-,`zbiorcze` tinyint(1)
 );
 
 -- --------------------------------------------------------
@@ -749,15 +749,15 @@ CREATE TABLE `MiejsceView` (
 --
 CREATE TABLE `PlytkaMiejsceView` (
 `id` tinyint unsigned
-,`id_pomieszczenie` tinyint unsigned
-,`kod` varchar(16)
+,`nazwa` text
 ,`miejsce_id` tinyint unsigned
 ,`mnazwa` text
-,`nazwa` text
 ,`opis` text
+,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
-,`zbiorcze` tinyint(1)
 );
 
 -- --------------------------------------------------------
@@ -1592,7 +1592,7 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (157, 'Zasilanie expander 0x000', 4),
 (158, 'Łącznik płytki A z procesorem', 8),
 (159, 'Zasilanie dolnej części płytki A', 4),
-(160, 'Zasilanie ekspandera 0x001', 6),
+(160, 'Zasilanie ekspandera 0x001', 5),
 (161, 'Masa dolnej i górnej płytki A', 2),
 (200, 'Zasilanie +24V, impulsy od licznika energi', 8);
 
@@ -1603,15 +1603,15 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `PrzewodMiejsceZakonczenieView` (
-`etykieta` text
-,`kod` varchar(1)
-,`miejsce_id` tinyint unsigned
-,`nazwa` text
-,`przewod_id` tinyint unsigned
-,`przewod_miejsce_id` smallint unsigned
+`zid` smallint unsigned
+,`etykieta` text
 ,`przewod_miejsce_id_zlacze` smallint unsigned
 ,`rodzaj_zakonczenia` tinyint(1)
-,`zid` smallint unsigned
+,`przewod_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`przewod_miejsce_id` smallint unsigned
+,`nazwa` text
+,`kod` varchar(1)
 );
 
 -- --------------------------------------------------------
@@ -1636,7 +1636,7 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 (3, 1, 26),
 (4, 1, 20),
 (5, 2, 26),
-(6, 2, 20),
+(6, 2, 26),
 (7, 3, 26),
 (8, 3, 20),
 (9, 4, 26),
@@ -1988,9 +1988,9 @@ INSERT INTO `rodzaj_zakonczenia` (`id`, `nazwa`, `kod`, `przewod`, `plytka`) VAL
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `WewnetrzneKableView` (
-`c` bigint
+`przewod_id` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`przewod_id` tinyint unsigned
+,`c` bigint
 );
 
 -- --------------------------------------------------------
@@ -2071,7 +2071,19 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (58, 'Czujnik temperatury w podłodze w Holu', 67, 3, 0),
 (59, 'A', 5, 1, 10),
 (60, 'Przewody pokój A', 291, 3, 12),
-(61, 'B', 3, 1, 6);
+(61, 'B', 3, 1, 6),
+(62, 'Przekaźnik oświetlnia A 8x', 6, 3, 10),
+(63, 'Przekaźnik oświetlenia B 4x', 4, 3, 6),
+(64, 'Lampa sufitowa łazienka', 8, 3, 6),
+(65, 'C', 7, 1, 6),
+(66, 'D', 292, 1, 12),
+(67, 'E', 293, 1, 12),
+(68, 'Przewód do właczników pokój B', 294, 3, 12),
+(69, 'Ekspander 0', 315, 3, 5),
+(70, 'B', 316, 1, 4),
+(71, 'Plytka', 320, 4, 4),
+(72, 'B', 319, 1, 4),
+(73, 'A', 322, 1, 6);
 
 -- --------------------------------------------------------
 
@@ -2080,15 +2092,15 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZakonczenieView` (
-`etykieta` text
-,`id` smallint unsigned
-,`ilosc_pin` tinyint unsigned
-,`kod` varchar(1)
-,`miejsce_id` tinyint unsigned
-,`nazwa` text
-,`przewod_id` tinyint unsigned
+`id` smallint unsigned
+,`etykieta` text
 ,`przewod_miejsce_id` smallint unsigned
 ,`rodzaj_zakonczenia` tinyint(1)
+,`ilosc_pin` tinyint unsigned
+,`przewod_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`nazwa` text
+,`kod` varchar(1)
 );
 
 -- --------------------------------------------------------
@@ -2098,15 +2110,15 @@ CREATE TABLE `ZakonczenieView` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZakonczenieZylyView` (
-`etykieta` text
-,`opis` text
+`zzid` smallint unsigned
+,`zakonczenie_id` smallint unsigned
+,`zyla_id` smallint unsigned
 ,`pos` tinyint
+,`opis` text
+,`zid` smallint unsigned
+,`etykieta` text
 ,`przewod_miejsce_id` smallint unsigned
 ,`rodzaj_zakonczenia` tinyint(1)
-,`zakonczenie_id` smallint unsigned
-,`zid` smallint unsigned
-,`zyla_id` smallint unsigned
-,`zzid` smallint unsigned
 );
 
 -- --------------------------------------------------------
@@ -2414,7 +2426,121 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (284, 51, 433, 1, 'GND kont.'),
 (285, 51, 432, 2, 'Kontakt. pokój'),
 (286, 49, 427, 1, 'GND kont.'),
-(287, 49, 426, 2, 'Kontakt. pracownia');
+(287, 49, 426, 2, 'Kontakt. pracownia'),
+(288, 59, 226, 1, '1'),
+(289, 59, 227, 2, '2'),
+(290, 59, 228, 3, '3'),
+(291, 59, 229, 4, '4'),
+(292, 59, 230, 5, '5'),
+(293, 59, 231, 6, '6'),
+(294, 59, 232, 7, '7'),
+(295, 59, 233, 8, '8'),
+(296, 59, 234, 9, '9'),
+(297, 59, 225, 10, '10'),
+(298, 64, 235, 1, 'Zasilanie'),
+(299, 64, 236, 2, 'Masa'),
+(300, 64, 237, 3, 'Przekażnik lewej lampy'),
+(301, 64, 238, 4, 'Przekaźnik prawej lampy'),
+(302, 64, 239, 5, '-'),
+(303, 64, 240, 6, '-'),
+(304, 65, 236, 1, '1'),
+(305, 65, 239, 2, '2'),
+(306, 65, 240, 3, '3'),
+(307, 65, 237, 4, '4'),
+(308, 65, 238, 5, '5'),
+(309, 65, 235, 6, '6'),
+(310, 63, 219, 1, 'Zasilanie'),
+(311, 63, 220, 2, 'Masa'),
+(312, 63, 221, 3, 'CH 1'),
+(313, 63, 222, 4, 'CH 2'),
+(314, 63, 223, 5, 'CH 3'),
+(315, 63, 224, 6, 'CH 4'),
+(316, 61, 220, 1, '1'),
+(317, 61, 221, 2, '2'),
+(318, 61, 222, 3, '3'),
+(319, 61, 223, 4, '4'),
+(320, 61, 224, 5, '5'),
+(321, 61, 219, 6, '6'),
+(322, 62, 225, 1, 'Zasilanie'),
+(323, 62, 226, 2, 'Masa'),
+(324, 62, 227, 3, 'CH 1'),
+(325, 62, 228, 4, 'CH 2'),
+(326, 62, 229, 5, 'CH 3'),
+(327, 62, 230, 6, 'CH 4'),
+(328, 62, 231, 7, 'CH 5'),
+(329, 62, 232, 8, 'CH 6'),
+(330, 62, 233, 9, 'CH 7'),
+(331, 62, 234, 10, 'CH 8'),
+(332, 66, 465, 1, '1'),
+(333, 66, 466, 2, '2'),
+(334, 66, 467, 3, '3'),
+(335, 66, 468, 4, '4'),
+(336, 66, 469, 5, '5'),
+(337, 66, 470, 6, '6'),
+(338, 66, 471, 7, '7'),
+(339, 66, 472, 8, '8'),
+(340, 66, 473, 9, '9'),
+(341, 66, 474, 10, '10'),
+(342, 66, 475, 11, '11'),
+(343, 66, 476, 12, '12'),
+(344, 60, 465, 1, '69'),
+(345, 60, 471, 2, '70'),
+(346, 60, 472, 3, '71'),
+(347, 60, 466, 4, '73'),
+(348, 60, 473, 5, '74'),
+(349, 60, 474, 6, '75'),
+(350, 60, 475, 7, '82'),
+(351, 60, 476, 8, '83'),
+(352, 60, 469, 9, '88'),
+(353, 60, 470, 10, '89'),
+(354, 60, 467, 11, '90'),
+(355, 60, 468, 12, '91'),
+(356, 67, 477, 1, '1'),
+(357, 67, 478, 2, '2'),
+(358, 67, 479, 3, '3'),
+(359, 67, 480, 4, '4'),
+(360, 67, 481, 5, '5'),
+(361, 67, 482, 6, '6'),
+(362, 67, 483, 7, '7'),
+(363, 67, 484, 8, '8'),
+(364, 67, 485, 9, '9'),
+(365, 67, 486, 10, '10'),
+(366, 67, 487, 11, '11'),
+(367, 67, 488, 12, '12'),
+(368, 68, 477, 1, '81'),
+(369, 68, 488, 2, '84'),
+(370, 68, 478, 3, '85'),
+(371, 68, 485, 4, '86'),
+(372, 68, 487, 5, '86'),
+(373, 68, 486, 6, '87'),
+(374, 68, 479, 7, '95'),
+(375, 68, 480, 8, '96'),
+(376, 68, 481, 9, '97'),
+(377, 68, 482, 10, '98'),
+(378, 68, 483, 11, '99'),
+(379, 68, 484, 12, '100'),
+(380, 69, 390, 1, '+5V'),
+(381, 69, 391, 2, 'GND'),
+(382, 69, 393, 3, 'SDA'),
+(383, 69, 392, 4, 'SCL'),
+(384, 69, 0, 5, 'INT'),
+(385, 70, 390, 1, '1'),
+(386, 70, 392, 2, '2'),
+(387, 70, 393, 3, '3'),
+(388, 70, 391, 4, '4'),
+(389, 71, 489, 1, '1'),
+(390, 71, 490, 2, '2'),
+(391, 71, 491, 3, '3'),
+(392, 71, 492, 4, '4'),
+(393, 72, 492, 1, '1'),
+(394, 72, 491, 2, '2'),
+(395, 72, 490, 3, '3'),
+(396, 72, 489, 4, '4'),
+(397, 73, 493, 1, '1'),
+(398, 73, 496, 2, '2'),
+(399, 73, 495, 3, '3'),
+(400, 73, 494, 4, '4'),
+(401, 73, 497, 5, '5');
 
 -- --------------------------------------------------------
 
@@ -2423,23 +2549,23 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZakonczePrzewodMiejsce` (
-`etykieta` text
-,`ilosc_pin` tinyint unsigned
-,`ilosc_zyl` tinyint unsigned
+`zid` smallint unsigned
+,`etykieta` text
+,`przewod_miejsce_id` smallint unsigned
+,`rodzaj_zakonczenia` tinyint(1)
+,`przewod_id` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`mkod` varchar(16)
+,`znazwa` text
+,`zkod` varchar(1)
+,`ilosc_pin` tinyint unsigned
 ,`mnazwa` text
 ,`mopis` text
+,`zbiorcze` tinyint(1)
+,`mkod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
 ,`popis` text
-,`przewod_id` tinyint unsigned
-,`przewod_miejsce_id` smallint unsigned
-,`rodzaj_zakonczenia` tinyint(1)
-,`zbiorcze` tinyint(1)
-,`zid` smallint unsigned
-,`zkod` varchar(1)
-,`znazwa` text
+,`ilosc_zyl` tinyint unsigned
 );
 
 -- --------------------------------------------------------
@@ -2449,9 +2575,9 @@ CREATE TABLE `ZakonczePrzewodMiejsce` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZewnetrzneKableView` (
-`c` bigint
+`przewod_id` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`przewod_id` tinyint unsigned
+,`c` bigint
 );
 
 -- --------------------------------------------------------
@@ -2461,21 +2587,21 @@ CREATE TABLE `ZewnetrzneKableView` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZlaczeWtyczkaView` (
-`epid` smallint unsigned
+`wtyczka_id` smallint unsigned
+,`zlacze_id` smallint unsigned
+,`epid` smallint unsigned
 ,`epnazwa` text
 ,`eppos` tinyint
-,`html` text
-,`kolor` text
-,`kolor_id` tinyint unsigned
-,`opis` text
-,`przewod_id` tinyint unsigned
-,`wtyczka_id` smallint unsigned
-,`zid` smallint unsigned
-,`zlacze_id` smallint unsigned
 ,`zyla_id` smallint unsigned
-,`zzetykieta` text
-,`zzopis` text
 ,`zzpos` tinyint
+,`zzopis` text
+,`zzetykieta` text
+,`zid` smallint unsigned
+,`kolor_id` tinyint unsigned
+,`przewod_id` tinyint unsigned
+,`opis` text
+,`kolor` text
+,`html` text
 );
 
 -- --------------------------------------------------------
@@ -2921,12 +3047,8 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (389, 9, 54, '-'),
 (390, 4, 157, '+5V '),
 (391, 7, 157, 'GND'),
-(392, 3, 157, 'SCL'),
-(393, 9, 157, 'SDA'),
-(394, 1, 157, '-'),
-(395, 8, 157, '-'),
-(396, 6, 157, '-'),
-(397, 5, 157, '-'),
+(392, 8, 157, 'SCL'),
+(393, 3, 157, 'SDA'),
 (398, 2, 21, '+5V'),
 (399, 3, 21, 'Sygnał czujnika temp. i wilg'),
 (400, 1, 21, 'GND'),
@@ -2993,7 +3115,40 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (461, 7, 67, 'GND'),
 (462, 4, 68, '+5V'),
 (463, 5, 68, 'Zasilanie zasilacza 12V'),
-(464, 7, 68, 'GND');
+(464, 7, 68, 'GND'),
+(465, 7, 145, 'GND - 69'),
+(466, 6, 145, 'GND - 73'),
+(467, 9, 145, '1.B7 - 90'),
+(468, 13, 145, '1.B6 -  91'),
+(469, 8, 145, '1.B5 - 88'),
+(470, 5, 145, '1.B4 - 89'),
+(471, 10, 145, '1.B3 - 70'),
+(472, 11, 145, '1.B2 - 71'),
+(473, 3, 145, '1.B1 - 74'),
+(474, 1, 145, '1.B0 - 75'),
+(475, 2, 145, 'GND - 82'),
+(476, 4, 145, 'GND - 83'),
+(477, 7, 146, 'GND - 81'),
+(478, 6, 146, 'GND - 85'),
+(479, 9, 146, '1.A7 - 95'),
+(480, 13, 146, '1.A6 - 96'),
+(481, 8, 146, '1.A5 - 97'),
+(482, 5, 146, '1.A4 - 98'),
+(483, 10, 146, '1.A3 - 99'),
+(484, 11, 146, '1.A2 - 100'),
+(485, 3, 146, '1.A1 - 86'),
+(486, 1, 146, '1.A0 - 87'),
+(487, 2, 146, 'GND - 86'),
+(488, 4, 146, 'GND - 84'),
+(489, 4, 159, '+5V przekaźników'),
+(490, 8, 159, '-'),
+(491, 5, 159, '-'),
+(492, 7, 159, 'GND'),
+(493, 4, 160, '+5V'),
+(494, 7, 160, 'GND'),
+(495, 3, 160, 'SDA'),
+(496, 8, 160, 'SCL'),
+(497, 2, 160, 'INT');
 
 -- --------------------------------------------------------
 
@@ -3002,12 +3157,12 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZylaWidok` (
-`html` text
-,`id` smallint unsigned
-,`kolor` text
+`id` smallint unsigned
 ,`kolor_id` tinyint unsigned
-,`opis` text
 ,`przewod_id` tinyint unsigned
+,`opis` text
+,`kolor` text
+,`html` text
 );
 
 -- --------------------------------------------------------
@@ -3343,13 +3498,13 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=288;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=402;
 
 --
 -- AUTO_INCREMENT dla tabeli `zlacze_wtyczka`
@@ -3361,7 +3516,7 @@ ALTER TABLE `zlacze_wtyczka`
 -- AUTO_INCREMENT dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=465;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=499;
 
 --
 -- Ograniczenia dla zrzutów tabel

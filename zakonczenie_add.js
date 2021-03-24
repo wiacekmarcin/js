@@ -17,7 +17,7 @@ function($scope, $routeParams, $location, $http) {
                     "pmid" : $scope.pmid,
                     "etykieta" : zakonczenie.nazwa,
                     "rodzaj_zakonczenia" : zakonczenie.rodzaj.id,
-                    "ilosc_pinow" : zakonczenie.ilosc_pinow
+                    "ilosc_pin" : zakonczenie.ilosc_pinow
                 };
         sendData(params);
     };

@@ -6,13 +6,16 @@ mysqli_set_charset($con,"utf8");
 
 $length = $_POST["length"];
 $zakonczenie_id = $_POST["zkid"];
+$queries = array();
 for ($i = 0; $i < $length; $i++)
 {
     $opis = $_POST["opis_" . $i];
     $zyla_id = $_POST["zyla_id_" . $i];
     $pos = $_POST["pos_" . $i];
     $id = $_POST["id_" . $i];
-    if ($zyla_id != - 1 && $id != -1) {
+    print $zyla_id . " " . $id . "\n";
+    if ($zyla_id != -1) {
+        
         if ($id != -1)
             array_push($queries, 
             "UPDATE `zakonczenie_zyly` SET `zyla_id`=$zyla_id,`pos`=$pos,`opis`='$opis' WHERE `id`=$id"
