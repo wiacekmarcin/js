@@ -80,8 +80,8 @@ function($scope, $routeParams, $location, $http) {
         var params =  {'przewod' : $scope.przewod_id.id , 'count' : $scope.przewod_id.ilosc_zyl};
         for (var i = 0; i < $scope.przewod_id.ilosc_zyl; i++) {
             params['id_' + i] = $scope.selectedZid[i] ? $scope.selectedZid[i] : '-1'; 
-            params['color_' + i] = $scope.selectedKolor[i].id;
-            params['descr_' + i] = $scope.selectedOpis[i] ? $scope.selectedOpis[i] : '';
+            params['kolor_' + i] = $scope.selectedKolor[i].id;
+            params['opis_' + i] = $scope.selectedOpis[i] ? $scope.selectedOpis[i] : '';
         }
         sendData(params);
     }
