@@ -159,11 +159,12 @@ public:
     } Pora;
 
     PoraDnia();
-    void ustaw(uint8_t valN, uint8_t valW);
+    void ustaw(uint8_t valN, uint8_t valW, uint8_t valZ, uint8_t valT);
     bool czyWieczor() const { return m_wieczor && m_prevwieczor; }
-    bool czyNoc() const { return m_noc & m_prevwieczor; }
-    bool czyDzien() const { return !((m_wieczor && m_prevwieczor) || (m_noc & m_prevwieczor)); }
-
+    bool czyNoc() const { return m_noc && m_prevwieczor; }
+    bool czyDzien() const { return !((m_wieczor && m_prevwieczor) || (m_noc && m_prevnoc)); }
+    bool czyTaryf2() const { return m_taryf2 && m_prevtaryf2; }
+    bool czyZasAwar() const { return m_zas_awar && m_prevzas_awar; }
     Pora getPoraDnia() const;
     
 #ifdef DEBUG
@@ -176,6 +177,10 @@ private:
     bool m_wieczor;
     bool m_prevnoc;
     bool m_prevwieczor;
+    bool m_taryf2;
+    bool m_prevtaryf2;
+    bool m_zas_awar;
+    bool m_prevzas_awar;
 };
 
 #endif  //_IN_H_

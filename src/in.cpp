@@ -295,7 +295,8 @@ void Drzwi::print() const
 }
 #endif
 
-PoraDnia::PoraDnia() : m_noc(false), m_wieczor(false), m_prevnoc(false),  m_prevwieczor(false)
+PoraDnia::PoraDnia() : m_noc(false), m_wieczor(false), m_prevnoc(false),  m_prevwieczor(false),
+       m_taryf2(false), m_prevtaryf2(false), m_zas_awar(false), m_prevzas_awar(false)
 {
 
 }
@@ -310,13 +311,19 @@ PoraDnia::Pora PoraDnia::getPoraDnia() const
         return DZIEN;
 }
 
-void PoraDnia::ustaw(uint8_t valN, uint8_t valW)
+void PoraDnia::ustaw(uint8_t valN, uint8_t valW, uint8_t valZ, uint8_t valT)
 {
     m_prevnoc = m_noc;
     m_noc = valN == HIGH;
 
     m_prevwieczor = m_wieczor;
     m_wieczor = valW == HIGH;
+
+    m_prevzas_awar = m_zas_awar;
+    m_zas_awar = valZ == HIGH;
+
+    m_prevtaryf2 = m_taryf2;
+    m_taryf2 = valT == HIGH;
 }
 
 #ifdef DEBUG

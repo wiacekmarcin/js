@@ -31,13 +31,12 @@ private:
     static constexpr uint8_t CZ_R_LUSTRO = 0;
     static constexpr uint8_t DRZWI = 2;
     static constexpr uint8_t KLAWISZ = 3;
-    static constexpr uint8_t WIECZOR =4;
-    static constexpr uint8_t NOC = 5;
-    //static constexpr uint8_t OFF = 6;
-    //static constexpr uint8_t ON = 7;
-    
-    //static constexpr uint8_t CZ_POZ_WODY = 6;
-    static constexpr uint8_t lenWej = 6; //7
+    static constexpr uint8_t Z_AWAR = 4;
+    static constexpr uint8_t TARYF2 = 5;
+    static constexpr uint8_t WIECZOR =6;
+    static constexpr uint8_t NOC = 7;
+        
+    static constexpr uint8_t lenWej = 7;
 
     class Wlacznik wl;
     class CzujkaZblizeniowa czBl;

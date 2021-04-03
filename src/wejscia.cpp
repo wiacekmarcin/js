@@ -24,9 +24,9 @@ void Wejscia::init()
     wejscia.pinMode(KLAWISZ, INPUT);
     wejscia.pinMode(NOC, INPUT);
     wejscia.pinMode(WIECZOR, INPUT);
-    //wejscia.pinMode(6, INPUT);
-    //wejscia.pinMode(7, INPUT);
-    //wejscia.pinMode(CZ_POZ_WODY, INPUT);
+    wejscia.pinMode(TARYF2, INPUT);
+    wejscia.pinMode(Z_AWAR, INPUT);
+    
 
 }
 
@@ -52,6 +52,7 @@ void Wejscia::get(unsigned long timeInt, unsigned int timeAfterInt)
     uint8_t inD = wejscia.digitalReadAll();
     if (inD != inSave) {
         inSave = inD;
+        Serial.println(inD, HEX);
         //printd = true;
 #ifdef DEBUG        
         Serial.print("mls=");
@@ -74,15 +75,18 @@ void Wejscia::get(unsigned long timeInt, unsigned int timeAfterInt)
     czBl.ustaw(MASK(inD, CZ_R_LUSTRO), timeInt, timeAfterInt);
     czR.ustaw(MASK(inD, CZ_R_WC), timeInt, timeAfterInt);
     drz.ustaw(MASK(inD, DRZWI), timeInt, timeAfterInt);
-    prd.ustaw(MASK(inD, NOC), MASK(inD, WIECZOR));
+    prd.ustaw(MASK(inD, NOC), MASK(inD, WIECZOR), MASK(inD, Z_AWAR), MASK(inD, TARYF2));
     //if (printd) {
-    //Serial.print(" => ");
-    //Serial.print(prd.czyNoc() ? 'N' : '-');
-    //Serial.print(prd.czyWieczor() ? 'W' : '-');
-    //Serial.print(wl.nacisniety() ? 'K' : '-');
-    //Serial.print(drz.czyOtwarte() ? 'D' : '-'); 
-    //Serial.print(czBl.czyRuch() ? (czBl.czyDlugiRuch() ? "LL" : "LS") : "-");
-    //Serial.println(czR.czyRuch() ? 'R' : '-');
+    Serial.print(" => ");
+    Serial.print(prd.czyNoc() ? 'N' : '-');
+    Serial.print(prd.czyWieczor() ? 'W' : '-');
+    Serial.print(wl.nacisniety() ? 'K' : '-');
+    Serial.print(drz.czyOtwarte() ? 'D' : '-'); 
+    Serial.print(czBl.czyRuch() ? (czBl.czyDlugiRuch() ? "LL" : "LS") : "-");
+    Serial.print(prd.czyTaryf2() ? '2' : '-');
+    Serial.print(prd.czyZasAwar() ? 'Z' : '-');
+    Serial.println(czR.czyRuch() ? 'R' : '-');
+
     //}
 }
 
