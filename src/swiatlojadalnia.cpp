@@ -1,13 +1,21 @@
 #include "swiatlojadalnia.h"
 
-#include <PCF8574.h>
+
 #include "main.h"
+
+#ifndef NEW_BOARD	
+#include <PCF8574.h>
 extern PCF8574 expPozostale;
+#else
+#include "io.h"
+#endif
 
 void SwiatloJadalnia::init() {
+#ifndef NEW_BOARD	
 	expPozostale.pinMode(0, OUTPUT, ho(false));
 	expPozostale.pinMode(1, OUTPUT, ho(false));
 	expPozostale.pinMode(4, OUTPUT, ho(false));
+#endif	
 }
 
 void SwiatloJadalnia::rotate() {
@@ -63,12 +71,21 @@ bool SwiatloJadalnia::czyZapalone() const {
 }
 
 void SwiatloJadalnia::setPrzekaz(bool on, bool off) {
+#ifndef NEW_BOARD		
   	for (uint8_t id = 0 ; id < maxSw; ++id) {
 		if (on && sw[id])
-			expPozostale.digitalWrite(id, ho(true));
+			expPozostale.digitalWrite(mapPins[id], ho(true));
 		else if (off && !sw[id])
-			expPozostale.digitalWrite(id, ho(false));
+			expPozostale.digitalWrite(mapPins[id], ho(false));
   	}
+#else	  
+	for (uint8_t id = 0 ; id < maxSw; ++id) {
+		if (on && sw[id])
+			zapalJadalnia(id + 1, true);
+		else if (off && !sw[id])
+			zapalJadalnia(id + 1, false);
+  	}
+#endif
 }
 
 void SwiatloJadalnia::zapal(const Wejscia & w)

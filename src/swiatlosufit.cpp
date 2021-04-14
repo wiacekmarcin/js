@@ -1,18 +1,23 @@
 #include "swiatlosufit.h"
-
-#include <PCF8574.h>
 #include "main.h"
+
+#ifndef NEW_BOARD
+#include <PCF8574.h>
 extern PCF8574 expOczka;
 extern PCF8574 expPozostale;
-
+#else
+#include "io.h"
+#endif
 const uint8_t SwiatloSufit::mapPins[SwiatloSufit::maxLed] = { 5, 7, 0, 2, 8, 4, 6, 3, 1 };
 
 void SwiatloSufit::init() {
+#ifndef NEW_BOARD	
 	for (uint8_t p = 0; p < 8; ++p) {
 		expOczka.pinMode(p, OUTPUT, ho(false));
 	}
 	expOczka.begin();
 	expPozostale.pinMode(3, OUTPUT, ho(false));
+#endif	
 }
 
 void SwiatloSufit::updown(bool up) {
@@ -107,13 +112,16 @@ void SwiatloSufit::rotate() {
 void SwiatloSufit::set(uint8_t pin, bool on) {
   	if (pin >= 9)
     	return;
-
+#ifndef NEW_BOARD
   	uint8_t p = SwiatloSufit::mapPins[pin];
   	if (p < 8) {
     	expOczka.digitalWrite( p, ho(on)); //piny są odwrócone najpierw P3, na koniec P0
   	} else {
     	expPozostale.digitalWrite( 3, ho(on));
   	}
+#else
+	zapalKuchnia(pin, on);
+#endif
 }
 
 void SwiatloSufit::setPrzekaz(bool on, bool off) {

@@ -1,13 +1,16 @@
 #include "wejscia.h"
-
-#include <PCF8574.h>
-
-extern PCF8574 expWejscia;
-extern PCF8574 expLedy;
 #include "main.h"
 
-void Wejscia::init() {
+#ifndef NEW_BOARD
+#include <PCF8574.h>
+extern PCF8574 expWejscia;
+extern PCF8574 expLedy;
+#else
+#include "io.h"
+#endif
 
+void Wejscia::init() {
+#ifndef NEW_BOARD
 	expWejscia.pinMode(0, INPUT_PULLUP); //jadalnia up
 	expWejscia.pinMode(1, INPUT_PULLUP); //jadalnia down
 	expWejscia.pinMode(2, INPUT_PULLUP); //kuchnia B up
@@ -21,9 +24,11 @@ void Wejscia::init() {
 	expLedy.pinMode(5, INPUT_PULLUP); //kontaktron
 	expLedy.pinMode(6, INPUT); //ruch kuchnia
 	expLedy.pinMode(7, INPUT); //ruch drzwi
-
+#endif
 };
 
+#define LI(d, p) (((~(d))&(1<<(p)))>>(p))
+#define HI(d, p) (((d)&(1<<(p)))>>(p))
 void Wejscia::read() {
 #ifdef DBG
 	static unsigned int num = 0;
@@ -32,8 +37,10 @@ void Wejscia::read() {
 	Serial.print(num);
 	Serial.print(". ");
 #endif
+#ifndef NEW_BOARD
 	auto d1 = expWejscia.digitalReadAll();
 	auto d2 = expLedy.digitalReadAll();
+
 #ifdef DBG
 	Serial.print(d1.p7, 2);
 	Serial.print(d1.p6, 2);
@@ -60,6 +67,23 @@ void Wejscia::read() {
 	drzwi_otw = hi(d2.p5);
 	ruch_kuch = hi(d2.p6);
 	ruch_drzwi = hi(d2.p7);
+
+#else
+	auto d = readWejscia();
+	kl_jad_up = LI(d, JAD2);
+	kl_jad_down = LI(d, JAD1);
+	kl_kuch_b_up = LI(d, KUCHB2);
+	kl_kuch_b_down = LI(d, KUCHB1);
+	kl_kuch_a_up = LI(d, KUCHA2);
+	kl_kuch_a_down = LI(d, KUCHA1);
+	noc = HI(d, NOC);
+	wieczor = HI(d, WIECZOR);
+	//taryfa2 = HI(d, TARYF2);
+	//zas_awar = HI(d, ZAS_AWAR);
+	ruch_kuch = HI(d, RUCH1);
+	ruch_drzwi = HI(d, RUCH2);
+
+#endif
 }
 
 
