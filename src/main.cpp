@@ -5,6 +5,7 @@
 #include <PCF8574.h>
 #else
 #include <Adafruit_MCP23017.h>
+#include "io.h"
 #endif
 
 
@@ -101,8 +102,11 @@ void setup() {
 	//if (w.czyZasilanieAwaryjne) { zapalZasAwar(true); delay(50); }
 	zapalPrzekazniki(true);
 	delay(100);
-	zapalSzafa(true);
-	if (w.czyWieczor()) zapalSufit1(true);
+	zapalSzafki(true);
+	if (w.czyWieczor()) {
+		zapalLedSufitLod(true);
+		zapalLEDZasilacz(true);
+	}
 
 #endif
 	 swSufit.init();

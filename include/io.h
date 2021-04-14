@@ -50,10 +50,10 @@ extern Adafruit_MCP23017 io24;
 #define    RUCH1     14   //B6 IN
 #define    RUCH2     15   //B7 IN
 
-#define    ZASLED     4
 #define    PRZEK      5
 #define    ZAWAPRZ    6
 #define    INTER      7
+#define    ZASLED     8
 
 struct wejscieconf {
 //public:    
