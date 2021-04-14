@@ -92,6 +92,19 @@ unsigned long t = 0;
 
 
 void setup() {
+#ifdef NEW_BOARD
+	zapalPrzekazniki(false);
+	zapalZasAwar(false);
+	io_init();
+	delay(500);
+	w.read();
+	//if (w.czyZasilanieAwaryjne) { zapalZasAwar(true); delay(50); }
+	zapalPrzekazniki(true);
+	delay(100);
+	zapalSzafa(true);
+	if (w.czyWieczor()) zapalSufit1(true);
+
+#endif
 	 swSufit.init();
 	 //expOczka.begin(); -- w srodku jest funkcja begin
 
@@ -134,6 +147,7 @@ void loop() {
 	}
 	w.read();
 	t = millis();
+	swSufit.rotate();
 	if (!change(30*60, 5*60)) {
 		delay(100);
 		return;
@@ -146,8 +160,6 @@ void loop() {
 	swLED.zapal(w, swSufit.czyZapalone());
 	swPod.zapal(w.czyWieczor(), swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
 	
-
-	swSufit.rotate();
 	delay(100 - (millis() - t));
 
 }
