@@ -2,6 +2,12 @@
 #include <Wire.h>
 #include <Adafruit_MCP23017.h>
 
+#define ZAS_AW 6
+#define TARYF2 7
+#define WIECZOR 8
+#define NOC 9
+
+
 #define INPUT1
 #define OUTPUT1
 #define OUTPUT2
@@ -20,6 +26,11 @@ Adafruit_MCP23017 i1;
 
 void zapalRaspberry(bool on);
 void setup() {
+  pinMode(ZAS_AW, INPUT);
+  pinMode(TARYF2, INPUT);
+  pinMode(WIECZOR, INPUT);
+  pinMode(NOC, INPUT);
+
   Wire.begin();
   Serial.begin(9600);
 
@@ -127,6 +138,24 @@ void zapalLustro(bool on) {
 #endif  
 }
 
+void zapalLusterko(bool on)
+{
+#ifdef OUTPUT2  
+  o2.digitalWrite(LUSTERKO, on ? LOW : HIGH);
+#endif  
+}
+
+void zapalLusterkoImp(bool on)
+{
+  static bool state = false;
+  if (on)
+    state = !state;
+  
+#ifdef OUTPUT2  
+  o2.digitalWrite(LUSTERKO, state ? LOW : HIGH);
+#endif  
+}
+
 void zapalPrysznic(bool on) {
 #ifdef OUTPUT1  
   o1.digitalWrite(PRYSZNIC_LEWY_TYLNY, on ? LOW : HIGH);
@@ -169,10 +198,6 @@ void zapalPokoj(bool on1, bool on2)
 
 void zapalPracownia(bool on1, bool on2)
 {
-  Serial.print("Zapal Pracownia ");
-  Serial.print(on1, DEC);
-  Serial.print(", ");
-  Serial.println(on2, DEC);
 #ifdef OUTPUT2 
   o2.digitalWrite(PRACOWNIA1, on1? LOW : HIGH);
   o2.digitalWrite(PRACOWNIA2, on2? LOW : HIGH);
@@ -181,20 +206,56 @@ void zapalPracownia(bool on1, bool on2)
 
 void wlaczLeweGniazdo(bool on)
 {
+  static bool state = false;
+  if (on) {
+    state = !state;
+  }
 #ifdef OUTPUT2 
-  o2.digitalWrite(GNIAZDO_LEWE, on? LOW : HIGH);
-  o2.digitalWrite(SYG_GNI_LEWE, on? LOW : HIGH);
+  o2.digitalWrite(GNIAZDO_LEWE, state? LOW : HIGH);
+  o2.digitalWrite(SYG_GNI_LEWE, state? LOW : HIGH);
 #endif
 }
 
 void wlaczPraweGniazdo(bool on)
 {
+  static bool state = false;
+  if (on) {
+    state = !state;
+  }
 #ifdef OUTPUT2 
-  o2.digitalWrite(GNIAZDO_PRAWE, on? LOW : HIGH);
-  o2.digitalWrite(SYG_GNI_PRAWE, on? LOW : HIGH);
+  o2.digitalWrite(GNIAZDO_PRAWE, state? LOW : HIGH);
+  o2.digitalWrite(SYG_GNI_PRAWE, state? LOW : HIGH);
 #endif
 }
 
+void wlaczGniazdoKaloryfer(bool on)
+{
+#ifdef OUTPUT2 
+  o2.digitalWrite(GNIAZDO_KAL, on? LOW : HIGH);
+#endif
+}
+
+void wlacznadLustremPrawe(bool on)
+{
+  static bool state = false;
+  if (on) {
+    state = !state;
+  }
+#ifdef OUTPUT1
+  o1.digitalWrite(LUSTRO_PRAWE, state? LOW : HIGH);
+#endif
+}
+
+void wlacznadLustremLewe(bool on)
+{
+  static bool state = false;
+  if (on) {
+    state = !state;
+  }
+#ifdef OUTPUT1
+  o1.digitalWrite(LUSTRO_LEWE, state? LOW : HIGH);
+#endif
+}
 
 
 #define W_LAZ 0
@@ -205,12 +266,12 @@ void wlaczPraweGniazdo(bool on)
 #define W_SED_G_P 5
 #define W_SED_G_S 6
 #define W_SED_G_L 7
-#define W_LUS_L_L 8
-#define W_LUS_L_P 9
-#define W_LUS_P_L 10
-#define W_LUS_P_P 11
-#define W_PRAC_L  12
-#define W_PRAC_P  13
+#define W_LUS_P_P 8 
+#define W_LUS_P_L 9  //#10 I #9
+#define W_LUS_L_P 10 //#10 I #9
+#define W_LUS_L_L 11 //#L_l
+#define W_PRAC_L  12 //#PRAC_L
+#define W_PRAC_P  13 //#PRAC_P
 #define W_POKOJ_L 14
 #define W_POKOJ_P 15
 
@@ -240,7 +301,15 @@ bool pok1 = false;
 bool pok2 = false;
 bool pra1 = false;
 bool pra2 = false;
+
+
 void loop() {
+
+  bool wieczor = digitalRead(WIECZOR);
+  bool noc = digitalRead(NOC);
+  bool taryfa2 = digitalRead(TARYF2);
+  bool zas_awar = digitalRead(ZAS_AW);
+
 
 #ifdef INPUT1  
   // put your main code here, to run repeatedly:
@@ -268,11 +337,13 @@ void loop() {
       //Serial.println(zLaz, DEC);
       if (zLaz) {
         zapalLazienka(true, m & (1 << W_SED_D_L) );
-        zapalRadio(m & (1 << W_SED_D_P));
+        zapalRadio(!noc && (m & (1 << W_SED_D_P)));
         zapalMonitor(true);
         zapalPrysznic(m & (1 << W_SED_G_S));
         zapalLustro(m & (1 << W_SED_G_L));
         zapalWanna(m & (1 << W_SED_G_P));
+        wlaczGniazdoKaloryfer(true);
+        zapalLusterko(true);
       } else {
         zapalLazienka(false, false);
         zapalRadio(false);
@@ -280,6 +351,8 @@ void loop() {
         zapalPrysznic(false);
         zapalLustro(false);
         zapalWanna(false);
+        wlaczGniazdoKaloryfer(false);
+        zapalLusterko(false);
       }
     }
 
@@ -298,6 +371,19 @@ void loop() {
     if (c & (1 << W_SED_G_P))    
       zapalWanna(m & (1 << W_SED_G_P));
 
+#define JEDNALAMPAPRACOWNIA 1 
+#ifdef JEDNALAMPAPRACOWNIA
+    if (c & (1 << W_PRAC_L)) {
+      pra2 = (m & (1 << W_PRAC_L)) ? !pra2 : pra2;
+      zapalPracownia(false, pra2);
+    }
+
+    if (c & (1 << W_PRAC_P)) {
+      pra2 = (m & (1 << W_PRAC_P)) ? !pra2 : pra2;
+      zapalPracownia(false, pra2);
+    }
+
+#else
     if (c & (1 << W_PRAC_L)) {
       pra1 = (m & (1 << W_PRAC_L)) ? !pra1 : pra1;
       zapalPracownia(pra1, pra2);
@@ -307,7 +393,21 @@ void loop() {
       pra2 = (m & (1 << W_PRAC_P)) ? !pra2 : pra2;
       zapalPracownia(pra1, pra2);
     }
+#endif
 
+#define JEDNALAMPAPOKOJ 1 
+#ifdef JEDNALAMPAPOKOJ
+
+    if (c & (1 << W_POKOJ_L)) {
+      pok2 = (m & (1 << W_POKOJ_L)) ? !pok2 : pok2;
+      zapalPokoj(false, pok2);
+    }
+
+    if (c & (1 << W_POKOJ_P)) {
+      pok2 = (m & (1 << W_POKOJ_P)) ? !pok2 : pok2;
+      zapalPokoj(pok1, pok2);
+    }
+#else
     if (c & (1 << W_POKOJ_L)) {
       pok1 = (m & (1 << W_POKOJ_L)) ? !pok1 : pok1;
       zapalPokoj(pok1, pok2);
@@ -317,6 +417,25 @@ void loop() {
       pok2 = (m & (1 << W_POKOJ_P)) ? !pok2 : pok2;
       zapalPokoj(pok1, pok2);
     }
+
+#endif
+
+    if (c & (1 << W_LUS_L_L)) {
+      wlaczLeweGniazdo(m & (1 << W_LUS_L_L));
+    }
+
+    if (c & (1 << W_LUS_L_P)) {
+      wlacznadLustremPrawe(m & (1 << W_LUS_L_P));
+    }
+
+    if (c & (1 << W_LUS_P_L)) {
+      wlacznadLustremLewe(m & (1 << W_LUS_P_L));
+    }
+
+    if (c & (1 << W_LUS_P_P)) {
+      wlaczPraweGniazdo(m & (1 << W_LUS_P_P));
+    }
+
   }
 
   prev = act;
