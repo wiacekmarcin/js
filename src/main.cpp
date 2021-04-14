@@ -1,17 +1,29 @@
 #include <Arduino.h>
-#include <PCF8574.h>
-
 #include "main.h"
+
+#ifndef NEW_BOARD
+#include <PCF8574.h>
+#else
+#include <Adafruit_MCP23017.h>
+#endif
+
+
 #include "wejscia.h"
 #include "podswietlenie.h"
 #include "swiatloled.h"
 #include "swiatlojadalnia.h"
 #include "swiatlosufit.h"
 
+#ifdef NEW_BOARD
+Adafruit_MCP23017 o20;
+Adafruit_MCP23017 io24;
+#else
 PCF8574 expWejscia(0x20);
 PCF8574 expLedy(0x25);
 PCF8574 expOczka(0x26);
 PCF8574 expPozostale(0x27);
+#endif
+
 
 
 Wejscia w;
@@ -85,12 +97,16 @@ void setup() {
 
 	 swJadalnia.init();
      swPod.init();
-	 expPozostale.begin();
+#ifndef NEW_BOARD
+	expPozostale.begin();
+#endif 
+	 
 
 	 swLED.init();
 	 w.init();
+#ifndef NEW_BOARD	 
 	 expLedy.begin();
-
+#endif
 	 swPod.zapalSzafa(true);
 	 Serial.begin(38400);
 

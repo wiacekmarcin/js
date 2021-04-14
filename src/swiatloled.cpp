@@ -1,8 +1,12 @@
 #include "swiatloled.h"
-
-#include <PCF8574.h>
 #include "main.h"
+
+#ifndef NEW_BOARD
+#include <PCF8574.h>
 extern PCF8574 expLedy;
+#else
+#include "io.h"
+#endif
 
 void SwiatloLED::init()
 {
@@ -10,19 +14,31 @@ void SwiatloLED::init()
 	m_sufit2 = false;
 	m_drzwi1 = false;
 	m_drzwi2 = false;
+#ifndef NEW_BOARD
 	expLedy.pinMode(ALL, OUTPUT, lo(false));
 	expLedy.pinMode(SUFIT1, OUTPUT, lo(false));
 	expLedy.pinMode(SUFIT2, OUTPUT, lo(false));
 	expLedy.pinMode(DRZWI1, OUTPUT, lo(false));
 	expLedy.pinMode(DRZWI2, OUTPUT, lo(false));
+#endif // !NEW_BOARD	
+	
 }
 
 void SwiatloLED::ustaw_przekaz() {
+#ifndef NEW_BOARD	
 	expLedy.digitalWrite(SUFIT1, lo(m_sufit1)); //ustawiane sygnałem LOW
 	expLedy.digitalWrite(SUFIT2, lo(m_sufit2));
 	expLedy.digitalWrite(DRZWI1, lo(m_drzwi1));
 	expLedy.digitalWrite(DRZWI2, lo(m_drzwi2));
 	expLedy.digitalWrite(ALL, lo(m_sufit1 || m_sufit2 || m_drzwi1 || m_drzwi2));
+#else
+	zapalDrzwi1(m_drzwi1);
+	zapalDrzwi2(m_drzwi2);
+	zapalSufit1(m_sufit1);
+	zapalSufit2(m_sufit2);
+	zapalLEDZasilacz(m_sufit1 || m_sufit2 || m_drzwi1 || m_drzwi2);
+#endif
+
 }
 
 void SwiatloLED::zapalSufit1(bool on) {
