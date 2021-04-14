@@ -70,6 +70,9 @@ void Wejscia::read() {
 
 #else
 	auto d = readWejscia();
+#ifdef DBG
+	Serial.println(d, BIN);
+#endif	
 	kl_jad_up = LI(d, JAD2);
 	kl_jad_down = LI(d, JAD1);
 	kl_kuch_b_up = LI(d, KUCHB2);
