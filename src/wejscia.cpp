@@ -70,8 +70,28 @@ void Wejscia::read() {
 
 #else
 	auto d = readWejscia();
+	d = d & 0xff1f;
 #ifdef DBG
 	Serial.println(d, BIN);
+	/*
+	Serial.println("|KONTAKT,ZAS_AWA, TARYF2,WIECZOR,    NOC, JADAL2, JADAL1, KUCHB2, KUCHB1, KUCHA2, KUCHA1,  RUCH1, RUCH2");
+	Serial.println("|  L    |    H  |   H   |    H  |    H  |   L   |   L   |    L  |   L   |   L   |   L   |   H   |    H ");
+	  Serial.print("|      ");Serial.print((d >> KONTAKT ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> ZAS_AWAR ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> TARYF2 ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> WIECZOR ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> NOC ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> JAD2 ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> JAD1 ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> KUCHB2 ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> KUCHB1 ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> KUCHA2 ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> KUCHA1 ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.print((d >> RUCH1 ) & 0x01, DEC);
+	  Serial.print("|      ");Serial.println((d >> RUCH2 ) & 0x01, DEC);
+    */
+
+
 #endif	
 	kl_jad_up = LI(d, JAD2);
 	kl_jad_down = LI(d, JAD1);

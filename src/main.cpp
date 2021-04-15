@@ -93,9 +93,11 @@ unsigned long t = 0;
 
 
 void setup() {
+
 #ifdef NEW_BOARD
 	zapalPrzekazniki(false);
 	zapalZasAwar(false);
+	zapalLEDZasilacz(false);
 	io_init();
 	delay(500);
 	w.read();
@@ -124,13 +126,16 @@ void setup() {
 #ifndef NEW_BOARD	 
 	 expLedy.begin();
 #endif
-	 swPod.zapalSzafa(true);
-	 Serial.begin(38400);
+	swPod.zapalSzafa(true);
+	Serial.begin(38400);
 
 	t = millis();
 
 	w.read();
 	//printW(t, w, true);
+
+
+
 }
 
 
@@ -138,8 +143,37 @@ void setup() {
 unsigned long mss = 0;
 
 bool prev = false;
+int passcnt = -1;
 void loop() {
+#if 0
+	//5, 6,  8
+	digitalWrite(5, HIGH);
+	o20.writeGPIOAB(0xffff);
+	delay(5000);
+	o20.writeGPIOAB(0x0000);
+	Serial.println("5 - LOW");
+	for (int i=0; i< 16;i++) {
+		delay(400);
+		o20.digitalWrite(i, LOW);
+	}
+	io24.digitalWrite(LEDDRZ1, LOW);
+	io24.digitalWrite(LEDSUFL, LOW);
+	io24.digitalWrite(LEDSUFJ, LOW);	
+	
 
+	delay(5000);
+	Serial.println("5 - HIGH");
+	for (int i=0; i< 16;i++) {
+		delay(400);
+		o20.digitalWrite(i, HIGH);
+	}
+	io24.digitalWrite(LEDDRZ1, HIGH);
+	io24.digitalWrite(LEDSUFL, HIGH);
+	io24.digitalWrite(LEDSUFJ, HIGH);
+
+	digitalWrite(5, LOW);
+	
+	return;
 
 	if (Serial.available() > 0) {
 		uint8_t inc = Serial.read();
@@ -148,7 +182,18 @@ void loop() {
 			Serial.print(" ");
 			printW(t, w, true);	
 		}
+
+		if (inc == 'u') {
+			++passcnt;
+			test(passcnt);
+		} else if (inc == 'd') {
+			--passcnt;
+			test(passcnt);
+		}
+
+
 	}
+	#endif
 	w.read();
 	t = millis();
 	swSufit.rotate();
@@ -165,5 +210,6 @@ void loop() {
 	swPod.zapal(w.czyWieczor(), swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
 	
 	delay(100 - (millis() - t));
+
 
 }
