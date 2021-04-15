@@ -134,5 +134,7 @@ inline uint16_t readWejscia() {
 }
 
 
+void test(short pos);
+
 #endif
 #endif // !IO_PINS_H
