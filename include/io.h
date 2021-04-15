@@ -14,19 +14,19 @@ extern Adafruit_MCP23017 io24;
 #define o20_ADRESS  0x20
 #define io24_ADRESS 0x24
 
-#define    PRZEK1    0        //A0 OUT
-#define    PRZEK2    1        //A1 OUT
-#define    PRZEK3    2        //A2 OUT
-#define    PRZEK4    3        //A3 OUT
-#define    PRZEK5    4        //A4 OUT
-#define    PRZEK6    5        //A5 OUT
-#define    PRZEK7    6        //A6 OUT
-#define    PRZEK8    7        //A7 OUT
-#define    PRZEK9    8        //B0 OUT
-#define    PRZEK10   9        //B1 OUT
-#define    PRZEK11  10        //B2 OUT
-#define    PRZEK12  11        //B3 OUT
-#define    PRZEK13  12        //B4 OUT
+#define    LAMPA2    0        //A0 OUT
+#define    LAMPA7    1        //A1 OUT
+#define    LAMPA1    2        //A2 OUT
+#define    LAMPA6    3        //A3 OUT
+#define    LAMPA8    4        //A4 OUT
+#define    LAMPA4    5        //A5 OUT
+#define    LAMPA9    6        //A6 OUT
+#define    LAMPA3    7        //A7 OUT
+#define    LAMPA5    8        //B0 OUT
+#define    OSSZAFEK  9        //B1 OUT
+#define    JADAL1   10        //B2 OUT
+#define    JADAL2   11        //B3 OUT
+#define    JADAL3   12        //B4 OUT
 #define    OSWKUCH  13        //B5 OUT
 #define    OSWJAD   14        //B6 OUT
 #define    LEDDRZ2  15        //B7 OUT    
@@ -34,13 +34,13 @@ extern Adafruit_MCP23017 io24;
 
 
 #define    KONTAKT    0   //A0 IN
-#define    ZAS_AWAR   1   //A1 IN 
-#define    TARYF2     2   //A2 IN 
-#define    WIECZOR    3   //A3 IN 
-#define    NOC        4   //A4 IN
-#define    LEDDRZ1    5   //A5 OUT
-#define    LEDSUFL    6   //A6 OUT
-#define    LEDSUFJ    7   //A7 OUT
+#define    NOC        1   //A1 IN 
+#define    WIECZOR    2   //A2 IN
+#define    TARYF2     3   //A3 IN 
+#define    ZAS_AWAR   4   //A4 IN
+#define    LEDSUFL    5   //A6 OUT
+#define    LEDSUFJ    6   //A7 OUT
+#define    LEDDRZ1    7   //A5 OUT
 #define    JAD2       8   //B0 IN
 #define    JAD1       9   //B1 IN
 #define    KUCHB2    10   //B2 IN
@@ -75,22 +75,28 @@ inline void zapalJadalnia(short nr, bool zapal) {
     //przekazniki 11,12,13
     if (nr < 1 || nr > 3)
         return;
-    static const uint8_t mapPins[3] = {9, 8, 12};    
+    static const uint8_t mapPins[3] = {JADAL1, JADAL2, JADAL3};    
     o20.digitalWrite(mapPins[nr-1], zapal ? HIGH : LOW);
 }
 
 inline void zapalKuchnia(short nr, bool zapal) {
-    if (nr < 1 || nr > 9)
+    Serial.print("pin=");
+    Serial.print(nr, DEC);
+    Serial.print(" io=");
+   
+    if (nr < 0 || nr >= 9)
         return;
     //na listwie               2 7 1 6 8 4 9 3 | 5 10 11 12 | 13
     //wejscia na przekaznikach 8 7 6 5 4 3 2 1 | 4  3  2  1 |  1
-    //wejscia na expanderach   7 6 5 4 3 2 1 0 | 11 10 9  8 |  12
-    static const uint8_t mapPins[9] = {5, 7, 0, 2, 11, 4, 6, 3, 1};
-    o20.digitalWrite(mapPins[nr-1], zapal ? HIGH : LOW);
+    //wejscia na expanderach   7 6 5 4 3 2 1 0 | 8  9 10 11 | 12
+    static const uint8_t mapPins[9] = 
+    { LAMPA1, LAMPA2, LAMPA3, LAMPA4, LAMPA5, LAMPA6, LAMPA7, LAMPA8, LAMPA9 };
+    o20.digitalWrite(mapPins[nr], zapal ? HIGH : LOW);
+    Serial.println(mapPins[nr], DEC);
 }           
 
 inline void zapalSzafki(bool zapal) {
-    o20.digitalWrite(PRZEK10, zapal ? HIGH : LOW);
+    o20.digitalWrite(OSSZAFEK, zapal ? HIGH : LOW);
 }
 
 inline void zapalLEDZasilacz(bool zapal) {
@@ -134,7 +140,7 @@ inline uint16_t readWejscia() {
 }
 
 
-void test(short pos);
+//void test(short pos);
 
 #endif
 #endif // !IO_PINS_H

@@ -34,8 +34,7 @@ void Wejscia::read() {
 	static unsigned int num = 0;
 	++num;
 
-	Serial.print(num);
-	Serial.print(". ");
+
 #endif
 #ifndef NEW_BOARD
 	auto d1 = expWejscia.digitalReadAll();
@@ -70,10 +69,32 @@ void Wejscia::read() {
 
 #else
 	auto d = readWejscia();
-	d = d & 0xff1f;
+	//
+	//d = d & 0xff1f;
 #ifdef DBG
-	Serial.println(d, BIN);
-	/*
+	static uint16_t prev = 0x00;
+	if (prev != d) {
+		prev = d;
+		Serial.print(num);
+		Serial.print(". ");
+		Serial.println(d, BIN);
+		Serial.print(((d >> KONTAKT ) & 0x01) ? "KON "  : "--- ");
+		Serial.print(((d >> ZAS_AWAR ) & 0x01) ? "ZAW " : "--- ");
+		Serial.print(((d >> TARYF2 ) & 0x01) ? " TAR " : "--- ");
+		Serial.print(((d >> WIECZOR ) & 0x01) ? "WIE " : "--- ");
+		Serial.print(((d >> NOC ) & 0x01) ? "NOC " : "--- ");
+		Serial.print(((d >> JAD2 ) & 0x01) ? "JA2 " : "--- ");
+		Serial.print(((d >> JAD1 ) & 0x01) ? "JA1 " : "--- ");
+		Serial.print(((d >> KUCHB2 ) & 0x01) ? "KB2 " : "--- ");
+		Serial.print(((d >> KUCHB1 ) & 0x01) ? "KB1 " : "--- ");
+		Serial.print(((d >> KUCHA2 ) & 0x01) ? "KA2 " : "--- ");
+		Serial.print(((d >> KUCHA1 ) & 0x01) ? "KA1 " : "--- ");
+		Serial.print(((d >> RUCH1 ) & 0x01) ? "RU1 " : "--- ");
+		Serial.println(((d >> RUCH2 ) & 0x01) ? "RU2" : "---");
+	}
+
+#ifdef DBG
+/*
 	Serial.println("|KONTAKT,ZAS_AWA, TARYF2,WIECZOR,    NOC, JADAL2, JADAL1, KUCHB2, KUCHB1, KUCHA2, KUCHA1,  RUCH1, RUCH2");
 	Serial.println("|  L    |    H  |   H   |    H  |    H  |   L   |   L   |    L  |   L   |   L   |   L   |   H   |    H ");
 	  Serial.print("|      ");Serial.print((d >> KONTAKT ) & 0x01, DEC);
@@ -89,10 +110,35 @@ void Wejscia::read() {
 	  Serial.print("|      ");Serial.print((d >> KUCHA1 ) & 0x01, DEC);
 	  Serial.print("|      ");Serial.print((d >> RUCH1 ) & 0x01, DEC);
 	  Serial.print("|      ");Serial.println((d >> RUCH2 ) & 0x01, DEC);
-    */
+*/
+#endif
 
 
 #endif	
+/*
+	static int pos = -1;
+	if (LI(d, JAD2)) {
+		digitalWrite(ZASLED, LOW);
+		digitalWrite(ZAWAPRZ, LOW);
+		Serial.println("ZASLED LOW");
+		io24.digitalWrite(LEDDRZ1, LOW);
+		io24.digitalWrite(LEDDRZ2, HIGH);
+		io24.digitalWrite(LEDSUFL, LOW);
+		io24.digitalWrite(LEDSUFJ, HIGH);
+	}
+
+	if (LI(d, JAD1)) {
+		digitalWrite(ZASLED, HIGH);
+		digitalWrite(ZAWAPRZ, HIGH);
+		Serial.println("ZASLED HIGH");
+		io24.digitalWrite(LEDDRZ1, LOW);
+		io24.digitalWrite(LEDDRZ2, HIGH);
+		io24.digitalWrite(LEDSUFL, LOW);
+		io24.digitalWrite(LEDSUFJ, HIGH);
+	}
+*/
+	
+
 	kl_jad_up = LI(d, JAD2);
 	kl_jad_down = LI(d, JAD1);
 	kl_kuch_b_up = LI(d, KUCHB2);
@@ -102,10 +148,11 @@ void Wejscia::read() {
 	noc = HI(d, NOC);
 	wieczor = HI(d, WIECZOR);
 	//taryfa2 = HI(d, TARYF2);
-	//zas_awar = HI(d, ZAS_AWAR);
+	zas_awar = HI(d, ZAS_AWAR);
 	ruch_kuch = HI(d, RUCH1);
 	ruch_drzwi = HI(d, RUCH2);
-
+	drzwi_otw = HI(d, KONTAKT);
+	
 #endif
 }
 

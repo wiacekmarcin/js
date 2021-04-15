@@ -32,10 +32,10 @@ void SwiatloLED::ustaw_przekaz() {
 	expLedy.digitalWrite(DRZWI2, lo(m_drzwi2));
 	expLedy.digitalWrite(ALL, lo(m_sufit1 || m_sufit2 || m_drzwi1 || m_drzwi2));
 #else
-	zapalDrzwi1(m_drzwi1);
-	zapalDrzwi2(m_drzwi2);
-	zapalSufit1(m_sufit1);
-	zapalSufit2(m_sufit2);
+	zapalLedSufitLod(m_sufit1);
+	zapalLedSufitJad(m_sufit2);
+	zapalLedDrzwi1(m_drzwi1);
+	zapalLedDrzwi2(m_drzwi2);
 	zapalLEDZasilacz(m_sufit1 || m_sufit2 || m_drzwi1 || m_drzwi2);
 #endif
 

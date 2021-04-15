@@ -28,6 +28,8 @@ public:
 
 	void zapal(const Wejscia & w, SwiatloLED & led);
 
+	void tiktok(unsigned long mls);
+
 protected:
 	void updown(bool up);
 
@@ -72,6 +74,13 @@ private:
 	static constexpr uint8_t KLBDN 	= 0x04;
 	static constexpr uint8_t KLAUP 	= 0x02;
 	static constexpr uint8_t KLADN 	= 0x01;
+
+	struct czas {
+		unsigned long time;
+		bool on;
+	};
+
+	struct czas tabela[9];
 
 public :
 

@@ -34,12 +34,16 @@ public:
 protected:
 
     void ustaw_przekaz();
+#ifndef NEW_BOARD
+
 
 	static constexpr uint8_t ALL = 4;
 	static constexpr uint8_t SUFIT1 = 0;
 	static constexpr uint8_t SUFIT2 = 1;
 	static constexpr uint8_t DRZWI1 = 2;
 	static constexpr uint8_t DRZWI2 = 3;
+
+#endif // !NEW_BOARD
 
 private:
 	bool m_sufit1, m_sufit2, m_drzwi1, m_drzwi2;

@@ -12,7 +12,7 @@ inline bool hi(uint8_t val) { return val == HIGH; }
 
 
 
-//#define DBG
+#define DBG
 
 
 
