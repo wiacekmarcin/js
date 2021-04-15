@@ -4,19 +4,19 @@ struct wejscieconf wconf[] = {
     {NULL, PRZEK,       OUTPUT, LOW},
     {NULL, ZAWAPRZ,     OUTPUT, LOW},
     {NULL, INTER,       INPUT_PULLUP,  HIGH},
-    {&o20, PRZEK1,      OUTPUT, HIGH},
-    {&o20, PRZEK2,      OUTPUT, HIGH},
-    {&o20, PRZEK3,      OUTPUT, HIGH},
-    {&o20, PRZEK4,      OUTPUT, HIGH},
-    {&o20, PRZEK5,      OUTPUT, HIGH},
-    {&o20, PRZEK6,      OUTPUT, HIGH},
-    {&o20, PRZEK7,      OUTPUT, HIGH},
-    {&o20, PRZEK8,      OUTPUT, HIGH},
-    {&o20, PRZEK9,      OUTPUT, HIGH},
-    {&o20, PRZEK10,     OUTPUT, HIGH},
-    {&o20, PRZEK11,     OUTPUT, HIGH},
-    {&o20, PRZEK12,     OUTPUT, HIGH},
-    {&o20, PRZEK13,     OUTPUT, HIGH},
+    {&o20, LAMPA2,      OUTPUT, HIGH}, 
+    {&o20, LAMPA7,      OUTPUT, HIGH}, 
+    {&o20, LAMPA1,      OUTPUT, HIGH},
+    {&o20, LAMPA6,      OUTPUT, HIGH},
+    {&o20, LAMPA8,      OUTPUT, HIGH},
+    {&o20, LAMPA4,      OUTPUT, HIGH},
+    {&o20, LAMPA9,      OUTPUT, HIGH},
+    {&o20, LAMPA3,      OUTPUT, HIGH},
+    {&o20, LAMPA5,      OUTPUT, HIGH},
+    {&o20, OSSZAFEK,    OUTPUT, HIGH},
+    {&o20, JADAL1,      OUTPUT, HIGH},
+    {&o20, JADAL2,      OUTPUT, HIGH},
+    {&o20, JADAL3,      OUTPUT, HIGH},
     {&o20, OSWKUCH,     OUTPUT, HIGH},
     {&o20, OSWJAD,      OUTPUT, HIGH},
     {&o20, LEDDRZ2,     OUTPUT, LOW},
@@ -67,6 +67,18 @@ void io_init() {
     }
 }
 
+void init_value() {
+
+    int i = 0;
+    while(wconf[i].pin != -1) {
+        if (wconf[i].ptr != NULL && wconf[i].input == OUTPUT) {
+            wconf[i].ptr->digitalWrite(wconf[i].pin, !wconf[i].lowastrue);
+            delay(5);
+        }
+        ++i;
+    }
+}
+/*
 void test(short pos) {
     if (pos < 0 || pos > 36)
         return;
@@ -103,3 +115,4 @@ void test(short pos) {
         ++i;
     }
 }
+*/

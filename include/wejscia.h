@@ -104,7 +104,7 @@ public:
   void setRuch();
 
 private:
-  WejscieValue wieczor, drzwi_otw, noc, ruch_kuch, ruch_drzwi;
+  WejscieValue wieczor, drzwi_otw, noc, ruch_kuch, ruch_drzwi, zas_awar;
   WejscieValue kl_kuch_a_up, kl_kuch_a_down, kl_kuch_b_up, kl_kuch_b_down, kl_jad_up, kl_jad_down;
 
 

@@ -99,42 +99,36 @@ void setup() {
 	zapalZasAwar(false);
 	zapalLEDZasilacz(false);
 	io_init();
+	Serial.begin(115200);
 	delay(500);
 	w.read();
 	//if (w.czyZasilanieAwaryjne) { zapalZasAwar(true); delay(50); }
 	zapalPrzekazniki(true);
-	delay(100);
 	zapalSzafki(true);
-	if (w.czyWieczor()) {
-		zapalLedSufitLod(true);
-		zapalLEDZasilacz(true);
-	}
+	//if (w.czyWieczor()) {
+	//	zapalLedSufitLod(true);
+	//	zapalLEDZasilacz(true);
+	//}
 
-#endif
-	 swSufit.init();
+#else
+	expPozostale.begin();
+	
 	 //expOczka.begin(); -- w srodku jest funkcja begin
 
-	 swJadalnia.init();
-     swPod.init();
-#ifndef NEW_BOARD
-	expPozostale.begin();
-#endif 
+	swJadalnia.init();
+    swPod.init();
+	swLED.init();
+	w.init();
 	 
-
-	 swLED.init();
-	 w.init();
-#ifndef NEW_BOARD	 
-	 expLedy.begin();
-#endif
+	expLedy.begin();
 	swPod.zapalSzafa(true);
-	Serial.begin(38400);
+#endif
 
+	swSufit.init();
 	t = millis();
 
 	w.read();
 	//printW(t, w, true);
-
-
 
 }
 
@@ -144,6 +138,8 @@ unsigned long mss = 0;
 
 bool prev = false;
 int passcnt = -1;
+
+
 void loop() {
 #if 0
 	//5, 6,  8
@@ -193,10 +189,16 @@ void loop() {
 
 
 	}
-	#endif
+#endif
+
 	w.read();
+
+	//delay(110);
+	//return;
+
 	t = millis();
 	swSufit.rotate();
+	swSufit.tiktok(t);
 	if (!change(30*60, 5*60)) {
 		delay(100);
 		return;

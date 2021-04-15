@@ -19,6 +19,7 @@ void SwiatloJadalnia::init() {
 }
 
 void SwiatloJadalnia::rotate() {
+	/*
 	if (!rotationinProgress && (millis() - timeRotate < czasRotacji))
 		return;
 
@@ -34,6 +35,7 @@ void SwiatloJadalnia::rotate() {
   	sw[2] = tmp;
   	setPrzekaz(true, false);
 	rotationinProgress = true;
+	*/
 }
 
 void SwiatloJadalnia::up() {
@@ -41,7 +43,7 @@ void SwiatloJadalnia::up() {
   		if (!sw[id]) {
 			sw[id] = true;
 			setPrzekaz();
-			return;
+			//return;
   		}
 	}
 }
@@ -51,7 +53,7 @@ void SwiatloJadalnia::down() {
   		if (sw[id]) {
 			sw[id] = false;
 			setPrzekaz();
-			return;
+			//return;
   		}
 	}
 }

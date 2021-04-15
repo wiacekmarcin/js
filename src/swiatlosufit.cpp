@@ -18,6 +18,11 @@ void SwiatloSufit::init() {
 	expOczka.begin();
 	expPozostale.pinMode(3, OUTPUT, ho(false));
 #endif	
+
+	for (short i = 0; i < maxLed; i++) {
+		tabela[i].on = false;
+		tabela[i].time = 0L;
+	}
 }
 
 void SwiatloSufit::updown(bool up) {
@@ -57,12 +62,22 @@ void SwiatloSufit::down() {
 
 void  SwiatloSufit::off() {
 	setLevel(0);
-	setPrzekaz();
+	unsigned mls = millis();
+	for (short i = 0; i < maxLed; i++) {
+		tabela[i].time = mls + 150*i;
+		tabela[i].on = false;
+	}
+	//setPrzekaz();
 }
 
 void  SwiatloSufit::on() {
 	setLevel(4);
-	setPrzekaz();
+	//setPrzekaz();
+	unsigned mls = millis();
+	for (short i = 0; i < maxLed; i++) {
+		tabela[i].time = mls + 150*i;
+		tabela[i].on = true;
+	}
 }
 
 bool SwiatloSufit::czyZapalone() const {
@@ -110,6 +125,7 @@ void SwiatloSufit::rotate() {
 }
 
 void SwiatloSufit::set(uint8_t pin, bool on) {
+
   	if (pin >= 9)
     	return;
 #ifndef NEW_BOARD
@@ -461,4 +477,12 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led) {
 	}
 }
 
-
+void SwiatloSufit::tiktok(unsigned long mls) 
+{
+	for (short i = 0; i < maxLed; i++) {
+		if (tabela[i].time == 0 || tabela[i].time > mls)
+			continue;
+		tabela[i].time = 0; //znacznik wykonanej roboty
+		zapalKuchnia(i, tabela[i].on);
+	}
+}
