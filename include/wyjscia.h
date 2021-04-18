@@ -1,11 +1,11 @@
 #ifndef __WYJSCIA_H__
 #define __WYJSCIA_H__
-
-#include <PCF8574.h>
+#include <Arduino.h>
+#include <Adafruit_MCP23017.h>
 //#define DEBUG
 class Wyjscia {
 public:
-    Wyjscia();
+    Wyjscia(Adafruit_MCP23017 & wyjscia);
 
     void init();
 
@@ -65,14 +65,14 @@ protected:
 
 private:
 
-    PCF8574 wyjscia;
+    Adafruit_MCP23017 & wyjscia;
 
-    static constexpr uint8_t ZAWOR = 0; //fiolet
-    static constexpr uint8_t LUSTRO = 1;  //niebieski
-    static constexpr uint8_t SWIATLO = 2;  //bialy
-    static constexpr uint8_t SZAFKA = 3;   //zolty
-    static constexpr uint8_t WY_SWIATLO = 4;
-    static constexpr uint8_t WIATRAK = 5;
+    static constexpr uint8_t ZAWOR = 5; //fiolet
+    static constexpr uint8_t LUSTRO = 4;  //niebieski
+    static constexpr uint8_t SWIATLO = 3;  //bialy
+    static constexpr uint8_t SZAFKA = 2;   //zolty
+    static constexpr uint8_t WY_SWIATLO = 6; //brazowy
+    static constexpr uint8_t WIATRAK = 7; //zielony
 
     static constexpr uint8_t maxWyj = 6;
 

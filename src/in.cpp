@@ -17,19 +17,24 @@ void Wlacznik::ustaw(uint8_t value, unsigned long timeInt, unsigned int timeAfte
 {
     m_prev = m_val;
     m_val = (value == LOW); //klawisz nacisniety
- 
+#ifdef MYINTERUPTS 
     if (m_timeInt != timeInt || (timeAfterInt - m_timePush) > SEC(1)) { //inne przerwanie lub czas powyzej 1s
         m_timeInt = timeInt;
         clearState();
     }
-    
+#else
+    if (timeInt - m_timeInt > SEC(1)) { // czas powyzej 1s
+        m_timeInt = timeInt;
+        clearState();
+    }    
+#endif    
     if (m_val && !m_prev) {
         ++m_cntPush;
         m_timePush = timeAfterInt;
         m_timeHold = 0;
     }
 
-    if (m_val && m_prev ) { //nacisniety klawisz i przytrzymany przez {
+    if (m_val && m_prev ) { //nacisniety klawisz i przytrzymany przez 
         m_timeHold = timeAfterInt - m_timePush;
     }
 }

@@ -1,13 +1,13 @@
 #ifndef __WEJSCIA_H__
 #define __WEJSCIA_H__
 
-#include <PCF8574.h>
 
+#include <Adafruit_MCP23017.h>
 #include "in.h"
-//#define DEBUG
+#define DEBUG
 class Wejscia {
 public:
-    Wejscia(void (*fun)());
+    Wejscia(Adafruit_MCP23017 & wyjscia);
 
     void init();
 
@@ -25,18 +25,18 @@ public:
     void get();
 private:
     
-    PCF8574 wejscia;
+    Adafruit_MCP23017 & wejscia;
 
-    static constexpr uint8_t CZ_R_WC = 1;
-    static constexpr uint8_t CZ_R_LUSTRO = 0;
-    static constexpr uint8_t DRZWI = 2;
-    static constexpr uint8_t KLAWISZ = 3;
-    static constexpr uint8_t Z_AWAR = 4;
-    static constexpr uint8_t TARYF2 = 5;
-    static constexpr uint8_t WIECZOR =6;
-    static constexpr uint8_t NOC = 7;
+    static constexpr uint8_t CZ_R_WC = 0;//jasnozielony
+    static constexpr uint8_t CZ_R_LUSTRO = 1;//jansobrazowy
+    static constexpr uint8_t DRZWI = 2; //szary
+    static constexpr uint8_t KLAWISZ = 3; //pomaranczowy
+    static constexpr uint8_t Z_AWAR = 4; //fioletowy
+    static constexpr uint8_t TARYF2 = 5; //brazowy
+    static constexpr uint8_t WIECZOR = 6; //zolty
+    static constexpr uint8_t NOC = 7; //bialy
         
-    static constexpr uint8_t lenWej = 7;
+    static constexpr uint8_t lenWej = 8;
 
     class Wlacznik wl;
     class CzujkaZblizeniowa czBl;

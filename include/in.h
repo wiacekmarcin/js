@@ -1,7 +1,6 @@
 #ifndef     _IN_H_
 #define     _IN_H_
 
-#include <PCF8574.h>
 #include "util.h"
 
 //#define DEBUG

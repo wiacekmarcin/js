@@ -1,8 +1,8 @@
 #include "wyjscia.h"
 #include "util.h"
 
-Wyjscia::Wyjscia() :
-    wyjscia(0x21)
+Wyjscia::Wyjscia(Adafruit_MCP23017 &wyj) :
+    wyjscia(wyj)
 {
     for (int i = 0; i < maxWyj; ++i) {
         on[i] = false;
@@ -13,15 +13,25 @@ Wyjscia::Wyjscia() :
 
 void Wyjscia::init()
 {
-    wyjscia.begin();      
-    wyjscia.pinMode(SWIATLO, OUTPUT, HIGH);
-    wyjscia.pinMode(SZAFKA, OUTPUT, HIGH);
-    wyjscia.pinMode(LUSTRO, OUTPUT, HIGH);
-    wyjscia.pinMode(ZAWOR, OUTPUT, HIGH);
-    wyjscia.pinMode(WY_SWIATLO, OUTPUT, HIGH);
-    wyjscia.pinMode(WIATRAK, OUTPUT, LOW);
+    wyjscia.pinMode(SWIATLO, OUTPUT);
+    wyjscia.digitalWrite(SWIATLO, HIGH);
 
-    for (int i = 0; i < maxWyj; ++i) {
+    wyjscia.pinMode(SZAFKA, OUTPUT);
+    wyjscia.digitalWrite(SZAFKA, HIGH);
+
+    wyjscia.pinMode(LUSTRO, OUTPUT);
+    wyjscia.digitalWrite(LUSTRO, HIGH);
+
+    wyjscia.pinMode(ZAWOR, OUTPUT);
+    wyjscia.digitalWrite(ZAWOR, HIGH);
+
+    wyjscia.pinMode(WY_SWIATLO, OUTPUT);
+    wyjscia.digitalWrite(WY_SWIATLO, HIGH);
+
+    wyjscia.pinMode(WIATRAK, OUTPUT);
+    wyjscia.digitalWrite(WIATRAK, HIGH);
+
+    for (int i = SZAFKA; i <= WIATRAK; ++i) {
         set(i, false, 0);
     }
 }
@@ -30,8 +40,8 @@ void Wyjscia::set(uint8_t pos, bool value, unsigned long tmt)
 {
     unsigned long mls = millis();
     wyjscia.digitalWrite(pos, o(pos, value));
-    on[pos] = value;
-    timeout[pos] = 1000L*tmt + mls;
+    on[pos-SZAFKA] = value;
+    timeout[pos-SZAFKA] = 1000L*tmt + mls;
 #ifdef DEBUG
     Serial.print("set pos=");
     Serial.print((int)pos, DEC);
@@ -46,7 +56,7 @@ void Wyjscia::set(uint8_t pos, bool value, unsigned long tmt)
 
 void Wyjscia::add(uint8_t pos, unsigned long tmt)
 {
-    timeout[pos] += 1000L*tmt;
+    timeout[pos-SZAFKA] += 1000L*tmt;
 #ifdef DEBUG
     Serial.print(" tmt=");
     Serial.print(tmt, DEC);
@@ -66,7 +76,7 @@ bool Wyjscia::tiktok()
             ret = true;
             if (timeout[i] < mls && timeout[i]) {
                 on[i] = false;
-                wyjscia.digitalWrite(i, o(i, false));
+                wyjscia.digitalWrite(i+SZAFKA, o(i+SZAFKA, false));
                 timeout[i] = 0;
 #ifdef DEBUG                
                 Serial.print("tittok OFF = ");
@@ -85,12 +95,12 @@ bool Wyjscia::tiktok()
 
 uint8_t Wyjscia::o(uint8_t id, bool value)
 {
-    return (id == WIATRAK) ? ho(value) : lo(value);
+    return (id == WIATRAK || id == WY_SWIATLO) ? ho(value) : lo(value);
 }
 
 bool Wyjscia::i(uint8_t id, uint8_t value)
 {
-    return (id == WIATRAK) ? hi(value) : li(value);
+    return (id == WIATRAK || id == WY_SWIATLO) ? hi(value) : li(value);
 }
 
 void Wyjscia::print(const char * funn) const

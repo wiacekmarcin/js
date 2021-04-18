@@ -1,7 +1,6 @@
 #include <Arduino.h>
 
 #include <Wire.h>
-#include <PCF8574.h>
 
 #include "wejscia.h"
 #include "wyjscia.h"
@@ -10,7 +9,9 @@
 #include "util.h"
 
 #define SENSORS
-//#define DEBUG
+#define DEBUG
+
+//#define MYINTERUPTS
 
 constexpr unsigned short DELAY = 200; //50;
 constexpr unsigned long TIMEBEFORESLEEP = SEC(5);
@@ -22,6 +23,7 @@ constexpr unsigned int CNTMAXLOOP = TIMEBEFORESLEEP / DELAY;
 
 // na 9 pinie jest temperatury
 #define ONE_WIRE_BUS 9
+#define INTERPIN 7
 
 // Inicjalizacja protokoli
 OneWire oneWire(ONE_WIRE_BUS);
@@ -32,12 +34,13 @@ DallasTemperature sensors(&oneWire, ONE_WIRE_BUS);
 DeviceAddress insideThermometer;
 #endif
 
-//PCF8574 expWejscia(0x20);
-void keyPressedOnPCF8574();
-Wejscia expWejscia(keyPressedOnPCF8574);
 
-//PCF8574 expWyjscia(0x21);
-Wyjscia expWyjscia;
+void keyPressedOn();
+Adafruit_MCP23017 wejsciawyjscia;
+Wejscia expWejscia(wejsciawyjscia);
+
+
+Wyjscia expWyjscia(wejsciawyjscia);
 
 Swiatlo lampa(expWejscia, expWyjscia);
 
@@ -49,13 +52,24 @@ void SensorInitalize();
 
 bool noSensors = false;
 volatile uint8_t cntLoop = 0;
-void setup() {  
-  
-  expWejscia.init();
+volatile uint8_t awakenByInterrupt = false;
 
-  expWyjscia.init();
+void intCallBack(){
+    awakenByInterrupt=true;
+}
+
+void setup() {  
+    wejsciawyjscia.begin();
+
+#ifdef MYINTERUPTS
+    pinMode(INTERPIN, INPUT);
+    wejsciawyjscia.setupInterrupts(false, true, LOW);
+		attachInterrupt(digitalPinToInterrupt(INTERPIN), keyPressedOn, FALLING );
+#endif    
+    expWejscia.init();
+    expWyjscia.init();
   
-  Serial.begin(115200);
+    Serial.begin(115200);
 
 
   #ifdef SENSORS
@@ -71,9 +85,17 @@ void setup() {
   #endif
   
 
+  
+    
+
     cntLoop = 0;
-    delay(1000);
+#ifndef DEBUG    
+    delay(5000);
+#else
+    cntLoop = 200;
+#endif    
     expWejscia.get(0, 0);
+    //sei();
 }
 
 
@@ -81,7 +103,7 @@ void setup() {
 void printTemperature(DeviceAddress deviceAddress)
 {
   
-
+#ifdef SENSORS
   // method 2 - faster
   float tempC = sensors.getTempC(deviceAddress);
   if(tempC == DEVICE_DISCONNECTED_C) 
@@ -92,7 +114,7 @@ void printTemperature(DeviceAddress deviceAddress)
   //Serial.print("Temp C: ");
   //Serial.println(tempC);
   //expWejscia.get();
-
+#endif
 }
 
 
@@ -100,7 +122,7 @@ unsigned long tik = 0;
 
 unsigned long timeInt = 0L;
 
-void keyPressedOnPCF8574()
+void keyPressedOn()
 {
     cli();
     if (!cntLoop)
@@ -136,7 +158,13 @@ void setWiatrak()
 }
 
 
-void loop() {
+void loop()
+{
+
+
+
+#ifdef MYINTERUPTS
+
 
     if (cntLoop > 0) {
         //Serial.print("cntLoop=");
@@ -165,7 +193,14 @@ void loop() {
 #ifdef DEBUG        
         expWejscia.get(millis(), 0);
         expWejscia.print();
-#endif        
-
+#endif
     }
+#else  
+    mls = millis();
+    expWejscia.get(mls, 0);
+    lampa.set(mls);
+    setWiatrak();
+    delay(100);
 }
+#endif
+    
