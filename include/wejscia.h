@@ -24,6 +24,8 @@
 #define RUCH2     15 //B7 IN
 */
 
+
+
 class WejscieValue {
 public:
   WejscieValue() : value(false), prevvalue(false), timeChange(0)
@@ -59,7 +61,7 @@ private:
   	bool value, prevvalue;
   	unsigned long timeChange;
 };
-
+class LiquidCrystal_I2C;
 class Wejscia
 {
 public:
@@ -67,13 +69,17 @@ public:
 
 	void init();
 
-	void read();
+	void read(bool printlcd, LiquidCrystal_I2C * lcd);
 
   bool czyWieczor() const;
 
   bool czyDrzwiOtwarte() const;
 
   bool czyNoc() const;
+
+  bool czyZasilanieAwaryjne() const;
+
+  bool czyZmianaZasAwaryjne() const;
 
   bool czyRuchKuchnia(unsigned long timeins) const;
 
@@ -104,7 +110,7 @@ public:
   void setRuch();
 
 private:
-  WejscieValue wieczor, drzwi_otw, noc, ruch_kuch, ruch_drzwi, zas_awar;
+  WejscieValue wieczor, drzwi_otw, noc, ruch_kuch, ruch_drzwi, zas_awar, taryfa2;
   WejscieValue kl_kuch_a_up, kl_kuch_a_down, kl_kuch_b_up, kl_kuch_b_down, kl_jad_up, kl_jad_down;
 
 

@@ -23,6 +23,7 @@ void SwiatloSufit::init() {
 		tabela[i].on = false;
 		tabela[i].time = 0L;
 	}
+	tik = 0;
 }
 
 void SwiatloSufit::updown(bool up) {
@@ -62,7 +63,7 @@ void SwiatloSufit::down() {
 
 void  SwiatloSufit::off() {
 	setLevel(0);
-	unsigned mls = millis();
+	unsigned long mls = millis();
 	for (short i = 0; i < maxLed; i++) {
 		tabela[i].time = mls + 150*i;
 		tabela[i].on = false;
@@ -73,7 +74,7 @@ void  SwiatloSufit::off() {
 void  SwiatloSufit::on() {
 	setLevel(4);
 	//setPrzekaz();
-	unsigned mls = millis();
+	unsigned long mls = millis();
 	for (short i = 0; i < maxLed; i++) {
 		tabela[i].time = mls + 150*i;
 		tabela[i].on = true;
@@ -195,6 +196,15 @@ void SwiatloSufit::setLevel(int8_t lev) {
 		}
 		break;
   	}
+}
+
+bool SwiatloSufit::ZapalAwaryjnie(const Wejscia & w, SwiatloLED & led) 
+{
+	bool klawiszdown = w.czyklJadUp() || w.czyklJadDown() || w.czyklKuch();
+	
+	if (klawiszdown)
+		led.zapalSufit(!led.czyZapalone(), false);
+	return true;
 }
 
 bool SwiatloSufit::ZapalWieczor(uint8_t maska, SwiatloLED & led)
@@ -417,6 +427,11 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led) {
 	bool czyNoc = w.czyNoc();
 	bool czyWieczor = w.czyWieczor();
 
+	if (w.czyZmianaZasAwaryjne()) {
+		off();
+		return;
+	}
+
 	uint8_t mask = 0x00;
 	mask = (mask << 1 ) | led.czyZapalonySufit2();
 	mask = (mask << 1 ) | led.czyZapalonySufit1();
@@ -440,8 +455,10 @@ void SwiatloSufit::zapal(const Wejscia & w, SwiatloLED & led) {
 	
 	timeChange = millis();
 	bool ret = true;
-
-	if (czyNoc && czyWieczor) {
+	if (w.czyZasilanieAwaryjne()) {
+		ret = ZapalAwaryjnie(w, led);
+		return;
+	} else if (czyNoc && czyWieczor) {
 		ret = ZapalWieczoriNoc(mask, led);
 	} else if (czyWieczor) {
 		ret = ZapalWieczor(mask, led);

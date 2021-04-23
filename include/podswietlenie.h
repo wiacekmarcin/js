@@ -18,7 +18,7 @@ public:
 
   	void zapalSzafa(const bool on);
 
-	void zapal(bool w, bool s, bool j, bool l );
+	void zapal(bool a, bool w, bool s, bool j, bool l );
 
 	bool czySzafaZapalona() { return szafa; }
 protected:

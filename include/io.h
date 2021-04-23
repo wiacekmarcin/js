@@ -34,10 +34,10 @@ extern Adafruit_MCP23017 io24;
 
 
 #define    KONTAKT    0   //A0 IN
-#define    NOC        1   //A1 IN 
-#define    WIECZOR    2   //A2 IN
-#define    TARYF2     3   //A3 IN 
-#define    ZAS_AWAR   4   //A4 IN
+#define    NOC        3   //A1 IN 
+#define    ZAS_AWAR   2   //A2 IN
+#define    TARYF2     1   //A3 IN 
+#define    WIECZOR    4   //A4 IN
 #define    LEDSUFL    5   //A6 OUT
 #define    LEDSUFJ    6   //A7 OUT
 #define    LEDDRZ1    7   //A5 OUT
@@ -80,9 +80,9 @@ inline void zapalJadalnia(short nr, bool zapal) {
 }
 
 inline void zapalKuchnia(short nr, bool zapal) {
-    Serial.print("pin=");
-    Serial.print(nr, DEC);
-    Serial.print(" io=");
+    //Serial.print("pin=");
+    //Serial.print(nr, DEC);
+    //Serial.print(" io=");
    
     if (nr < 0 || nr >= 9)
         return;
@@ -92,7 +92,7 @@ inline void zapalKuchnia(short nr, bool zapal) {
     static const uint8_t mapPins[9] = 
     { LAMPA1, LAMPA2, LAMPA3, LAMPA4, LAMPA5, LAMPA6, LAMPA7, LAMPA8, LAMPA9 };
     o20.digitalWrite(mapPins[nr], zapal ? HIGH : LOW);
-    Serial.println(mapPins[nr], DEC);
+    //Serial.println(mapPins[nr], DEC);
 }           
 
 inline void zapalSzafki(bool zapal) {

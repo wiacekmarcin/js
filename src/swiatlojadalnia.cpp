@@ -96,6 +96,16 @@ void SwiatloJadalnia::zapal(const Wejscia & w)
 	bool klup = w.czyklJadUp();
 	bool kldown = w.czyklJadDown();
 
+	if (w.czyZmianaZasAwaryjne()) {
+		off();
+		return;
+	}
+
+	if (w.czyZasilanieAwaryjne()) {
+		return;
+	}
+
+
 	if (!klup && !kldown)
 		return;
 	else {
