@@ -43,6 +43,7 @@ protected:
 	bool ZapalNoc(uint8_t maska, SwiatloLED & led);
 	bool ZapalWieczor(uint8_t maska, SwiatloLED & led);
 	bool ZapalWieczoriNoc(uint8_t maska, SwiatloLED & led);
+	bool ZapalAwaryjnie(const Wejscia & w, SwiatloLED & led);
 private:
     static constexpr uint8_t maxLed = 9; //0  1  2  3  4  5  6  7  8
 
@@ -81,6 +82,7 @@ private:
 	};
 
 	struct czas tabela[9];
+	unsigned long tik;
 
 public :
 

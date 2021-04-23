@@ -90,6 +90,13 @@ void SwiatloLED::zapal(const Wejscia & w, bool s)
 {
 	//rzeczy zwiazane z ledami od sufitu przeniesione do swiatlosufit
 
+	if (w.czyZasilanieAwaryjne())  {
+		zapalDrzwi1(false);
+		zapalDrzwi2(false);
+		zapalSufit2(false);
+		return;
+	}
+
 	if (s) {
 		zapalDrzwi1(false);
 		zapalDrzwi2(false);

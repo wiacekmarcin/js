@@ -55,9 +55,11 @@ void Podswietlenie::setPrzekaz()
 #endif
 }
 
-void Podswietlenie::zapal(bool wieczor, bool sufit, bool jadalnia, bool led)
+void Podswietlenie::zapal(bool zas_awar, bool wieczor, bool sufit, bool jadalnia, bool led)
 {
-	zapalKuchnia(wieczor && !sufit && !led);
-	zapalJadalnia(wieczor && !sufit && !led && !jadalnia);
+    
+	zapalKuchnia(!zas_awar && wieczor && !sufit && !led);
+	zapalJadalnia(!zas_awar && wieczor && !sufit && !led && !jadalnia);
+  zapalSzafa(!zas_awar);
 
 }

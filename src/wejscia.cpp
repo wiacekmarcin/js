@@ -7,6 +7,7 @@ extern PCF8574 expWejscia;
 extern PCF8574 expLedy;
 #else
 #include "io.h"
+#include <LiquidCrystal_I2C.h>
 #endif
 
 void Wejscia::init() {
@@ -29,7 +30,10 @@ void Wejscia::init() {
 
 #define LI(d, p) (((~(d))&(1<<(p)))>>(p))
 #define HI(d, p) (((d)&(1<<(p)))>>(p))
-void Wejscia::read() {
+
+
+
+void Wejscia::read(bool printlcd, LiquidCrystal_I2C * lcd) {
 #ifdef DBG
 	static unsigned int num = 0;
 	++num;
@@ -71,6 +75,16 @@ void Wejscia::read() {
 	auto d = readWejscia();
 	//
 	//d = d & 0xff1f;
+	if (printlcd) {
+		lcd->setCursor(0,1);
+		lcd->print(((d >> 1 ) & 0x01) ? '1' : '0');
+		lcd->print(' ');
+		lcd->print(((d >> 2 ) & 0x01) ? '1' : '0');
+		lcd->print(' ');
+		lcd->print(((d >> 3 ) & 0x01) ? '1' : '0');
+		lcd->print(' ');
+		lcd->print(((d >> 4 ) & 0x01) ? '1' : '0');
+	}
 #ifdef DBG
 	static uint16_t prev = 0x00;
 	if (prev != d) {
@@ -78,19 +92,20 @@ void Wejscia::read() {
 		Serial.print(num);
 		Serial.print(". ");
 		Serial.println(d, BIN);
-		Serial.print(((d >> KONTAKT ) & 0x01) ? "KON "  : "--- ");
+		//Serial.print(((d >> KONTAKT ) & 0x01) ? "KON "  : "--- ");
 		Serial.print(((d >> ZAS_AWAR ) & 0x01) ? "ZAW " : "--- ");
 		Serial.print(((d >> TARYF2 ) & 0x01) ? " TAR " : "--- ");
 		Serial.print(((d >> WIECZOR ) & 0x01) ? "WIE " : "--- ");
 		Serial.print(((d >> NOC ) & 0x01) ? "NOC " : "--- ");
-		Serial.print(((d >> JAD2 ) & 0x01) ? "JA2 " : "--- ");
-		Serial.print(((d >> JAD1 ) & 0x01) ? "JA1 " : "--- ");
-		Serial.print(((d >> KUCHB2 ) & 0x01) ? "KB2 " : "--- ");
-		Serial.print(((d >> KUCHB1 ) & 0x01) ? "KB1 " : "--- ");
-		Serial.print(((d >> KUCHA2 ) & 0x01) ? "KA2 " : "--- ");
-		Serial.print(((d >> KUCHA1 ) & 0x01) ? "KA1 " : "--- ");
-		Serial.print(((d >> RUCH1 ) & 0x01) ? "RU1 " : "--- ");
-		Serial.println(((d >> RUCH2 ) & 0x01) ? "RU2" : "---");
+		//Serial.print(((d >> JAD2 ) & 0x01) ? "JA2 " : "--- ");
+		//Serial.print(((d >> JAD1 ) & 0x01) ? "JA1 " : "--- ");
+		//Serial.print(((d >> KUCHB2 ) & 0x01) ? "KB2 " : "--- ");
+		//Serial.print(((d >> KUCHB1 ) & 0x01) ? "KB1 " : "--- ");
+		//Serial.print(((d >> KUCHA2 ) & 0x01) ? "KA2 " : "--- ");
+		//Serial.print(((d >> KUCHA1 ) & 0x01) ? "KA1 " : "--- ");
+		//Serial.print(((d >> RUCH1 ) & 0x01) ? "RU1 " : "--- ");
+		//Serial.println(((d >> RUCH2 ) & 0x01) ? "RU2" : "---");
+		Serial.println(" ");
 	}
 
 #ifdef DBG
@@ -145,10 +160,10 @@ void Wejscia::read() {
 	kl_kuch_b_down = LI(d, KUCHB1);
 	kl_kuch_a_up = LI(d, KUCHA2);
 	kl_kuch_a_down = LI(d, KUCHA1);
-	noc = HI(d, NOC);
-	wieczor = HI(d, WIECZOR);
-	//taryfa2 = HI(d, TARYF2);
-	zas_awar = HI(d, ZAS_AWAR);
+	noc = LI(d, NOC);
+	wieczor = LI(d, WIECZOR);
+	taryfa2 = LI(d, TARYF2);
+	zas_awar = LI(d, ZAS_AWAR);
 	ruch_kuch = HI(d, RUCH1);
 	ruch_drzwi = HI(d, RUCH2);
 	drzwi_otw = HI(d, KONTAKT);
@@ -163,6 +178,14 @@ bool Wejscia::czyWieczor() const {
 
 bool Wejscia::czyDrzwiOtwarte() const {
   return drzwi_otw;
+}
+
+bool Wejscia::czyZasilanieAwaryjne() const {
+	return zas_awar;
+}
+
+bool Wejscia::czyZmianaZasAwaryjne() const {
+	return zas_awar && zas_awar.czyZmiana();
 }
 
 bool Wejscia::czyNoc() const {

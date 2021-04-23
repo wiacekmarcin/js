@@ -8,6 +8,11 @@
 #include "io.h"
 #endif
 
+#include <LiquidCrystal_I2C.h>
+#define ISLCD 9
+
+
+LiquidCrystal_I2C lcd(0x3F,16,2);  
 
 #include "wejscia.h"
 #include "podswietlenie.h"
@@ -62,6 +67,7 @@ bool change(unsigned long timeinsKuchnia, unsigned long timeimsDrzwi) {
 
 void printW(const long & t, const Wejscia &w, bool force = false) 
 {
+/*	
 	Serial.println(t);
 	Serial.println("JAD UP | JAD DOWN | KUCH A UP | KUCH A DOWN | KUCH B UP | KUCH B DOWN | DRZWI_OTW | WIE | NOC | RUCH_DRZWI | RUCH_KUCH ");
 	Serial.print  ("      ");
@@ -87,6 +93,7 @@ void printW(const long & t, const Wejscia &w, bool force = false)
 	Serial.print ("|         ");
 	Serial.println (w.czyRuchKuchnia(2000));
 	Serial.println('-');
+*/	
 }
 
 unsigned long t = 0;
@@ -95,13 +102,14 @@ unsigned long t = 0;
 void setup() {
 
 #ifdef NEW_BOARD
+
 	zapalPrzekazniki(false);
 	zapalZasAwar(false);
 	zapalLEDZasilacz(false);
 	io_init();
 	Serial.begin(115200);
 	delay(500);
-	w.read();
+	w.read(false, NULL);
 	//if (w.czyZasilanieAwaryjne) { zapalZasAwar(true); delay(50); }
 	zapalPrzekazniki(true);
 	zapalSzafki(true);
@@ -127,7 +135,7 @@ void setup() {
 	swSufit.init();
 	t = millis();
 
-	w.read();
+	w.read(false, NULL);
 	//printW(t, w, true);
 
 }
@@ -138,7 +146,7 @@ unsigned long mss = 0;
 
 bool prev = false;
 int passcnt = -1;
-
+bool connectLcd = false;
 
 void loop() {
 #if 0
@@ -191,7 +199,34 @@ void loop() {
 	}
 #endif
 
-	w.read();
+	 if (digitalRead(ISLCD) == LOW) {
+        if (!connectLcd) {
+            Serial.println("Inicjalizacja LCD");
+            lcd.init();                      // initialize the lcd 
+            lcd.clear();
+            
+            // Print a message to the LCD.
+            lcd.print("Staritng!");
+            connectLcd = true;
+			lcd.clear();
+            lcd.setBacklight(true);
+            lcd.setCursor(0,0);
+            lcd.print('1');
+            lcd.print(' ');
+            lcd.print('2');
+            lcd.print(' ');
+            lcd.print('3');
+            lcd.print(' ');
+            lcd.print('4');
+        } 
+    } else if (connectLcd) {
+        connectLcd = false;
+        Serial.println("Rozlaczenie LCD");
+    }
+
+	w.read(connectLcd, &lcd);
+	//lcd.setCursor(0,1);
+
 
 	//delay(110);
 	//return;
@@ -209,7 +244,7 @@ void loop() {
 	swJadalnia.zapal(w);
 	swSufit.zapal(w, swLED);
 	swLED.zapal(w, swSufit.czyZapalone());
-	swPod.zapal(w.czyWieczor(), swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
+	swPod.zapal(w.czyZasilanieAwaryjne(), w.czyWieczor(), swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
 	
 	delay(100 - (millis() - t));
 
