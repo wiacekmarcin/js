@@ -9,9 +9,9 @@
 #include "util.h"
 
 #define SENSORS
-#define DEBUG
+//#define DEBUG
 
-//#define MYINTERUPTS
+#define MYINTERUPTS
 
 constexpr unsigned short DELAY = 200; //50;
 constexpr unsigned long TIMEBEFORESLEEP = SEC(5);
@@ -19,11 +19,15 @@ constexpr unsigned int CNTMAXLOOP = TIMEBEFORESLEEP / DELAY;
 
 #ifdef SENSORS
 #include "OneWire.h"
-#include "DallasTemperature.h"
+#include <DallasTemperature.h>
 
 // na 9 pinie jest temperatury
 #define ONE_WIRE_BUS 9
+#ifdef MYINTERUPTS
 #define INTERPIN 7
+#endif
+
+#define ISLCD  8
 
 // Inicjalizacja protokoli
 OneWire oneWire(ONE_WIRE_BUS);
@@ -33,6 +37,10 @@ DallasTemperature sensors(&oneWire, ONE_WIRE_BUS);
 
 DeviceAddress insideThermometer;
 #endif
+
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x3F,16,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 
 void keyPressedOn();
@@ -60,11 +68,12 @@ void intCallBack(){
 
 void setup() {  
     wejsciawyjscia.begin();
+    pinMode(ISLCD, INPUT);
 
 #ifdef MYINTERUPTS
     pinMode(INTERPIN, INPUT);
-    wejsciawyjscia.setupInterrupts(false, true, LOW);
-		attachInterrupt(digitalPinToInterrupt(INTERPIN), keyPressedOn, FALLING );
+    wejsciawyjscia.setupInterrupts(false, false, LOW);
+    attachInterrupt(digitalPinToInterrupt(INTERPIN), keyPressedOn, FALLING );
 #endif    
     expWejscia.init();
     expWyjscia.init();
@@ -85,17 +94,18 @@ void setup() {
   #endif
   
 
-  
+    lcd.init();                      // initialize the lcd 
+    lcd.clear();
+ 
+    // Print a message to the LCD.
+    lcd.backlight();
+    
     
 
     cntLoop = 0;
-#ifndef DEBUG    
-    delay(5000);
-#else
-    cntLoop = 200;
-#endif    
-    expWejscia.get(0, 0);
-    //sei();
+    expWejscia.get(false, 0, 0, false, &lcd);
+    delay(2000);
+    sei();
 }
 
 
@@ -111,8 +121,8 @@ void printTemperature(DeviceAddress deviceAddress)
     Serial.println("Error: Could not read temperature data");
     return;
   }
-  //Serial.print("Temp C: ");
-  //Serial.println(tempC);
+  Serial.print("Temp C: ");
+  Serial.println(tempC);
   //expWejscia.get();
 #endif
 }
@@ -128,8 +138,8 @@ void keyPressedOn()
     if (!cntLoop)
         timeInt = millis();  
     cntLoop = CNTMAXLOOP;
+    awakenByInterrupt=true;
     sei();
-    //Serial.println('-');
 }
 
 void mydelay(unsigned long ms)
@@ -147,7 +157,7 @@ void mydelay(unsigned long ms)
 
 bool wasTemp = false;
 unsigned long mls = 0L;
-
+unsigned long prevmls = 0L;
 void setWiatrak() 
 {
     const Wlacznik & w = expWejscia.getWlacznik();
@@ -157,21 +167,28 @@ void setWiatrak()
     }
 }
 
-
+uint8_t prevLcd = 1;
 void loop()
 {
 
 
 
 #ifdef MYINTERUPTS
-
+    if (digitalRead(ISLCD) == LOW && !prevLcd) {
+        lcd.init();                      // initialize the lcd 
+        lcd.clear();
+        // Print a message to the LCD.
+        lcd.backlight();
+        expWejscia.get(awakenByInterrupt, timeInt, mls - timeInt, digitalRead(ISLCD) == LOW, &lcd);
+    }
 
     if (cntLoop > 0) {
         //Serial.print("cntLoop=");
         //Serial.println(cntLoop, DEC);
         --cntLoop;
         mls = millis();
-        expWejscia.get(timeInt, mls - timeInt);
+        expWejscia.get(awakenByInterrupt, timeInt, mls - timeInt, digitalRead(ISLCD) == LOW, &lcd);
+        awakenByInterrupt=false;
 #ifdef DEBUG        
         expWejscia.print();
 #endif        
@@ -195,12 +212,28 @@ void loop()
         expWejscia.print();
 #endif
     }
+
 #else  
+
+
     mls = millis();
-    expWejscia.get(mls, 0);
-    lampa.set(mls);
-    setWiatrak();
-    delay(100);
-}
+    expWejscia.get(mls, 0, digitalRead(ISLCD) == LOW, &lcd);
+
+    if (expWejscia.czyZasilAwar()) {
+        expWyjscia.off();
+    } else {
+        lampa.set(mls);
+        setWiatrak();
+    }
+#ifdef DEBUG    
+    if (mls - prevmls > 15000) {
+        prevmls = mls;
+        expWejscia.print();
+        expWyjscia.print("Czas");
+    }
+#endif    
+    delay(50);
 #endif
+}
+
     

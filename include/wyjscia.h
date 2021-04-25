@@ -11,6 +11,8 @@ public:
 
     bool tiktok();
 
+    void off();
+
     void setSwiatlo(bool on = true, unsigned long timeout = 10*60)
         { set(SWIATLO, on, timeout); }
 
@@ -55,7 +57,6 @@ public:
     inline static bool hi(uint8_t value) { return value == HIGH; }
 
     static uint8_t o(uint8_t id, bool value);
-    static bool i(uint8_t id, uint8_t value);
 
     void print(const char *ff) const;
 
@@ -74,10 +75,13 @@ private:
     static constexpr uint8_t WY_SWIATLO = 6; //brazowy
     static constexpr uint8_t WIATRAK = 7; //zielony
 
-    static constexpr uint8_t maxWyj = 6;
+    static constexpr uint8_t WY_FIRST = SZAFKA;
+    static constexpr uint8_t WY_LAST = WIATRAK; 
 
-    bool on[maxWyj] = { false, false, false, false, false, false };
-    unsigned long timeout[maxWyj] = { 0, 0, 0, 0, 0, 0};
+    static constexpr uint8_t maxWyj = 8;
+
+    bool on[maxWyj] = { false, false, false, false, false, false, false, false };
+    unsigned long timeout[maxWyj] = { 0, 0, 0, 0, 0, 0, 0, 0};
 
 };
 

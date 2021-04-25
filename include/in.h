@@ -154,7 +154,7 @@ public:
     typedef enum epora {
         DZIEN,
         WIECZOR,
-        NOC
+        NOC,
     } Pora;
 
     PoraDnia();

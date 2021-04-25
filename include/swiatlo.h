@@ -22,9 +22,6 @@ public:
     void przedluzLustro(int mls = 5*60);
     void zgasLustro();
 protected:
-    void setDzien(); 
-    void setWieczor(); 
-    void setNoc(); 
 
     unsigned long czasZapaleniaSwiatlo(bool noc, bool otwarte_drzwi) {
         return noc ? (otwarte_drzwi ? L_SEC(30) : L_MIN(2)) : (otwarte_drzwi ? L_MIN(1) : L_MIN(5));

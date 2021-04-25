@@ -117,9 +117,21 @@ bool Swiatlo::set(unsigned long mls)
     const Drzwi & d = wej.getDrzwi();
     const CzujkaRuchu & c = wej.getCzujkaRuchu();
     const CzujkaZblizeniowa & l = wej.getCzujkaZbl();
-
-    //najpierw czujniki ruchu
-
+/*
+    Serial.print("onl=");Serial.print(onL, DEC);
+    Serial.print(" onS=");Serial.print(onS, DEC);
+    Serial.print(" wie=");Serial.print(pora.czyWieczor(), DEC);
+    Serial.print(" noc=");Serial.print(pora.czyNoc(), DEC);
+    Serial.print(" kla1=");Serial.print(w.nacisniety(), DEC);
+    Serial.print(" kla2=");Serial.print(w.nacisnietyDrugiRaz(), DEC);
+    Serial.print(" kla3=");Serial.print(w.nacisnietyTrzeciRaz(), DEC);
+    Serial.print(" dotw=");Serial.print(d.czyOtwarte());
+    Serial.print(" dott=");Serial.print(d.zostalyOtwarte());
+    Serial.print(" ruc=");Serial.print(c.czyRuch());
+    Serial.print(" lus=");Serial.print(l.czyRuch());
+    Serial.print(" ldr=");Serial.println(l.czyDlugiRuch());
+*/
+    //zapal swiatlo przyciskem
     if (!onL && !onS && w.nacisniety()) {
         if (pora.czyWieczor() && !pora.czyNoc()) { //zapalamy glowne swiatlo
             zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
@@ -130,6 +142,18 @@ bool Swiatlo::set(unsigned long mls)
         return true;
     }
 
+    //gas swiatlo przyciskiem
+    if ((onL || onS) && w.nacisniety()) {
+        zgasLustro();
+        lustroJakoSwiatlo = false;
+        if (pora.czyNoc())
+            zapalSwiatlo(L_SEC(5));
+        else
+            zgasSwiatlo();
+        return true;
+    }
+
+    //drugi raz przycisk
     if (!onS && onL && w.nacisnietyDrugiRaz() && lustroJakoSwiatlo) {
         zgasLustro();
         lustroJakoSwiatlo = false;
@@ -137,287 +161,46 @@ bool Swiatlo::set(unsigned long mls)
         return true;
     }
 
-    if (onS && w.nacisniety()) {
-        if (pora.czyNoc()) {
-            zapalSwiatlo(L_SEC(5));
-        } else {
-            zgasSwiatlo();
-        }
-        zgasLustro();
-        return true;
-    }
-
-    if (!onS && onL && w.nacisniety() && lustroJakoSwiatlo) {
-        if (pora.czyNoc()) {
+    //otwarcie drzwi
+    if ((onS || onL) && d.zostalyOtwarte() && mls - w.czasWcisniecia() > L_SEC(5)) {
+        if (onS && onL) {
             zgasLustro();
-            zapalSwiatlo(L_SEC(5));
-        } else {
-            zgasLustro();
-        }
-        lustroJakoSwiatlo = false;
-        return true;
-    } 
-
-    if (!lustroJakoSwiatlo && !onL && l.czyRuch()) {
-        zapalLustro(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
-        return true;
-    }
-
-    if (!onL && l.czyDlugiRuch()) {
-        zapalLustro(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
-        return true;
-    }
-
-    if (!onL && !onS && (c.czyRuch() || l.czyRuch())) {
-        if (pora.czyNoc() && pora.czyDzien()) {
-            zapalLustro(L_MIN(1));
-            lustroJakoSwiatlo = true;
-        } else {
-            zapalSwiatlo(L_MIN(3));
-        }
-        return true;    
-    }
-    
-    if (c.czyRuch() || l.czyRuch()) {
-        if (!onS && !onL) {
-            if (pora.czyWieczor()) {
-                zapalSwiatlo(L_MIN(5));
-            } else {
-                zapalLustro(pora.czyNoc() ? L_MIN(3) : L_MIN(5));
-                lustroJakoSwiatlo = true;
-            }
+            zapalSwiatlo(L_MIN(1));
         }
         if (onS) {
-            if (pora.czyNoc()) {
-                przedluzSwiatlo(L_MIN(1));
-            } else {
-                przedluzSwiatlo(L_MIN(3));
-            }    
+            zapalSwiatlo(L_MIN(1));
         }
-
-        if (onL && !onL && !lustroJakoSwiatlo) {
-            if (pora.czyNoc()) {
-                przedluzLustro(L_MIN(1));
-            } else {
-                przedluzLustro(L_MIN(3));
-            }
+        if (onL) {
+            zapalLustro(L_MIN(1));
         }
+        return true;
     }
+
+    //czujniki ruchu
+    if (c.czyRuch() || l.czyRuch()) {
+        if (onL && lustroJakoSwiatlo) {
+            przedluzLustro(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
+        } else if (onS) {
+            przedluzSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+        } else if (pora.czyWieczor()) {
+            zapalSwiatlo(L_MIN(2));
+        } else {
+            lustroJakoSwiatlo = true;
+            zapalLustro(L_MIN(2));
+        }
+        return true;
+    }
+
+    //podswietlenie lustra
+    if (!onL && l.czyDlugiRuch() && !lustroJakoSwiatlo) {
+        zapalLustro(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
+        return true;
+    }
+
+    if (w.nacisnietyTrzeciRaz()) {
+        wyj.setWiatrak(true, L_MIN(5));
+    }
+    
 
     return true;
-}
-
-
-void Swiatlo::setDzien() 
-{
-    // * 1. Włącznik zapala lustro jak jest zgaszona
-    // * 2. Podwojny włącznik zapala swiatlo jak jest zgaszona i gasi lustro
-    // * 3. Włącznik zgasza lampę i lustro jak jest zapalone
-    // * 4. Czujnik ruchu zapala lustro na 1 min przy otwartych drzwiach
-    // * 5. Czujnik ruchu zapala lustro na 5 min przy zamkniętych drzwiach
-    // * 6. Czujnik zbliżeniowy zapala lustro na 1 min przy otwartych drzwiach 
-    // * 7. Czujnik zbliżeniowy zapala lustro na 3 min przy zamkniętych drzwiach 
-    // * 8. Otwarcie drzwi powoduje zgaszenie lustra przy zapalonym swietle glownym
-    // * 9. jak jest zapalone swiatlo glowne i lusro przy otwarciu drzwi zgas swiatlo
-
-    bool onL = wyj.getLustro();
-    bool onS = wyj.getSwiatlo();
-
-    const Wlacznik & w = wej.getWlacznik();
-    const Drzwi & d = wej.getDrzwi();
-    const CzujkaRuchu & c = wej.getCzujkaRuchu();
-    const CzujkaZblizeniowa & l = wej.getCzujkaZbl();
-
-    //1.
-    if (!onL && !onS && w.nacisniety()) {
-        zapalLustro(L_MIN(5));
-        //return;
-    }
-
-    //2
-    if (onL && !onS && w.nacisnietyDrugiRaz()) {
-        zgasLustro();
-        zapalSwiatlo(L_MIN(10));
-        //return;
-    }
-
-    //3
-    if ((onL || onS) && w.nacisniety()) {
-        zgasLustro();
-        zgasSwiatlo();
-        //return;
-    }
-
-    //4 i 5 ruch wydluza zapalone swiatlo lustra
-    if (c.czyRuch() && onL && !onS) {
-        przedluzLustro(d.czyOtwarte() ? L_MIN(1) : L_MIN(5));
-        //return; 
-    }
-
-    //4 i 5 ruch wydluza zapalone swiatlo glowne
-    if (c.czyRuch() && onS) {
-        przedluzSwiatlo(d.czyOtwarte() ? L_MIN(1) : L_MIN(5));
-        //return; 
-    }
-    
-    //4 i 5 zapala lustro 
-    if (c.czyRuch() && !onS && !onL) {
-        zapalLustro(d.czyOtwarte() ? L_MIN(1) : L_MIN(5));
-        //return;
-    }
-
-    // 6 i 7
-    if (!onL && l.czyRuch()) {
-        zapalLustro(d.czyOtwarte() ? L_MIN(1) : L_MIN(5));
-    }
-
-    //9
-    if (onL && onS && d.zostalyOtwarte()) {
-        zgasLustro();
-    }
-
-   
-}
-
-void Swiatlo::setWieczor() {
-    // * 1. Włącznik zapala lampę główną jak jest zgaszona
-    // * 2. Włącznik gasi lampę główną jak jest zapalona
-    // * 3. Włącznik gasi lustro przy zamkniętych drzwiach jak jest zapalone
-    // * 4. Czujnik ruchu przedluza swiecenie lampy głównej na 1 min przy otwartych drzwiach
-    // * 5. Czujnik ruchu przedluza swiecenie lampę główną na 5 min przy zamkniętych drzwiach
-    // * 6. Czujnik ruchu zapala lampę główną na 1 min przy otwartych drzwiach
-    // * 7. Czujnik ruchu zapala lampę główną na 5 min przy zamkniętych drzwiach
-    // * 8. Czujnik zbliżeniowy zapala lustro na 1 min przy otwartych drzwiach
-    // * 9. Czujnik zbliżeniowy zapala lustro na 3 min przy zamknietych drzwiach
-    // *10. Otwarcie drzwi jeżeli lustro pali się to gasi lustro
-
-
-    bool onL = wyj.getLustro();
-    bool onS = wyj.getSwiatlo();
-
-    const Wlacznik & w = wej.getWlacznik();
-    const Drzwi & d = wej.getDrzwi();
-    const CzujkaRuchu & c = wej.getCzujkaRuchu();
-    const CzujkaZblizeniowa l = wej.getCzujkaZbl();
-
-    //1 
-    if (w.nacisniety() && !onS) {
-        zapalSwiatlo(L_MIN(5));
-        return;
-    }
-
-    //2
-    if (w.nacisniety() && onS) {
-        zgasSwiatlo();
-        return;
-    }
-
-    //3
-    if (w.nacisniety() && onL && d.czyZamkniete()) {
-        zgasLustro();
-        return;
-    }
-
-    //4 i 5
-    if (c.czyRuch() && onS) {
-        przedluzSwiatlo(d.czyOtwarte() ? L_MIN(1) : L_MIN(5));
-        return; 
-    }
-    
-    //6 i 7
-    if (c.czyRuch() && !onS) {
-        zapalSwiatlo(d.czyOtwarte() ? L_MIN(1) : L_MIN(5));
-        return; 
-    }
-
-    //8 i 9
-    if (l.czyRuch() && !onL) {
-        zapalLustro(d.czyOtwarte() ? L_MIN(1) : L_MIN(3));
-        return;
-    }
-
-    //8 i 9
-    if (l.czyRuch() && onL) {
-        przedluzLustro(d.czyOtwarte() ? L_MIN(1) : L_MIN(3));
-        return;
-    }
-
-    //10
-    if (onL && onS && d.zostalyOtwarte()) {
-        zgasLustro();
-        return;
-    }
-
-}
-
-void Swiatlo::setNoc()
-{
-    // * 1. Włącznik zapala lustro jak jest zgaszone lustro i światło
-    // * 2. Włącznik zapala światło i gasi lustro jak świeci się już lustro i czas od poprzedniego 
-    // *     załąćzenia włącznika mniejsze niż 10 s. 
-    // * 3!. Włącznik gasi światło i/lub lustro jeżelilustro lub światło główne jeżeli odstępy między kolejnymi 
-    // *     załączeniami jest większy niż 10 s //do poprawki
-    // * 4. Czujnik ruchu zapala lustro główną na 1 min przy otwartych drzwiach
-    // * 5. Czujnik ruchu zapala lustro główną na 3 min przy zamkniętych drzwiach
-    // * 6. Czujnik zbliżeniowy zapala lustro jeżeli świeci lampa główna na 0.5 min przy otwartych drzwiach
-    // * 7. Czujnik zbliżeniowy zapala lustro jeżeli świeci lampa główna na 2 min przy zamknietych drzwiach
-    // * 8. Otwarcie drzwi jeżeli lustro pali i pali się światło główne to gasi lustro
-     
-
-    bool onL = wyj.getLustro();
-    bool onS = wyj.getSwiatlo();
-    const Wlacznik & w = wej.getWlacznik();
-    const Drzwi & d = wej.getDrzwi();
-    const CzujkaRuchu & c = wej.getCzujkaRuchu();
-    const CzujkaZblizeniowa & l = wej.getCzujkaZbl();
-
-    //1
-    if (w.nacisniety() && !onL && !onS) {
-        zapalLustro(L_MIN(5));
-        return;
-    }
-
-    //2
-    if (w.nacisnietyDrugiRaz() && onL) {
-        zgasLustro();
-        zapalSwiatlo(L_MIN(5));
-        return;
-    }
-
-    //3
-    if (w.nacisniety() && onL) {
-        zapalLustro(L_SEC(15)); //nie gas od razu tylko po 15 s
-        return;
-    }
-
-    //3
-    if (w.nacisniety() && onS) {
-        zgasLustro();
-        zapalLustro(L_SEC(15)); //nie gas od razu tylko po 15 s
-        return;
-    }
-
-    //6 i 7
-    if (onS && !onL && l.czyRuch()) {
-        zapalLustro(d.czyOtwarte() ? L_SEC(30) : L_MIN(2));
-        return;
-    }
-
-    //4 i 5
-    if (onS && c.czyRuch()) {
-        przedluzSwiatlo(d.czyOtwarte() ? L_SEC(30) : L_MIN(2));
-        return;
-    }
-
-    //4 i 5
-    if (!onS && onL && c.czyRuch()) {
-        przedluzLustro(d.czyOtwarte() ? L_SEC(30) : L_MIN(2));
-        return;
-    }
-
-    if (onL && onS && d.zostalyOtwarte()) {
-        zgasLustro();
-        zapalSwiatlo(L_SEC(15)); // gas po 15s
-        return;
-    }
 }

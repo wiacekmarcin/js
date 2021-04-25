@@ -31,7 +31,13 @@ void Wyjscia::init()
     wyjscia.pinMode(WIATRAK, OUTPUT);
     wyjscia.digitalWrite(WIATRAK, HIGH);
 
-    for (int i = SZAFKA; i <= WIATRAK; ++i) {
+    for (int i = WY_FIRST; i <= WY_LAST; ++i) {
+        set(i, false, 0);
+    }
+}
+
+void Wyjscia::off() {
+     for (int i = WY_FIRST; i <= WY_LAST; ++i) {
         set(i, false, 0);
     }
 }
@@ -40,8 +46,8 @@ void Wyjscia::set(uint8_t pos, bool value, unsigned long tmt)
 {
     unsigned long mls = millis();
     wyjscia.digitalWrite(pos, o(pos, value));
-    on[pos-SZAFKA] = value;
-    timeout[pos-SZAFKA] = 1000L*tmt + mls;
+    on[pos] = value;
+    timeout[pos] = 1000L*tmt + mls;
 #ifdef DEBUG
     Serial.print("set pos=");
     Serial.print((int)pos, DEC);
@@ -56,7 +62,7 @@ void Wyjscia::set(uint8_t pos, bool value, unsigned long tmt)
 
 void Wyjscia::add(uint8_t pos, unsigned long tmt)
 {
-    timeout[pos-SZAFKA] += 1000L*tmt;
+    timeout[pos] += 1000L*tmt;
 #ifdef DEBUG
     Serial.print(" tmt=");
     Serial.print(tmt, DEC);
@@ -71,12 +77,12 @@ bool Wyjscia::tiktok()
     bool ret = false;
     unsigned long mls = millis();
 
-    for (int i = 0; i < maxWyj; ++i) {
+    for (int i = WY_FIRST; i <= WY_LAST; ++i) {
         if (on[i]) {
             ret = true;
             if (timeout[i] < mls && timeout[i]) {
                 on[i] = false;
-                wyjscia.digitalWrite(i+SZAFKA, o(i+SZAFKA, false));
+                wyjscia.digitalWrite(i, o(i, false));
                 timeout[i] = 0;
 #ifdef DEBUG                
                 Serial.print("tittok OFF = ");
@@ -96,11 +102,6 @@ bool Wyjscia::tiktok()
 uint8_t Wyjscia::o(uint8_t id, bool value)
 {
     return (id == WIATRAK || id == WY_SWIATLO) ? ho(value) : lo(value);
-}
-
-bool Wyjscia::i(uint8_t id, uint8_t value)
-{
-    return (id == WIATRAK || id == WY_SWIATLO) ? hi(value) : li(value);
 }
 
 void Wyjscia::print(const char * funn) const
@@ -131,13 +132,13 @@ void Wyjscia::print(const char * funn) const
     Serial.println(et);
     for (int i = 0; i < maxWyj; ++i) {
         Serial.print("|     ");
-        Serial.print(on[klucze[i]] ? "T" : "N");
+        Serial.print(on[klucze[i]-SZAFKA] ? "T" : "N");
         Serial.print("     ");
     }
     Serial.println("|");
     for (int i = 0; i < maxWyj; ++i) {
         Serial.print("|     ");
-        Serial.print(o(klucze[i], on[klucze[i]]) ? "H" : "L");
+        Serial.print(o(klucze[i], on[klucze[i]-SZAFKA]) ? "H" : "L");
         Serial.print("     ");
     }
     Serial.println("|");
@@ -145,7 +146,7 @@ void Wyjscia::print(const char * funn) const
     char buff[12];
     for (int i = 0; i < maxWyj; ++i) {
         Serial.print("|");
-        printtime(timeout[klucze[i]], buff);
+        printtime(timeout[klucze[i]-SZAFKA], buff);
         Serial.print(buff);
     }
     Serial.println("|");

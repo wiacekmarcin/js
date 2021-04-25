@@ -88,12 +88,12 @@ CzujkaZblizeniowa::CzujkaZblizeniowa() : m_timeSig(0), m_timeHold(0), m_ruch(fal
 void CzujkaZblizeniowa::ustaw(uint8_t value, unsigned long timeInt, unsigned int timeAfterInt)
 {
 #ifdef DEBUG    
-    Serial.print("value=");
-    Serial.print(value,DEC);
-    Serial.print(" prev=");
-    Serial.print(m_prev,DEC);
-    Serial.print(" val=");
-    Serial.println(m_val,DEC);
+    //Serial.print("value=");
+    //Serial.print(value,DEC);
+    //Serial.print(" prev=");
+    //Serial.print(m_prev,DEC);
+    //Serial.print(" val=");
+    //Serial.println(m_val,DEC);
 #endif    
     m_prev = m_val;
     m_val = (value == LOW); 
@@ -319,16 +319,16 @@ PoraDnia::Pora PoraDnia::getPoraDnia() const
 void PoraDnia::ustaw(uint8_t valN, uint8_t valW, uint8_t valZ, uint8_t valT)
 {
     m_prevnoc = m_noc;
-    m_noc = valN == HIGH;
+    m_noc = valN == LOW;
 
     m_prevwieczor = m_wieczor;
-    m_wieczor = valW == HIGH;
+    m_wieczor = valW == LOW;
 
     m_prevzas_awar = m_zas_awar;
-    m_zas_awar = valZ == HIGH;
+    m_zas_awar = valZ == LOW;
 
     m_prevtaryf2 = m_taryf2;
-    m_taryf2 = valT == HIGH;
+    m_taryf2 = valT == LOW;
 }
 
 #ifdef DEBUG
@@ -352,6 +352,14 @@ void PoraDnia::print() const
         Serial.println(m_wieczor, DEC);
         Serial.print("prevwieczor = ");
         Serial.println(m_prevwieczor, DEC);
+        Serial.print("taryf2 = ");
+        Serial.println(m_taryf2, DEC);
+        Serial.print("prevtaryf2 = ");
+        Serial.println(m_prevtaryf2, DEC);
+        Serial.print("zas.awar = ");
+        Serial.println(m_zas_awar, DEC);
+        Serial.print("prev.zas.awar = ");
+        Serial.println(m_prevzas_awar, DEC);
         Serial.println("-------");
 
         Serial.print("czyWieczor() = ");
@@ -360,6 +368,10 @@ void PoraDnia::print() const
         Serial.println(czyNoc());
         Serial.print("czyDzien() = ");
         Serial.println(czyDzien());
+        Serial.print("CzyZasAwar()=");
+        Serial.println(czyZasAwar());
+        Serial.print("CzyTaryf2()=");
+        Serial.println(czyTaryf2());
     }
 }
 #endif
