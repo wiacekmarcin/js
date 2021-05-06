@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 14 Kwi 2021, 02:05
+-- Czas generowania: 06 Maj 2021, 06:19
 -- Wersja serwera: 8.0.23-0ubuntu0.20.04.1
 -- Wersja PHP: 7.4.3
 
@@ -1409,7 +1409,8 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (170, 'D2-F4', 9),
 (171, 'D12-G1', 9),
 (172, 'P6-S3', 9),
-(173, 'TX52', 9);
+(173, 'TX52', 9),
+(174, 'GND', 3);
 
 -- --------------------------------------------------------
 
@@ -1896,7 +1897,13 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 (466, 172, 636),
 (467, 172, 685),
 (468, 173, 538),
-(469, 173, 662);
+(469, 173, 662),
+(470, 174, 749),
+(471, 174, 761),
+(472, 174, 779),
+(473, 174, 791),
+(474, 174, 814),
+(475, 174, 850);
 
 -- --------------------------------------------------------
 
@@ -2342,8 +2349,8 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (193, '+5V stałe', 2),
 (194, 'Łącznik z plytką do rozdzielni prądowej', 8),
 (195, '24V sterowane', 2),
-(196, 'Masa układu 3.3V', 2),
-(197, 'Sygnał 3.3V nocy, zasilania awaryjnego, nocy, wieczoru, 2 taryfy', 4),
+(196, '', 2),
+(197, 'Sygnał 3.3V nocy, zasilania awaryjnego, nocy, wieczoru, 2 taryfy', 6),
 (198, 'Kabel do czujników ruchu nad szklanym drzwiami', 8),
 (199, 'Zasilanie przekaźnika awaryjnego', 4),
 (200, 'Zasilanie +24V, impulsy od licznika energi', 8);
@@ -2915,7 +2922,7 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (80, 'Masa', 323, 4, 2),
 (81, 'A', 341, 1, 4),
 (82, 'B', 344, 1, 2),
-(83, 'D', 346, 1, 4),
+(83, 'c', 346, 1, 6),
 (84, 'C', 348, 1, 4),
 (85, 'A', 349, 1, 2),
 (86, 'B', 351, 1, 8),
@@ -2972,7 +2979,9 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (137, 'W', 393, 1, 12),
 (138, 'A', 357, 1, 4),
 (139, 'W', 368, 1, 4),
-(140, 'V', 354, 5, 2);
+(140, 'V', 354, 5, 2),
+(141, 'B', 98, 1, 12),
+(142, 'A', 100, 1, 12);
 
 -- --------------------------------------------------------
 
@@ -3445,10 +3454,10 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (414, 79, 497, 5, 'INT'),
 (415, 80, 503, 1, '1'),
 (416, 80, 504, 2, '2'),
-(417, 83, 515, 1, '1'),
-(418, 83, 516, 2, '2'),
-(419, 83, 517, 3, '3'),
-(420, 83, 518, 4, '4'),
+(417, 83, 778, 1, '1'),
+(418, 83, 777, 2, '2'),
+(419, 83, 518, 3, '3'),
+(420, 83, 517, 4, '4'),
 (421, 84, 519, 1, '1'),
 (422, 84, 519, 2, '2'),
 (423, 85, 521, 1, '1'),
@@ -3624,9 +3633,9 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (593, 109, 633, 1, '1'),
 (594, 109, 634, 2, '2'),
 (595, 110, 329, 1, '1'),
-(596, 110, 332, 2, '2'),
+(596, 110, 331, 2, '2'),
 (597, 110, 330, 3, '3'),
-(598, 110, 331, 4, '4'),
+(598, 110, 332, 4, '4'),
 (599, 110, 333, 5, '5'),
 (600, 110, 328, 6, '6'),
 (601, 111, 635, 1, '1'),
@@ -3838,7 +3847,33 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (807, 77, 378, 5, '5'),
 (808, 77, 379, 6, '6'),
 (809, 77, 382, 7, '7'),
-(810, 77, 383, 8, '8');
+(810, 77, 383, 8, '8'),
+(811, 83, 516, 5, '5'),
+(812, 83, 515, 6, '6'),
+(813, 141, 84, 1, '1'),
+(814, 141, 85, 2, '2'),
+(815, 141, 86, 3, '3'),
+(816, 141, 87, 4, '4'),
+(817, 141, 83, 5, '5'),
+(818, 141, 82, 6, '6'),
+(819, 141, 81, 7, '7'),
+(820, 141, 80, 8, '8'),
+(821, 141, 88, 9, '9'),
+(822, 141, 89, 10, '10'),
+(823, 141, 90, 11, '11'),
+(824, 141, 91, 12, '12'),
+(825, 142, 103, 1, '1'),
+(826, 142, 96, 2, '2'),
+(827, 142, 98, 3, '3'),
+(828, 142, 97, 4, '4'),
+(829, 142, 100, 5, '5'),
+(830, 142, 99, 6, '6'),
+(831, 142, 95, 7, '7'),
+(832, 142, 94, 8, '8'),
+(833, 142, 93, 9, '9'),
+(834, 142, 92, 10, '10'),
+(835, 142, 101, 11, '11'),
+(836, 142, 102, 12, '12');
 
 -- --------------------------------------------------------
 
@@ -4129,16 +4164,16 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (148, 6, 93, '2 taryfa'),
 (149, 8, 93, 'Sygnał wieczoru'),
 (150, 1, 93, 'Sygnał nocy'),
-(151, 3, 93, 'TX'),
-(152, 9, 93, 'RX'),
-(153, 5, 94, 'X'),
+(151, 3, 93, 'polaczony z czarnym'),
+(152, 9, 93, '--'),
+(153, 5, 94, 'X - jest polaczenie'),
 (154, 4, 94, 'Podświetlenie klawiszy'),
 (155, 7, 94, 'Włącznik kuchnia prawy prawy'),
 (156, 6, 94, 'Włącznik kuchnia prawy lewy'),
 (157, 8, 94, 'Włącznik salon prawy prawy'),
 (158, 1, 94, 'Włącznik salon prawy lewy'),
 (159, 3, 94, 'Włącznik salon lewy prawy'),
-(160, 9, 94, 'Włącznik salon lewy lewy'),
+(160, 9, 94, '(X) Włącznik salon lewy lewy'),
 (161, 9, 95, '-'),
 (162, 3, 95, '-'),
 (163, 1, 95, '-'),
@@ -4242,12 +4277,12 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (261, 3, 7, 'Sygnał czujnika temperatury'),
 (262, 5, 7, '+5V'),
 (263, 6, 7, 'GND'),
-(264, 14, 7, 'Sygnał czujnika temperatury'),
+(264, 10, 7, 'Sygnał czujnika temperatury'),
 (265, 7, 7, '+5V'),
 (266, 9, 8, 'GND'),
 (267, 6, 8, 'Sygnał czujnika temperatury'),
 (268, 8, 8, '+5V'),
-(269, 4, 8, 'GND kontaktronu'),
+(269, 13, 8, 'GND kontaktronu'),
 (270, 4, 9, '+5V'),
 (271, 8, 9, 'Sygnał czujnika'),
 (272, 7, 9, 'GND'),
@@ -4294,14 +4329,14 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (313, 0, 18, ''),
 (314, 1, 19, 'GND'),
 (315, 3, 19, 'Styk kontaktoru'),
-(316, 9, 38, 'kanał 8 - Swiatłło pod wanną'),
-(317, 7, 38, 'kanał 7 - sterowanie term. salon'),
-(318, 1, 38, 'kanał 6 - sterowanie term. kuchnia'),
-(319, 5, 38, 'kanał 5 - sterowanie term. łazienka'),
-(320, 6, 38, 'kanał 4 - Sterowanie pompą'),
-(321, 8, 38, 'kanał 3 - termostat kaloryfer'),
-(322, 3, 38, 'kanał 1 - oświetlenie kwiatów prysznic'),
-(323, 4, 38, 'kanał 2 - oświetlenie kwiatów wanna'),
+(316, 9, 38, 'kanał 1 - oświetlenie kwiatów prysznic'),
+(317, 7, 38, 'kanał 2 - oświetlenie kwiatów wanna'),
+(318, 1, 38, 'kanał 3 - termostat kaloryfer'),
+(319, 5, 38, 'kanał 4 - Sterowanie pompą'),
+(320, 6, 38, 'kanał 5 - sterowanie term. łazienka'),
+(321, 8, 38, 'kanał 6 - sterowanie term. kuchnia'),
+(322, 3, 38, 'kanał 8 - Swiatłło pod wanną'),
+(323, 4, 38, 'kanał 7 - sterowanie term. salon'),
 (324, 0, 151, '+5Vp'),
 (325, 0, 151, 'Kanał 1'),
 (326, 0, 151, 'Kanał 2'),
@@ -4309,9 +4344,9 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (328, 6, 53, 'GND'),
 (329, 4, 53, '+5V'),
 (330, 3, 53, 'Kanał 1 - wiatrak 1 (kuchnia)'),
-(331, 1, 53, 'Kanał 2 - wiatrak 2 (łazienka)'),
-(332, 9, 53, 'Swiatło przedpokój'),
-(333, 8, 53, 'Podświetlenie klawiszy'),
+(331, 1, 53, 'Podświetlenie klawiszy'),
+(332, 9, 53, 'Kanał 2 - wiatrak 2 (łazienka)'),
+(333, 8, 53, 'Swiatło przedpokój'),
 (334, 4, 153, '+5V'),
 (335, 7, 153, 'GND'),
 (336, 9, 153, 'Kanał 8 - pompa'),
@@ -4488,12 +4523,12 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (512, 0, 199, 'Sygnal nocy'),
 (513, 0, 199, 'Sygnał 2 taryfa'),
 (514, 0, 199, 'Sygnał zasilanie awaryjne'),
-(515, 0, 197, 'Sygnał wieczoru'),
-(516, 0, 197, 'Sygnał nocy'),
-(517, 0, 197, 'Sygnał 2 taryfy'),
-(518, 0, 197, 'Sygnał zasilania awaryjnego'),
-(519, 0, 196, 'GND'),
-(520, 0, 196, 'GND'),
+(515, 11, 197, '#6'),
+(516, 6, 197, '#12'),
+(517, 1, 197, '#13'),
+(518, 8, 197, '#21'),
+(519, 0, 196, ''),
+(520, 0, 196, ''),
 (521, 0, 195, '+24V'),
 (522, 0, 195, 'GND'),
 (523, 0, 194, 'Zasilanie awarune'),
@@ -4590,10 +4625,10 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (614, 7, 83, 'GND'),
 (615, 3, 187, 'GND'),
 (616, 1, 187, '+5V'),
-(617, 1, 186, 'Wieczór'),
-(618, 3, 186, 'Noc'),
-(619, 11, 186, '2 taryfa'),
-(620, 4, 186, 'Zasilanie awaryjne'),
+(617, 1, 186, 'Wieczór #21'),
+(618, 3, 186, 'Noc #13'),
+(619, 11, 186, '2 taryfa #12'),
+(620, 4, 186, 'Zasilanie awaryjne #6'),
 (621, 0, 185, '93.1'),
 (622, 0, 185, '93.2'),
 (623, 0, 185, '86,1'),
@@ -4626,10 +4661,10 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (650, 7, 180, 'GND'),
 (651, 8, 180, 'Sygnał'),
 (652, 4, 180, '+5V'),
-(653, 0, 181, 'Zasilanie +5V'),
-(654, 0, 181, 'GND'),
-(655, 0, 181, 'G.7'),
-(656, 0, 181, 'G.8'),
+(653, 13, 181, 'Zasilanie +5V'),
+(654, 6, 181, 'GND'),
+(655, 8, 181, 'G.7'),
+(656, 9, 181, 'G.8'),
 (657, 0, 178, 'H38.8'),
 (658, 0, 178, 'H38.7'),
 (659, 0, 178, 'H38.6'),
@@ -4749,7 +4784,9 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (773, 0, 179, 'S72.6'),
 (774, 0, 179, 'S72.5'),
 (775, 0, 179, 'S72.4'),
-(776, 0, 179, 'S72.3');
+(776, 0, 179, 'S72.3'),
+(777, 4, 197, '+3.3V'),
+(778, 3, 197, 'GND');
 
 -- --------------------------------------------------------
 
@@ -5063,13 +5100,13 @@ ALTER TABLE `plytki`
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
 --
 ALTER TABLE `polaczenie_plytka`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_plytka_polaczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=470;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=476;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
@@ -5099,13 +5136,13 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=811;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=837;
 
 --
 -- AUTO_INCREMENT dla tabeli `zlacze_wtyczka`
@@ -5117,7 +5154,7 @@ ALTER TABLE `zlacze_wtyczka`
 -- AUTO_INCREMENT dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=777;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=779;
 
 --
 -- Ograniczenia dla zrzutów tabel
