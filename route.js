@@ -48,4 +48,7 @@ app.config(function($routeProvider) {
     .when("/plytki", {
         templateUrl: 'plytki.htm',    
     })
+    .when("/zlacza", {
+        templateUrl: 'zlacza.htm',    
+    })
 });
