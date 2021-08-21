@@ -16,6 +16,7 @@ void SwiatloJadalnia::init() {
 	expPozostale.pinMode(1, OUTPUT, ho(false));
 	expPozostale.pinMode(4, OUTPUT, ho(false));
 #endif	
+	swNum = 0;
 }
 
 void SwiatloJadalnia::rotate() {
@@ -39,37 +40,58 @@ void SwiatloJadalnia::rotate() {
 }
 
 void SwiatloJadalnia::up() {
-	for (uint8_t id = 0 ; id < maxSw; ++id) {
-  		if (!sw[id]) {
-			sw[id] = true;
-			setPrzekaz();
-			//return;
-  		}
+	//for (uint8_t id = 0 ; id < maxSw; ++id) {
+  	//	if (!sw[id]) {
+	//		sw[id] = true;
+	//		setPrzekaz();
+	//return;
+  	//	}
+	//}
+	if (swNum < 8) {
+		++swNum;
+		setPrzekaz2();
 	}
+	
 }
 
 void SwiatloJadalnia::down() {
-	for (uint8_t id = 0 ; id < maxSw; ++id) {
-  		if (sw[id]) {
-			sw[id] = false;
-			setPrzekaz();
-			//return;
-  		}
+	//for (uint8_t id = 0 ; id < maxSw; ++id) {
+  	//	if (sw[id]) {
+	//		sw[id] = false;
+	//		setPrzekaz();
+	//		//return;
+  	//	}
+	//}
+	if (swNum > 0) {
+		--swNum;
+		setPrzekaz2();
 	}
 }
 
 void SwiatloJadalnia::off() {
-	for (uint8_t id = 0 ; id < maxSw; ++id) {
- 		sw[id] = false;
+	//for (uint8_t id = 0 ; id < maxSw; ++id) {
+ 	//	sw[id] = false;
+	//}
+	//setPrzekaz();
+
+	swNum = 0;
+	setPrzekaz2();
+}
+
+void SwiatloJadalnia::on(uint8_t num) 
+{
+	if (num < 8) {
+		swNum = num;
+		setPrzekaz2();
 	}
-	setPrzekaz();
 }
 
 bool SwiatloJadalnia::czyZapalone() const {
-	for (uint8_t id = 0 ; id < maxSw; ++id)
-  		if (sw[id])
-			return true;
-	return false;
+	//for (uint8_t id = 0 ; id < maxSw; ++id)
+  	//	if (sw[id])
+	//		return true;
+	//return false;
+	return swNum > 0;
 }
 
 void SwiatloJadalnia::setPrzekaz(bool on, bool off) {
@@ -90,11 +112,20 @@ void SwiatloJadalnia::setPrzekaz(bool on, bool off) {
 #endif
 }
 
+void SwiatloJadalnia::setPrzekaz2()
+{
+	zapalJadalnia(1, swNum & 0x01);
+	zapalJadalnia(2, swNum & 0x02);
+	zapalJadalnia(3, swNum & 0x04);
+}
+
 void SwiatloJadalnia::zapal(const Wejscia & w)
 {
 
 	bool klup = w.czyklJadUp();
 	bool kldown = w.czyklJadDown();
+	bool czyWieczor = w.czyWieczor();
+	bool czyNoc = w.czyNoc();
 
 	if (w.czyZmianaZasAwaryjne()) {
 		off();
@@ -116,7 +147,7 @@ void SwiatloJadalnia::zapal(const Wejscia & w)
 
 	timeChange = millis();
 	if (!czyZapalone() && (klup || kldown)) {
-		up();
+		on(czyNoc ? LASER1 : (czyWieczor ? LASER4 : LASER7));
  	} else if (czyZapalone() && klup && kldown) {
 		off();
 	} else if (klup) {

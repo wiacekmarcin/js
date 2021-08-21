@@ -22,6 +22,8 @@ public:
 
 	void off();
 
+	void on(uint8_t num);
+
   	bool czyZapalone() const;
 
 	void zapal(const Wejscia & w);
@@ -29,6 +31,7 @@ public:
 
 protected:
   	void setPrzekaz(bool on = true, bool off = true);
+	void setPrzekaz2();
 
 
 private:
@@ -40,6 +43,14 @@ private:
 	static constexpr unsigned int czasRotacji = 15000;
 	unsigned long timeRotate;
 	bool rotationinProgress;
+
+	enum {
+		LASER1 = 1,
+		LASER4 = 4,
+		LASER7 = 7
+	};
+
+	uint8_t swNum;
 };
 
 #endif
