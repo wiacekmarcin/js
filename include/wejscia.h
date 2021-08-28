@@ -6,14 +6,17 @@
 #include "in.h"
 //#define DEBUG
 
+#define INTERPIN 7
+
+
 class LiquidCrystal_I2C;
 class Wejscia {
 public:
     Wejscia(Adafruit_MCP23017 & wyjscia);
 
-    void init();
+    void init(void(*fun)());
 
-    void get(bool awakeByInt, unsigned long timeInt, unsigned int timeAfterInt, bool printLCD, LiquidCrystal_I2C * lcd);
+    void get(unsigned long timeInt, unsigned int timeAfterInt);
     void czysc() { wl.czysc(); }
     const Wlacznik & getWlacznik() const { return wl; }
     const CzujkaZblizeniowa & getCzujkaZbl() const { return czBl; }
@@ -22,13 +25,7 @@ public:
     const PoraDnia & getPoraDnia() const { return prd; }
     const bool czyZasilAwar() const { return prd.czyZasAwar(); }
    
-
     void print();
-
-    void get();
-private:
-    
-    Adafruit_MCP23017 & wejscia;
 
     static constexpr uint8_t CZ_R_WC = 1;//jasnozielony
     static constexpr uint8_t CZ_R_LUSTRO = 0;//jansobrazowy
@@ -38,6 +35,12 @@ private:
     static constexpr uint8_t TARYF2 = 7; //brazowy
     static constexpr uint8_t WIECZOR = 4; //zolty
     static constexpr uint8_t NOC = 5; //bialy
+
+private:
+    
+    Adafruit_MCP23017 & wejscia;
+
+
         
     static constexpr uint8_t lenWej = 8;
 
@@ -46,6 +49,7 @@ private:
     class CzujkaRuchu czR;
     class Drzwi drz;
     class PoraDnia prd;
+
 };
 
 

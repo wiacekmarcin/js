@@ -2,8 +2,13 @@
 #define     _IN_H_
 
 #include "util.h"
+#include "debug.h"
 
-//#define DEBUG
+class Wlacznik;
+class CzujkaZblizeniowa;
+class CzujkaRuchu;
+class Drzwi;
+class PoraDnia;
 /**
  * Podstawowa klasa dla wlacznika, czujnika ruchu i czujnia zblizeniowego
  * funkcje ustaw - ustawia wartosc odczytana z pcf8572 i tutaj trzeba zrobic
@@ -19,12 +24,16 @@ class ValueBase {
 public:
     ValueBase() : m_val(false), m_prev(false) 
     {}
-    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt) {}
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned long timeAfterInt) {}
    
     void czysc() {}
-#ifdef DEBUG    
+    friend void print_wlacznik(const Wlacznik * w);
+    friend void print_czujkazblizeniowa(const CzujkaZblizeniowa * cz);
+    friend void print_czujkaruchu(const CzujkaRuchu *cr);
+    friend void print_drzwi(const Drzwi *d);
+    friend void print_poradnia(const PoraDnia *p);
     void print() const;
-#endif
+
 
 protected:
     bool m_val; 
@@ -43,7 +52,7 @@ protected:
 class Wlacznik : public ValueBase {
 public:
     Wlacznik();
-    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned long timeAfterInt);
 
     bool nacisniety() const { return m_val && m_val != m_prev && m_cntPush == 1; }
     bool wcisniety() const  { return m_val && m_val == m_prev; }
@@ -51,9 +60,9 @@ public:
     bool nacisnietyDrugiRaz() const { return m_val && m_val != m_prev && m_cntPush == 2; }
     bool nacisnietyTrzeciRaz() const { return m_val && m_val != m_prev && m_cntPush == 3; }
 
-#ifdef DEBUG
     void print() const;
-#endif
+    friend void print_wlacznik(const Wlacznik * w);
+
 
     void czysc() { clearState(); }
 protected:
@@ -77,13 +86,12 @@ private:
 class CzujkaZblizeniowa : public ValueBase {
 public:
     CzujkaZblizeniowa();
-    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned long timeAfterInt);
     bool czyRuch() const { return m_wykrytoRuch; }
     bool czyDlugiRuch() const { return m_wykrytoDlugiRuch; }
 
-#ifdef DEBUG
     void print() const;
-#endif
+    friend void print_czujkazblizeniowa(const CzujkaZblizeniowa * cz);
 
     void czysc() ;
 
@@ -109,14 +117,15 @@ class CzujkaRuchu : public ValueBase {
 public:
     CzujkaRuchu();
 
-    void ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt);
+    void ustaw(uint8_t val, unsigned long timeInt, unsigned long timeAfterInt);
     bool czyRuch() const { return m_ruch; }
     unsigned long czasBezRuchu() const { return millis() - m_timelastMove; }
     unsigned long poprzCzasBezRuchu() const { return millis() - m_prevtimelastMove; }
 
-#ifdef DEBUG
+     
     void print() const;
-#endif
+    friend void print_czujkaruchu(const CzujkaRuchu *cr);
+
 
     void czysc() ;
 private:
@@ -136,9 +145,8 @@ public:
     unsigned long czasOtwarcia() const { return m_otwarte ? millis() - m_timeOpen : 0; }
     unsigned long czasZamkniecia() const { return m_otwarte ? 0 : millis() - m_timeClose; }
 
-#ifdef DEBUG
+    friend void print_drzwi(const Drzwi *d);
     void print() const;
-#endif
 
     void czysc() ;
 
@@ -166,9 +174,8 @@ public:
     bool czyZasAwar() const { return m_zas_awar && m_prevzas_awar; }
     Pora getPoraDnia() const;
     
-#ifdef DEBUG
     void print() const;
-#endif
+    friend void print_poradnia(const PoraDnia *p);
 
     void czysc() { }
 private:

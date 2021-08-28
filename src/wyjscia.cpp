@@ -1,5 +1,6 @@
 #include "wyjscia.h"
 #include "util.h"
+#include "debug.h"
 
 Wyjscia::Wyjscia(Adafruit_MCP23017 &wyj) :
     wyjscia(wyj)

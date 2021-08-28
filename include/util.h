@@ -13,5 +13,9 @@ void printtime(unsigned long mls, char * buf);
 #define L_SEC(X) ((unsigned long)( 1L*(X)))
 #define L_MIN(X) ((unsigned long)(60L*(X)))
 
+#define MASK(X, M) (((0x01 << (M)) & (X)) >> M)
+#define CHAN(X, Y, M) (((X)^(Y)) & (0x01 << (M)))
+
+//#define MYINTERUPTS
 
 #endif // !__UTIL_H__

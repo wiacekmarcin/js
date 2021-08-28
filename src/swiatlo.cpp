@@ -117,7 +117,7 @@ bool Swiatlo::set(unsigned long mls)
     const Drzwi & d = wej.getDrzwi();
     const CzujkaRuchu & c = wej.getCzujkaRuchu();
     const CzujkaZblizeniowa & l = wej.getCzujkaZbl();
-/*
+    
     Serial.print("onl=");Serial.print(onL, DEC);
     Serial.print(" onS=");Serial.print(onS, DEC);
     Serial.print(" wie=");Serial.print(pora.czyWieczor(), DEC);
@@ -130,7 +130,7 @@ bool Swiatlo::set(unsigned long mls)
     Serial.print(" ruc=");Serial.print(c.czyRuch());
     Serial.print(" lus=");Serial.print(l.czyRuch());
     Serial.print(" ldr=");Serial.println(l.czyDlugiRuch());
-*/
+
     //zapal swiatlo przyciskem
     if (!onL && !onS && w.nacisniety()) {
         if (pora.czyWieczor() && !pora.czyNoc()) { //zapalamy glowne swiatlo
