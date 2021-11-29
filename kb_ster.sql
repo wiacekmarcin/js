@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 06 Maj 2021, 06:19
--- Wersja serwera: 8.0.23-0ubuntu0.20.04.1
+-- Czas generowania: 29 Lis 2021, 03:14
+-- Wersja serwera: 8.0.27-0ubuntu0.20.04.1
 -- Wersja PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -101,7 +101,7 @@ CREATE TABLE `elementy_plytkowe` (
   `ilosc_pin` tinyint NOT NULL,
   `plytka_id` tinyint UNSIGNED NOT NULL,
   `rodzaj_urzadzenia` tinyint UNSIGNED NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `elementy_plytkowe`
@@ -215,7 +215,7 @@ CREATE TABLE `elementy_plytkowe_pin` (
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `pos` tinyint NOT NULL,
   `element_plytkowy_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `elementy_plytkowe_pin`
@@ -972,7 +972,7 @@ CREATE TABLE `kolor` (
   `id` tinyint UNSIGNED NOT NULL,
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `html` text CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Zrzut danych tabeli `kolor`
@@ -993,7 +993,8 @@ INSERT INTO `kolor` (`id`, `nazwa`, `html`) VALUES
 (11, 'Jasnozielony', 'lime'),
 (12, 'Jasnobrązowy', '#CD853F'),
 (13, 'Różowy', 'fuchsia'),
-(14, 'Błękitny', 'aqua');
+(14, 'Błękitny', 'aqua'),
+(15, 'Ciemnozielony', 'darkgreen');
 
 -- --------------------------------------------------------
 
@@ -1021,7 +1022,7 @@ CREATE TABLE `miejsce` (
   `id_pomieszczenie` tinyint UNSIGNED NOT NULL,
   `kod` varchar(16) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `polaczenie` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Zrzut danych tabeli `miejsce`
@@ -1177,6 +1178,18 @@ CREATE TABLE `MiejsceView` (
 -- --------------------------------------------------------
 
 --
+-- Zastąpiona struktura widoku `PlytkaAiB`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `PlytkaAiB` (
+`przewod` tinyint unsigned
+,`opis` text
+,`ilosc_zyl` tinyint unsigned
+);
+
+-- --------------------------------------------------------
+
+--
 -- Zastąpiona struktura widoku `PlytkaMiejsceView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
@@ -1203,7 +1216,7 @@ CREATE TABLE `plytki` (
   `id` tinyint UNSIGNED NOT NULL,
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `miejsce_id` tinyint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `plytki`
@@ -1218,7 +1231,8 @@ INSERT INTO `plytki` (`id`, `nazwa`, `miejsce_id`) VALUES
 (6, 'Płytka A I/O', 26),
 (7, 'Płytka B I/O', 26),
 (8, 'Płytka C Zasilanie', 26),
-(9, 'Płytka A', 1);
+(9, 'Płytka A', 1),
+(10, 'Płytka C', 1);
 
 -- --------------------------------------------------------
 
@@ -1230,7 +1244,7 @@ CREATE TABLE `polaczenie_plytka` (
   `id` smallint UNSIGNED NOT NULL,
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `plytka_id` tinyint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `polaczenie_plytka`
@@ -1422,7 +1436,7 @@ CREATE TABLE `polaczenie_plytka_polaczenie` (
   `id` smallint UNSIGNED NOT NULL,
   `polaczenie_plytka_id` smallint UNSIGNED NOT NULL,
   `elementy_plytkowe_piny_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `polaczenie_plytka_polaczenie`
@@ -1915,7 +1929,7 @@ CREATE TABLE `polaczenie_zyla` (
   `id` smallint UNSIGNED NOT NULL,
   `zakonczenie_zyly_id` smallint UNSIGNED NOT NULL,
   `zyla_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `polaczenie_zyla`
@@ -2124,7 +2138,7 @@ INSERT INTO `polaczenie_zyla` (`id`, `zakonczenie_zyly_id`, `zyla_id`) VALUES
 CREATE TABLE `pomieszczenie` (
   `id` tinyint UNSIGNED NOT NULL,
   `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Zrzut danych tabeli `pomieszczenie`
@@ -2151,7 +2165,7 @@ CREATE TABLE `przewod` (
   `id` tinyint UNSIGNED NOT NULL,
   `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `ilosc_zyl` tinyint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Zrzut danych tabeli `przewod`
@@ -2343,7 +2357,7 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (187, '5V', 2),
 (188, 'Łacznik z płytką mikroprocesora', 12),
 (189, '24V i 5V', 4),
-(190, 'łącznik z mikroprocesorem', 10),
+(190, 'Łącznik z mikroprocesorem', 10),
 (191, 'Wejście sygnały 5V (noc, wieczór, 2 taryfa, zas. awaryjne)', 4),
 (192, 'Łacznik z prockiem', 12),
 (193, '+5V stałe', 2),
@@ -2834,7 +2848,7 @@ CREATE TABLE `zakonczenie` (
   `przewod_miejsce_id` smallint UNSIGNED NOT NULL,
   `rodzaj_zakonczenia` tinyint(1) NOT NULL,
   `ilosc_pin` tinyint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Zrzut danych tabeli `zakonczenie`
@@ -2962,26 +2976,33 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (120, 'f', 383, 1, 12),
 (121, 'g', 385, 1, 12),
 (122, 'H', 77, 1, 8),
-(123, 'i', 123, 1, 6),
-(124, 'j', 73, 1, 8),
+(123, 'I', 123, 1, 6),
+(124, 'J', 73, 1, 8),
 (125, 'K', 15, 1, 10),
 (126, 'L', 141, 1, 8),
 (127, 'M', 161, 1, 8),
 (128, 'n', 387, 1, 12),
-(129, 'N', 389, 1, 12),
+(129, 'O', 389, 1, 12),
 (130, 'P', 163, 1, 8),
 (131, 'Q', 169, 1, 8),
-(132, 'r85', 171, 1, 8),
-(133, 's', 145, 1, 10),
+(132, 'R', 171, 1, 8),
+(133, 'S', 145, 1, 10),
 (134, 'T', 143, 1, 8),
 (135, 'V', 391, 1, 2),
 (136, 'A', 366, 1, 2),
 (137, 'W', 393, 1, 12),
 (138, 'A', 357, 1, 4),
 (139, 'W', 368, 1, 4),
-(140, 'V', 354, 5, 2),
+(140, 'V', 354, 1, 2),
 (141, 'B', 98, 1, 12),
-(142, 'A', 100, 1, 12);
+(142, 'A', 100, 1, 12),
+(143, 'Przypływomierz i przycisk', 47, 3, 4),
+(144, 'Czujnik temperatury i wilgotności', 142, 3, 3),
+(145, 'Czujnik temperatury i wilgotności', 162, 3, 3),
+(146, 'Czujnik temperatury i wilgotności', 170, 3, 3),
+(147, 'Czujnik temperatury i wilgotności', 164, 3, 3),
+(148, 'Czujnik temperatury', 11, 3, 3),
+(149, 'Czujnik temperatury i wilgotności', 13, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -3031,7 +3052,7 @@ CREATE TABLE `zakonczenie_zyly` (
   `zyla_id` smallint UNSIGNED NOT NULL,
   `pos` tinyint NOT NULL,
   `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `zakonczenie_zyly`
@@ -3632,12 +3653,12 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (592, 108, 632, 12, '12'),
 (593, 109, 633, 1, '1'),
 (594, 109, 634, 2, '2'),
-(595, 110, 329, 1, '1'),
+(595, 110, 328, 1, '1'),
 (596, 110, 331, 2, '2'),
-(597, 110, 330, 3, '3'),
-(598, 110, 332, 4, '4'),
+(597, 110, 332, 3, 'I190.5'),
+(598, 110, 330, 4, 'I190.6'),
 (599, 110, 333, 5, '5'),
-(600, 110, 328, 6, '6'),
+(600, 110, 329, 6, '6'),
 (601, 111, 635, 1, '1'),
 (602, 111, 636, 2, '2'),
 (603, 111, 637, 3, '3'),
@@ -3650,9 +3671,9 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (610, 111, 644, 10, '10'),
 (611, 111, 645, 11, '11'),
 (612, 111, 646, 12, '12'),
-(613, 112, 647, 1, '1'),
+(613, 112, 649, 1, '1'),
 (614, 112, 648, 2, '2'),
-(615, 112, 649, 3, '3'),
+(615, 112, 647, 3, '3'),
 (616, 113, 268, 1, '1'),
 (617, 113, 267, 2, '2'),
 (618, 113, 266, 3, '3'),
@@ -3667,13 +3688,13 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (627, 116, 655, 2, 'Kanał 1'),
 (628, 116, 656, 3, 'Kanał 2'),
 (629, 116, 654, 4, 'GND'),
-(630, 117, 653, 1, '1'),
-(631, 117, 654, 2, '2'),
+(630, 117, 654, 1, '1'),
+(631, 117, 653, 2, '2'),
 (632, 117, 655, 3, '3'),
 (633, 117, 656, 4, '4'),
-(634, 118, 650, 1, '1'),
+(634, 118, 652, 1, '1'),
 (635, 118, 651, 2, '2'),
-(636, 118, 652, 3, '3'),
+(636, 118, 650, 3, '3'),
 (637, 119, 633, 1, '1'),
 (638, 119, 634, 2, '2'),
 (639, 120, 657, 1, '1'),
@@ -3708,8 +3729,8 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (668, 122, 321, 6, '6'),
 (669, 122, 322, 7, '7'),
 (670, 122, 323, 8, '8'),
-(671, 123, 438, 1, '1'),
-(672, 123, 443, 2, '2'),
+(671, 123, 443, 1, '1'),
+(672, 123, 438, 2, '2'),
 (673, 123, 439, 3, '3 F.9'),
 (674, 123, 441, 4, '4 F.12'),
 (675, 123, 442, 5, '5 F.11'),
@@ -3720,34 +3741,34 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (680, 124, 62, 4, '4 - G.3'),
 (681, 124, 63, 5, '5 - G.2'),
 (682, 124, 64, 6, '6 - G.1'),
-(683, 124, 60, 7, '7'),
-(684, 124, 57, 8, '8'),
-(685, 125, 257, 1, '1'),
-(686, 125, 260, 2, '2'),
-(687, 125, 263, 3, '3'),
-(688, 125, 259, 4, '4'),
-(689, 125, 262, 5, '5'),
-(690, 125, 265, 6, '6'),
+(683, 124, 57, 7, '7'),
+(684, 124, 60, 8, '8'),
+(685, 125, 259, 1, '1'),
+(686, 125, 262, 2, '2'),
+(687, 125, 265, 3, '3'),
+(688, 125, 257, 4, '4'),
+(689, 125, 260, 5, '5'),
+(690, 125, 263, 6, '6'),
 (691, 125, 256, 7, '7 - G.12'),
 (692, 125, 258, 8, '8 - G.11'),
 (693, 125, 261, 9, '9 - G.10'),
 (694, 125, 264, 10, '10 - G.9'),
-(695, 126, 682, 1, '1'),
-(696, 126, 681, 2, '2'),
+(695, 126, 681, 1, '+5V'),
+(696, 126, 682, 2, 'GND'),
 (697, 126, 683, 3, '3 - A.6'),
 (698, 126, 684, 4, '4 - O.12'),
 (699, 126, 685, 5, '5 - O.11'),
 (700, 126, 686, 6, '6 - O.10'),
 (701, 126, 687, 7, '7 - O.9'),
 (702, 126, 688, 8, '8 - O.8'),
-(703, 127, 691, 1, '1 - O.5'),
-(704, 127, 692, 2, '2 - O.4'),
+(703, 127, 696, 1, '1 - O.5'),
+(704, 127, 694, 2, '2 - O.4'),
 (705, 127, 692, 3, '3 - O.3'),
 (706, 127, 693, 4, '4 - O.2'),
 (707, 127, 695, 5, '5 - O.1'),
-(708, 127, 696, 6, '6 - A.4'),
-(709, 127, 689, 7, '7'),
-(710, 127, 690, 8, '8'),
+(708, 127, 691, 6, '6 - A.4'),
+(709, 127, 690, 7, 'GND'),
+(710, 127, 689, 8, '+5V'),
 (711, 128, 697, 1, '1'),
 (712, 128, 698, 2, '2'),
 (713, 128, 699, 3, '3'),
@@ -3768,7 +3789,7 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (728, 129, 714, 6, '6'),
 (729, 129, 715, 7, '7'),
 (730, 129, 716, 8, '8'),
-(731, 129, 716, 9, '9'),
+(731, 129, 717, 9, '9'),
 (732, 129, 718, 10, '10'),
 (733, 129, 719, 11, '11'),
 (734, 129, 720, 12, '12'),
@@ -3778,10 +3799,10 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (738, 130, 724, 4, '4'),
 (739, 130, 725, 5, '5'),
 (740, 130, 726, 6, '6'),
-(741, 130, 727, 7, '7'),
-(742, 130, 728, 8, '8'),
-(743, 131, 729, 1, '1'),
-(744, 131, 730, 2, '2'),
+(741, 130, 728, 7, '7'),
+(742, 130, 727, 8, '8'),
+(743, 131, 730, 1, '1'),
+(744, 131, 729, 2, '2'),
 (745, 131, 731, 3, '3'),
 (746, 131, 732, 4, '4'),
 (747, 131, 733, 5, '5'),
@@ -3794,10 +3815,10 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (754, 132, 740, 4, '4'),
 (755, 132, 741, 5, '5'),
 (756, 132, 742, 6, '6'),
-(757, 132, 743, 7, '7'),
-(758, 132, 744, 8, '8'),
-(759, 133, 745, 1, '1'),
-(760, 133, 746, 2, '2'),
+(757, 132, 744, 7, '7'),
+(758, 132, 743, 8, '8'),
+(759, 133, 746, 1, '1'),
+(760, 133, 745, 2, '2'),
 (761, 133, 747, 3, '3'),
 (762, 133, 748, 4, '4'),
 (763, 133, 749, 5, '5'),
@@ -3873,7 +3894,29 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (833, 142, 93, 9, '9'),
 (834, 142, 92, 10, '10'),
 (835, 142, 101, 11, '11'),
-(836, 142, 102, 12, '12');
+(836, 142, 102, 12, '12'),
+(837, 143, 406, 1, 'Zasilanie przepływomierza'),
+(838, 143, 408, 2, 'Sygnał przepływomierza'),
+(839, 143, 409, 3, 'Sygnał od przycisku'),
+(840, 143, 407, 4, 'GND'),
+(841, 144, 681, 1, 'Czerwony Zasilanie 5V'),
+(842, 144, 682, 2, 'Czarny GND'),
+(843, 144, 683, 3, 'Żółty Sygnał'),
+(844, 145, 689, 1, 'Zasilanie +5V (czerwony)'),
+(845, 145, 690, 2, 'GND (czarny)'),
+(846, 145, 691, 3, 'Sygnał (żólty)'),
+(847, 146, 729, 1, 'Masa (czarny)'),
+(848, 146, 730, 2, 'Zasilanie +5V (czerwony)'),
+(849, 146, 731, 3, 'Sygnał (żółty)'),
+(850, 147, 727, 1, 'Zasilanie +5V (czerwony)'),
+(851, 147, 728, 2, 'GND (czarny)'),
+(852, 147, 726, 3, 'Sygnał (żółty)'),
+(853, 148, 251, 1, 'Zasilanie +5V (czerwony)'),
+(854, 148, 249, 2, 'GND (czarny)'),
+(855, 148, 250, 3, 'Sygnał (żołty)'),
+(856, 149, 252, 1, 'Zasilanie +5V (czerwony)'),
+(857, 149, 253, 2, 'GND (czarny)'),
+(858, 149, 254, 3, 'Sygnał (żółty)');
 
 -- --------------------------------------------------------
 
@@ -3947,7 +3990,7 @@ CREATE TABLE `zlacze_wtyczka` (
   `id` smallint UNSIGNED NOT NULL,
   `wtyczka_id` smallint UNSIGNED NOT NULL,
   `zlacze_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `zlacze_wtyczka`
@@ -4007,7 +4050,7 @@ CREATE TABLE `zyla` (
   `kolor_id` tinyint UNSIGNED NOT NULL,
   `przewod_id` tinyint UNSIGNED NOT NULL,
   `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Zrzut danych tabeli `zyla`
@@ -4062,8 +4105,8 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (46, 5, 34, 'zasilanie awaryjne'),
 (47, 1, 34, 'noc'),
 (48, 8, 34, 'wieczór'),
-(49, 8, 35, 'Wyjście światło'),
-(50, 1, 35, 'Wyjście wiatrak'),
+(49, 8, 35, 'Zapalone światło w WC (główne lub lustro)'),
+(50, 1, 35, 'Żądanie uruchomienie wentylatora w WC'),
 (51, 6, 35, 'Sygnał dla przekaźnika 5'),
 (52, 5, 35, 'Sygnał dla przekaźnika 6'),
 (53, 4, 35, 'Podświetlenie włączników'),
@@ -4531,70 +4574,70 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (520, 0, 196, ''),
 (521, 0, 195, '+24V'),
 (522, 0, 195, 'GND'),
-(523, 0, 194, 'Zasilanie awarune'),
-(524, 0, 194, '2 taryfa'),
-(525, 0, 194, 'noc'),
-(526, 0, 194, 'wieczór'),
-(527, 0, 194, '+24 V sterowane'),
-(528, 0, 194, 'GND'),
-(529, 0, 194, 'GND'),
-(530, 0, 194, '+24 V'),
+(523, 9, 194, 'Zasilanie awarune'),
+(524, 3, 194, '2 taryfa'),
+(525, 8, 194, 'noc'),
+(526, 1, 194, 'wieczór'),
+(527, 4, 194, '+24 V sterowane'),
+(528, 7, 194, 'GND'),
+(529, 6, 194, 'GND'),
+(530, 5, 194, '+24 V'),
 (531, 1, 193, '+5V'),
 (532, 3, 193, 'GND'),
-(533, 0, 192, '42.4 kontantron pracownia4'),
-(534, 0, 192, '42.5 kontaktron pokój'),
-(535, 0, 192, '42.6 czujnik ruchu nad drzwiami do pokojów'),
-(536, 0, 192, '42.7 czujnik ruchu pracownia'),
-(537, 0, 192, '42.8 czujnik ruchu pokój'),
-(538, 0, 192, '53.2'),
-(539, 0, 192, '54.6'),
-(540, 0, 192, '54.5'),
-(541, 0, 192, '54.4'),
-(542, 0, 192, '54.3'),
-(543, 0, 192, '54.2'),
-(544, 0, 192, '54.1'),
+(533, 1, 192, '42.4 kontantron pracownia4'),
+(534, 8, 192, '42.5 kontaktron pokój'),
+(535, 6, 192, '42.6 czujnik ruchu nad drzwiami do pokojów'),
+(536, 15, 192, '42.7 czujnik ruchu pracownia'),
+(537, 7, 192, '42.8 czujnik ruchu pokój'),
+(538, 2, 192, '53.4'),
+(539, 10, 192, '54.6'),
+(540, 11, 192, '54.5'),
+(541, 13, 192, '54.4'),
+(542, 3, 192, '54.3'),
+(543, 5, 192, '54.2'),
+(544, 4, 192, '54.1'),
 (545, 1, 191, 'Zasilanie awaryjne'),
 (546, 3, 191, '2 taryfa'),
 (547, 11, 191, 'noc'),
 (548, 4, 191, 'wieczór'),
-(549, 0, 190, '`35.5 Światło w WC (in)'),
-(550, 0, 190, '35.6 Żadanie uruchomienie wiatraka w WC (in)'),
-(551, 0, 190, '35.7 Przekażnik 5 WC (out)'),
-(552, 0, 190, '35.8 Przekaźnik 6 WC (out)'),
-(553, 0, 190, '53.4 Przekaźnik wiatrak 1 przedpokoj'),
-(554, 0, 190, '53.5 Przekaźnik wiatrak 2'),
-(555, 0, 190, '59.8 -'),
-(556, 0, 190, '59.7'),
-(557, 0, 190, '59.6'),
-(558, 0, 190, '59.5'),
+(549, 2, 190, '`35.5 Światło w WC (in)'),
+(550, 11, 190, '35.6 Żadanie uruchomienie wiatraka w WC (in)'),
+(551, 4, 190, '35.7 Przekażnik 5 WC (out)'),
+(552, 7, 190, '35.8 Przekaźnik 6 WC (out)'),
+(553, 8, 190, '53.4 Przekaźnik wiatrak 1 przedpokoj'),
+(554, 10, 190, '53.5 Przekaźnik wiatrak 2'),
+(555, 1, 190, '59.8 -'),
+(556, 5, 190, '59.7'),
+(557, 3, 190, '59.6'),
+(558, 6, 190, '59.5'),
 (559, 0, 189, '+5V'),
 (560, 0, 189, 'GND'),
 (561, 0, 189, 'GND'),
 (562, 0, 189, '+24V'),
-(563, 0, 86, 'RX'),
-(564, 0, 86, 'TX'),
-(565, 0, 86, 'Zasilanie awaryjne'),
-(566, 0, 86, '2 taryfa'),
-(567, 0, 86, 'noc'),
-(568, 0, 86, 'wieczór'),
-(569, 0, 86, '+24V sterowalne'),
-(570, 0, 86, 'GND'),
-(571, 0, 59, 'Podświetlenie klawiszy'),
-(572, 0, 59, 'Podświetlenie klawiszy'),
-(573, 0, 59, 'Klawisz lewy Hol'),
-(574, 0, 59, 'Klawisz prawy Hol'),
-(575, 0, 59, '-'),
-(576, 0, 59, '-'),
-(577, 0, 59, '-'),
-(578, 0, 59, '-'),
-(579, 0, 57, 'RX'),
-(580, 0, 57, 'TX'),
-(581, 0, 57, 'GND'),
-(582, 0, 57, '+24V'),
-(583, 0, 57, 'wieczór'),
-(584, 0, 57, 'noc'),
-(585, 0, 57, '2 taryfa'),
-(586, 0, 57, 'zasilanie awaryjne'),
+(563, 9, 86, 'RX'),
+(564, 3, 86, 'TX'),
+(565, 2, 86, 'Zasilanie awaryjne'),
+(566, 6, 86, '2 taryfa'),
+(567, 1, 86, 'noc'),
+(568, 8, 86, 'wieczór'),
+(569, 4, 86, '+24V sterowalne'),
+(570, 7, 86, 'GND'),
+(571, 4, 59, 'Podświetlenie klawiszy'),
+(572, 5, 59, 'Podświetlenie klawiszy'),
+(573, 1, 59, 'Klawisz lewy Hol'),
+(574, 8, 59, 'Klawisz prawy Hol'),
+(575, 3, 59, '-'),
+(576, 9, 59, '-'),
+(577, 6, 59, '-'),
+(578, 7, 59, '-'),
+(579, 9, 57, 'RX'),
+(580, 3, 57, 'TX'),
+(581, 7, 57, 'GND'),
+(582, 4, 57, '+24V'),
+(583, 8, 57, 'wieczór'),
+(584, 1, 57, 'noc'),
+(585, 6, 57, '2 taryfa'),
+(586, 5, 57, 'zasilanie awaryjne'),
 (587, 5, 58, 'GND'),
 (588, 9, 58, 'włacznik salon lewy klawisz lewy'),
 (589, 3, 58, 'włącznik salon lewy klawisz prawy'),
@@ -4603,18 +4646,18 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (592, 6, 58, 'włącznik kuchnia klawisz lewy'),
 (593, 7, 58, 'włącznik kuchnia klawisz prawy'),
 (594, 4, 58, 'podświetlenie klawiszy'),
-(595, 0, 188, '83.6 czujnik ruchu 1'),
-(596, 0, 188, '83.5 czujnik ruchu 2'),
-(597, 0, 188, '83.4'),
-(598, 0, 188, '83.3'),
-(599, 0, 188, '83.2'),
-(600, 0, 188, '83.1'),
-(601, 0, 188, '84.3 Czujnik ruchu 1'),
-(602, 0, 188, '84.8'),
-(603, 0, 188, '84.7'),
-(604, 0, 188, '84.6'),
-(605, 0, 188, '64.5'),
-(606, 0, 188, '84.3 Czujnik ruchu 2'),
+(595, 7, 188, '83.6 czujnik ruchu 1'),
+(596, 15, 188, '83.5 czujnik ruchu 2'),
+(597, 6, 188, '83.4'),
+(598, 2, 188, '83.3'),
+(599, 11, 188, '83.2'),
+(600, 3, 188, '83.1'),
+(601, 13, 188, '-'),
+(602, 5, 188, '-'),
+(603, 4, 188, '-'),
+(604, 10, 188, '-'),
+(605, 8, 188, '-'),
+(606, 1, 188, '-'),
 (607, 5, 83, '-'),
 (608, 6, 83, '-'),
 (609, 3, 83, '-'),
@@ -4629,18 +4672,18 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (618, 3, 186, 'Noc #13'),
 (619, 11, 186, '2 taryfa #12'),
 (620, 4, 186, 'Zasilanie awaryjne #6'),
-(621, 0, 185, '93.1'),
-(622, 0, 185, '93.2'),
-(623, 0, 185, '86,1'),
-(624, 0, 185, '86.2'),
-(625, 0, 185, '57.1'),
-(626, 0, 185, '57.2'),
-(627, 0, 185, '34.1'),
-(628, 0, 185, '34.2'),
-(629, 0, 185, '52.1'),
-(630, 0, 185, '52.2'),
-(631, 0, 185, 'GND'),
-(632, 0, 185, '+5V'),
+(621, 15, 185, '93.1'),
+(622, 2, 185, '93.2'),
+(623, 13, 185, '86,1'),
+(624, 5, 185, '86.2'),
+(625, 6, 185, '57.1'),
+(626, 8, 185, '57.2'),
+(627, 3, 185, '34.1'),
+(628, 10, 185, '34.2'),
+(629, 11, 185, '52.1'),
+(630, 1, 185, '52.2'),
+(631, 7, 185, 'GND'),
+(632, 4, 185, '+5V'),
 (633, 0, 184, 'GND'),
 (634, 0, 184, '+24V'),
 (635, 0, 183, 'D183.2'),
@@ -4689,70 +4732,70 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (678, 0, 177, 'K7.9'),
 (679, 0, 177, 'K7.8'),
 (680, 0, 177, 'K7.7'),
-(681, 0, 70, '+5V'),
-(682, 0, 70, 'GND'),
-(683, 0, 70, '-'),
-(684, 0, 70, '-'),
-(685, 0, 70, '-'),
-(686, 0, 70, '-'),
-(687, 0, 70, '-'),
-(688, 0, 70, ''),
-(689, 0, 80, '+5V'),
-(690, 0, 80, 'GND'),
-(691, 0, 80, '-'),
-(692, 0, 80, '-'),
-(693, 0, 80, '-'),
-(694, 0, 80, '-'),
-(695, 0, 80, '-'),
-(696, 0, 80, '-'),
-(697, 0, 176, 'P81.5'),
-(698, 0, 176, 'P81,4'),
-(699, 0, 176, 'P81.3'),
-(700, 0, 176, 'P81.2'),
-(701, 0, 176, 'P81.1'),
-(702, 0, 176, 'R85.2'),
-(703, 0, 176, 'R85.3'),
-(704, 0, 176, 'Q84.8'),
-(705, 0, 176, 'Q84.7'),
-(706, 0, 176, 'Q84.6'),
-(707, 0, 176, 'Q84.5'),
-(708, 0, 176, 'Q84.4'),
-(709, 0, 175, 'M80.5'),
-(710, 0, 175, 'M80.4'),
-(711, 0, 175, 'M80.3'),
-(712, 0, 175, 'M80.2'),
-(713, 0, 175, 'M80.1'),
-(714, 0, 175, 'R85.2'),
-(715, 0, 175, 'R85.3'),
-(716, 0, 175, 'Q84.8'),
-(717, 0, 175, 'Q84.7'),
-(718, 0, 175, 'Q84.6'),
-(719, 0, 175, 'Q84.5'),
-(720, 0, 175, 'Q84.4'),
-(721, 0, 81, 'N.5'),
-(722, 0, 81, 'N.4'),
-(723, 0, 81, 'N.3'),
-(724, 0, 81, 'N.2'),
-(725, 0, 81, 'N.1'),
-(726, 0, 81, 'A.7'),
-(727, 0, 81, '+5V'),
-(728, 0, 81, 'GND'),
-(729, 0, 84, 'GND'),
-(730, 0, 84, '+5V'),
-(731, 0, 84, 'A.5'),
-(732, 0, 84, 'N12'),
-(733, 0, 84, 'N.11'),
-(734, 0, 84, 'N.10'),
-(735, 0, 84, 'N.9'),
-(736, 0, 84, 'N.8'),
-(737, 0, 85, 'W.4'),
-(738, 0, 85, 'N.6'),
-(739, 0, 85, 'N.7'),
-(740, 0, 85, 'O.6'),
-(741, 0, 85, '0.7'),
-(742, 0, 85, 'A.8'),
-(743, 0, 85, '+5V'),
-(744, 0, 85, 'GND'),
+(681, 4, 70, '+5V'),
+(682, 7, 70, 'GND'),
+(683, 8, 70, 'Sygnał czujnika'),
+(684, 1, 70, '-'),
+(685, 3, 70, '-'),
+(686, 6, 70, '-'),
+(687, 5, 70, '-'),
+(688, 9, 70, ''),
+(689, 4, 80, '+5V'),
+(690, 7, 80, 'GND'),
+(691, 8, 80, 'Sygnał czujnika'),
+(692, 6, 80, '-'),
+(693, 3, 80, '-'),
+(694, 9, 80, '-'),
+(695, 5, 80, '-'),
+(696, 1, 80, '-'),
+(697, 1, 176, 'P81.5'),
+(698, 8, 176, 'P81,4'),
+(699, 11, 176, 'P81.3'),
+(700, 15, 176, 'P81.2'),
+(701, 4, 176, 'P81.1'),
+(702, 2, 176, 'R85.2'),
+(703, 13, 176, 'R85.3'),
+(704, 3, 176, 'Q84.8'),
+(705, 10, 176, 'Q84.7'),
+(706, 5, 176, 'Q84.6'),
+(707, 6, 176, 'Q84.5'),
+(708, 7, 176, 'Q84.4'),
+(709, 1, 175, 'M80.5'),
+(710, 8, 175, 'M80.4'),
+(711, 11, 175, 'M80.3'),
+(712, 15, 175, 'M80.2'),
+(713, 4, 175, 'M80.1'),
+(714, 2, 175, 'R85.2'),
+(715, 3, 175, 'R85.3'),
+(716, 10, 175, 'Q84.8'),
+(717, 5, 175, 'Q84.7'),
+(718, 6, 175, 'Q84.6'),
+(719, 7, 175, 'Q84.5'),
+(720, 13, 175, 'Q84.4'),
+(721, 3, 81, 'N.5'),
+(722, 9, 81, 'N.4'),
+(723, 6, 81, 'N.3'),
+(724, 1, 81, 'N.2'),
+(725, 5, 81, 'N.1'),
+(726, 8, 81, 'A.7'),
+(727, 4, 81, '+5V'),
+(728, 7, 81, 'GND'),
+(729, 7, 84, 'GND'),
+(730, 4, 84, '+5V'),
+(731, 8, 84, 'A.5'),
+(732, 9, 84, 'N12'),
+(733, 3, 84, 'N.11'),
+(734, 6, 84, 'N.10'),
+(735, 1, 84, 'N.9'),
+(736, 5, 84, 'N.8'),
+(737, 5, 85, 'W.4'),
+(738, 1, 85, 'N.6'),
+(739, 6, 85, 'N.7'),
+(740, 9, 85, 'O.6'),
+(741, 3, 85, '0.7'),
+(742, 8, 85, 'A.8'),
+(743, 4, 85, '+5V'),
+(744, 7, 85, 'GND'),
 (745, 0, 72, 'GND'),
 (746, 0, 72, '+5V'),
 (747, 0, 72, 'W.12'),
@@ -4786,7 +4829,25 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (775, 0, 179, 'S72.4'),
 (776, 0, 179, 'S72.3'),
 (777, 4, 197, '+3.3V'),
-(778, 3, 197, 'GND');
+(778, 3, 197, 'GND'),
+(779, 7, 69, 'GND'),
+(780, 6, 69, '-'),
+(781, 1, 69, '-'),
+(782, 4, 69, '+5V'),
+(783, 8, 69, 'Sygnał od przypływomierza 1'),
+(784, 3, 69, 'Sygnał od przepływomierza 2'),
+(785, 9, 69, 'Sygnał od przepływomierza 3'),
+(786, 5, 69, '-'),
+(787, 7, 50, 'GND'),
+(788, 1, 50, 'Sygnał 108'),
+(789, 10, 50, 'Sygnał 109'),
+(790, 9, 50, 'Sygnał 110'),
+(791, 8, 50, 'Sygnał 111'),
+(792, 5, 50, '-'),
+(793, 2, 50, 'Sygnał 112'),
+(794, 6, 50, 'Sygnał 113'),
+(795, 3, 50, 'Sygnał 114'),
+(796, 4, 50, '+5V');
 
 -- --------------------------------------------------------
 
@@ -4856,6 +4917,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 DROP TABLE IF EXISTS `MiejsceView`;
 
 CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `MiejsceView`  AS  select `miejsce`.`id` AS `id`,`miejsce`.`nazwa` AS `nazwa`,`miejsce`.`opis` AS `opis`,`miejsce`.`zbiorcze` AS `zbiorcze`,`miejsce`.`id_pomieszczenie` AS `id_pomieszczenie`,`miejsce`.`kod` AS `kod`,`miejsce`.`polaczenie` AS `polaczenie`,`pomieszczenie`.`nazwa` AS `pomieszczenie` from (`miejsce` left join `pomieszczenie` on((`miejsce`.`id_pomieszczenie` = `pomieszczenie`.`id`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `PlytkaAiB`
+--
+DROP TABLE IF EXISTS `PlytkaAiB`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PlytkaAiB`  AS  select `przewod`.`id` AS `przewod`,`przewod`.`opis` AS `opis`,`przewod`.`ilosc_zyl` AS `ilosc_zyl` from `przewod` where (`przewod`.`id` in (7,8,34,35,36,42,52,53,54,57,59,61,70,71,72,80,81,83,84,85,86,87,88,93,94,175,176,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195)) ;
 
 -- --------------------------------------------------------
 
@@ -5082,7 +5152,7 @@ ALTER TABLE `elementy_plytkowe_pin`
 -- AUTO_INCREMENT dla tabeli `kolor`
 --
 ALTER TABLE `kolor`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT dla tabeli `miejsce`
@@ -5094,7 +5164,7 @@ ALTER TABLE `miejsce`
 -- AUTO_INCREMENT dla tabeli `plytki`
 --
 ALTER TABLE `plytki`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
@@ -5136,13 +5206,13 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=837;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=859;
 
 --
 -- AUTO_INCREMENT dla tabeli `zlacze_wtyczka`
@@ -5154,7 +5224,7 @@ ALTER TABLE `zlacze_wtyczka`
 -- AUTO_INCREMENT dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=779;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=797;
 
 --
 -- Ograniczenia dla zrzutów tabel
