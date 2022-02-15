@@ -59,7 +59,10 @@
                     >Dodaj zakonczenie
                 </a>
                 <span ng-if="prze[pid].miejsca[0].zakid !== undefined && prze[pid].miejsca[0].zakid !== null">
-                        {{prze[pid].miejsca[0].zakid}}. {{prze[pid].miejsca[0].r_naz}} : {{prze[pid].miejsca[0].etyk}}
+                    {{prze[pid].miejsca[0].zakid}}. {{prze[pid].miejsca[0].r_naz}} : {{prze[pid].miejsca[0].etyk}}
+                </span>
+                <span ng-if="zlaczewtyczka[prze[pid].miejsca[0].zakid].wtyczka_id !== undefined && zlaczewtyczka[prze[pid].miejsca[0].zakid].wtyczka_id !== null">
+                        {{zlaczewtyczka[prze[pid].miejsca[0].zakid].zlacze_id}}. {{zlaczewtyczka[prze[pid].miejsca[0].zakid].plytka}} : {{zlaczewtyczka[prze[pid].miejsca[0].zakid].zlacze}}
                 </span>    
             </td>
             <td style="text-align: left;" ng-show="showtd4(pid)">
@@ -75,6 +78,9 @@
                 <span ng-if="prze[pid].miejsca[1].zakid !== undefined && prze[pid].miejsca[1].zakid !== null">
                     {{prze[pid].miejsca[1].zakid}}. {{prze[pid].miejsca[1].r_naz}} : {{prze[pid].miejsca[1].etyk}}
                 </span>
+                <span ng-if="zlaczewtyczka[prze[pid].miejsca[1].zakid].wtyczka_id !== undefined && zlaczewtyczka[prze[pid].miejsca[1].zakid].wtyczka_id !== null">
+                    {{zlaczewtyczka[prze[pid].miejsca[1].zakid].zlacze_id}}. {{zlaczewtyczka[prze[pid].miejsca[1].zakid].plytka}} : {{zlaczewtyczka[prze[pid].miejsca[1].zakid].zlacze}}
+            </span> 
             </td>
             <td style="text-align: center;"> <div class="btn-group">
                 <div style="display: flex;"><button ng-click="seteditPlace(pid)">Edytuj</button>&nbsp;<button ng-click="setDetails(pid)">Szczegóły</button></div>
