@@ -24,6 +24,7 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
             $scope.polaczenia = response.data.polaczenia;
             $scope.urzadzenia = response.data.urzadzenia;
             $scope.kolory = response.data.kolory;
+            $scope.zlaczewtyczka = response.data.zlaczewtyczka;
 
             var BreakException = {};
             for (var i=0; i < $scope.przewody.length; i++) {
