@@ -117,29 +117,20 @@ while($row = mysqli_fetch_array($result)) {
 
 }
 
-/*
-$query = "SELECT `urzadzenie_zakonczenie`.`id`, `urzadzenie_zakonczenie`.`zakonczenie_id`, `urzadzenie_zakonczenie`.`zyla_id`, ";
-$query .= "`urzadzenie_zakonczenie`.`opis`, `kolor`.`nazwa`, `kolor`.`html` ";
-$query .= "FROM `urzadzenie_zakonczenie` LEFT JOIN `kolor` ON `kolor`.`id` = `urzadzenie_zakonczenie`.`kolor_id` ";
-$query .= "ORDER by `urzadzenie_zakonczenie`.`zakonczenie_id` ";
-$prevzik = -1;
-*/
-$arrayurzadzenia = array();
-/*
+
+$query = "SELECT `zid_1`, `et_1`, `rz_1`, `ip_z1`, `zid_2`, `et_2`, `plytka_id`, `rz_2`, `ip_z2`, `ply_nazwa`, `miejsce_1`, `przewod`, `miejsce_2` FROM `ZlaczeWtyczka` WHERE 1";
 $result = mysqli_query($con, $query);
+$zlaczewtyczka = array();
 while($row = mysqli_fetch_array($result)) {
-    if ($prevzik  != $row["zakonczenie_id"]) {
-        $arrayurzadzenia[$row["zakonczenie_id"]] = array();
-        $prevzik  = $row["zakonczenie_id"];
-    }
-    array_push($arrayurzadzenia[$row["zakonczenie_id"]], array(
-        "id" => $row["zyla_id"],
-        "opis" => $row["opis"],
-        "kolor" => $row["nazwa"],
-        "html" => $row["html"]
-    ));
+    $zlaczewtyczka[$row["zid_1"]] = array(
+        "wtyczka" => $row["et_1"],
+        "wtyczka_id" => $row["zid_1"],
+        "zlacze" => $row["et_2"],
+        "zlacze_id" => $row["zid_2"],
+        "plytka_id" => $row["plytka_id"],
+        "plytka" => $row["ply_nazwa"]
+    );
 }
-*/
 
 $query = "SELECT `id`, `nazwa`, `html`  FROM `KolorView` ";
 $result = mysqli_query($con, $query);
@@ -152,6 +143,8 @@ while($row = mysqli_fetch_array($result)) {
     ));
 }
 
+$arrayurzadzenia = array();
+
 $opt = array(
     'przewody' => $przewodyindexarray,
     'przewod' => $przewodyarray,
@@ -161,7 +154,8 @@ $opt = array(
     "zakonczenie" => $zakarr,
     "polaczenia" => $arraypolaczenie,
     "urzadzenia" => $arrayurzadzenia,
-    "kolory" => $kolory
+    "kolory" => $kolory,
+    "zlaczewtyczka" => $zlaczewtyczka
 );
 
 echo json_encode($opt);
