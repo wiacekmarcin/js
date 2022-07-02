@@ -11,9 +11,6 @@
 #include <Wire.h>
 #include <Adafruit_MCP23017.h>
 
-
-
-
 constexpr unsigned short DELAY = 200; //50;
 constexpr unsigned long TIMEBEFORESLEEP = SEC(5);
 constexpr unsigned int CNTMAXLOOP = TIMEBEFORESLEEP / DELAY;
@@ -140,7 +137,7 @@ void loop()
         expWejscia.print();
         expWyjscia.print("Czas");
     }
-    Serial.print('*');
+    //Serial.print('*');
 #endif 
     static unsigned long prevtittok = 0L;
     if (mls - prevtittok > 1000) {
@@ -150,4 +147,4 @@ void loop()
 #endif
 }
 
-    
+

@@ -107,6 +107,7 @@ void Swiatlo::zgasLustro()
      * 8. Otwarcie drzwi jeżeli lustro pali i pali się światło główne to gasi lustro
      **/
 
+
 bool Swiatlo::set(unsigned long mls)
 {
     bool onL = wyj.getLustro();
@@ -117,27 +118,49 @@ bool Swiatlo::set(unsigned long mls)
     const Drzwi & d = wej.getDrzwi();
     const CzujkaRuchu & c = wej.getCzujkaRuchu();
     const CzujkaZblizeniowa & l = wej.getCzujkaZbl();
+
+    static bool ponL, ponS;
+    static PoraDnia ppora;
+    static Wlacznik pw;
+    static Drzwi pd;
+    static CzujkaRuchu pc;
+    static CzujkaZblizeniowa pl;
+    bool wasPr = false;
     
-    Serial.print("onl=");Serial.print(onL, DEC);
-    Serial.print(" onS=");Serial.print(onS, DEC);
-    Serial.print(" wie=");Serial.print(pora.czyWieczor(), DEC);
-    Serial.print(" noc=");Serial.print(pora.czyNoc(), DEC);
-    Serial.print(" kla1=");Serial.print(w.nacisniety(), DEC);
-    Serial.print(" kla2=");Serial.print(w.nacisnietyDrugiRaz(), DEC);
-    Serial.print(" kla3=");Serial.print(w.nacisnietyTrzeciRaz(), DEC);
-    Serial.print(" dotw=");Serial.print(d.czyOtwarte());
-    Serial.print(" dott=");Serial.print(d.zostalyOtwarte());
-    Serial.print(" ruc=");Serial.print(c.czyRuch());
-    Serial.print(" lus=");Serial.print(l.czyRuch());
-    Serial.print(" ldr=");Serial.println(l.czyDlugiRuch());
+    if (ponL != onL) { Serial.print("onl=");Serial.print(onL, DEC); wasPr = true; }
+    if (ponS != onS) { Serial.print(" onS=");Serial.print(onS, DEC); wasPr = true; }
+    if (ppora.czyWieczor() != pora.czyWieczor()) { pora.print();/*Serial.print(" wie=");Serial.print(pora.czyWieczor(), DEC);*/ wasPr = true; }
+    if (ppora.czyNoc() != pora.czyNoc()) { pora.print();/*Serial.print(" noc=");Serial.print(pora.czyNoc(), DEC);*/ wasPr = true; }
+    if (pw.nacisniety() != w.nacisniety()) { w.print();/*Serial.print(" kla1=");Serial.print(w.nacisniety(), DEC);*/ wasPr = true; }
+    if (pw.nacisnietyDrugiRaz() != w.nacisnietyDrugiRaz()) { w.print();/*Serial.print(" kla2=");Serial.print(w.nacisnietyDrugiRaz(), DEC);*/ wasPr = true; }
+    if (pw.nacisnietyTrzeciRaz() != w.nacisnietyTrzeciRaz()) { w.print();/*Serial.print(" kla3=");Serial.print(w.nacisnietyTrzeciRaz(), DEC);*/ wasPr = true; }
+    if (pd.czyOtwarte() != d.czyOtwarte()) { d.print();/*Serial.print(" dotw=");Serial.print(d.czyOtwarte());*/ wasPr = true; }
+    if (pd.zostalyOtwarte() != d.zostalyOtwarte()) { d.print();/*Serial.print(" dott=");Serial.print(d.zostalyOtwarte());*/ wasPr = true; }
+    if (pc.czyRuch() != c.czyRuch()) { c.print();/*Serial.print(" ruc=");Serial.print(c.czyRuch());*/ wasPr = true; }
+    if (pl.czyRuch() != l.czyRuch()) { l.print();/*Serial.print(" lus=");Serial.print(l.czyRuch());*/ wasPr = true; }
+    if (pl.czyDlugiRuch() != l.czyDlugiRuch()) { l.print();/*Serial.print(" ldr=");Serial.print(l.czyDlugiRuch());*/ wasPr = true; }
+
+    //if (wasPr) {
+    //    Serial.println();
+    //    pora.print();
+
+    ponL = onL;
+    ponS = onS;
+    ppora = pora;
+    pw = w;
+    pd = d;
+    pc = c;
+    pl = l;
 
     //zapal swiatlo przyciskem
     if (!onL && !onS && w.nacisniety()) {
         if (pora.czyWieczor() && !pora.czyNoc()) { //zapalamy glowne swiatlo
-            zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+            //zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+            zapalSwiatlo(L_MIN(5));
         } else {  //zapalamy lustro
             lustroJakoSwiatlo = true;
-            zapalLustro(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+            //zapalLustro(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+            zapalLustro(L_MIN(5));
         }
         return true;
     }
@@ -157,7 +180,8 @@ bool Swiatlo::set(unsigned long mls)
     if (!onS && onL && w.nacisnietyDrugiRaz() && lustroJakoSwiatlo) {
         zgasLustro();
         lustroJakoSwiatlo = false;
-        zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+        //zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
+        zapalSwiatlo(L_MIN(20));
         return true;
     }
 

@@ -2,7 +2,7 @@
 #define _DBG_H
 #include <Arduino.h>
 
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 

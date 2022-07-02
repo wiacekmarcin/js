@@ -94,8 +94,8 @@ bool Wyjscia::tiktok()
         }
     }
 #ifdef DEBUG      
-    Serial.print("tiktok call : ");
-    Serial.println(ret ? "One_On" : "All_off");
+    //Serial.print("tiktok call : ");
+    //Serial.println(ret ? "One_On" : "All_off");
 #endif    
     return ret;
 }
@@ -108,8 +108,8 @@ uint8_t Wyjscia::o(uint8_t id, bool value)
 void Wyjscia::print(const char * funn) const
 {
 #ifdef DEBUG
-    unsigned mls = millis();
-    unsigned mms = mls % 1000;
+    unsigned long mls = millis();
+    unsigned long mms = mls % 1000;
     Serial.print(mls, DEC);
     Serial.print(" (");
     Serial.print(mls/1000, DEC);
@@ -121,35 +121,26 @@ void Wyjscia::print(const char * funn) const
     Serial.print(mms, DEC);
     Serial.print(") ");
     Serial.println(funn);
-    const char et[] = { "|  swiatlo  " 
-                        "|   lustro  "
-                        "|   szafka  " 
-                        "|    zawor  "
-                        "| wy_swiat  "
-                        "|  wiatrak  |" 
+    const char et[][9] = {  "swiatlo ", 
+                            "lustro  ",
+                            "szafka  ", 
+                            "zawor   ",
+                            "wy_swiat",
+                            "wiatrak ",
+                            "?       ", 
+                            "?       ",
                         };
 
     int klucze[] = { SWIATLO, LUSTRO, SZAFKA, ZAWOR, WY_SWIATLO, WIATRAK };
-    Serial.println(et);
-    for (int i = 0; i < maxWyj; ++i) {
-        Serial.print("|     ");
-        Serial.print(on[klucze[i]-SZAFKA] ? "T" : "N");
-        Serial.print("     ");
-    }
-    Serial.println("|");
-    for (int i = 0; i < maxWyj; ++i) {
-        Serial.print("|     ");
-        Serial.print(o(klucze[i], on[klucze[i]-SZAFKA]) ? "H" : "L");
-        Serial.print("     ");
-    }
-    Serial.println("|");
-
     char buff[12];
-    for (int i = 0; i < maxWyj; ++i) {
-        Serial.print("|");
-        printtime(timeout[klucze[i]-SZAFKA], buff);
-        Serial.print(buff);
+    for (int i = 0; i < sizeof(klucze)/sizeof(klucze[0]); ++i) {
+        Serial.print(et[i]);
+        Serial.print(on[klucze[i]-SZAFKA] ? "1 " : "0 ");
+        Serial.print(o(klucze[i], on[klucze[i]-SZAFKA]) ? "(H)" : "(L)");
+        Serial.print(" ");
+        printtime(timeout[on[klucze[i]-SZAFKA]], buff);
+        Serial.println(buff);
     }
-    Serial.println("|");
+    
 #endif // DEBUG    
 }

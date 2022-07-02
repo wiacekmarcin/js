@@ -128,10 +128,15 @@ void CzujkaRuchu::ustaw(uint8_t val, unsigned long timeInt, unsigned long timeAf
     m_val = (val == HIGH); 
 
     if (!m_ruch && m_val && !m_prev) {
+        m_ruch = true;
+        return;
+        
+    } else if (m_prev) { /// m_val || (!m_val && m_prev)
         m_prevtimelastMove = m_timelastMove;
         m_timelastMove = timeInt;// + timeAfterInt;
-        m_ruch = true;
-    } else if (m_ruch) {
+    }
+    
+    if (m_ruch) {
         m_ruch = false;
     }
     //print();

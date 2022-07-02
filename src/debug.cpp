@@ -191,6 +191,8 @@ void print_poradnia(const PoraDnia * p)
 
 void print_wejscie(uint8_t prev, uint8_t inD)
 {
+    if (prev == inD)
+        return;
     Serial.print(millis(), DEC);
     Serial.print(" ");
     Serial.println(inD, BIN);
