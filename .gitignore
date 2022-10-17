@@ -72,3 +72,5 @@
 *.exe
 *.out
 *.app
+qjson4/QJson4.pro.user
+FullScreanApp.pro.user
