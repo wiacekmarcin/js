@@ -4,9 +4,6 @@
 #include <QVariant>
 #include <QLabel>
 #include <QWidget>
-#include <QFontDatabase>
-#include <QDebug>
-#include <QFont>
 
 Zegar::Zegar(QWidget *parent) :
     BlackWidget(parent),

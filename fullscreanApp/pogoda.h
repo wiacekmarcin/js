@@ -43,7 +43,6 @@ protected:
     QString deg2Cardinal(const float &deg);
     QString toBeaufortChar(int b);
     QString toDescrSilaWiatru(const float & ms);
-    bool isDayTime();
 private slots:
     void parseMessage(QNetworkReply *reply);
 
