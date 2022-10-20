@@ -17,11 +17,10 @@ Informacje::Informacje(QWidget *parent) :
     inprogress = false;
     done = false;
 
-    //int id = QFontDatabase::addApplicationFont(":/font/fonts/robotic/Roboto-Medium.ttf");
-    //QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    //qDebug() << "font:informacje" << family;
-    QFont font1("RobotoMedium");
-    QFont font2("RobotoMedium");
+    int id = QFontDatabase::addApplicationFont(":/font/fonts/robotic/Roboto-Medium.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont font1(family);
+    QFont font2(family);
     font1.setPixelSize(20);
     font1.setWeight(QFont::Light);
     font2.setPixelSize(30);
@@ -57,9 +56,6 @@ void Informacje::timeout(const QDateTime &dt)
     
     if (!done) {
         pobierz();
-        return;
-    }
-
     int h = dt.time().hour();
 
     if (h < 6)

@@ -56,9 +56,7 @@ HEADERS += \
 
 FORMS += \
     ip.ui \
-    informacje.ui \
-    pogoda5day.ui \
-    pogodaday.ui
+    informacje.ui
 
 RESOURCES += \
     ikony.qrc

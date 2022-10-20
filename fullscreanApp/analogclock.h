@@ -11,7 +11,7 @@ public:
 
     void setWschod(int hour, int min);
     void setZachod(int hour, int min);
-    virtual void timeout(const QDateTime &) override;
+    virtual void timeout(const QDateTime &);
     QRect getRect();
 protected:
     void paintEvent(QPaintEvent *event) override;
