@@ -116,29 +116,22 @@ void Zegar::setupUi(QWidget *Zegar)
     ltime->setStyleSheet(timeStyle);
     QLabel * label = new QLabel(Zegar);
     label->setObjectName(QString::fromUtf8("label"));
-    label->setGeometry(QRect(220, 60, 32, 32));
-    //label->setText(QString("\uf051"));
-    label->setText(QString("\uf06e"));
-    label->setStyleSheet(iconStyle);
-    label->setFont(weatherFont);
-    //label->setPixmap(QPixmap(QString::fromUtf8(":/new/prefix1/sun.png")));
-    //label->setScaledContents(true);
+    label->setGeometry(QRect(190, 60, 48, 48));
+    label->setPixmap(QPixmap(QString::fromUtf8(":/new/prefix1/sun.png")));
+    label->setScaledContents(true);
     QLabel * label_2 = new QLabel(Zegar);
     label_2->setObjectName(QString::fromUtf8("label_2"));
-    label_2->setGeometry(QRect(225, 100, 32, 32));
-    //label_2->setPixmap(QPixmap(QString::fromUtf8(":/new/prefix1/moon.png")));
-    //label_2->setScaledContents(true);
-    //label_2->setText(QString("\uf052"));
-    label_2->setText(QString("\uf070"));
-    label_2->setStyleSheet(iconStyle);
-    label_2->setFont(weatherFont);
+    label_2->setGeometry(QRect(190, 100, 48, 48));
+    label_2->setPixmap(QPixmap(QString::fromUtf8(":/new/prefix1/moon.png")));
+    label_2->setScaledContents(true);
+
     wschod = new QLabel(Zegar);
     wschod->setObjectName(QString::fromUtf8("wschod"));
-    wschod->setGeometry(QRect(250, 60, 80, 32));
+    wschod->setGeometry(QRect(240, 60, 60, 32));
     wschod->setStyleSheet(minStyle);
     zachod = new QLabel(Zegar);
     zachod->setObjectName(QString::fromUtf8("zachod"));
-    zachod->setGeometry(QRect(250, 100, 80, 32));
+    zachod->setGeometry(QRect(240, 100, 80, 32));
     zachod->setStyleSheet(minStyle);
 }
 
