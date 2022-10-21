@@ -20,10 +20,7 @@ constexpr char iconWiStyle[] = "font-size:65px;line-height:65px;color:#aaa;text-
 constexpr char feelTempStyle[] = "font-size:30px;line-height:35px;color:#999;text-align:right;background:#000;font-weight:400;";
 constexpr char conditionalStyle[] = "font-size:22px;line-height:20px;color:#ccc;text-align:right;background:#000;font-weight:600;";
 
-
-class Pogoda : public BlackWidget
 {
-    Q_OBJECT
 
 public:
     explicit Pogoda(QWidget *parent = 0);
@@ -43,6 +40,7 @@ protected:
     QString deg2Cardinal(const float &deg);
     QString toBeaufortChar(int b);
     QString toDescrSilaWiatru(const float & ms);
+    bool isDayTime();
 private slots:
     void parseMessage(QNetworkReply *reply);
 
@@ -67,6 +65,8 @@ private:
     QLabel *maxTemp;
     QLabel *minTemp;
     QLabel *wCond;
+    QLabel *humiTemp;
+    QLabel *presTemp;
 
     QString citiname;
     int pog_h;

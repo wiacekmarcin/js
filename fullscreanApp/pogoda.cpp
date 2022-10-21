@@ -247,7 +247,7 @@ void Pogoda::parseMessage(QNetworkReply *reply)
     int pressure = doc.toVariant().toMap()["main"].toMap()["pressure"].toInt();
     int huminidity = doc.toVariant().toMap()["main"].toMap()["humidity"].toDouble();
     humiTemp->setText(QString::number(huminidity, 'f', 0));
-    presTemp->setText(QString::number(pressure, 'f', 0));
+    presTemp->setText(QString::number(pressure, 'f', 0)+QString("kPa"));
 
     QString weather_main = doc.toVariant().toMap()["weather"].toList()[0].toMap()["main"].toString();
     QString weather_descr = doc.toVariant().toMap()["weather"].toList()[0].toMap()["description"].toString();
@@ -280,13 +280,6 @@ QString Pogoda::getTimeRemaing(int h, int m)
         return QString("%1.%2 godz").arg(h10/10).arg(h10%10);
     }
 }
-
-
-QString Pogoda::getWindName(float windDirection)
-{
-    if (windDirection > 11.25 && windDirection <= 33.75) {
-        return "NNE";
-    } else if (windDirection > 33.75 && windDirection <= 56.25) {
 
 bool Pogoda::isDayTime() {
     QTime act = QTime::currentTime();
@@ -361,6 +354,25 @@ void Pogoda::setupUi(QWidget *Pogoda)
     feelTemp->setGeometry(QRect(170, 200, 165, 30));
     feelTemp->setStyleSheet(feelTempStyle);
     feelTemp->setFont(tempFont);
+
+    QLabel * label_2 = new QLabel(Pogoda);
+    label_2->setObjectName(QString::fromUtf8("lhumiTemp"));
+    label_2->setGeometry(QRect(250, 110, 35, 35));
+    label_2->setText(QString::fromUtf8("\uf07a"));
+    label_2->setStyleSheet(feelTempStyle);
+    label_2->setFont(weatherFont);
+
+    humiTemp = new QLabel(Pogoda);
+    humiTemp->setObjectName(QString::fromUtf8("humiTemp"));
+    humiTemp->setGeometry(QRect(280, 110, 70, 30));
+    humiTemp->setStyleSheet(feelTempStyle);
+    humiTemp->setFont(tempFont);
+
+    presTemp = new QLabel(Pogoda);
+    presTemp->setObjectName(QString::fromUtf8("presTemp"));
+    presTemp->setGeometry(QRect(250, 150, 70, 30));
+    presTemp->setStyleSheet(feelTempStyle);
+    presTemp->setFont(tempFont);
 
 }
 

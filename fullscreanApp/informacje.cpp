@@ -113,9 +113,7 @@ void Informacje::pobierz()
 {
     inprogress = true;
     m_requestSize = addresses.size();
-    qDebug() << m_requestSize;
     for(auto & rss : addresses) {
-        qDebug() << "REQUEST" << rss;
         netMng.get(QNetworkRequest(QUrl(rss)));
     }
 }
