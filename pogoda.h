@@ -43,11 +43,9 @@ protected:
     QString deg2Cardinal(const float &deg);
     QString toBeaufortChar(int b);
     QString toDescrSilaWiatru(const float & ms);
+    bool isDayTime();
 private slots:
     void parseMessage(QNetworkReply *reply);
-    QString getWindName(float windDirection);
-    int getBeafort(float speedms);
-    bool isDayTime();
 
 private:
     QString getTimeRemaing(int h, int m);
@@ -70,6 +68,8 @@ private:
     QLabel *maxTemp;
     QLabel *minTemp;
     QLabel *wCond;
+    QLabel *humiTemp;
+    QLabel *presTemp;
 
     QString citiname;
     int pog_h;
