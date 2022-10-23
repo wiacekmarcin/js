@@ -20,8 +20,6 @@ constexpr char iconWiStyle[] = "font-size:65px;line-height:65px;color:#aaa;text-
 constexpr char feelTempStyle[] = "font-size:30px;line-height:30px;color:#999;text-align:right;background:#000;font-weight:200;";
 constexpr char conditionalStyle[] = "font-size:22px;line-height:20px;color:#ccc;text-align:right;background:#000;font-weight:600;";
 
-class QLabel;
-
 
 class Pogoda : public BlackWidget
 {
