@@ -20,6 +20,8 @@ constexpr char iconWiStyle[] = "font-size:65px;line-height:65px;color:#aaa;text-
 constexpr char feelTempStyle[] = "font-size:30px;line-height:35px;color:#999;text-align:right;background:#000;font-weight:400;";
 constexpr char conditionalStyle[] = "font-size:22px;line-height:20px;color:#ccc;text-align:right;background:#000;font-weight:600;";
 
+
+class Pogoda : public BlackWidget
 {
 
 public:

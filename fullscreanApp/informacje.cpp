@@ -44,9 +44,10 @@ Informacje::Informacje(QWidget *parent) :
 
     addresses << "https://www.polsatnews.pl/rss/polska.xml" << "https://www.polsatnews.pl/rss/swiat.xml" << "https://tvn24.pl/najnowsze.xml" << "https://tvn24.pl/najwazniejsze.xml";
     addresses << "https://tvn24.pl/tvnwarszawa/najnowsze.xml" << "https://www.rmf24.pl/feed";
+    addresses << "http://kanaly.rss.interia.pl/fakty.xml";
     addresses << "http://www.tokfm.pl/pub/rss/tokfmpl_polska.xml";
 
-    ui->qrcode->setBaseSize(150,150);
+    ui->qrcode->setBaseSize(100,100);
 }
 
 void Informacje::timeout(const QDateTime &dt)
@@ -178,7 +179,6 @@ void Informacje::parseMessage(QNetworkReply *reply)
             QString psDate = p.item(0).toElement().text();
 
             QString url = "";
-            
             auto u = it.elementsByTagName("link");
             if (p.isEmpty() || p.length() < 1)
                 url = "";

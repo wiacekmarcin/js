@@ -32,6 +32,7 @@ SOURCES += \
         mainwindow.cpp \
     blackwidget.cpp \
     qrcodegen.cpp \
+    qrwidget.cpp \
     rssitem.cpp \
     zegar.cpp \
     analogclock.cpp \
@@ -46,6 +47,10 @@ HEADERS += \
     pogodaday.h \
     qrwidget.h \
     qrcodegen.h \
+    qrwidget.h \
+    rssitem.h \
+    zegar.h \
+    analogclock.h \
     ip.h \
     pogoda5day.h \
     informacje.h
