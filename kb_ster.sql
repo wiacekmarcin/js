@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.5deb2
+-- version 5.1.1deb5ubuntu1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 15 Lut 2022, 01:34
--- Wersja serwera: 8.0.28-0ubuntu0.20.04.3
--- Wersja PHP: 7.4.3
+-- Czas generowania: 09 Lis 2023, 02:21
+-- Wersja serwera: 8.0.35-0ubuntu0.22.04.1
+-- Wersja PHP: 8.1.2-1ubuntu2.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -97,11 +96,11 @@ CREATE TABLE `ElementyPlytkoweView` (
 
 CREATE TABLE `elementy_plytkowe` (
   `id` smallint UNSIGNED NOT NULL,
-  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `nazwa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
   `ilosc_pin` tinyint NOT NULL,
   `plytka_id` tinyint UNSIGNED NOT NULL,
   `rodzaj_urzadzenia` tinyint UNSIGNED NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 --
 -- Zrzut danych tabeli `elementy_plytkowe`
@@ -228,7 +227,11 @@ INSERT INTO `elementy_plytkowe` (`id`, `nazwa`, `ilosc_pin`, `plytka_id`, `rodza
 (162, 'M', 8, 10, 5),
 (163, 'Arduino Mega', 84, 12, 3),
 (164, 'A', 12, 12, 5),
-(165, 'B', 12, 12, 5);
+(165, 'B', 12, 12, 5),
+(166, 'OUT29', 6, 13, 5),
+(167, 'IN104', 3, 13, 5),
+(168, 'IN105', 3, 13, 5),
+(169, 'A', 6, 11, 5);
 
 -- --------------------------------------------------------
 
@@ -238,10 +241,10 @@ INSERT INTO `elementy_plytkowe` (`id`, `nazwa`, `ilosc_pin`, `plytka_id`, `rodza
 
 CREATE TABLE `elementy_plytkowe_pin` (
   `id` smallint UNSIGNED NOT NULL,
-  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `nazwa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
   `pos` tinyint NOT NULL,
   `element_plytkowy_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 --
 -- Zrzut danych tabeli `elementy_plytkowe_pin`
@@ -1270,7 +1273,25 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`
 (1519, '9', 9, 165),
 (1520, '10', 10, 165),
 (1521, '11', 11, 165),
-(1522, '12', 12, 165);
+(1522, '12', 12, 165),
+(1529, 'Zasilanie +5V', 1, 166),
+(1530, 'Sygnał czujnika 105', 2, 166),
+(1531, 'GND', 3, 166),
+(1532, '-', 4, 166),
+(1533, '-', 5, 166),
+(1534, 'Sygnał czujnika 104', 6, 166),
+(1535, 'GND', 1, 167),
+(1536, 'Zasilanie', 2, 167),
+(1537, 'Sygnał', 3, 167),
+(1538, 'GND', 1, 168),
+(1539, 'Sygnał', 2, 168),
+(1540, 'Zasilanie', 3, 168),
+(1541, 'Sygnał czujnika 105', 1, 169),
+(1542, 'GND', 2, 169),
+(1543, 'Sygnał czujnika 104', 3, 169),
+(1544, '-', 4, 169),
+(1545, '-', 5, 169),
+(1546, '+5V', 6, 169);
 
 -- --------------------------------------------------------
 
@@ -1280,7 +1301,7 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`
 
 CREATE TABLE `kolor` (
   `id` tinyint UNSIGNED NOT NULL,
-  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `nazwa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
   `html` text CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -1326,8 +1347,8 @@ CREATE TABLE `KolorView` (
 
 CREATE TABLE `miejsce` (
   `id` tinyint UNSIGNED NOT NULL,
-  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
-  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `nazwa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
+  `opis` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
   `zbiorcze` tinyint(1) NOT NULL,
   `id_pomieszczenie` tinyint UNSIGNED NOT NULL,
   `kod` varchar(16) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
@@ -1347,7 +1368,7 @@ INSERT INTO `miejsce` (`id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `k
 (6, 'Czujnik lustro WC', 'Czujnik zbliżeniowy umieszczony pod lustrem w WC na ścianie z Holem', 0, 2, 'WC-LUSTRO', 0),
 (7, 'Włącznik WC', 'Włącznik światła WC umieszczony w Holu na ścianie WC obok drzwi', 0, 2, 'WC-WLACZ', 0),
 (8, 'Włącznik hol WC', 'Podwójny włącznik światła w holu na ścianie WC', 0, 1, 'HOL-WLACZ_SC_WC', 0),
-(9, 'Umywalka WC', 'Czujniki przepływu wody w WC pod umywalką', 0, 2, 'WC-UMYWALKA', 0),
+(9, 'Umywalka WC', 'Czujniki przepływu wody w WC pod umywalką', 1, 2, 'WC-UMYWALKA', 0),
 (10, 'Pralka WC', 'Czujniki przepływu wody w WC koło pralki', 0, 2, 'WC-PRALKA', 0),
 (11, 'Czujnik zalania WC', 'Czujnik zalania koło drzwi w WC', 0, 2, 'WC-SC_LUSTRO', 0),
 (12, 'Gabaryt WC', 'Umieszczony w środku gabarytu (stelaż sedesu) w WC', 0, 2, 'WC-GABARYT', 0),
@@ -1524,9 +1545,9 @@ CREATE TABLE `PlytkaMiejsceView` (
 
 CREATE TABLE `plytki` (
   `id` tinyint UNSIGNED NOT NULL,
-  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `nazwa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
   `miejsce_id` tinyint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 --
 -- Zrzut danych tabeli `plytki`
@@ -1544,7 +1565,41 @@ INSERT INTO `plytki` (`id`, `nazwa`, `miejsce_id`) VALUES
 (9, 'Płytka A', 1),
 (10, 'Płytka B', 1),
 (11, 'Płytka C', 1),
-(12, 'Płytka D', 1);
+(12, 'Płytka D', 1),
+(13, 'Płytka Umywalka WC', 9);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `polaczenie`
+--
+
+CREATE TABLE `polaczenie` (
+  `id` smallint NOT NULL,
+  `miejsce_id` tinyint NOT NULL,
+  `opis` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `PolaczenieZylaWidok`
+--
+
+CREATE TABLE `PolaczenieZylaWidok` (
+  `id` smallint UNSIGNED DEFAULT NULL,
+  `zyla_id_1` smallint UNSIGNED DEFAULT NULL,
+  `zyla_id_2` smallint UNSIGNED DEFAULT NULL,
+  `zakonczenie_id` smallint UNSIGNED DEFAULT NULL,
+  `przewod_id1` tinyint UNSIGNED DEFAULT NULL,
+  `opis1` text COLLATE utf8mb3_polish_ci,
+  `kolor1` text COLLATE utf8mb3_polish_ci,
+  `html1` text COLLATE utf8mb3_polish_ci,
+  `przewod_id2` tinyint UNSIGNED DEFAULT NULL,
+  `opis2` text COLLATE utf8mb3_polish_ci,
+  `kolor2` text COLLATE utf8mb3_polish_ci,
+  `html2` text COLLATE utf8mb3_polish_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 -- --------------------------------------------------------
 
@@ -1554,9 +1609,9 @@ INSERT INTO `plytki` (`id`, `nazwa`, `miejsce_id`) VALUES
 
 CREATE TABLE `polaczenie_plytka` (
   `id` smallint UNSIGNED NOT NULL,
-  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `nazwa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
   `plytka_id` tinyint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 --
 -- Zrzut danych tabeli `polaczenie_plytka`
@@ -1813,7 +1868,11 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (402, 'L7-O9', 10),
 (403, 'L6-O10', 10),
 (404, 'L5-O11', 10),
-(405, 'L4-O12', 10);
+(405, 'L4-O12', 10),
+(406, '5V', 13),
+(407, 'GND', 13),
+(408, 'SIG1', 13),
+(409, 'SIG2', 13);
 
 -- --------------------------------------------------------
 
@@ -1825,7 +1884,7 @@ CREATE TABLE `polaczenie_plytka_polaczenie` (
   `id` smallint UNSIGNED NOT NULL,
   `polaczenie_plytka_id` smallint UNSIGNED NOT NULL,
   `elementy_plytkowe_piny_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 --
 -- Zrzut danych tabeli `polaczenie_plytka_polaczenie`
@@ -2493,7 +2552,19 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 (987, 329, 1416),
 (988, 358, 1372),
 (989, 359, 1373),
-(990, 377, 1371);
+(990, 377, 1371),
+(991, 406, 1540),
+(992, 406, 1536),
+(993, 406, 1529),
+(994, 407, 1531),
+(995, 407, 1532),
+(996, 407, 1533),
+(997, 407, 1535),
+(998, 407, 1538),
+(999, 408, 1537),
+(1000, 408, 1534),
+(1001, 409, 1530),
+(1002, 409, 1539);
 
 -- --------------------------------------------------------
 
@@ -2505,7 +2576,7 @@ CREATE TABLE `polaczenie_zyla` (
   `id` smallint UNSIGNED NOT NULL,
   `zakonczenie_zyly_id` smallint UNSIGNED NOT NULL,
   `zyla_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 --
 -- Zrzut danych tabeli `polaczenie_zyla`
@@ -2713,7 +2784,7 @@ INSERT INTO `polaczenie_zyla` (`id`, `zakonczenie_zyly_id`, `zyla_id`) VALUES
 
 CREATE TABLE `pomieszczenie` (
   `id` tinyint UNSIGNED NOT NULL,
-  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
+  `nazwa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
@@ -2739,7 +2810,7 @@ INSERT INTO `pomieszczenie` (`id`, `nazwa`) VALUES
 
 CREATE TABLE `przewod` (
   `id` tinyint UNSIGNED NOT NULL,
-  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `opis` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
   `ilosc_zyl` tinyint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -3383,7 +3454,7 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 
 CREATE TABLE `rodzaj_zakonczenia` (
   `id` tinyint NOT NULL,
-  `nazwa` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `nazwa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
   `kod` varchar(1) NOT NULL,
   `przewod` tinyint(1) NOT NULL,
   `plytka` tinyint(1) NOT NULL
@@ -3399,6 +3470,41 @@ INSERT INTO `rodzaj_zakonczenia` (`id`, `nazwa`, `kod`, `przewod`, `plytka`) VAL
 (3, 'Urządzenie', 'U', 1, 1),
 (4, 'Połączenie płytki', 'P', 1, 1),
 (5, 'Złącze', 'Z', 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `urzadzenie_zakonczenie`
+--
+
+CREATE TABLE `urzadzenie_zakonczenie` (
+  `id` smallint UNSIGNED NOT NULL,
+  `zakonczenie_id` smallint UNSIGNED NOT NULL,
+  `zyla_id` smallint UNSIGNED NOT NULL,
+  `opis` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL,
+  `kolor_id` tinyint UNSIGNED NOT NULL,
+  `pos` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
+
+--
+-- Zrzut danych tabeli `urzadzenie_zakonczenie`
+--
+
+INSERT INTO `urzadzenie_zakonczenie` (`id`, `zakonczenie_id`, `zyla_id`, `opis`, `kolor_id`, `pos`) VALUES
+(1, 52, 270, 'Zasilanie +5V', 4, 1),
+(2, 52, 271, 'Sygnał czujnika', 8, 2),
+(3, 52, 272, 'Masa', 7, 3),
+(4, 53, 273, 'Zasilanie +5V', 4, 1),
+(5, 53, 274, 'Sygnał czujnika', 8, 2),
+(6, 53, 275, 'Masa', 7, 3),
+(7, 54, 276, 'Zasilanie +5V', 4, 1),
+(8, 54, 277, 'Sygnał czujnika', 8, 2),
+(9, 54, 278, 'Masa ', 7, 3),
+(10, 55, 279, 'Zasilanie +5V', 4, 1),
+(11, 55, 280, 'Sygnał czujnika', 8, 2),
+(12, 55, 281, 'Masa ', 7, 3),
+(13, 56, 314, 'Masa', 1, 2),
+(14, 56, 315, 'Styk', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -3586,7 +3692,13 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (154, 'MEGA 192', 356, 1, 12),
 (155, 'MEGA 190', 359, 1, 10),
 (156, 'MEGA 188', 364, 1, 6),
-(157, 'MEGA 183', 376, 1, 12);
+(157, 'MEGA 183', 376, 1, 12),
+(158, 'C.A', 60, 1, 6),
+(159, 'OUT29', 59, 1, 6),
+(160, 'Czujnik przepływu', 209, 3, 3),
+(161, 'Czujnik przepływu wody', 212, 3, 3),
+(162, 'IN104', 210, 1, 3),
+(163, 'IN105', 211, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -3635,8 +3747,8 @@ CREATE TABLE `zakonczenie_zyly` (
   `zakonczenie_id` smallint UNSIGNED NOT NULL,
   `zyla_id` smallint UNSIGNED NOT NULL,
   `pos` tinyint NOT NULL,
-  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
+  `opis` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 --
 -- Zrzut danych tabeli `zakonczenie_zyly`
@@ -4569,7 +4681,31 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (924, 157, 643, 9, '9'),
 (925, 157, 644, 10, '10'),
 (926, 157, 645, 11, '11'),
-(927, 157, 646, 12, '12');
+(927, 157, 646, 12, '12'),
+(928, 158, 804, 1, 'Sygnał czujnika 105'),
+(929, 158, 805, 2, 'GND'),
+(930, 158, 808, 3, 'Sygnał czujnika 104'),
+(931, 158, 807, 4, '-'),
+(932, 158, 806, 5, '-'),
+(933, 158, 803, 6, '+5V'),
+(934, 159, 803, 1, '5V'),
+(935, 159, 804, 2, 'Signal105'),
+(936, 159, 805, 3, 'GND'),
+(937, 159, 806, 4, '-'),
+(938, 159, 807, 5, '-'),
+(939, 159, 808, 6, 'SIgnal104'),
+(940, 160, 797, 1, 'Zasilanie'),
+(941, 160, 798, 2, 'Sygnał'),
+(942, 160, 799, 3, 'Masa'),
+(943, 161, 800, 1, 'Zasilanie'),
+(944, 161, 801, 2, 'Sygnał'),
+(945, 161, 802, 3, 'Masa'),
+(946, 162, 799, 1, 'Masa'),
+(947, 162, 797, 2, 'Zasilanie +5V'),
+(948, 162, 798, 3, 'Sygnał'),
+(949, 163, 802, 1, 'GND'),
+(950, 163, 801, 2, 'Sygnał'),
+(951, 163, 800, 3, 'Zasilanie +5V');
 
 -- --------------------------------------------------------
 
@@ -4608,6 +4744,71 @@ CREATE TABLE `ZewnetrzneKableView` (
 ,`miejsce_id` tinyint unsigned
 ,`c` bigint
 );
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `zlacze`
+--
+
+CREATE TABLE `zlacze` (
+  `id` smallint UNSIGNED NOT NULL,
+  `etykieta` varchar(10) NOT NULL,
+  `przewod_miejsce_id` smallint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Zrzut danych tabeli `zlacze`
+--
+
+INSERT INTO `zlacze` (`id`, `etykieta`, `przewod_miejsce_id`) VALUES
+(1, 'O', 41),
+(2, 'J', 49),
+(3, 'M', 51),
+(4, 'B', 53),
+(5, 'C', 55),
+(6, 'G', 57),
+(7, 'I', 65),
+(8, 'E', 68),
+(9, 'A', 70),
+(10, 'P', 72),
+(11, 'D', 74),
+(12, 'N', 76),
+(13, 'H', 79),
+(14, 'L', 81),
+(15, 'K', 97),
+(16, 'A', 50),
+(17, 'F', 99),
+(18, 'B', 299),
+(19, 'C', 301),
+(20, 'A', 78),
+(21, 'B', 108),
+(22, 'C', 303),
+(23, 'D', 305),
+(24, 'F', 307),
+(25, 'G', 309),
+(26, 'H', 311),
+(27, 'I', 313);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `ZlaczeView`
+--
+
+CREATE TABLE `ZlaczeView` (
+  `zk_id` int UNSIGNED DEFAULT NULL,
+  `zlacze_id` smallint UNSIGNED DEFAULT NULL,
+  `zyla_id` smallint UNSIGNED DEFAULT NULL,
+  `pos` tinyint DEFAULT NULL,
+  `etykieta` varchar(10) COLLATE utf8mb3_polish_ci DEFAULT NULL,
+  `miejsce_id` tinyint UNSIGNED DEFAULT NULL,
+  `pm_id` smallint UNSIGNED DEFAULT NULL,
+  `opis` varchar(50) COLLATE utf8mb3_polish_ci DEFAULT NULL,
+  `name` varchar(20) COLLATE utf8mb3_polish_ci DEFAULT NULL,
+  `html` text COLLATE utf8mb3_polish_ci,
+  `przewod_id` tinyint UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 -- --------------------------------------------------------
 
@@ -4658,6 +4859,206 @@ CREATE TABLE `ZlaczeWtyczkaView` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `zlacze_kolejnosc`
+--
+
+CREATE TABLE `zlacze_kolejnosc` (
+  `id` int UNSIGNED NOT NULL,
+  `zlacze_id` smallint UNSIGNED NOT NULL,
+  `zyla_id` smallint UNSIGNED NOT NULL,
+  `pos` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
+
+--
+-- Zrzut danych tabeli `zlacze_kolejnosc`
+--
+
+INSERT INTO `zlacze_kolejnosc` (`id`, `zlacze_id`, `zyla_id`, `pos`) VALUES
+(1, 1, 1, 1),
+(2, 1, 2, 2),
+(3, 1, 3, 3),
+(4, 1, 4, 4),
+(5, 1, 5, 5),
+(6, 1, 6, 6),
+(7, 1, 7, 7),
+(8, 1, 8, 8),
+(9, 2, 9, 1),
+(10, 2, 10, 2),
+(11, 2, 11, 3),
+(12, 2, 12, 4),
+(13, 2, 13, 5),
+(14, 2, 14, 6),
+(15, 2, 15, 7),
+(16, 2, 16, 8),
+(17, 3, 17, 1),
+(18, 3, 18, 2),
+(19, 3, 19, 3),
+(20, 3, 20, 4),
+(21, 3, 21, 5),
+(22, 3, 22, 6),
+(23, 3, 23, 7),
+(24, 3, 24, 8),
+(25, 4, 25, 1),
+(26, 4, 26, 2),
+(27, 4, 27, 3),
+(28, 4, 28, 4),
+(29, 5, 29, 1),
+(30, 5, 30, 2),
+(31, 6, 31, 1),
+(32, 6, 32, 2),
+(33, 6, 33, 3),
+(34, 6, 34, 4),
+(35, 7, 35, 1),
+(36, 7, 36, 2),
+(37, 7, 37, 3),
+(38, 8, 38, 1),
+(39, 8, 39, 2),
+(40, 8, 40, 3),
+(41, 9, 41, 1),
+(42, 9, 42, 2),
+(43, 9, 43, 3),
+(44, 9, 44, 4),
+(45, 9, 45, 5),
+(46, 9, 46, 6),
+(47, 9, 47, 7),
+(48, 9, 48, 8),
+(49, 10, 49, 1),
+(50, 10, 50, 2),
+(51, 10, 51, 3),
+(52, 10, 52, 4),
+(53, 10, 53, 5),
+(54, 10, 54, 6),
+(55, 10, 55, 7),
+(56, 10, 56, 8),
+(57, 11, 57, 1),
+(58, 11, 58, 2),
+(59, 11, 59, 3),
+(60, 11, 60, 4),
+(61, 11, 61, 5),
+(62, 11, 62, 6),
+(63, 11, 63, 7),
+(64, 11, 64, 8),
+(65, 12, 65, 1),
+(66, 12, 69, 2),
+(67, 12, 66, 3),
+(68, 12, 67, 4),
+(69, 12, 68, 5),
+(70, 12, 70, 6),
+(71, 12, 71, 7),
+(72, 12, 72, 8),
+(73, 13, 73, 1),
+(74, 13, 74, 2),
+(75, 13, 75, 3),
+(76, 13, 76, 4),
+(77, 14, 77, 3),
+(78, 15, 80, 1),
+(79, 15, 81, 2),
+(80, 15, 82, 3),
+(81, 15, 83, 4),
+(82, 15, 84, 5),
+(83, 15, 85, 6),
+(84, 15, 86, 7),
+(85, 15, 87, 8),
+(86, 15, 88, 12),
+(87, 15, 89, 11),
+(88, 15, 90, 10),
+(89, 15, 91, 9),
+(90, 16, 10, 1),
+(91, 16, 14, 2),
+(92, 16, 16, 3),
+(93, 16, 15, 4),
+(94, 16, 13, 5),
+(95, 16, 12, 6),
+(96, 16, 11, 7),
+(97, 16, 9, 8),
+(98, 17, 92, 1),
+(99, 17, 93, 2),
+(100, 17, 94, 3),
+(101, 17, 95, 4),
+(102, 17, 96, 5),
+(103, 17, 97, 6),
+(104, 17, 98, 7),
+(105, 17, 99, 8),
+(106, 17, 100, 9),
+(107, 17, 101, 10),
+(108, 17, 102, 11),
+(109, 17, 103, 12),
+(110, 19, 114, 1),
+(111, 19, 113, 2),
+(112, 19, 115, 3),
+(113, 19, 112, 4),
+(114, 18, 121, 1),
+(115, 18, 120, 2),
+(116, 18, 119, 3),
+(117, 18, 118, 4),
+(118, 18, 117, 5),
+(119, 18, 116, 6),
+(120, 14, 79, 1),
+(121, 14, 78, 2),
+(122, 20, 323, 1),
+(123, 20, 322, 2),
+(124, 20, 321, 3),
+(125, 20, 320, 4),
+(126, 20, 319, 5),
+(127, 20, 318, 6),
+(128, 20, 317, 7),
+(129, 20, 316, 8),
+(130, 21, 328, 1),
+(131, 21, 329, 2),
+(132, 21, 330, 3),
+(133, 21, 331, 4),
+(134, 21, 332, 5),
+(135, 21, 333, 6),
+(136, 22, 324, 1),
+(137, 22, 325, 2),
+(138, 22, 326, 3),
+(139, 22, 327, 4),
+(140, 23, 344, 1),
+(141, 23, 345, 2),
+(142, 23, 346, 3),
+(143, 23, 347, 4),
+(144, 23, 348, 5),
+(145, 23, 349, 6),
+(146, 23, 350, 7),
+(147, 23, 351, 8),
+(148, 24, 334, 1),
+(149, 24, 335, 2),
+(150, 24, 336, 3),
+(151, 24, 337, 4),
+(152, 24, 338, 5),
+(153, 24, 339, 6),
+(154, 24, 340, 7),
+(155, 24, 341, 8),
+(156, 24, 342, 9),
+(157, 24, 343, 10),
+(158, 25, 352, 1),
+(159, 25, 353, 2),
+(160, 25, 354, 3),
+(161, 25, 355, 4),
+(162, 26, 356, 1),
+(163, 26, 357, 2),
+(164, 26, 358, 3),
+(165, 26, 359, 4),
+(166, 26, 360, 5),
+(167, 26, 361, 6),
+(168, 26, 362, 7),
+(169, 26, 363, 8),
+(170, 26, 364, 9),
+(171, 26, 365, 10),
+(172, 27, 366, 1),
+(173, 27, 367, 2),
+(174, 27, 368, 3),
+(175, 27, 369, 4),
+(176, 27, 370, 5),
+(177, 27, 371, 6),
+(178, 27, 372, 7),
+(179, 27, 373, 8),
+(180, 27, 374, 9),
+(181, 27, 375, 10);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `zlacze_wtyczka`
 --
 
@@ -4665,7 +5066,7 @@ CREATE TABLE `zlacze_wtyczka` (
   `id` smallint UNSIGNED NOT NULL,
   `wtyczka_id` smallint UNSIGNED NOT NULL,
   `zlacze_id` smallint UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
 
 --
 -- Zrzut danych tabeli `zlacze_wtyczka`
@@ -4748,7 +5149,7 @@ CREATE TABLE `zyla` (
   `id` smallint UNSIGNED NOT NULL,
   `kolor_id` tinyint UNSIGNED NOT NULL,
   `przewod_id` tinyint UNSIGNED NOT NULL,
-  `opis` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL
+  `opis` text CHARACTER SET utf8mb3 COLLATE utf8mb3_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
@@ -5466,11 +5867,11 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (713, 4, 175, 'M80.1'),
 (714, 2, 175, 'R85.2'),
 (715, 3, 175, 'R85.3'),
-(716, 10, 175, 'Q84.8'),
-(717, 5, 175, 'Q84.7'),
-(718, 6, 175, 'Q84.6'),
-(719, 7, 175, 'Q84.5'),
-(720, 13, 175, 'Q84.4'),
+(716, 10, 175, 'L70.8'),
+(717, 5, 175, 'L70.7'),
+(718, 6, 175, 'L70.6'),
+(719, 7, 175, 'L70.5'),
+(720, 13, 175, 'L70.4'),
 (721, 3, 81, 'N.5'),
 (722, 9, 81, 'N.4'),
 (723, 6, 81, 'N.3'),
@@ -5546,7 +5947,19 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (793, 2, 50, 'Sygnał 112'),
 (794, 6, 50, 'Sygnał 113'),
 (795, 3, 50, 'Sygnał 114'),
-(796, 4, 50, '+5V');
+(796, 4, 50, '+5V'),
+(797, 4, 104, '+5V'),
+(798, 8, 104, 'Sygnał'),
+(799, 7, 104, 'GND'),
+(800, 4, 105, '+5V'),
+(801, 8, 105, 'Sygnał'),
+(802, 7, 105, 'GND'),
+(803, 4, 29, '+5V'),
+(804, 9, 29, 'Sygnał czujnika'),
+(805, 3, 29, 'GND'),
+(806, 6, 29, 'USZKODZONY'),
+(807, 1, 29, 'USZKODZONY'),
+(808, 8, 29, 'Sygnał czujnika');
 
 -- --------------------------------------------------------
 
@@ -5566,11 +5979,49 @@ CREATE TABLE `ZylaWidok` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `ZylaZlaczeKolejnoscView`
+--
+
+CREATE TABLE `ZylaZlaczeKolejnoscView` (
+  `pm_id` smallint UNSIGNED DEFAULT NULL,
+  `pm_kabel_id` tinyint UNSIGNED DEFAULT NULL,
+  `pm_miejsce_id` tinyint UNSIGNED DEFAULT NULL,
+  `zw_id` smallint UNSIGNED DEFAULT NULL,
+  `zw_color` tinyint UNSIGNED DEFAULT NULL,
+  `zw_przewod_id` tinyint UNSIGNED DEFAULT NULL,
+  `zw_opis` varchar(50) COLLATE utf8mb3_polish_ci DEFAULT NULL,
+  `zw_kolor_name` varchar(20) COLLATE utf8mb3_polish_ci DEFAULT NULL,
+  `zw_kolor_html` text COLLATE utf8mb3_polish_ci,
+  `zlw_zlacze_id` smallint UNSIGNED DEFAULT NULL,
+  `zlw_zyla_id` smallint UNSIGNED DEFAULT NULL,
+  `zlw_pos` tinyint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `ZylaZlaczeView`
+--
+
+CREATE TABLE `ZylaZlaczeView` (
+  `id` smallint UNSIGNED DEFAULT NULL,
+  `zlacze_id` smallint UNSIGNED DEFAULT NULL,
+  `zyla_id` smallint UNSIGNED DEFAULT NULL,
+  `pos` tinyint DEFAULT NULL,
+  `opis` varchar(50) COLLATE utf8mb3_polish_ci DEFAULT NULL,
+  `name` varchar(20) COLLATE utf8mb3_polish_ci DEFAULT NULL,
+  `html` text COLLATE utf8mb3_polish_ci,
+  `przewod_id` tinyint UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura widoku `ElementyPlytkowePinView`
 --
 DROP TABLE IF EXISTS `ElementyPlytkowePinView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkowePinView`  AS  select `elementy_plytkowe_pin`.`id` AS `id`,`elementy_plytkowe_pin`.`nazwa` AS `pinnazwa`,`elementy_plytkowe_pin`.`pos` AS `pos`,`elementy_plytkowe_pin`.`element_plytkowy_id` AS `element_plytkowy_id`,`elementy_plytkowe`.`nazwa` AS `elementnazwa`,`elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`,`elementy_plytkowe`.`plytka_id` AS `plytka_id`,`elementy_plytkowe`.`rodzaj_urzadzenia` AS `rodzaj_urzadzenia` from (`elementy_plytkowe_pin` left join `elementy_plytkowe` on((`elementy_plytkowe_pin`.`element_plytkowy_id` = `elementy_plytkowe`.`id`))) where (0 <> 1) order by `elementy_plytkowe`.`plytka_id`,`elementy_plytkowe`.`nazwa`,`elementy_plytkowe_pin`.`pos` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkowePinView`  AS SELECT `elementy_plytkowe_pin`.`id` AS `id`, `elementy_plytkowe_pin`.`nazwa` AS `pinnazwa`, `elementy_plytkowe_pin`.`pos` AS `pos`, `elementy_plytkowe_pin`.`element_plytkowy_id` AS `element_plytkowy_id`, `elementy_plytkowe`.`nazwa` AS `elementnazwa`, `elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`, `elementy_plytkowe`.`plytka_id` AS `plytka_id`, `elementy_plytkowe`.`rodzaj_urzadzenia` AS `rodzaj_urzadzenia` FROM (`elementy_plytkowe_pin` left join `elementy_plytkowe` on((`elementy_plytkowe_pin`.`element_plytkowy_id` = `elementy_plytkowe`.`id`))) WHERE (0 <> 1) ORDER BY `elementy_plytkowe`.`plytka_id` ASC, `elementy_plytkowe`.`nazwa` ASC, `elementy_plytkowe_pin`.`pos` ASC ;
 
 -- --------------------------------------------------------
 
@@ -5579,7 +6030,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `ElementyPlytkowePolaczeniaPinView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkowePolaczeniaPinView`  AS  select `polaczenie_plytka_polaczenie`.`id` AS `id`,`polaczenie_plytka_polaczenie`.`polaczenie_plytka_id` AS `polaczenie_plytka_id`,`polaczenie_plytka_polaczenie`.`elementy_plytkowe_piny_id` AS `elementy_plytkowe_piny_id`,`elementy_plytkowe_pin`.`nazwa` AS `pinnazwa`,`elementy_plytkowe_pin`.`pos` AS `pos`,`elementy_plytkowe_pin`.`element_plytkowy_id` AS `element_plytkowy_id`,`elementy_plytkowe`.`nazwa` AS `elemnazwa`,`elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`,`elementy_plytkowe`.`plytka_id` AS `plytka_id`,`elementy_plytkowe`.`rodzaj_urzadzenia` AS `rodzaj_urzadzenia`,`rodzaj_zakonczenia`.`nazwa` AS `rodznazwa`,`rodzaj_zakonczenia`.`kod` AS `kod`,`rodzaj_zakonczenia`.`przewod` AS `przewod`,`rodzaj_zakonczenia`.`plytka` AS `plytka` from (((`polaczenie_plytka_polaczenie` left join `elementy_plytkowe_pin` on((`polaczenie_plytka_polaczenie`.`elementy_plytkowe_piny_id` = `elementy_plytkowe_pin`.`id`))) left join `elementy_plytkowe` on((`elementy_plytkowe_pin`.`element_plytkowy_id` = `elementy_plytkowe`.`id`))) left join `rodzaj_zakonczenia` on((`elementy_plytkowe`.`rodzaj_urzadzenia` = `rodzaj_zakonczenia`.`id`))) where (0 <> 1) order by `polaczenie_plytka_polaczenie`.`polaczenie_plytka_id`,`elementy_plytkowe_pin`.`pos` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkowePolaczeniaPinView`  AS SELECT `polaczenie_plytka_polaczenie`.`id` AS `id`, `polaczenie_plytka_polaczenie`.`polaczenie_plytka_id` AS `polaczenie_plytka_id`, `polaczenie_plytka_polaczenie`.`elementy_plytkowe_piny_id` AS `elementy_plytkowe_piny_id`, `elementy_plytkowe_pin`.`nazwa` AS `pinnazwa`, `elementy_plytkowe_pin`.`pos` AS `pos`, `elementy_plytkowe_pin`.`element_plytkowy_id` AS `element_plytkowy_id`, `elementy_plytkowe`.`nazwa` AS `elemnazwa`, `elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`, `elementy_plytkowe`.`plytka_id` AS `plytka_id`, `elementy_plytkowe`.`rodzaj_urzadzenia` AS `rodzaj_urzadzenia`, `rodzaj_zakonczenia`.`nazwa` AS `rodznazwa`, `rodzaj_zakonczenia`.`kod` AS `kod`, `rodzaj_zakonczenia`.`przewod` AS `przewod`, `rodzaj_zakonczenia`.`plytka` AS `plytka` FROM (((`polaczenie_plytka_polaczenie` left join `elementy_plytkowe_pin` on((`polaczenie_plytka_polaczenie`.`elementy_plytkowe_piny_id` = `elementy_plytkowe_pin`.`id`))) left join `elementy_plytkowe` on((`elementy_plytkowe_pin`.`element_plytkowy_id` = `elementy_plytkowe`.`id`))) left join `rodzaj_zakonczenia` on((`elementy_plytkowe`.`rodzaj_urzadzenia` = `rodzaj_zakonczenia`.`id`))) WHERE (0 <> 1) ORDER BY `polaczenie_plytka_polaczenie`.`polaczenie_plytka_id` ASC, `elementy_plytkowe_pin`.`pos` ASC ;
 
 -- --------------------------------------------------------
 
@@ -5588,7 +6039,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `ElementyPlytkoweView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkoweView`  AS  select `elementy_plytkowe`.`id` AS `id`,`elementy_plytkowe`.`nazwa` AS `nazwa`,`elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`,`elementy_plytkowe`.`plytka_id` AS `plytka_id`,`plytki`.`miejsce_id` AS `miejsce_id`,`plytki`.`nazwa` AS `pnazwa`,`rodzaj_zakonczenia`.`id` AS `urzadzenie_rodzaj_id`,`rodzaj_zakonczenia`.`nazwa` AS `urzadzenie_nazwa`,`rodzaj_zakonczenia`.`kod` AS `urzadzenie_rodzaj_kod`,`rodzaj_zakonczenia`.`plytka` AS `urzadzenie_plytka`,`rodzaj_zakonczenia`.`przewod` AS `urzadzenie_przewod`,`MiejsceView`.`nazwa` AS `mnazwa`,`MiejsceView`.`opis` AS `opis`,`MiejsceView`.`zbiorcze` AS `zbiorcze`,`MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`,`MiejsceView`.`kod` AS `kod`,`MiejsceView`.`polaczenie` AS `polaczenie`,`MiejsceView`.`pomieszczenie` AS `pomieszczenie` from (((`elementy_plytkowe` left join `plytki` on((`plytki`.`id` = `elementy_plytkowe`.`plytka_id`))) left join `MiejsceView` on((`plytki`.`miejsce_id` = `MiejsceView`.`id`))) left join `rodzaj_zakonczenia` on((`elementy_plytkowe`.`rodzaj_urzadzenia` = `rodzaj_zakonczenia`.`id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ElementyPlytkoweView`  AS SELECT `elementy_plytkowe`.`id` AS `id`, `elementy_plytkowe`.`nazwa` AS `nazwa`, `elementy_plytkowe`.`ilosc_pin` AS `ilosc_pin`, `elementy_plytkowe`.`plytka_id` AS `plytka_id`, `plytki`.`miejsce_id` AS `miejsce_id`, `plytki`.`nazwa` AS `pnazwa`, `rodzaj_zakonczenia`.`id` AS `urzadzenie_rodzaj_id`, `rodzaj_zakonczenia`.`nazwa` AS `urzadzenie_nazwa`, `rodzaj_zakonczenia`.`kod` AS `urzadzenie_rodzaj_kod`, `rodzaj_zakonczenia`.`plytka` AS `urzadzenie_plytka`, `rodzaj_zakonczenia`.`przewod` AS `urzadzenie_przewod`, `MiejsceView`.`nazwa` AS `mnazwa`, `MiejsceView`.`opis` AS `opis`, `MiejsceView`.`zbiorcze` AS `zbiorcze`, `MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`, `MiejsceView`.`kod` AS `kod`, `MiejsceView`.`polaczenie` AS `polaczenie`, `MiejsceView`.`pomieszczenie` AS `pomieszczenie` FROM (((`elementy_plytkowe` left join `plytki` on((`plytki`.`id` = `elementy_plytkowe`.`plytka_id`))) left join `MiejsceView` on((`plytki`.`miejsce_id` = `MiejsceView`.`id`))) left join `rodzaj_zakonczenia` on((`elementy_plytkowe`.`rodzaj_urzadzenia` = `rodzaj_zakonczenia`.`id`))) ;
 
 -- --------------------------------------------------------
 
@@ -5597,7 +6048,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `KolorView`;
 
-CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `KolorView`  AS  select `kolor`.`id` AS `id`,`kolor`.`nazwa` AS `nazwa`,`kolor`.`html` AS `html` from `kolor` order by `kolor`.`nazwa` ;
+CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `KolorView`  AS SELECT `kolor`.`id` AS `id`, `kolor`.`nazwa` AS `nazwa`, `kolor`.`html` AS `html` FROM `kolor` ORDER BY `kolor`.`nazwa` ASC ;
 
 -- --------------------------------------------------------
 
@@ -5606,7 +6057,7 @@ CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `MiejscePrzewodView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `MiejscePrzewodView`  AS  select `przewod_miejsce`.`id` AS `id`,`przewod_miejsce`.`przewod_id` AS `pid`,`przewod_miejsce`.`miejsce_id` AS `mid`,`MiejsceView`.`nazwa` AS `nazwa`,`MiejsceView`.`opis` AS `opis`,`MiejsceView`.`zbiorcze` AS `zbiorcze`,`MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`,`MiejsceView`.`kod` AS `kod`,`MiejsceView`.`polaczenie` AS `polaczenie`,`MiejsceView`.`pomieszczenie` AS `pomieszczenie`,`przewod`.`id` AS `ppid`,`przewod`.`opis` AS `popis`,`przewod`.`ilosc_zyl` AS `ilosc_zyl` from ((`przewod_miejsce` left join `MiejsceView` on((`MiejsceView`.`id` = `przewod_miejsce`.`miejsce_id`))) left join `przewod` on((`przewod`.`id` = `przewod_miejsce`.`przewod_id`))) where (0 <> 1) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `MiejscePrzewodView`  AS SELECT `przewod_miejsce`.`id` AS `id`, `przewod_miejsce`.`przewod_id` AS `pid`, `przewod_miejsce`.`miejsce_id` AS `mid`, `MiejsceView`.`nazwa` AS `nazwa`, `MiejsceView`.`opis` AS `opis`, `MiejsceView`.`zbiorcze` AS `zbiorcze`, `MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`, `MiejsceView`.`kod` AS `kod`, `MiejsceView`.`polaczenie` AS `polaczenie`, `MiejsceView`.`pomieszczenie` AS `pomieszczenie`, `przewod`.`id` AS `ppid`, `przewod`.`opis` AS `popis`, `przewod`.`ilosc_zyl` AS `ilosc_zyl` FROM ((`przewod_miejsce` left join `MiejsceView` on((`MiejsceView`.`id` = `przewod_miejsce`.`miejsce_id`))) left join `przewod` on((`przewod`.`id` = `przewod_miejsce`.`przewod_id`))) WHERE (0 <> 1) ;
 
 -- --------------------------------------------------------
 
@@ -5615,7 +6066,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `MiejsceView`;
 
-CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `MiejsceView`  AS  select `miejsce`.`id` AS `id`,`miejsce`.`nazwa` AS `nazwa`,`miejsce`.`opis` AS `opis`,`miejsce`.`zbiorcze` AS `zbiorcze`,`miejsce`.`id_pomieszczenie` AS `id_pomieszczenie`,`miejsce`.`kod` AS `kod`,`miejsce`.`polaczenie` AS `polaczenie`,`pomieszczenie`.`nazwa` AS `pomieszczenie` from (`miejsce` left join `pomieszczenie` on((`miejsce`.`id_pomieszczenie` = `pomieszczenie`.`id`))) ;
+CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `MiejsceView`  AS SELECT `miejsce`.`id` AS `id`, `miejsce`.`nazwa` AS `nazwa`, `miejsce`.`opis` AS `opis`, `miejsce`.`zbiorcze` AS `zbiorcze`, `miejsce`.`id_pomieszczenie` AS `id_pomieszczenie`, `miejsce`.`kod` AS `kod`, `miejsce`.`polaczenie` AS `polaczenie`, `pomieszczenie`.`nazwa` AS `pomieszczenie` FROM (`miejsce` left join `pomieszczenie` on((`miejsce`.`id_pomieszczenie` = `pomieszczenie`.`id`))) ;
 
 -- --------------------------------------------------------
 
@@ -5624,7 +6075,7 @@ CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `PlytkaAiB`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PlytkaAiB`  AS  select `przewod`.`id` AS `przewod`,`przewod`.`opis` AS `opis`,`przewod`.`ilosc_zyl` AS `ilosc_zyl` from `przewod` where (`przewod`.`id` in (7,8,34,35,36,42,52,53,54,57,59,61,70,71,72,80,81,83,84,85,86,87,88,93,94,175,176,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PlytkaAiB`  AS SELECT `przewod`.`id` AS `przewod`, `przewod`.`opis` AS `opis`, `przewod`.`ilosc_zyl` AS `ilosc_zyl` FROM `przewod` WHERE (`przewod`.`id` in (7,8,34,35,36,42,52,53,54,57,59,61,70,71,72,80,81,83,84,85,86,87,88,93,94,175,176,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195)) ;
 
 -- --------------------------------------------------------
 
@@ -5633,7 +6084,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `PlytkaMiejsceView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PlytkaMiejsceView`  AS  select `plytki`.`id` AS `id`,`plytki`.`nazwa` AS `nazwa`,`MiejsceView`.`id` AS `miejsce_id`,`MiejsceView`.`nazwa` AS `mnazwa`,`MiejsceView`.`opis` AS `opis`,`MiejsceView`.`zbiorcze` AS `zbiorcze`,`MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`,`MiejsceView`.`kod` AS `kod`,`MiejsceView`.`polaczenie` AS `polaczenie`,`MiejsceView`.`pomieszczenie` AS `pomieszczenie` from (`plytki` left join `MiejsceView` on((`plytki`.`miejsce_id` = `MiejsceView`.`id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PlytkaMiejsceView`  AS SELECT `plytki`.`id` AS `id`, `plytki`.`nazwa` AS `nazwa`, `MiejsceView`.`id` AS `miejsce_id`, `MiejsceView`.`nazwa` AS `mnazwa`, `MiejsceView`.`opis` AS `opis`, `MiejsceView`.`zbiorcze` AS `zbiorcze`, `MiejsceView`.`id_pomieszczenie` AS `id_pomieszczenie`, `MiejsceView`.`kod` AS `kod`, `MiejsceView`.`polaczenie` AS `polaczenie`, `MiejsceView`.`pomieszczenie` AS `pomieszczenie` FROM (`plytki` left join `MiejsceView` on((`plytki`.`miejsce_id` = `MiejsceView`.`id`))) ;
 
 -- --------------------------------------------------------
 
@@ -5642,7 +6093,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `PrzewodMiejsceZakonczenieView`;
 
-CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PrzewodMiejsceZakonczenieView`  AS  select `z`.`id` AS `zid`,`z`.`etykieta` AS `etykieta`,`z`.`przewod_miejsce_id` AS `przewod_miejsce_id_zlacze`,`z`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`,`pm`.`przewod_id` AS `przewod_id`,`pm`.`miejsce_id` AS `miejsce_id`,`pm`.`id` AS `przewod_miejsce_id`,`rz`.`nazwa` AS `nazwa`,`rz`.`kod` AS `kod` from ((`przewod_miejsce` `pm` left join `zakonczenie` `z` on((`pm`.`id` = `z`.`przewod_miejsce_id`))) left join `rodzaj_zakonczenia` `rz` on((`rz`.`id` = `z`.`rodzaj_zakonczenia`))) where (0 <> 1) order by `pm`.`miejsce_id`,`pm`.`przewod_id`,`z`.`rodzaj_zakonczenia`,`z`.`etykieta` ;
+CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `PrzewodMiejsceZakonczenieView`  AS SELECT `z`.`id` AS `zid`, `z`.`etykieta` AS `etykieta`, `z`.`przewod_miejsce_id` AS `przewod_miejsce_id_zlacze`, `z`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`, `pm`.`przewod_id` AS `przewod_id`, `pm`.`miejsce_id` AS `miejsce_id`, `pm`.`id` AS `przewod_miejsce_id`, `rz`.`nazwa` AS `nazwa`, `rz`.`kod` AS `kod` FROM ((`przewod_miejsce` `pm` left join `zakonczenie` `z` on((`pm`.`id` = `z`.`przewod_miejsce_id`))) left join `rodzaj_zakonczenia` `rz` on((`rz`.`id` = `z`.`rodzaj_zakonczenia`))) WHERE (0 <> 1) ORDER BY `pm`.`miejsce_id` ASC, `pm`.`przewod_id` ASC, `z`.`rodzaj_zakonczenia` ASC, `z`.`etykieta` ASC ;
 
 -- --------------------------------------------------------
 
@@ -5651,7 +6102,7 @@ CREATE ALGORITHM=TEMPTABLE DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `WewnetrzneKableView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `WewnetrzneKableView`  AS  select `przewod_miejsce`.`przewod_id` AS `przewod_id`,`przewod_miejsce`.`miejsce_id` AS `miejsce_id`,count(`przewod_miejsce`.`przewod_id`) AS `c` from `przewod_miejsce` group by `przewod_miejsce`.`miejsce_id`,`przewod_miejsce`.`przewod_id` having (`c` = 2) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `WewnetrzneKableView`  AS SELECT `przewod_miejsce`.`przewod_id` AS `przewod_id`, `przewod_miejsce`.`miejsce_id` AS `miejsce_id`, count(`przewod_miejsce`.`przewod_id`) AS `c` FROM `przewod_miejsce` GROUP BY `przewod_miejsce`.`miejsce_id`, `przewod_miejsce`.`przewod_id` HAVING (`c` = 2) ;
 
 -- --------------------------------------------------------
 
@@ -5660,7 +6111,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `ZakonczenieView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczenieView`  AS  select `zakonczenie`.`id` AS `id`,`zakonczenie`.`etykieta` AS `etykieta`,`zakonczenie`.`przewod_miejsce_id` AS `przewod_miejsce_id`,`zakonczenie`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`,`zakonczenie`.`ilosc_pin` AS `ilosc_pin`,`przewod_miejsce`.`przewod_id` AS `przewod_id`,`przewod_miejsce`.`miejsce_id` AS `miejsce_id`,`rodzaj_zakonczenia`.`nazwa` AS `nazwa`,`rodzaj_zakonczenia`.`kod` AS `kod` from ((`zakonczenie` left join `przewod_miejsce` on((`przewod_miejsce`.`id` = `zakonczenie`.`przewod_miejsce_id`))) left join `rodzaj_zakonczenia` on((`rodzaj_zakonczenia`.`id` = `zakonczenie`.`rodzaj_zakonczenia`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczenieView`  AS SELECT `zakonczenie`.`id` AS `id`, `zakonczenie`.`etykieta` AS `etykieta`, `zakonczenie`.`przewod_miejsce_id` AS `przewod_miejsce_id`, `zakonczenie`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`, `zakonczenie`.`ilosc_pin` AS `ilosc_pin`, `przewod_miejsce`.`przewod_id` AS `przewod_id`, `przewod_miejsce`.`miejsce_id` AS `miejsce_id`, `rodzaj_zakonczenia`.`nazwa` AS `nazwa`, `rodzaj_zakonczenia`.`kod` AS `kod` FROM ((`zakonczenie` left join `przewod_miejsce` on((`przewod_miejsce`.`id` = `zakonczenie`.`przewod_miejsce_id`))) left join `rodzaj_zakonczenia` on((`rodzaj_zakonczenia`.`id` = `zakonczenie`.`rodzaj_zakonczenia`))) ;
 
 -- --------------------------------------------------------
 
@@ -5669,7 +6120,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `ZakonczenieZylyView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczenieZylyView`  AS  select `zakonczenie_zyly`.`id` AS `zzid`,`zakonczenie_zyly`.`zakonczenie_id` AS `zakonczenie_id`,`zakonczenie_zyly`.`zyla_id` AS `zyla_id`,`zakonczenie_zyly`.`pos` AS `pos`,`zakonczenie_zyly`.`opis` AS `opis`,`zakonczenie`.`id` AS `zid`,`zakonczenie`.`etykieta` AS `etykieta`,`zakonczenie`.`przewod_miejsce_id` AS `przewod_miejsce_id`,`zakonczenie`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia` from (`zakonczenie_zyly` left join `zakonczenie` on((`zakonczenie_zyly`.`zakonczenie_id` = `zakonczenie`.`id`))) where (0 <> 1) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczenieZylyView`  AS SELECT `zakonczenie_zyly`.`id` AS `zzid`, `zakonczenie_zyly`.`zakonczenie_id` AS `zakonczenie_id`, `zakonczenie_zyly`.`zyla_id` AS `zyla_id`, `zakonczenie_zyly`.`pos` AS `pos`, `zakonczenie_zyly`.`opis` AS `opis`, `zakonczenie`.`id` AS `zid`, `zakonczenie`.`etykieta` AS `etykieta`, `zakonczenie`.`przewod_miejsce_id` AS `przewod_miejsce_id`, `zakonczenie`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia` FROM (`zakonczenie_zyly` left join `zakonczenie` on((`zakonczenie_zyly`.`zakonczenie_id` = `zakonczenie`.`id`))) WHERE (0 <> 1) ;
 
 -- --------------------------------------------------------
 
@@ -5678,7 +6129,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `ZakonczePrzewodMiejsce`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczePrzewodMiejsce`  AS  select `ZakonczenieView`.`id` AS `zid`,`ZakonczenieView`.`etykieta` AS `etykieta`,`ZakonczenieView`.`przewod_miejsce_id` AS `przewod_miejsce_id`,`ZakonczenieView`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`,`ZakonczenieView`.`przewod_id` AS `przewod_id`,`ZakonczenieView`.`miejsce_id` AS `miejsce_id`,`ZakonczenieView`.`nazwa` AS `znazwa`,`ZakonczenieView`.`kod` AS `zkod`,`ZakonczenieView`.`ilosc_pin` AS `ilosc_pin`,`MiejsceView`.`nazwa` AS `mnazwa`,`MiejsceView`.`opis` AS `mopis`,`MiejsceView`.`zbiorcze` AS `zbiorcze`,`MiejsceView`.`kod` AS `mkod`,`MiejsceView`.`polaczenie` AS `polaczenie`,`MiejsceView`.`pomieszczenie` AS `pomieszczenie`,`przewod`.`opis` AS `popis`,`przewod`.`ilosc_zyl` AS `ilosc_zyl` from ((`ZakonczenieView` left join `MiejsceView` on((`MiejsceView`.`id` = `ZakonczenieView`.`miejsce_id`))) left join `przewod` on((`przewod`.`id` = `ZakonczenieView`.`przewod_id`))) where (0 <> 1) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZakonczePrzewodMiejsce`  AS SELECT `ZakonczenieView`.`id` AS `zid`, `ZakonczenieView`.`etykieta` AS `etykieta`, `ZakonczenieView`.`przewod_miejsce_id` AS `przewod_miejsce_id`, `ZakonczenieView`.`rodzaj_zakonczenia` AS `rodzaj_zakonczenia`, `ZakonczenieView`.`przewod_id` AS `przewod_id`, `ZakonczenieView`.`miejsce_id` AS `miejsce_id`, `ZakonczenieView`.`nazwa` AS `znazwa`, `ZakonczenieView`.`kod` AS `zkod`, `ZakonczenieView`.`ilosc_pin` AS `ilosc_pin`, `MiejsceView`.`nazwa` AS `mnazwa`, `MiejsceView`.`opis` AS `mopis`, `MiejsceView`.`zbiorcze` AS `zbiorcze`, `MiejsceView`.`kod` AS `mkod`, `MiejsceView`.`polaczenie` AS `polaczenie`, `MiejsceView`.`pomieszczenie` AS `pomieszczenie`, `przewod`.`opis` AS `popis`, `przewod`.`ilosc_zyl` AS `ilosc_zyl` FROM ((`ZakonczenieView` left join `MiejsceView` on((`MiejsceView`.`id` = `ZakonczenieView`.`miejsce_id`))) left join `przewod` on((`przewod`.`id` = `ZakonczenieView`.`przewod_id`))) WHERE (0 <> 1) ;
 
 -- --------------------------------------------------------
 
@@ -5687,7 +6138,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `ZewnetrzneKableView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZewnetrzneKableView`  AS  select `przewod_miejsce`.`przewod_id` AS `przewod_id`,`przewod_miejsce`.`miejsce_id` AS `miejsce_id`,count(`przewod_miejsce`.`przewod_id`) AS `c` from `przewod_miejsce` group by `przewod_miejsce`.`miejsce_id`,`przewod_miejsce`.`przewod_id` having (`c` = 1) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZewnetrzneKableView`  AS SELECT `przewod_miejsce`.`przewod_id` AS `przewod_id`, `przewod_miejsce`.`miejsce_id` AS `miejsce_id`, count(`przewod_miejsce`.`przewod_id`) AS `c` FROM `przewod_miejsce` GROUP BY `przewod_miejsce`.`miejsce_id`, `przewod_miejsce`.`przewod_id` HAVING (`c` = 1) ;
 
 -- --------------------------------------------------------
 
@@ -5696,7 +6147,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `ZlaczeWtyczka`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZlaczeWtyczka`  AS  select `z1`.`id` AS `zid_1`,`z1`.`etykieta` AS `et_1`,`z1`.`rodzaj_zakonczenia` AS `rz_1`,`z1`.`ilosc_pin` AS `ip_z1`,`z2`.`id` AS `zid_2`,`z2`.`nazwa` AS `et_2`,`z2`.`plytka_id` AS `plytka_id`,`z2`.`rodzaj_urzadzenia` AS `rz_2`,`z2`.`ilosc_pin` AS `ip_z2`,`pl`.`nazwa` AS `ply_nazwa`,`m1`.`nazwa` AS `miejsce_1`,`pm`.`przewod_id` AS `przewod`,`m2`.`nazwa` AS `miejsce_2` from ((((((`zlacze_wtyczka` `zw` left join `zakonczenie` `z1` on((`z1`.`id` = `zw`.`wtyczka_id`))) left join `elementy_plytkowe` `z2` on((`z2`.`id` = `zw`.`zlacze_id`))) left join `plytki` `pl` on((`pl`.`id` = `z2`.`plytka_id`))) left join `miejsce` `m1` on((`m1`.`id` = `pl`.`miejsce_id`))) left join `przewod_miejsce` `pm` on((`pm`.`id` = `z1`.`przewod_miejsce_id`))) left join `miejsce` `m2` on((`m2`.`id` = `pm`.`miejsce_id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZlaczeWtyczka`  AS SELECT `z1`.`id` AS `zid_1`, `z1`.`etykieta` AS `et_1`, `z1`.`rodzaj_zakonczenia` AS `rz_1`, `z1`.`ilosc_pin` AS `ip_z1`, `z2`.`id` AS `zid_2`, `z2`.`nazwa` AS `et_2`, `z2`.`plytka_id` AS `plytka_id`, `z2`.`rodzaj_urzadzenia` AS `rz_2`, `z2`.`ilosc_pin` AS `ip_z2`, `pl`.`nazwa` AS `ply_nazwa`, `m1`.`nazwa` AS `miejsce_1`, `pm`.`przewod_id` AS `przewod`, `m2`.`nazwa` AS `miejsce_2` FROM ((((((`zlacze_wtyczka` `zw` left join `zakonczenie` `z1` on((`z1`.`id` = `zw`.`wtyczka_id`))) left join `elementy_plytkowe` `z2` on((`z2`.`id` = `zw`.`zlacze_id`))) left join `plytki` `pl` on((`pl`.`id` = `z2`.`plytka_id`))) left join `miejsce` `m1` on((`m1`.`id` = `pl`.`miejsce_id`))) left join `przewod_miejsce` `pm` on((`pm`.`id` = `z1`.`przewod_miejsce_id`))) left join `miejsce` `m2` on((`m2`.`id` = `pm`.`miejsce_id`))) ;
 
 -- --------------------------------------------------------
 
@@ -5705,7 +6156,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `ZlaczeWtyczkaView`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZlaczeWtyczkaView`  AS  select `zw`.`wtyczka_id` AS `wtyczka_id`,`zw`.`zlacze_id` AS `zlacze_id`,`ep`.`id` AS `epid`,`ep`.`nazwa` AS `epnazwa`,`ep`.`pos` AS `eppos`,`zz`.`zyla_id` AS `zyla_id`,`zz`.`pos` AS `zzpos`,`zz`.`opis` AS `zzopis`,`zz`.`etykieta` AS `zzetykieta`,`z`.`id` AS `zid`,`z`.`kolor_id` AS `kolor_id`,`z`.`przewod_id` AS `przewod_id`,`z`.`opis` AS `opis`,`z`.`kolor` AS `kolor`,`z`.`html` AS `html` from (((`zlacze_wtyczka` `zw` left join `elementy_plytkowe_pin` `ep` on((`ep`.`element_plytkowy_id` = `zw`.`zlacze_id`))) left join `ZakonczenieZylyView` `zz` on(((`zz`.`zakonczenie_id` = `zw`.`wtyczka_id`) and (`ep`.`pos` = `zz`.`pos`)))) left join `ZylaWidok` `z` on((`z`.`id` = `zz`.`zyla_id`))) where (0 <> 1) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZlaczeWtyczkaView`  AS SELECT `zw`.`wtyczka_id` AS `wtyczka_id`, `zw`.`zlacze_id` AS `zlacze_id`, `ep`.`id` AS `epid`, `ep`.`nazwa` AS `epnazwa`, `ep`.`pos` AS `eppos`, `zz`.`zyla_id` AS `zyla_id`, `zz`.`pos` AS `zzpos`, `zz`.`opis` AS `zzopis`, `zz`.`etykieta` AS `zzetykieta`, `z`.`id` AS `zid`, `z`.`kolor_id` AS `kolor_id`, `z`.`przewod_id` AS `przewod_id`, `z`.`opis` AS `opis`, `z`.`kolor` AS `kolor`, `z`.`html` AS `html` FROM (((`zlacze_wtyczka` `zw` left join `elementy_plytkowe_pin` `ep` on((`ep`.`element_plytkowy_id` = `zw`.`zlacze_id`))) left join `ZakonczenieZylyView` `zz` on(((`zz`.`zakonczenie_id` = `zw`.`wtyczka_id`) and (`ep`.`pos` = `zz`.`pos`)))) left join `ZylaWidok` `z` on((`z`.`id` = `zz`.`zyla_id`))) WHERE (0 <> 1) ;
 
 -- --------------------------------------------------------
 
@@ -5714,7 +6165,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER
 --
 DROP TABLE IF EXISTS `ZylaWidok`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZylaWidok`  AS  select `z`.`id` AS `id`,`z`.`kolor_id` AS `kolor_id`,`z`.`przewod_id` AS `przewod_id`,`z`.`opis` AS `opis`,`k`.`nazwa` AS `kolor`,`k`.`html` AS `html` from (`zyla` `z` left join `kolor` `k` on((`k`.`id` = `z`.`kolor_id`))) where (0 <> 1) order by `k`.`nazwa`,`z`.`przewod_id` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`phpmyadmin`@`localhost` SQL SECURITY DEFINER VIEW `ZylaWidok`  AS SELECT `z`.`id` AS `id`, `z`.`kolor_id` AS `kolor_id`, `z`.`przewod_id` AS `przewod_id`, `z`.`opis` AS `opis`, `k`.`nazwa` AS `kolor`, `k`.`html` AS `html` FROM (`zyla` `z` left join `kolor` `k` on((`k`.`id` = `z`.`kolor_id`))) WHERE (0 <> 1) ORDER BY `k`.`nazwa` ASC, `z`.`przewod_id` ASC ;
 
 --
 -- Indeksy dla zrzutów tabel
@@ -5841,20 +6292,20 @@ ALTER TABLE `zyla`
   ADD KEY `przewod_id` (`przewod_id`);
 
 --
--- AUTO_INCREMENT dla tabel zrzutów
+-- AUTO_INCREMENT dla zrzuconych tabel
 --
 
 --
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe`
 --
 ALTER TABLE `elementy_plytkowe`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
 
 --
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe_pin`
 --
 ALTER TABLE `elementy_plytkowe_pin`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1523;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1547;
 
 --
 -- AUTO_INCREMENT dla tabeli `kolor`
@@ -5866,25 +6317,25 @@ ALTER TABLE `kolor`
 -- AUTO_INCREMENT dla tabeli `miejsce`
 --
 ALTER TABLE `miejsce`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT dla tabeli `plytki`
 --
 ALTER TABLE `plytki`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
 --
 ALTER TABLE `polaczenie_plytka`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=406;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=410;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_plytka_polaczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=991;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1003;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
@@ -5914,13 +6365,13 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=928;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=952;
 
 --
 -- AUTO_INCREMENT dla tabeli `zlacze_wtyczka`
@@ -5932,7 +6383,7 @@ ALTER TABLE `zlacze_wtyczka`
 -- AUTO_INCREMENT dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=797;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=809;
 
 --
 -- Ograniczenia dla zrzutów tabel
