@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 09 Lis 2023, 02:21
+-- Czas generowania: 12 Lis 2023, 10:18
 -- Wersja serwera: 8.0.35-0ubuntu0.22.04.1
 -- Wersja PHP: 8.1.2-1ubuntu2.14
 
@@ -231,7 +231,15 @@ INSERT INTO `elementy_plytkowe` (`id`, `nazwa`, `ilosc_pin`, `plytka_id`, `rodza
 (166, 'OUT29', 6, 13, 5),
 (167, 'IN104', 3, 13, 5),
 (168, 'IN105', 3, 13, 5),
-(169, 'A', 6, 11, 5);
+(169, 'A', 6, 11, 5),
+(170, 'IN170', 3, 14, 5),
+(171, 'IN171', 2, 14, 5),
+(172, 'OUT23', 4, 14, 5),
+(173, 'OUT50', 10, 15, 5),
+(174, 'OUT51', 4, 15, 5),
+(175, 'W108', 3, 15, 4),
+(176, 'W109', 3, 15, 4),
+(177, 'W100', 3, 15, 4);
 
 -- --------------------------------------------------------
 
@@ -1291,7 +1299,39 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`
 (1543, 'Sygnał czujnika 104', 3, 169),
 (1544, '-', 4, 169),
 (1545, '-', 5, 169),
-(1546, '+5V', 6, 169);
+(1546, '+5V', 6, 169),
+(1547, 'GND', 1, 170),
+(1548, '+5V', 2, 170),
+(1549, 'Signal', 3, 170),
+(1552, 'Przycisk', 1, 172),
+(1553, 'Przepływomierz', 2, 172),
+(1554, '-+5V', 3, 172),
+(1555, 'GND', 4, 172),
+(1556, 'Przycisk', 1, 171),
+(1557, 'GND', 2, 171),
+(1558, '-', 1, 173),
+(1559, '-', 2, 173),
+(1560, '-', 3, 173),
+(1561, '-', 4, 173),
+(1562, '-', 5, 173),
+(1563, '-', 6, 173),
+(1564, '-', 7, 173),
+(1565, '-', 8, 173),
+(1566, '-', 9, 173),
+(1567, '-', 10, 173),
+(1568, '-', 1, 174),
+(1569, '-', 2, 174),
+(1570, '-', 3, 174),
+(1571, '-', 4, 174),
+(1572, '-', 1, 175),
+(1573, '-', 2, 175),
+(1574, '-', 3, 175),
+(1575, '-', 1, 176),
+(1576, '-', 2, 176),
+(1577, '-', 3, 176),
+(1578, '-', 1, 177),
+(1579, '-', 2, 177),
+(1580, '-', 3, 177);
 
 -- --------------------------------------------------------
 
@@ -1371,7 +1411,7 @@ INSERT INTO `miejsce` (`id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `k
 (9, 'Umywalka WC', 'Czujniki przepływu wody w WC pod umywalką', 1, 2, 'WC-UMYWALKA', 0),
 (10, 'Pralka WC', 'Czujniki przepływu wody w WC koło pralki', 0, 2, 'WC-PRALKA', 0),
 (11, 'Czujnik zalania WC', 'Czujnik zalania koło drzwi w WC', 0, 2, 'WC-SC_LUSTRO', 0),
-(12, 'Gabaryt WC', 'Umieszczony w środku gabarytu (stelaż sedesu) w WC', 0, 2, 'WC-GABARYT', 0),
+(12, 'Gabaryt WC', 'Umieszczony w środku gabarytu (stelaż sedesu) w WC', 1, 2, 'WC-GABARYT', 0),
 (13, 'Temperatura WC', 'Czujnik temperatury w WC na stelażu kibla', 0, 2, 'WC-TEMP', 0),
 (14, 'Czujnik ruchu WC', 'Umieszczony w WC na ścianie z drzwiami nad nimi', 0, 2, 'WC-RUCH', 0),
 (15, 'Temperatura podłoga WC', 'Czujnik temperatury w podłodze WC', 0, 2, 'WC-PODL_TEMP', 0),
@@ -1566,7 +1606,9 @@ INSERT INTO `plytki` (`id`, `nazwa`, `miejsce_id`) VALUES
 (10, 'Płytka B', 1),
 (11, 'Płytka C', 1),
 (12, 'Płytka D', 1),
-(13, 'Płytka Umywalka WC', 9);
+(13, 'Płytka Umywalka WC', 9),
+(14, 'Płytka Sedes WC', 12),
+(15, 'Rozdzielnia wodowomierzy', 73);
 
 -- --------------------------------------------------------
 
@@ -1872,7 +1914,12 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (406, '5V', 13),
 (407, 'GND', 13),
 (408, 'SIG1', 13),
-(409, 'SIG2', 13);
+(409, 'SIG2', 13),
+(410, 'GND', 14),
+(411, '+5V', 14),
+(412, 'Przepływomierz', 14),
+(413, 'Przycisk', 14),
+(414, '+5V', 15);
 
 -- --------------------------------------------------------
 
@@ -2564,7 +2611,16 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 (999, 408, 1537),
 (1000, 408, 1534),
 (1001, 409, 1530),
-(1002, 409, 1539);
+(1002, 409, 1539),
+(1003, 410, 1547),
+(1004, 410, 1557),
+(1005, 410, 1555),
+(1006, 411, 1548),
+(1007, 411, 1554),
+(1008, 412, 1549),
+(1009, 412, 1553),
+(1010, 413, 1556),
+(1011, 413, 1552);
 
 -- --------------------------------------------------------
 
@@ -2848,7 +2904,7 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (27, 'WC, kontaktron drzwi wejściowych', 2),
 (28, 'WC, czujnik ruchu pod lustrem', 4),
 (29, 'WC, czujnik przepływu wody w umywalce', 6),
-(30, 'WC, czujnik zalania wody w WC', 6),
+(30, 'WC, czujnik zalania wody w WC', 4),
 (31, 'WC. czujnik przepływu wody w pralce', 6),
 (32, 'WC. czujnik temperatury w podłodze', 3),
 (33, 'Hol, czujnik temperatury w podłodze', 3),
@@ -2988,6 +3044,8 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (167, 'Zasilanie przekaźnika awaryjnego', 4),
 (168, 'łacznik płytek', 6),
 (169, 'łacznik płytek', 2),
+(170, 'Przepływomierz WC', 3),
+(171, 'Przycisk WC na gabarycie', 2),
 (174, '---', 2),
 (175, 'Łacznik z mikroprocesorem', 12),
 (176, 'Łacznik z mikroprocesorem', 12),
@@ -3444,7 +3502,11 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 (391, 174, 1),
 (392, 174, 1),
 (393, 179, 1),
-(394, 179, 1);
+(394, 179, 1),
+(395, 170, 12),
+(396, 170, 12),
+(397, 171, 12),
+(398, 171, 12);
 
 -- --------------------------------------------------------
 
@@ -3678,7 +3740,7 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (140, 'V', 354, 1, 2),
 (141, 'B', 98, 1, 12),
 (142, 'A', 100, 1, 12),
-(143, 'Przypływomierz i przycisk', 47, 3, 4),
+(143, 'C.B', 47, 1, 4),
 (144, 'Czujnik temperatury i wilgotności', 142, 3, 3),
 (145, 'Czujnik temperatury i wilgotności', 162, 3, 3),
 (146, 'Czujnik temperatury i wilgotności', 170, 3, 3),
@@ -3698,7 +3760,34 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (160, 'Czujnik przepływu', 209, 3, 3),
 (161, 'Czujnik przepływu wody', 212, 3, 3),
 (162, 'IN104', 210, 1, 3),
-(163, 'IN105', 211, 1, 3);
+(163, 'IN105', 211, 1, 3),
+(164, 'IN170', 395, 1, 3),
+(165, 'Przepływomierz WC Sedes', 396, 3, 3),
+(166, 'IN171', 397, 1, 2),
+(167, 'Przycisk WC Sedes', 398, 3, 2),
+(168, 'OUT23', 48, 1, 3),
+(169, 'Czujnik Zalania', 62, 3, 4),
+(170, 'C.C', 61, 1, 4),
+(171, 'Monitor', 159, 3, 6),
+(172, 'Panel sterowania', 160, 3, 6),
+(173, 'Czujnik przepływu wody', 217, 3, 3),
+(174, 'Rozdzielnia na sygnały', 101, 1, 10),
+(177, 'OUT51', 103, 1, 4),
+(178, 'Czujnik przeplywu wody', 219, 3, 3),
+(179, 'Przeþływomierz', 221, 3, 3),
+(180, 'Przepływomierz', 223, 3, 3),
+(181, 'Przepływomierz', 225, 3, 3),
+(182, 'Przepływomierz', 227, 3, 3),
+(183, 'Przepływomierz', 229, 3, 3),
+(184, 'W110', 222, 4, 3),
+(185, 'W108', 218, 4, 3),
+(186, 'W109', 220, 4, 3),
+(187, 'W111', 224, 4, 3),
+(188, 'W112', 226, 4, 3),
+(189, 'W113', 228, 2, 3),
+(190, 'W114', 230, 4, 3),
+(191, 'C.F51', 104, 1, 4),
+(192, 'C.E50', 102, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -4592,8 +4681,8 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (835, 142, 101, 11, '11'),
 (836, 142, 102, 12, '12'),
 (837, 143, 406, 1, 'Zasilanie przepływomierza'),
-(838, 143, 408, 2, 'Sygnał przepływomierza'),
-(839, 143, 409, 3, 'Sygnał od przycisku'),
+(838, 143, 409, 2, 'Sygnał od przycisku'),
+(839, 143, 408, 3, 'Sygnał od przepływomierza'),
 (840, 143, 407, 4, 'GND'),
 (841, 144, 681, 1, 'Czerwony Zasilanie 5V'),
 (842, 144, 682, 2, 'Czarny GND'),
@@ -4683,8 +4772,8 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (926, 157, 645, 11, '11'),
 (927, 157, 646, 12, '12'),
 (928, 158, 804, 1, 'Sygnał czujnika 105'),
-(929, 158, 805, 2, 'GND'),
-(930, 158, 808, 3, 'Sygnał czujnika 104'),
+(929, 158, 805, 3, 'GND'),
+(930, 158, 808, 2, 'Sygnał czujnika 104'),
 (931, 158, 807, 4, '-'),
 (932, 158, 806, 5, '-'),
 (933, 158, 803, 6, '+5V'),
@@ -4705,7 +4794,114 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (948, 162, 798, 3, 'Sygnał'),
 (949, 163, 802, 1, 'GND'),
 (950, 163, 801, 2, 'Sygnał'),
-(951, 163, 800, 3, 'Zasilanie +5V');
+(951, 163, 800, 3, 'Zasilanie +5V'),
+(952, 165, 809, 1, 'Zasilanie'),
+(953, 165, 811, 2, 'Masa'),
+(954, 165, 810, 3, 'Signał'),
+(955, 164, 809, 1, 'Masa'),
+(956, 164, 811, 2, '+5V'),
+(957, 164, 810, 3, 'Sygnał'),
+(958, 166, 812, 1, 'GND'),
+(959, 166, 813, 2, 'Signal'),
+(960, 167, 812, 1, 'Styk1'),
+(961, 167, 813, 2, 'Styk2'),
+(962, 168, 409, 1, 'Przycisk'),
+(963, 168, 408, 2, 'Przepływomierz'),
+(964, 168, 406, 3, 'Zasilanie'),
+(965, 168, 407, 4, 'Masa'),
+(966, 169, 814, 1, 'Zasilanie'),
+(967, 169, 815, 2, 'GND'),
+(968, 169, 816, 3, 'Stan ostrzegawczy'),
+(969, 169, 816, 4, 'Stan zalania'),
+(970, 170, 815, 1, 'GND'),
+(971, 170, 814, 2, '+5V'),
+(972, 170, 816, 3, 'Sygnał Mokro'),
+(973, 170, 817, 4, 'Sygnał Zalanie'),
+(974, 171, 838, 1, 'IOBUS1'),
+(975, 171, 839, 2, 'IOBUS2'),
+(976, 171, 840, 3, 'IOBUS3'),
+(977, 171, 841, 4, 'IOBUS4'),
+(978, 171, 842, 5, 'IOBUS5'),
+(979, 171, 843, 6, 'IOBUS6'),
+(980, 172, 838, 1, 'IOBUS1'),
+(981, 172, 839, 2, 'IOBUS2'),
+(982, 172, 840, 3, 'IOBUS3'),
+(983, 172, 841, 4, 'IOBUS4'),
+(984, 172, 842, 5, 'IOBUS5'),
+(985, 172, 843, 6, 'IOBUS6'),
+(986, 173, 855, 1, 'Zasilanie'),
+(987, 173, 854, 2, 'Sygnał'),
+(988, 173, 856, 3, 'Masa'),
+(989, 174, 787, 1, 'Masa'),
+(990, 174, 796, 2, 'Zasilanie'),
+(991, 174, 788, 3, 'Sygnał 108'),
+(992, 174, 789, 4, 'Sygnał 109'),
+(993, 174, 790, 5, 'Sygnał 110'),
+(994, 174, 791, 6, 'Sygnał 111'),
+(995, 174, 793, 7, 'Sygnał 112'),
+(996, 174, 794, 8, 'Sygnał 113'),
+(997, 174, 795, 9, 'Sygnał 114'),
+(998, 174, 792, 10, '-'),
+(999, 176, 856, 1, 'GND'),
+(1000, 176, 855, 2, '+5V'),
+(1001, 176, 854, 3, 'Sygnał'),
+(1002, 177, 819, 1, '-'),
+(1003, 177, 818, 2, '-'),
+(1004, 177, 821, 3, '-'),
+(1005, 177, 820, 4, '-'),
+(1006, 178, 858, 1, 'Zasilanie'),
+(1007, 178, 857, 2, 'Masa'),
+(1008, 178, 859, 3, 'Sygnał'),
+(1009, 179, 860, 1, 'Zasialnie'),
+(1010, 179, 861, 2, 'Masa'),
+(1011, 179, 862, 3, 'Sygnał'),
+(1012, 180, 864, 1, 'Zasilanie'),
+(1013, 180, 863, 2, 'Masa'),
+(1014, 180, 865, 3, 'Sygnał'),
+(1015, 181, 867, 1, 'Zasilanie'),
+(1016, 181, 866, 2, 'Masa'),
+(1017, 181, 868, 3, 'Sygnał'),
+(1018, 182, 870, 1, 'Zasilanie'),
+(1019, 182, 869, 2, 'Masa'),
+(1020, 182, 871, 3, 'Sygnał'),
+(1021, 183, 873, 1, 'Zasilanie'),
+(1022, 183, 872, 2, 'Czarny'),
+(1023, 183, 874, 3, 'Sygnał'),
+(1024, 184, 860, 1, '+5V'),
+(1025, 184, 861, 2, 'GND'),
+(1026, 184, 862, 3, 'Sygnał'),
+(1027, 185, 855, 1, '+5V'),
+(1028, 185, 856, 2, 'GND'),
+(1029, 185, 854, 3, 'Sygnał'),
+(1030, 186, 858, 1, '+5V'),
+(1031, 186, 857, 2, 'GND'),
+(1032, 186, 859, 3, 'Sygnał'),
+(1033, 187, 864, 1, '+5V'),
+(1034, 187, 863, 2, 'GND'),
+(1035, 187, 865, 3, 'Sygnał'),
+(1036, 188, 867, 1, '+5V'),
+(1037, 188, 866, 2, 'GND'),
+(1038, 188, 868, 3, 'Sygnał'),
+(1039, 189, 870, 1, '+5V'),
+(1040, 189, 869, 2, 'GND'),
+(1041, 189, 871, 3, 'Sygnał'),
+(1042, 190, 873, 1, '+5V'),
+(1043, 190, 872, 2, 'GND'),
+(1044, 190, 874, 3, 'Sygnał'),
+(1045, 191, 818, 1, '-'),
+(1046, 191, 819, 2, '-'),
+(1047, 191, 820, 3, '-'),
+(1048, 191, 821, 4, '-'),
+(1049, 192, 796, 1, '+5V'),
+(1050, 192, 788, 2, 'Sygnał 1'),
+(1051, 192, 789, 3, 'Sygnał 2'),
+(1052, 192, 790, 4, 'Sygnał 3'),
+(1053, 192, 791, 5, 'Sygnał 4'),
+(1054, 192, 793, 6, 'Sygnał 5'),
+(1055, 192, 794, 7, 'Sygnał 6'),
+(1056, 192, 795, 8, 'Sygnał 7'),
+(1057, 192, 792, 9, '-'),
+(1058, 192, 787, 10, '1GND');
 
 -- --------------------------------------------------------
 
@@ -5408,9 +5604,9 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (249, 7, 5, 'GND'),
 (250, 8, 5, 'Sygnał czujnika '),
 (251, 4, 5, '+5V'),
-(252, 4, 6, '-'),
-(253, 3, 6, '-'),
-(254, 1, 6, '-'),
+(252, 4, 6, '+5V'),
+(253, 3, 6, 'GND'),
+(254, 1, 6, 'Sygnał'),
 (255, 9, 6, '-'),
 (256, 1, 7, 'Styk kontraktronu'),
 (257, 8, 7, 'GND'),
@@ -5959,7 +6155,73 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (805, 3, 29, 'GND'),
 (806, 6, 29, 'USZKODZONY'),
 (807, 1, 29, 'USZKODZONY'),
-(808, 8, 29, 'Sygnał czujnika');
+(808, 8, 29, 'Sygnał czujnika'),
+(809, 7, 170, 'GND'),
+(810, 8, 170, 'Signal'),
+(811, 4, 170, 'Zasilanie'),
+(812, 6, 171, 'GND'),
+(813, 6, 171, 'Sygnał'),
+(814, 2, 30, 'Zasilanie +5V'),
+(815, 3, 30, 'GND'),
+(816, 1, 30, '-'),
+(817, 1, 30, '-'),
+(818, 8, 51, '-'),
+(819, 6, 51, '-'),
+(820, 13, 51, '-'),
+(821, 9, 51, '-'),
+(822, 6, 78, '-'),
+(823, 7, 78, '-'),
+(824, 8, 78, '-'),
+(825, 9, 78, '-'),
+(826, 3, 78, '-'),
+(827, 1, 78, '-'),
+(828, 5, 78, '-'),
+(829, 4, 78, '-'),
+(830, 9, 77, ''),
+(831, 1, 77, ''),
+(832, 8, 77, ''),
+(833, 5, 77, ''),
+(834, 7, 77, ''),
+(835, 4, 77, ''),
+(836, 3, 77, ''),
+(837, 6, 77, ''),
+(838, 4, 79, 'Szyna danych i zasilania 1'),
+(839, 3, 79, 'Szyna danych i zasilania 2'),
+(840, 7, 79, 'Szyna danych i zasilania 3'),
+(841, 9, 79, 'Szyna danych i zasilania 4'),
+(842, 1, 79, 'Szyna danych i zasilania 5'),
+(843, 8, 79, 'Szyna danych i zasilania 6'),
+(844, 11, 76, '-'),
+(845, 2, 76, '-'),
+(846, 10, 76, '-'),
+(847, 6, 76, '-'),
+(848, 3, 76, '-'),
+(849, 4, 76, '-'),
+(850, 1, 76, '-'),
+(851, 8, 76, '-'),
+(852, 5, 76, '-'),
+(853, 7, 76, '-'),
+(854, 9, 108, 'Sygnał'),
+(855, 4, 108, 'Zasilanie'),
+(856, 7, 108, 'Masa'),
+(857, 7, 109, 'Masa'),
+(858, 4, 109, 'Zasilanie'),
+(859, 8, 109, 'Sygnał'),
+(860, 4, 110, 'Zasilanie'),
+(861, 7, 110, 'Masa'),
+(862, 3, 110, 'Sygnał'),
+(863, 7, 111, 'Masa'),
+(864, 4, 111, 'Zasilanie'),
+(865, 1, 111, 'Sygnał'),
+(866, 7, 112, 'Masa'),
+(867, 4, 112, 'Zasilanie'),
+(868, 1, 112, 'Sygnał'),
+(869, 7, 113, 'Masa'),
+(870, 4, 113, 'Zasilanie'),
+(871, 5, 113, 'Sygnał'),
+(872, 7, 114, 'Masa'),
+(873, 4, 114, 'Zasilanie'),
+(874, 3, 114, 'Sygnał');
 
 -- --------------------------------------------------------
 
@@ -6299,13 +6561,13 @@ ALTER TABLE `zyla`
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe`
 --
 ALTER TABLE `elementy_plytkowe`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
 
 --
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe_pin`
 --
 ALTER TABLE `elementy_plytkowe_pin`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1547;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1581;
 
 --
 -- AUTO_INCREMENT dla tabeli `kolor`
@@ -6323,19 +6585,19 @@ ALTER TABLE `miejsce`
 -- AUTO_INCREMENT dla tabeli `plytki`
 --
 ALTER TABLE `plytki`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
 --
 ALTER TABLE `polaczenie_plytka`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=410;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=415;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_plytka_polaczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1003;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1012;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
@@ -6353,7 +6615,7 @@ ALTER TABLE `pomieszczenie`
 -- AUTO_INCREMENT dla tabeli `przewod_miejsce`
 --
 ALTER TABLE `przewod_miejsce`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=395;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=399;
 
 --
 -- AUTO_INCREMENT dla tabeli `rodzaj_zakonczenia`
@@ -6365,13 +6627,13 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=193;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=952;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1059;
 
 --
 -- AUTO_INCREMENT dla tabeli `zlacze_wtyczka`
@@ -6383,7 +6645,7 @@ ALTER TABLE `zlacze_wtyczka`
 -- AUTO_INCREMENT dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=809;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=875;
 
 --
 -- Ograniczenia dla zrzutów tabel
