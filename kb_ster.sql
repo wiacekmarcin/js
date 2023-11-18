@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Czas generowania: 14 Lis 2023, 07:17
+-- Czas generowania: 18 Lis 2023, 05:53
 -- Wersja serwera: 8.0.35-0ubuntu0.22.04.1
 -- Wersja PHP: 8.1.2-1ubuntu2.14
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ElementyPlytkowePinView` (
-`element_plytkowy_id` smallint unsigned
+,`element_plytkowy_id` smallint unsigned
 ,`elementnazwa` text
 ,`id` smallint unsigned
 ,`ilosc_pin` tinyint
@@ -47,15 +47,15 @@ CREATE TABLE `ElementyPlytkowePinView` (
 CREATE TABLE `ElementyPlytkowePolaczeniaPinView` (
 `element_plytkowy_id` smallint unsigned
 ,`elementy_plytkowe_piny_id` smallint unsigned
+,`pinnazwa` text
+,`pos` tinyint
 ,`elemnazwa` text
 ,`id` smallint unsigned
 ,`ilosc_pin` tinyint
 ,`kod` varchar(1)
-,`pinnazwa` text
 ,`plytka` tinyint(1)
 ,`plytka_id` tinyint unsigned
 ,`polaczenie_plytka_id` smallint unsigned
-,`pos` tinyint
 ,`przewod` tinyint(1)
 ,`rodzaj_urzadzenia` tinyint unsigned
 ,`rodznazwa` text
@@ -69,7 +69,7 @@ CREATE TABLE `ElementyPlytkowePolaczeniaPinView` (
 --
 CREATE TABLE `ElementyPlytkoweView` (
 `id` smallint unsigned
-,`id_pomieszczenie` tinyint unsigned
+,`nazwa` text
 ,`ilosc_pin` tinyint
 ,`kod` varchar(16)
 ,`miejsce_id` tinyint unsigned
@@ -80,6 +80,7 @@ CREATE TABLE `ElementyPlytkoweView` (
 ,`pnazwa` text
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
+,`id_pomieszczenie` tinyint unsigned
 ,`urzadzenie_nazwa` text
 ,`urzadzenie_plytka` tinyint(1)
 ,`urzadzenie_przewod` tinyint(1)
@@ -247,7 +248,16 @@ INSERT INTO `elementy_plytkowe` (`id`, `nazwa`, `ilosc_pin`, `plytka_id`, `rodza
 (182, 'IN100', 4, 17, 5),
 (183, 'IN101', 3, 17, 4),
 (184, 'IN102', 3, 17, 4),
-(185, 'IN103', 3, 17, 4);
+(185, 'IN103', 3, 17, 4),
+(186, 'Arduino Nano Every (wodomierz)', 30, 11, 3),
+(188, 'C.A.29', 6, 11, 5),
+(189, 'C.B.23', 4, 11, 5),
+(190, 'C.C.30', 4, 11, 5),
+(191, 'C.H.148', 12, 11, 5),
+(192, 'C.D.31', 6, 11, 5),
+(193, 'C.E.50', 10, 11, 5),
+(194, 'C.F.51', 4, 11, 5),
+(195, 'C.G.69', 8, 11, 5);
 
 -- --------------------------------------------------------
 
@@ -1372,7 +1382,91 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`
 (1613, '-', 3, 184),
 (1614, '-', 1, 185),
 (1615, '-', 2, 185),
-(1616, '-', 3, 185);
+(1616, '-', 3, 185),
+(1617, 'D13', 1, 186),
+(1618, '+3V3', 2, 186),
+(1619, 'D39', 3, 186),
+(1620, 'D14', 4, 186),
+(1621, 'D15', 5, 186),
+(1622, 'D16', 6, 186),
+(1623, 'D17', 7, 186),
+(1624, 'SDA', 8, 186),
+(1625, 'SCL', 9, 186),
+(1626, 'D20', 10, 186),
+(1627, 'D21', 11, 186),
+(1628, '+5V', 12, 186),
+(1629, 'RST.1', 13, 186),
+(1630, 'GND.1', 14, 186),
+(1631, 'VIN', 15, 186),
+(1632, 'D0', 16, 186),
+(1633, 'D1', 17, 186),
+(1634, 'RST.2', 18, 186),
+(1635, 'GND.2', 19, 186),
+(1636, 'D2', 20, 186),
+(1637, 'D3', 21, 186),
+(1638, 'D4', 22, 186),
+(1639, 'D5', 23, 186),
+(1640, 'D6', 24, 186),
+(1641, 'D7', 25, 186),
+(1642, 'D8', 26, 186),
+(1643, 'D9', 27, 186),
+(1644, 'D10', 28, 186),
+(1645, 'D11', 29, 186),
+(1646, 'D12', 30, 186),
+(1677, 'W105', 1, 188),
+(1678, 'W104', 2, 188),
+(1679, 'GND', 3, 188),
+(1680, 'GND', 4, 188),
+(1681, 'GND', 5, 188),
+(1682, '+5V', 6, 188),
+(1683, '+5V', 1, 189),
+(1684, 'BTN_WC', 2, 189),
+(1685, 'W170', 3, 189),
+(1686, 'GND', 4, 189),
+(1687, 'GND', 1, 190),
+(1688, '+5V', 2, 190),
+(1689, 'CZ.Z.1', 3, 190),
+(1690, 'CZ.Z.2', 4, 190),
+(1691, '-', 1, 191),
+(1692, 'CZ.Z.2', 2, 191),
+(1693, 'GND', 3, 191),
+(1694, '-', 4, 191),
+(1695, '+5V', 5, 191),
+(1696, 'BTN_K', 6, 191),
+(1697, 'BTN_L', 7, 191),
+(1698, 'SCL', 8, 191),
+(1699, 'SDA', 9, 191),
+(1700, 'GAZ1', 10, 191),
+(1701, 'GAZ2', 11, 191),
+(1702, '1S', 12, 191),
+(1703, '+5V', 1, 192),
+(1704, 'GND', 2, 192),
+(1705, 'GND', 3, 192),
+(1706, 'GND', 4, 192),
+(1707, 'W107', 5, 192),
+(1708, 'W106', 6, 192),
+(1709, 'GND', 1, 193),
+(1710, '-', 2, 193),
+(1711, 'W114', 3, 193),
+(1712, 'W113', 4, 193),
+(1713, 'W112', 5, 193),
+(1714, 'W111', 6, 193),
+(1715, 'W110', 7, 193),
+(1716, 'W109', 8, 193),
+(1717, 'W108', 9, 193),
+(1718, '+5V', 10, 193),
+(1719, '-', 1, 194),
+(1720, '-', 2, 194),
+(1721, '-', 3, 194),
+(1722, '-', 4, 194),
+(1723, '+5V', 1, 195),
+(1724, 'BTN.GAZ', 2, 195),
+(1725, 'ZG.1', 3, 195),
+(1726, 'ZG.2', 4, 195),
+(1727, 'GND', 5, 195),
+(1728, 'W101', 6, 195),
+(1729, 'W102', 7, 195),
+(1730, 'W103', 8, 195);
 
 -- --------------------------------------------------------
 
@@ -1552,6 +1646,28 @@ INSERT INTO `miejsce` (`id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `k
 
 --
 -- Zastąpiona struktura widoku `MiejscePrzewodView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `MiejscePrzewodView2` (
+`id` smallint unsigned
+,`pid` tinyint unsigned
+,`mid` tinyint unsigned
+,`nazwa` text
+,`opis` text
+,`zbiorcze` tinyint(1)
+,`id_pomieszczenie` tinyint unsigned
+,`kod` varchar(16)
+,`polaczenie` tinyint(1)
+,`pomieszczenie` text
+,`ppid` tinyint unsigned
+,`popis` text
+,`ilosc_zyl` tinyint unsigned
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `MiejsceView`
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `MiejscePrzewodView` (
@@ -1973,7 +2089,30 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (422, 'S102', 17),
 (423, 'S103', 17),
 (424, '100A', 17),
-(425, '100B', 17);
+(425, '100B', 17),
+(426, 'GND', 11),
+(427, '+5V', 11),
+(428, 'W104.D14', 11),
+(429, 'W105.D39', 11),
+(430, 'W170.D15', 11),
+(431, 'BTN_WC', 11),
+(432, 'GAZ.1', 11),
+(433, 'GAZ.2', 11),
+(434, 'W108.D12', 11),
+(435, 'W109.D11', 11),
+(436, 'W110.D10', 11),
+(437, 'W111.D9', 11),
+(438, 'W112.D8', 11),
+(439, 'W113.D7', 11),
+(440, 'W114.D6', 11),
+(441, 'W103.D21', 11),
+(444, 'W102.D20', 11),
+(445, 'W101.D5', 11),
+(446, 'BTN_GAZ', 11),
+(447, 'BTN_KUCH', 11),
+(448, 'BTN_LAZ', 11),
+(449, 'SDA', 11),
+(450, 'SCL', 11);
 
 -- --------------------------------------------------------
 
@@ -2706,7 +2845,68 @@ INSERT INTO `polaczenie_plytka_polaczenie` (`id`, `polaczenie_plytka_id`, `eleme
 (1042, 424, 1605),
 (1043, 424, 1599),
 (1044, 425, 1606),
-(1045, 425, 1598);
+(1045, 425, 1598),
+(1046, 426, 1679),
+(1047, 426, 1680),
+(1048, 426, 1681),
+(1049, 426, 1630),
+(1050, 426, 1635),
+(1051, 427, 1628),
+(1052, 427, 1682),
+(1053, 428, 1678),
+(1054, 429, 1677),
+(1055, 429, 1619),
+(1056, 428, 1620),
+(1057, 430, 1685),
+(1058, 431, 1636),
+(1059, 431, 1684),
+(1061, 426, 1686),
+(1062, 426, 1693),
+(1063, 426, 1687),
+(1064, 427, 1683),
+(1065, 427, 1688),
+(1067, 427, 1695),
+(1068, 432, 1689),
+(1069, 433, 1692),
+(1070, 433, 1690),
+(1071, 427, 1703),
+(1072, 426, 1704),
+(1073, 426, 1705),
+(1074, 426, 1706),
+(1075, 427, 1718),
+(1076, 426, 1709),
+(1077, 426, 1710),
+(1078, 434, 1717),
+(1079, 434, 1646),
+(1080, 435, 1716),
+(1081, 435, 1645),
+(1082, 436, 1715),
+(1083, 436, 1644),
+(1084, 437, 1714),
+(1085, 437, 1643),
+(1086, 438, 1713),
+(1087, 438, 1642),
+(1089, 439, 1712),
+(1090, 439, 1641),
+(1091, 440, 1711),
+(1093, 440, 1640),
+(1094, 430, 1621),
+(1095, 427, 1723),
+(1096, 426, 1727),
+(1097, 441, 1730),
+(1098, 441, 1627),
+(1099, 444, 1729),
+(1100, 444, 1626),
+(1101, 445, 1728),
+(1102, 445, 1639),
+(1104, 446, 1724),
+(1105, 446, 1632),
+(1106, 447, 1696),
+(1107, 448, 1697),
+(1108, 450, 1698),
+(1109, 450, 1625),
+(1110, 449, 1624),
+(1111, 449, 1699);
 
 -- --------------------------------------------------------
 
@@ -3108,6 +3308,7 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (145, 'Lazienka - kabel w puszcze do włacznikow', 12),
 (146, 'Lazienka, pokoje kabel do wlacznikow', 12),
 (147, 'Przewód do przycisku', 2),
+(148, 'Łącznik z płytką do wodomierzy', 12),
 (149, 'WC sufit zasilanie 4 przekaźników', 6),
 (150, 'WC sufit, zasilanie 2 przekaźników', 4),
 (151, 'Zasilanie przekaźników mechanicznych 2x LED/Zawór', 4),
@@ -3589,7 +3790,9 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 (397, 171, 12),
 (398, 171, 12),
 (399, 147, 85),
-(400, 147, 80);
+(400, 147, 80),
+(401, 148, 1),
+(402, 148, 1);
 
 -- --------------------------------------------------------
 
@@ -3886,7 +4089,8 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (208, 'P102', 206, 4, 3),
 (209, 'Przepływomierz', 207, 3, 3),
 (210, 'P103', 208, 4, 3),
-(211, 'C.G69', 140, 1, 8);
+(211, 'C.G69', 140, 1, 8),
+(212, 'C.H148', 401, 1, 12);
 
 -- --------------------------------------------------------
 
@@ -3895,15 +4099,14 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZakonczenieView` (
-`etykieta` text
-,`id` smallint unsigned
-,`ilosc_pin` tinyint unsigned
-,`kod` varchar(1)
-,`miejsce_id` tinyint unsigned
-,`nazwa` text
-,`przewod_id` tinyint unsigned
+`id` smallint unsigned
+,`etykieta` text
 ,`przewod_miejsce_id` smallint unsigned
 ,`rodzaj_zakonczenia` tinyint(1)
+,`ilosc_pin` tinyint unsigned
+,`przewod_id` tinyint unsigned
+,`miejsce_id` tinyint unsigned
+,`nazwa` text
 );
 
 -- --------------------------------------------------------
@@ -3922,6 +4125,24 @@ CREATE TABLE `ZakonczenieZylyView` (
 ,`zid` smallint unsigned
 ,`zyla_id` smallint unsigned
 ,`zzid` smallint unsigned
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `ZakonczenieZylyView`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `ZakonczenieZylyView` (
+`zzid` smallint unsigned
+,`zakonczenie_id` smallint unsigned
+,`zyla_id` smallint unsigned
+,`pos` tinyint
+,`opis` text
+,`zid` smallint unsigned
+,`etykieta` text
+,`przewod_miejsce_id` smallint unsigned
+,`rodzaj_zakonczenia` tinyint(1)
 );
 
 -- --------------------------------------------------------
@@ -5064,7 +5285,19 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (1127, 211, 779, 5, 'Masa'),
 (1128, 211, 783, 6, 'Przepływomierz 1'),
 (1129, 211, 784, 7, 'Przepływomierz 2'),
-(1130, 211, 785, 8, 'Przepływomierz 3');
+(1130, 211, 785, 8, 'Przepływomierz 3'),
+(1131, 212, 902, 1, '-'),
+(1132, 212, 903, 2, 'Czujnik zalania WC A'),
+(1133, 212, 904, 3, 'GND'),
+(1134, 212, 905, 4, 'Czujnik zalania WC B'),
+(1135, 212, 906, 5, '+5V'),
+(1136, 212, 907, 6, 'Przycisk kuchnia'),
+(1137, 212, 908, 7, 'Przycisk lazienka'),
+(1138, 212, 909, 8, 'SCL'),
+(1139, 212, 910, 9, 'SDA'),
+(1140, 212, 911, 10, 'Funkcjonalność gazu A'),
+(1141, 212, 912, 11, 'Funkcjonalność gazu A'),
+(1142, 212, 913, 12, 'Impuls czasu rzeczywistego 1s');
 
 -- --------------------------------------------------------
 
@@ -5077,9 +5310,11 @@ CREATE TABLE `ZakonczePrzewodMiejsce` (
 ,`ilosc_pin` tinyint unsigned
 ,`ilosc_zyl` tinyint unsigned
 ,`miejsce_id` tinyint unsigned
-,`mkod` varchar(16)
+,`znazwa` text
+,`zkod` varchar(1)
 ,`mnazwa` text
 ,`mopis` text
+, `mkod` varchar(16)
 ,`polaczenie` tinyint(1)
 ,`pomieszczenie` text
 ,`popis` text
@@ -5088,8 +5323,6 @@ CREATE TABLE `ZakonczePrzewodMiejsce` (
 ,`rodzaj_zakonczenia` tinyint(1)
 ,`zbiorcze` tinyint(1)
 ,`zid` smallint unsigned
-,`zkod` varchar(1)
-,`znazwa` text
 );
 
 -- --------------------------------------------------------
@@ -5176,19 +5409,19 @@ CREATE TABLE `ZlaczeView` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZlaczeWtyczka` (
-`et_1` text
-,`et_2` text
-,`ip_z1` tinyint unsigned
-,`ip_z2` tinyint
-,`miejsce_1` text
-,`miejsce_2` text
-,`ply_nazwa` text
-,`plytka_id` tinyint unsigned
-,`przewod` tinyint unsigned
+`zid_1` smallint unsigned
+,`et_1` text
 ,`rz_1` tinyint(1)
-,`rz_2` tinyint unsigned
-,`zid_1` smallint unsigned
+,`ip_z1` tinyint unsigned
 ,`zid_2` smallint unsigned
+,`et_2` text
+,`plytka_id` tinyint unsigned
+,`rz_2` tinyint unsigned
+,`ip_z2` tinyint
+,`ply_nazwa` text
+,`miejsce_1` text
+,`przewod` tinyint unsigned
+,`miejsce_2` text
 );
 
 -- --------------------------------------------------------
@@ -5198,21 +5431,21 @@ CREATE TABLE `ZlaczeWtyczka` (
 -- (Zobacz poniżej rzeczywisty widok)
 --
 CREATE TABLE `ZlaczeWtyczkaView` (
-`epid` smallint unsigned
+`wtyczka_id` smallint unsigned
+,`zlacze_id` smallint unsigned
+,`epid` smallint unsigned
 ,`epnazwa` text
 ,`eppos` tinyint
-,`html` text
-,`kolor` text
-,`kolor_id` tinyint unsigned
-,`opis` text
-,`przewod_id` tinyint unsigned
-,`wtyczka_id` smallint unsigned
-,`zid` smallint unsigned
-,`zlacze_id` smallint unsigned
 ,`zyla_id` smallint unsigned
-,`zzetykieta` text
-,`zzopis` text
 ,`zzpos` tinyint
+,`zzopis` text
+,`zzetykieta` text
+,`zid` smallint unsigned
+,`kolor_id` tinyint unsigned
+,`przewod_id` tinyint unsigned
+,`opis` text
+,`kolor` text
+,`html` text
 );
 
 -- --------------------------------------------------------
@@ -6403,7 +6636,19 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (898, 1, 100, '-'),
 (899, 9, 100, '-'),
 (900, 3, 147, 'Masa'),
-(901, 1, 147, 'Styk');
+(901, 1, 147, 'Styk'),
+(902, 1, 148, ''),
+(903, 12, 148, ''),
+(904, 11, 148, ''),
+(905, 3, 148, ''),
+(906, 2, 148, ''),
+(907, 4, 148, ''),
+(908, 7, 148, ''),
+(909, 10, 148, ''),
+(910, 8, 148, ''),
+(911, 9, 148, ''),
+(912, 6, 148, ''),
+(913, 13, 148, '');
 
 -- --------------------------------------------------------
 
@@ -6743,13 +6988,13 @@ ALTER TABLE `zyla`
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe`
 --
 ALTER TABLE `elementy_plytkowe`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=186;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=196;
 
 --
 -- AUTO_INCREMENT dla tabeli `elementy_plytkowe_pin`
 --
 ALTER TABLE `elementy_plytkowe_pin`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1617;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1731;
 
 --
 -- AUTO_INCREMENT dla tabeli `kolor`
@@ -6773,13 +7018,13 @@ ALTER TABLE `plytki`
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka`
 --
 ALTER TABLE `polaczenie_plytka`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=426;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=451;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_plytka_polaczenie`
 --
 ALTER TABLE `polaczenie_plytka_polaczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1046;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1112;
 
 --
 -- AUTO_INCREMENT dla tabeli `polaczenie_zyla`
@@ -6797,7 +7042,7 @@ ALTER TABLE `pomieszczenie`
 -- AUTO_INCREMENT dla tabeli `przewod_miejsce`
 --
 ALTER TABLE `przewod_miejsce`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=401;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=403;
 
 --
 -- AUTO_INCREMENT dla tabeli `rodzaj_zakonczenia`
@@ -6809,13 +7054,13 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT dla tabeli `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=213;
 
 --
 -- AUTO_INCREMENT dla tabeli `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1131;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1143;
 
 --
 -- AUTO_INCREMENT dla tabeli `zlacze_wtyczka`
@@ -6827,7 +7072,7 @@ ALTER TABLE `zlacze_wtyczka`
 -- AUTO_INCREMENT dla tabeli `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=902;
+  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=914;
 
 --
 -- Ograniczenia dla zrzutów tabel
