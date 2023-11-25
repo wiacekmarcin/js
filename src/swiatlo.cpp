@@ -5,7 +5,7 @@
 #include "in.h"
 
 
-Swiatlo::Swiatlo(Wejscia & we, Wyjscia & wy) : wej(we), wyj(wy), lustroJakoSwiatlo(false)
+Swiatlo::Swiatlo(Wejscia & we, Wyjscia & wy) : wej(we), wyj(wy), regaljakoSwiatlo(false)
 { 
 
 }
@@ -50,6 +50,16 @@ void Swiatlo::zapalLustro(int mls)
     wyj.print("Zapal");
 }
 
+void Swiatlo::zapalRegal(int mls)
+{
+#ifdef DEBUG
+    Serial.print("Zapal Regal, s=");
+    Serial.println(mls, DEC);
+#endif
+    wyj.setRegal(true, mls);
+    wyj.print("Zapal");
+}
+
 void Swiatlo::przedluzLustro(int mls)
 {
 #ifdef DEBUG
@@ -60,6 +70,16 @@ void Swiatlo::przedluzLustro(int mls)
     wyj.print("Zapal");
 }
 
+void Swiatlo::przedluzRegal(int mls)
+{
+#ifdef DEBUG
+    Serial.print("Przedluz regal, s=");
+    Serial.println(mls, DEC);
+#endif
+    wyj.addRegal(mls);
+    wyj.print("Zapal");
+}
+
 void Swiatlo::zgasLustro()
 {
 #ifdef DEBUG
@@ -67,6 +87,16 @@ void Swiatlo::zgasLustro()
 #endif // DEBUG    
     wyj.setLustro(false);
     wyj.print("Lutro off");
+    
+}
+
+void Swiatlo::zgasRegal()
+{
+#ifdef DEBUG
+    Serial.println("Zgas regal");
+#endif // DEBUG    
+    wyj.setRegal(false);
+    wyj.print("regal off");
     
 }
 
@@ -126,7 +156,7 @@ bool Swiatlo::set(unsigned long mls)
     static CzujkaRuchu pc;
     static CzujkaZblizeniowa pl;
     bool wasPr = false;
-    
+#ifdef DEBUG    
     if (ponL != onL) { Serial.print("onl=");Serial.print(onL, DEC); wasPr = true; }
     if (ponS != onS) { Serial.print(" onS=");Serial.print(onS, DEC); wasPr = true; }
     if (ppora.czyWieczor() != pora.czyWieczor()) { pora.print();/*Serial.print(" wie=");Serial.print(pora.czyWieczor(), DEC);*/ wasPr = true; }
@@ -139,7 +169,7 @@ bool Swiatlo::set(unsigned long mls)
     if (pc.czyRuch() != c.czyRuch()) { c.print();/*Serial.print(" ruc=");Serial.print(c.czyRuch());*/ wasPr = true; }
     if (pl.czyRuch() != l.czyRuch()) { l.print();/*Serial.print(" lus=");Serial.print(l.czyRuch());*/ wasPr = true; }
     if (pl.czyDlugiRuch() != l.czyDlugiRuch()) { l.print();/*Serial.print(" ldr=");Serial.print(l.czyDlugiRuch());*/ wasPr = true; }
-
+#endif
     //if (wasPr) {
     //    Serial.println();
     //    pora.print();
@@ -158,9 +188,9 @@ bool Swiatlo::set(unsigned long mls)
             //zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
             zapalSwiatlo(L_MIN(5));
         } else {  //zapalamy lustro
-            lustroJakoSwiatlo = true;
+            regaljakoSwiatlo = true;
             //zapalLustro(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
-            zapalLustro(L_MIN(5));
+            zapalRegal(L_MIN(5));
         }
         return true;
     }
@@ -168,7 +198,8 @@ bool Swiatlo::set(unsigned long mls)
     //gas swiatlo przyciskiem
     if ((onL || onS) && w.nacisniety()) {
         zgasLustro();
-        lustroJakoSwiatlo = false;
+        zgasRegal();
+        regaljakoSwiatlo = false;
         if (pora.czyNoc())
             zapalSwiatlo(L_SEC(5));
         else
@@ -177,9 +208,10 @@ bool Swiatlo::set(unsigned long mls)
     }
 
     //drugi raz przycisk
-    if (!onS && onL && w.nacisnietyDrugiRaz() && lustroJakoSwiatlo) {
+    if (!onS && onL && w.nacisnietyDrugiRaz() && regaljakoSwiatlo) {
         zgasLustro();
-        lustroJakoSwiatlo = false;
+        zgasRegal();
+        regaljakoSwiatlo = false;
         //zapalSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
         zapalSwiatlo(L_MIN(20));
         return true;
@@ -189,34 +221,36 @@ bool Swiatlo::set(unsigned long mls)
     if ((onS || onL) && d.zostalyOtwarte() && mls - w.czasWcisniecia() > L_SEC(5)) {
         if (onS && onL) {
             zgasLustro();
-            zapalSwiatlo(L_MIN(1));
+            zgasLustro();
+            zapalSwiatlo(L_MIN(2));
         }
         if (onS) {
-            zapalSwiatlo(L_MIN(1));
+            zapalSwiatlo(L_MIN(2));
         }
         if (onL) {
-            zapalLustro(L_MIN(1));
+            zapalRegal(L_MIN(2));
         }
         return true;
     }
 
     //czujniki ruchu
     if (c.czyRuch() || l.czyRuch()) {
-        if (onL && lustroJakoSwiatlo) {
-            przedluzLustro(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
+        if (onL && regaljakoSwiatlo) {
+            przedluzRegal(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
+            zapalLustro(L_MIN(2));
         } else if (onS) {
             przedluzSwiatlo(czasZapaleniaSwiatlo(pora.czyNoc(), d.czyOtwarte()));
         } else if (pora.czyWieczor()) {
             zapalSwiatlo(L_MIN(2));
         } else {
-            lustroJakoSwiatlo = true;
-            zapalLustro(L_MIN(2));
+            regaljakoSwiatlo = true;
+            zapalRegal(L_MIN(2));
         }
         return true;
     }
 
     //podswietlenie lustra
-    if (!onL && l.czyDlugiRuch() && !lustroJakoSwiatlo) {
+    if (!onL && l.czyDlugiRuch() && !regaljakoSwiatlo) {
         zapalLustro(czasZapaleniaLustro(pora.czyNoc(), d.czyOtwarte()));
         return true;
     }

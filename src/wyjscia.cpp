@@ -2,7 +2,7 @@
 #include "util.h"
 #include "debug.h"
 
-Wyjscia::Wyjscia(Adafruit_MCP23017 &wyj) :
+Wyjscia::Wyjscia(Adafruit_MCP23X17 &wyj) :
     wyjscia(wyj)
 {
     for (int i = 0; i < maxWyj; ++i) {
