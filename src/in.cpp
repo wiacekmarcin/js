@@ -1,7 +1,7 @@
 #include "in.h"
 #include "debug.h"
 
-
+#if 0
 Wlacznik::Wlacznik() : ValueBase(), m_cntPush(0), m_timeInt(0), m_timePush(0), m_timeHold(0) 
 {
     m_prev = 1;
@@ -232,3 +232,5 @@ void PoraDnia::print() const
     print_poradnia(this);
 #endif
 }
+
+#endif

@@ -1,7 +1,7 @@
 #ifndef __WEJSCIA_H__
 #define __WEJSCIA_H__
 
-
+#if 0
 #include <Adafruit_MCP23X17.h>
 #include "in.h"
 //#define DEBUG
@@ -27,14 +27,7 @@ public:
    
     void print();
 
-    static constexpr uint8_t CZ_R_WC = 1;//jasnozielony
-    static constexpr uint8_t CZ_R_LUSTRO = 0;//jansobrazowy
-    static constexpr uint8_t DRZWI = 2; //szary
-    static constexpr uint8_t KLAWISZ = 3; //pomaranczowy
-    static constexpr uint8_t Z_AWAR = 6; //fioletowy
-    static constexpr uint8_t TARYF2 = 7; //brazowy
-    static constexpr uint8_t WIECZOR = 4; //zolty
-    static constexpr uint8_t NOC = 5; //bialy
+
 
 private:
     
@@ -53,7 +46,7 @@ private:
 };
 
 
-
+#endif
 
 
 

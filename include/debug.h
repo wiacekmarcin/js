@@ -5,7 +5,7 @@
 #define DEBUG
 
 #ifdef DEBUG
-
+#if 0
 class Wlacznik;
 class CzujkaZblizeniowa;
 class CzujkaRuchu;
@@ -19,8 +19,8 @@ void print_drzwi(const Drzwi *d);
 void print_poradnia(const PoraDnia * p);
 
 #endif // DEBUG
-
-void print_wejscie(uint8_t prev, uint8_t act);
+#endif
+void debug_print_wejscie(uint8_t prev, uint8_t act);
 
 
 #endif // !_DBG_H

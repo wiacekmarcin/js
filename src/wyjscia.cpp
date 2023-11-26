@@ -1,6 +1,7 @@
 #include "wyjscia.h"
 #include "util.h"
 #include "debug.h"
+#if 0
 
 Wyjscia::Wyjscia(Adafruit_MCP23X17 &wyj) :
     wyjscia(wyj)
@@ -144,3 +145,5 @@ void Wyjscia::print(const char * funn) const
     
 #endif // DEBUG    
 }
+
+#endif

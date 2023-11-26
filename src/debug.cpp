@@ -3,7 +3,8 @@
 #include "util.h"
 #include "wejscia.h"
 #include <Arduino.h>
-
+#include "myMcp.hpp"
+#if 0
 #ifdef DEBUG
 void print_wlacznik(const Wlacznik * w)
 {
@@ -188,8 +189,11 @@ void print_poradnia(const PoraDnia * p)
 }
 
 #endif
+#endif
 
-void print_wejscie(uint8_t prev, uint8_t inD)
+using  WC_IO = MyMcp2317WC;
+
+void debug_print_wejscie(uint8_t prev, uint8_t inD)
 {
     if (prev == inD)
         return;
@@ -200,7 +204,7 @@ void print_wejscie(uint8_t prev, uint8_t inD)
     Serial.print("PREV = ");
     for (int i=7; i >= 0; i--) 
         Serial.print(MASK(prev, i)?'1':'0');
-    Serial.print("\nACT  = ");
+    Serial.print("\nACTV = ");
     for (int i=7; i >= 0; i--) 
         Serial.print(MASK(inD, i)?'1':'0');
     
@@ -209,22 +213,23 @@ void print_wejscie(uint8_t prev, uint8_t inD)
         Serial.print(MASK(prev^inD, i)?'1':'0');
     Serial.println("");
 
-    Serial.print(MASK(inD, Wejscia::NOC) ? 'N' : 'n');
-    Serial.print(MASK(inD, Wejscia::WIECZOR) ? 'W' : 'w');
-    Serial.print(MASK(inD, Wejscia::KLAWISZ) ? 'K' : 'k');
-    Serial.print(MASK(inD, Wejscia::DRZWI) ? 'D' : 'd');
-    Serial.print(MASK(inD, Wejscia::CZ_R_LUSTRO) ? 'L' : 'l');
-    Serial.print(MASK(inD, Wejscia::CZ_R_WC) ? 'R' : 'r');
-    Serial.print(MASK(inD, Wejscia::TARYF2) ? 'T' : 't');
-    Serial.println(MASK(inD, Wejscia::Z_AWAR) ? 'Z' : 'z');
+    
+    Serial.print(MASK(inD, WC_IO::KLAWISZ) ? 'K' : 'k');
+    Serial.print(MASK(inD, WC_IO::DRZWI) ? 'D' : 'd');
+    Serial.print(MASK(inD, WC_IO::CZ_R_LUSTRO) ? 'L' : 'l');
+    Serial.print(MASK(inD, WC_IO::CZ_R_WC) ? 'R' : 'r');
+    Serial.print(MASK(inD, WC_IO::NOC) ? 'N' : 'n');
+    Serial.print(MASK(inD, WC_IO::WIECZOR) ? 'W' : 'w');
+    Serial.print(MASK(inD, WC_IO::TARYF2) ? 'T' : 't');
+    Serial.println(MASK(inD, WC_IO::Z_AWAR) ? 'Z' : 'z');
 
-    Serial.print(CHAN(inD, prev,  Wejscia::NOC) ? 'N' : ' ');
-    Serial.print(CHAN(inD, prev,  Wejscia::WIECZOR) ? 'W' : ' ');
-    Serial.print(CHAN(inD, prev,  Wejscia::KLAWISZ) ? 'K' : ' ');
-    Serial.print(CHAN(inD, prev,  Wejscia::DRZWI) ? 'D' : ' ');
-    Serial.print(CHAN(inD, prev,  Wejscia::CZ_R_LUSTRO) ? 'L' : ' ');
-    Serial.print(CHAN(inD, prev,  Wejscia::CZ_R_WC) ? 'R' : ' ');
-    Serial.print(CHAN(inD, prev,  Wejscia::TARYF2) ? 'T' : ' ');
-    Serial.println(CHAN(inD, prev,  Wejscia::Z_AWAR) ? 'Z' : ' ');
+    Serial.print(CHAN(inD, prev,  WC_IO::KLAWISZ) ? 'K' : ' ');
+    Serial.print(CHAN(inD, prev,  WC_IO::DRZWI) ? 'D' : ' ');
+    Serial.print(CHAN(inD, prev,  WC_IO::CZ_R_LUSTRO) ? 'L' : ' ');
+    Serial.print(CHAN(inD, prev,  WC_IO::CZ_R_WC) ? 'R' : ' ');
+    Serial.print(CHAN(inD, prev,  WC_IO::NOC) ? 'N' : ' ');
+    Serial.print(CHAN(inD, prev,  WC_IO::WIECZOR) ? 'W' : ' ');
+    Serial.print(CHAN(inD, prev,  WC_IO::TARYF2) ? 'T' : ' ');
+    Serial.println(CHAN(inD, prev,  WC_IO::Z_AWAR) ? 'Z' : ' ');
 }
 

@@ -3,7 +3,7 @@
 
 #include "util.h"
 #include "debug.h"
-
+#if 0
 class Wlacznik;
 class CzujkaZblizeniowa;
 class CzujkaRuchu;
@@ -191,3 +191,4 @@ private:
 
 #endif  //_IN_H_
 
+#endif

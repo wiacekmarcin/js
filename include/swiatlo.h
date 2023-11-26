@@ -1,10 +1,40 @@
 #ifndef __LAMPA_H__
 #define __LAMPA_H__
 
-#include "wyjscia.h"
-#include "wejscia.h"
+#include "myMcp.hpp"
+
+#include "wlacznik.hpp"
+#include "wiatrak.hpp"
+
+class Swiatlo 
+{
+    public:
+    explicit Swiatlo(MyMcp2317WC & mcp, Wiatrak & wiatrak, unsigned short timeDelay);
+
+    void setWlacznik(Wlacznik & wl);
+    void tiktok();
+    
+    unsigned int getTikCnt(unsigned short min, unsigned short sec);
+    private:
+
+    MyMcp2317WC & io;
+    unsigned int swiatloGorneOff;
+    unsigned int swiatloBoczneOff;
+    unsigned int swiatloLustroOff;
+
+    bool stateHoldOn;
+    Wiatrak & wiatrak;
+    unsigned short div;
+};
 
 
+
+
+
+
+
+
+#if 0
 class Swiatlo {
 public:
 
@@ -42,5 +72,6 @@ private:
 
     bool regaljakoSwiatlo; //w jakim trybie swieci lustro
 };
-
+;
+#endif
 #endif //! ___LAMPA_H__

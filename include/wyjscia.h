@@ -2,6 +2,9 @@
 #define __WYJSCIA_H__
 #include <Arduino.h>
 #include <Adafruit_MCP23X17.h>
+
+#if 0
+
 //#define DEBUG
 class Wyjscia {
 public:
@@ -87,5 +90,7 @@ private:
     unsigned long timeout[maxWyj] = { 0, 0, 0, 0, 0, 0, 0, 0};
 
 };
+
+#endif
 
 #endif // !__WYJSCIA_H__

@@ -2,5 +2,8 @@
     "cmake.configureOnOpen": false,
     "githubPullRequests.ignoredPullRequestBranches": [
         "Przerwanie"
-    ]
+    ],
+    "files.associations": {
+        "type_traits": "cpp"
+    }
 }

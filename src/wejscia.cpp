@@ -2,7 +2,7 @@
 #include "util.h"
 #include "lcd.h"
 #include "debug.h"
-
+#if 0
 Wejscia::Wejscia(Adafruit_MCP23X17 & wej) :
     wejscia(wej)
 {
@@ -86,7 +86,7 @@ void Wejscia::print()
     prd.print();
 }
 
-
+#endif
 
 
 
