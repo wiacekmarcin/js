@@ -156,81 +156,8 @@ void CzujkaRuchu::czysc()
     m_ruch = 0;
 }
 
-Drzwi::Drzwi() : ValueBase(), m_otwarte(false), m_timeOpen(0), m_timeClose(0), m_otworzone(false)
-{
-    m_prev = 1;
-    m_val = 1;
-}
 
 
-void Drzwi::ustaw(uint8_t val, unsigned long timeInt, unsigned int timeAfterInt)
-{
-    m_prev = m_val;
-    m_val = (val == HIGH); //otwarte
 
-    if (m_val && !m_prev) {
-        m_otwarte = true;
-        m_otworzone = true;
-        m_timeOpen = timeInt ; /* + timeAfterInt;  */
-    } else if (!m_val && m_prev) {
-        m_otwarte = false;
-        m_timeClose = timeInt; /* + timeAfterInt; */
-    } else if (m_val && m_prev && m_otworzone) {
-        m_otworzone = false;
-    }
-
-}
-
-void Drzwi::czysc() 
-{
-    //nie wiem czy jest cos do czyszczeni
-}
-
-
-void Drzwi::print() const 
-{
-#ifdef DEBUG
-    print_drzwi(this);
-#endif // DEBUG    
-}
-
-PoraDnia::PoraDnia() : m_noc(false), m_wieczor(false), m_prevnoc(false),  m_prevwieczor(false),
-       m_taryf2(false), m_prevtaryf2(false), m_zas_awar(false), m_prevzas_awar(false)
-{
-
-}
-
-PoraDnia::Pora PoraDnia::getPoraDnia() const
-{
-    if (m_noc && m_prevnoc)
-        return NOC;
-    else if (m_wieczor && m_prevwieczor)
-        return WIECZOR;
-    else
-        return DZIEN;
-}
-
-void PoraDnia::ustaw(uint8_t valN, uint8_t valW, uint8_t valZ, uint8_t valT)
-{
-    m_prevnoc = m_noc;
-    m_noc = valN == LOW;
-
-    m_prevwieczor = m_wieczor;
-    m_wieczor = valW == LOW;
-
-    m_prevzas_awar = m_zas_awar;
-    m_zas_awar = valZ == LOW;
-
-    m_prevtaryf2 = m_taryf2;
-    m_taryf2 = valT == LOW;
-}
-
-
-void PoraDnia::print() const
-{
-#ifdef DEBUG
-    print_poradnia(this);
-#endif
-}
 
 #endif

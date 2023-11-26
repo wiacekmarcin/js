@@ -7,7 +7,7 @@
 #include "wlacznik.hpp"
 #include "wiatrak.hpp"
 #include "swiatlo.h"
-
+#include "drzwi.h"
 MyMcp2317WC mcp;
 
 
@@ -34,6 +34,7 @@ unsigned long actT = 0L;
 Wlacznik wlacznik;
 Wiatrak wiatrak(mcp);
 Swiatlo swiatlo(mcp, wiatrak, DELAYTIME);
+Drzwi drzwi;
 void loop()
 {
     actT = millis();
@@ -44,6 +45,7 @@ void loop()
         if (wlacznik.get()) {
             swiatlo.setWlacznik(wlacznik);
         }
+        drzwi.set(mcp.getDrzwi());
     } else {
         swiatlo.tiktok();
         wiatrak.tiktok();
