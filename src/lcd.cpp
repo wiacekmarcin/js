@@ -1,5 +1,5 @@
 #include "lcd.h"
-#include "util.h"
+
 #include "Arduino.h"
 
 #ifdef LCD_DEBUG

@@ -45,12 +45,13 @@ bool MyMcp2317WC::init_wc_io ()
     Adafruit_BusIO_RegisterBits poiCzujnik(&IPOLB, 1, CZ_R_WC);
     Adafruit_BusIO_RegisterBits poiDrzwi(&IPOLB, 1, DRZWI);
     Adafruit_BusIO_RegisterBits poiKlawisz(&IPOLB, 1, KLAWISZ);
+    Adafruit_BusIO_RegisterBits poiZAwar(&IPOLB, 1, Z_AWAR);
     
     poiCzujnik.write(0);
     poiLustro.write(0);
     poiDrzwi.write(1); 
     poiKlawisz.write(1);
-
+    poiZAwar.write(1);
     return true;
 }
 

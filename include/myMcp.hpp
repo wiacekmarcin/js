@@ -26,16 +26,19 @@ class MyMcp2317WC : protected Adafruit_MCP23X17
 
     bool czyWlacznik() { return (actValue >> KLAWISZ) & 0x1; }
     bool czyCzujnikLustra() { return (actValue >> CZ_R_LUSTRO) & 0x1; }
-    bool czyCzujnikRuchu() { return (actValue >> CZ_R_LUSTRO) & 0x1; }
+    bool czyCzujnikRuchu() { return (actValue >> CZ_R_WC) & 0x1; }
     bool czyZamknieteDrzwi() { return (actValue >> DRZWI) & 0x1; }
     bool czyWieczor() { return (actValue >> WIECZOR) & 0x1; }
     bool czyNoc() { return (actValue >> NOC) & 0x1; }
     bool czyZasilanieAwaryjne() { return (actValue >> Z_AWAR) & 0x1; }
+    bool czyZasilanie2Taryf() { return (actValue >> TARYF2) & 0x1; }
 
     bool getSwiatloGorne() const { return swiatloGorne; }
     bool getSwiatloLustro() const { return swiatloLustro; }
     bool getSwiatloBoczne() const { return swiatloBoczne; }
     bool getSwiatlo() const { return swiatloGorne || swiatloLustro || swiatloBoczne; }
+
+
     
     static constexpr uint8_t CZ_R_WC = 1;//jasnozielony
     static constexpr uint8_t CZ_R_LUSTRO = 0;//jansobrazowy

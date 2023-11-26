@@ -2,24 +2,16 @@
 #define _DBG_H
 #include <Arduino.h>
 
-#define DEBUG
+//#define DEBUG
 
-#ifdef DEBUG
-#if 0
-class Wlacznik;
-class CzujkaZblizeniowa;
-class CzujkaRuchu;
-class Drzwi;
-class PoraDnia;
+#define SEC(X) ((unsigned long)( 1000L*(X)))
+#define MIN(X) ((unsigned long)(60000L*(X)))
 
-void print_wlacznik(const Wlacznik * w);
-void print_czujkazblizeniowa(const CzujkaZblizeniowa * cz);
-void print_czujkaruchu(const CzujkaRuchu *cr);
-void print_drzwi(const Drzwi *d);
-void print_poradnia(const PoraDnia * p);
+#define L_SEC(X) ((unsigned long)( 1L*(X)))
+#define L_MIN(X) ((unsigned long)(60L*(X)))
 
-#endif // DEBUG
-#endif
+#define MASK(X, M) (((0x01 << (M)) & (X)) >> M)
+#define CHAN(X, Y, M) (((X)^(Y)) & (0x01 << (M)))
 void debug_print_wejscie(uint8_t prev, uint8_t act);
 
 

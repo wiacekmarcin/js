@@ -5,6 +5,7 @@
 
 #include "wlacznik.hpp"
 #include "wiatrak.hpp"
+#include "drzwi.hpp"
 
 class Swiatlo 
 {
@@ -12,9 +13,17 @@ class Swiatlo
     explicit Swiatlo(MyMcp2317WC & mcp, Wiatrak & wiatrak, unsigned short timeDelay);
 
     void setWlacznik(Wlacznik & wl);
+    void setDrzwi(Drzwi & drzwi);
+    void setCzujnikRuchu(bool ruch, bool otwDrzwi);
+    void setCzujkaLustro(bool ruch, bool otwDrzwi);
+
     void tiktok();
     
     unsigned int getTikCnt(unsigned short min, unsigned short sec);
+
+    protected:
+    void zwiekszCzasy(unsigned tiktok);
+
     private:
 
     MyMcp2317WC & io;
