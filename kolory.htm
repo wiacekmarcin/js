@@ -11,25 +11,16 @@
             <td ng-style='{ "background-color": "{{color.html}}" }'>&nbsp;</td>
             <td>{{ color.nazwa }}</td>
             <td>{{ color.cnt }}</td>
-            <td>
-              <button ng-click="editColorId = color.id">&#9998; Edycja</button>
-            </td>
           </tr>
           <tr ng-repeat-end ng-show="color.id == editColorId">
             <td> </td>
             <td> </td>
-            <td> </td>
             <td><input type="text"  ng-model="editColorName"></td>
-            <td>
-              <button ng-click="saveColor(color.id)">&#9999; Zachowaj</button>
-              <button ng-click="editColorId = -1">&#9747; Anuluj</button>
-            </td>
           </tr>
         <tr>
           <td> </td>
           <td><input type="text"  ng-model="newColor"></td>
           <td><input type="text"  ng-model="newColorName"></td>
-          <td> </td>
           <td>
             <button ng-click="newColor()">&#9997; Nowy</button>
           </td>
