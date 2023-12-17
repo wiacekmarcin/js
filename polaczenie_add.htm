@@ -1,11 +1,11 @@
 <div ng-controller="polaczenieadd-ctrl">
     <div class="w3-container" ng-show="choose">
         <label>Wybierz miejsce</label>
-        <select ng-model="id_miejsce" ng-options="miejsce as miejsce.name for miejsce in miejsca" ng-change="zmianaMiejsca(miejsce)">
+        <select ng-model="id_miejsce" ng-options="miejsce as miejsce.name for miejsce in miejsca" ng-change="zmianaMiejsca()">
         </select><br>
 
         <label>Wybierz połączenie</label>
-        <select ng-model="id_polmiejsce" ng-options="polmiejsce as polmiejsce.name for polmiejsce in polmiejsca" ng-change="zmianaPolMiejsca()">
+        <select ng-model="zak_id" ng-options="polaczenie as polaczenie.name for polaczenie in polaczenia" ng-change="zmianaPolMiejsca()">
         </select><br>
         <input type="button" ng-click="chooseMiejsce(false)" value="Dodaj połączenia"><br>
     </div>
@@ -29,8 +29,8 @@
                 <td colspan="3">
                     <table>
                         <tr>
-                            <th>Żyła 1</th>
-                            <th>Żyła 2</th>
+                            <th>Żyły przewodu {{przewod1}}</th>
+                            <th>Żyły przewodu {{przewod2}}</th>
                             <th></th>
                         </tr>
                         <tr ng-repeat="zyla in zyly1">
@@ -43,7 +43,7 @@
                                     ng-change="zmianaZyly2(zyla.id)"></select>
                             </td>
                             <td>
-                                <input bg-if="z2 == zyla.id" type="button" ng-click="insertPolaczenia(z1,z2)" value="Dodaj">
+                                <input type="button" ng-click="insertPolaczenia(zid, z1,z2)" value="Dodaj">
                             </td>
                         </tr>
                     </table>

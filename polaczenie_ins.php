@@ -22,10 +22,18 @@ for ($i = 0 ; $i < $count; $i++) {
 
 $query = '';
 for ($i = 0 ; $i < 2*$count; $i++) {
-    $query = "INSERT INTO `polaczenie_zyla`(`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES (NULL,";
-    $query .= $params[$i]['pmid'] . ',' . $params[$i]['id1'] . ',' . $params[$i]['id2'] .  ')';
+    //$query = "INSERT INTO `polaczenie_zyla`(`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES (NULL,";
+    //$query .= $params[$i]['pmid'] . ',' . $params[$i]['id1'] . ',' . $params[$i]['id2'] .  ')';
+	$query = "INSERT INTO `polaczenie_zyla`(`id`, `zakonczenie_zyly_id`, `zyla_id`) VALUES (NULL,";
+    $query .= $params[$i]['pmid'] . ',' . $params[$i]['id1'] . ')';
     $result = mysqli_query($con, $query);
-    echo $i . ($result ? '-OK ' : '-ERR ');
+	echo $query . ";";
+    //echo $i . ($result ? '-OK ' : '-ERR '. $query . ' | ');
+	$query = "INSERT INTO `polaczenie_zyla`(`id`, `zakonczenie_zyly_id`, `zyla_id`) VALUES (NULL,";
+    $query .= $params[$i]['pmid'] . ',' . $params[$i]['id2'] . ')';
+    $result = mysqli_query($con, $query);
+	echo $query . ";";
+    //echo $i . ($result ? '-OK ' : '-ERR '. $query . ' | ');
 }
 
 mysqli_close($con);
