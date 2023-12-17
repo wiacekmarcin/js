@@ -18,8 +18,8 @@ if ($id == -1) {
     $query = "INSERT INTO `miejsce`(`id`, `name`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`) ";
     $query.= "VALUES (NULL, '" . $nazwa . "', '" . $opis . "', " . $zbiorcze . ", " . $id_pomieszczenie . ", '" . $kod . "', " . $polaczenie . ");";
 } else {
-    $query = "UPDATE `miejsce` SET `nazwa`='". $nazwa . "', `opis`='" . $opis . "'. `zbiorcze`=" . $zbiorcze . ",`id_pomieszczenie`=";
-    $query .= $id_pomieszczenie . "`kod`='" . $kod . "',`polaczenie`=" . $polaczenie . " WHERE `id` = " . $id . ";";
+    $query = "UPDATE `miejsce` SET `nazwa`='". $nazwa . "', `opis`='" . $opis . "', `zbiorcze`=" . $zbiorcze . ", `id_pomieszczenie`=";
+    $query .= $id_pomieszczenie . ", `kod`='" . $kod . "', `polaczenie`=" . $polaczenie . " WHERE `id` = " . $id . ";";
 }
 
 $result = mysqli_query($con, $query);

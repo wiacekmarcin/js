@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 $username="kb_ster";
 $password="kb_ster";
 #$database="kb_ster_dbg";
-$database="kb_ster_test";
+$database="kb_ster";
 
 
 
