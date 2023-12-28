@@ -191,7 +191,7 @@ void loop() {
   for (int j = 0 ; j < 4; ++j)
   {
     short ind = ( textPos + j ) % 15;
-    float val = 0.0025 * impulseAll[j];
+    float val = 0.0025 * impulseAll[ind];
     u8g2.drawStr(0,j*16,info[ind]);
     u8g2.setCursor(64, j*16);
     u8g2.print(val,2);
