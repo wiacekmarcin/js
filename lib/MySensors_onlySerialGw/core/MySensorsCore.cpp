@@ -121,7 +121,6 @@ void _begin(void)
 #endif
 	if (!hwInitResult) {
 		CORE_DEBUG(PSTR("!MCO:BGN:HW ERR\n"));
-		setIndication(INDICATION_ERR_HW_INIT);
 		_infiniteLoop();
 	}
 
@@ -530,11 +529,6 @@ int8_t smartSleep(const uint8_t interrupt1, const uint8_t mode1, const uint8_t i
 	return _sleep(sleepingMS, true, interrupt1, mode1, interrupt2, mode2);
 }
 
-uint32_t getSleepRemaining(void)
-{
-	return hwGetSleepRemaining();
-}
-
 
 void _nodeLock(const char *str)
 {
@@ -542,15 +536,15 @@ void _nodeLock(const char *str)
 	// Make sure EEPROM is updated to locked status
 	hwWriteConfig(EEPROM_NODE_LOCK_COUNTER_ADDRESS, 0);
 	while (1) {
-		setIndication(INDICATION_ERR_LOCKED);
+
 		CORE_DEBUG(PSTR("MCO:NLK:NODE LOCKED. TO UNLOCK, GND PIN %" PRIu8 " AND RESET\n"),
 		           MY_NODE_UNLOCK_PIN);
 		doYield();
 		(void)_sendRoute(build(_msgTmp, GATEWAY_ADDRESS, NODE_SENSOR_ID,C_INTERNAL, I_LOCKED).set(str));
 
-		setIndication(INDICATION_SLEEP);
+
 		(void)hwSleep((uint32_t)1000*60*30); // Sleep for 30 min before resending LOCKED message
-		setIndication(INDICATION_WAKEUP);
+		
 	}
 #else
 	(void)str;

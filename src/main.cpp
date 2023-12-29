@@ -1,9 +1,10 @@
 #include <Arduino.h>
 
 #include <Adafruit_MCP23X17.h>
+Adafruit_MCP23X17 mcp;
+
 
 #define U8X8_HAVE_HW_I2C
-
 #ifdef U8X8_HAVE_HW_SPI
 #include <SPI.h>
 #endif
@@ -25,20 +26,16 @@
 //#define ARDUINO_ARCH_MEGAAVR
 //#define ARDUINO_ARCH_AVR
 
-#include <MySensors.h>
+#include "../lib/MySensors_onlySerialGw/MySensors.h"
 #define SLEEP_MODE false                        // flowvalue can only be reported when sleep mode is false.
 #define MAX_FLOW 60   
 
 struct flowMsg {
   MyMessage* flowMsg;
-  MyMessage* volumeMsg
-  MyMessage* lastCounterMsg
-} [15];
+  MyMessage* volumeMsg;
+  MyMessage* lastCounterMsg;
+} flowMessages[15];
 
-
-MyMessage flowMsg(CHILD_ID,V_FLOW);
-MyMessage volumeMsg(CHILD_ID,V_VOLUME);
-MyMessage lastCounterMsg(CHILD_ID,V_VAR1);
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
 enum Wodomierz { 
@@ -79,11 +76,12 @@ const char info[15][9] = {
 
 struct mcpIODigital {
   uint8_t pin;
-  uint8_t mode
+  uint8_t mode;
 };
 
 enum IODigitOutput {
   LAZ_UMY_W = 0,
+  MCP_FIRST = LAZ_UMY_W,
   LAZ_WAN_W,
   LAZ_PRYSZ_W,
   LAZ_SEDES_W,
@@ -97,7 +95,7 @@ enum IODigitOutput {
   KUCH_UMYW_W,
   F_GAZ_1,
   F_GAZ_2,
-  MCP_LAS
+  MCP_LAST,
 };
 
 
@@ -160,15 +158,17 @@ void setup()
   }
 
   for (int i = 0; i < 15; ++i) {
-    flowMsg[i].flowMsg = new flowMsg(i+1,V_FLOW);
-    flowMsg[i].volumeMsg = new flowMsg(i+1,V_VOLUME);
-    flowMsg[i].lastCounterMsg = new flowMsg(i+1,V_VAR1);
+    flowMessages[i].flowMsg = new MyMessage(i+1,V_FLOW);
+    flowMessages[i].volumeMsg = new MyMessage(i+1,V_VOLUME);
+    flowMessages[i].lastCounterMsg = new MyMessage(i+1,V_VAR1);
 
     request(i+1, V_VAR1);
   }
 
   if (mcp.begin_I2C()) {
-      mcp.pinMode(BUTTON_PIN, INPUT_PULLUP);
+    for (uint8_t i = MCP_FIRST; i < MCP_LAST; ++i) {
+      mcp.pinMode(i, OUTPUT);
+    }
   }
   Serial.begin(115200);
   sei();

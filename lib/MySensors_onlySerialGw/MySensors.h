@@ -43,7 +43,7 @@
 #include "MyConfig.h"
 #include "core/MyHelperFunctions.cpp"
 
-#include "core/MySplashScreen.h"
+
 #include "core/MySensorsCore.h"
 
 // OTA Debug, has to be defined before HAL
@@ -53,35 +53,9 @@
 
 // HARDWARE
 #include "hal/architecture/MyHwHAL.h"
-#include "hal/crypto/MyCryptoHAL.h"
-#if defined(ARDUINO_ARCH_ESP8266)
-#include "hal/architecture/ESP8266/MyHwESP8266.cpp"
-#include "hal/crypto/generic/MyCryptoGeneric.cpp"
-#elif defined(ARDUINO_ARCH_ESP32)
-#include "hal/architecture/ESP32/MyHwESP32.cpp"
-#include "hal/crypto/ESP32/MyCryptoESP32.cpp"
-#elif defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
+
+
 #include "hal/architecture/AVR/MyHwAVR.cpp"
-#include "hal/crypto/AVR/MyCryptoAVR.cpp"
-#elif defined(ARDUINO_ARCH_SAMD)
-#include "drivers/extEEPROM/extEEPROM.cpp"
-#include "hal/architecture/SAMD/MyHwSAMD.cpp"
-#include "hal/crypto/generic/MyCryptoGeneric.cpp"
-#elif defined(ARDUINO_ARCH_STM32F1)
-#include "hal/architecture/STM32F1/MyHwSTM32F1.cpp"
-#include "hal/crypto/generic/MyCryptoGeneric.cpp"
-#elif defined(ARDUINO_ARCH_NRF5) || defined(ARDUINO_ARCH_NRF52)
-#include "hal/architecture/NRF5/MyHwNRF5.cpp"
-#include "hal/crypto/generic/MyCryptoGeneric.cpp"
-#elif defined(__arm__) && defined(TEENSYDUINO)
-#include "hal/architecture/Teensy3/MyHwTeensy3.cpp"
-#include "hal/crypto/generic/MyCryptoGeneric.cpp"
-#elif defined(__linux__)
-#include "hal/architecture/Linux/MyHwLinuxGeneric.cpp"
-#include "hal/crypto/generic/MyCryptoGeneric.cpp"
-#else
-#error Hardware abstraction not defined (unsupported platform)
-#endif
 
 #include "hal/architecture/MyHwHAL.cpp"
 
@@ -117,40 +91,6 @@ define MY_DEFAULT_ERR_LED_PIN, MY_DEFAULT_TX_LED_PIN or\
 MY_DEFAULT_RX_LED_PIN in your sketch instead to enable LEDs
 #endif
 
-#if defined(MY_DEFAULT_RX_LED_PIN) || defined(MY_DEFAULT_TX_LED_PIN) || defined(MY_DEFAULT_ERR_LED_PIN)
-#include "core/MyLeds.cpp"
-#else
-#include "core/MyLeds.h"
-#endif
-
-#include "core/MyIndication.cpp"
-
-
-// INCLUSION MODE
-#if defined(MY_INCLUSION_MODE_FEATURE)
-#include "core/MyInclusionMode.cpp"
-#endif
-
-
-// SIGNING
-#include "core/MySigning.cpp"
-#if defined(MY_SIGNING_FEATURE)
-// SIGNING COMMON FUNCTIONS
-#if defined(MY_SIGNING_ATSHA204) && defined(MY_SIGNING_SOFT)
-#error Only one signing engine can be activated
-#endif
-#if defined(MY_SIGNING_ATSHA204) && defined(__linux__)
-#error No support for ATSHA204 on this platform
-#endif
-
-#if defined(MY_SIGNING_ATSHA204)
-#include "core/MySigningAtsha204.cpp"
-#include "drivers/ATSHA204/ATSHA204.cpp"
-#elif defined(MY_SIGNING_SOFT)
-#include "core/MySigningAtsha204Soft.cpp"
-#endif
-#endif
-
 // FLASH
 #if defined(MY_OTA_FIRMWARE_FEATURE)
 #ifndef MCUBOOT_PRESENT
@@ -160,7 +100,6 @@ MY_DEFAULT_RX_LED_PIN in your sketch instead to enable LEDs
 #include "drivers/SPIFlash/SPIFlash.cpp"
 #endif
 #endif
-#include "core/MyOTAFirmwareUpdate.cpp"
 #endif
 
 // GATEWAY - TRANSPORT
@@ -429,27 +368,10 @@ MY_DEFAULT_RX_LED_PIN in your sketch instead to enable LEDs
 
 #include "core/MyCapabilities.h"
 #include "core/MyMessage.cpp"
-#include "core/MySplashScreen.cpp"
 #include "core/MySensorsCore.cpp"
 
 // HW mains
-#if defined(ARDUINO_ARCH_AVR)
 #include "hal/architecture/AVR/MyMainAVR.cpp"
-#elif defined(ARDUINO_ARCH_SAMD)
-#include "hal/architecture/SAMD/MyMainSAMD.cpp"
-#elif defined(ARDUINO_ARCH_ESP8266)
-#include "hal/architecture/ESP8266/MyMainESP8266.cpp"
-#elif defined(ARDUINO_ARCH_NRF5)
-#include "hal/architecture/NRF5/MyMainNRF5.cpp"
-#elif defined(ARDUINO_ARCH_ESP32)
-#include "hal/architecture/ESP32/MyMainESP32.cpp"
-#elif defined(__linux__)
-#include "hal/architecture/Linux/MyMainLinuxGeneric.cpp"
-#elif defined(ARDUINO_ARCH_STM32F1)
-#include "hal/architecture/STM32F1/MyMainSTM32F1.cpp"
-#elif defined(__arm__) && defined(TEENSYDUINO)
-#include "hal/architecture/Teensy3/MyMainTeensy3.cpp"
-#endif
 
 #endif
 

@@ -18,7 +18,6 @@
  */
 
 #include "MyConfig.h"
-#include "MyTransport.h"
 #include "MyProtocol.h"
 #include "MyHelperFunctions.h"
 #include <string.h>

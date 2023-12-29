@@ -109,7 +109,8 @@
  * |--------------|----------
  * | AVR          | A
  */
-
+#if defined(ARDUINO_ARCH_AVR)
+#define MY_CAP_ARCH "M"
 #elif defined(ARDUINO_ARCH_AVR)
 #define MY_CAP_ARCH "A"
 #else
