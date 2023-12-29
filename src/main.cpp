@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+#include <Adafruit_MCP23X17.h>
+
 #define U8X8_HAVE_HW_I2C
 
 #ifdef U8X8_HAVE_HW_SPI
@@ -15,6 +17,28 @@
 // The complete list is available here: https://github.com/olikraus/u8g2/wiki/u8g2setupcpp
 // Please update the pin numbers according to your setup. Use U8X8_PIN_NONE if the reset pin is not connected
 
+
+#define MY_GATEWAY_SERIAL
+#define MY_DISABLED_SERIAL
+#define MY_SERIALDEVICE Serial
+#define MY_BAUD_RATE 115200
+//#define ARDUINO_ARCH_MEGAAVR
+//#define ARDUINO_ARCH_AVR
+
+#include <MySensors.h>
+#define SLEEP_MODE false                        // flowvalue can only be reported when sleep mode is false.
+#define MAX_FLOW 60   
+
+struct flowMsg {
+  MyMessage* flowMsg;
+  MyMessage* volumeMsg
+  MyMessage* lastCounterMsg
+} [15];
+
+
+MyMessage flowMsg(CHILD_ID,V_FLOW);
+MyMessage volumeMsg(CHILD_ID,V_VOLUME);
+MyMessage lastCounterMsg(CHILD_ID,V_VAR1);
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
 enum Wodomierz { 
@@ -32,7 +56,7 @@ enum Wodomierz {
   LAZ_WANNA_C,
   KUCH_UMYW_Z,
   KUCH_UMYW_C,
-  KUCH_ZMYW
+  KUCH_ZMYW_Z
 };
 
 const char info[15][9] = {
@@ -53,84 +77,51 @@ const char info[15][9] = {
   "KU_ZMYWA",
 };
 
+struct mcpIODigital {
+  uint8_t pin;
+  uint8_t mode
+};
+
+enum IODigitOutput {
+  LAZ_UMY_W = 0,
+  LAZ_WAN_W,
+  LAZ_PRYSZ_W,
+  LAZ_SEDES_W,
+  WC_SEDES_W,
+  WC_PRALKA_W,
+  KUCH_ZMYW_W,
+  KUCH_WENT,
+  WC_WENT,
+  LAZ_WENT,
+  WC_UMYW_W,
+  KUCH_UMYW_W,
+  F_GAZ_1,
+  F_GAZ_2,
+  MCP_LAS
+};
+
+
+
 unsigned int impulse[2][15];
 unsigned short index = 0;
 unsigned long impulseAll[15];
 
-static void WCUmywalkaZ()
-{
-  impulse[index][WC_UMYW_Z] += 1;
-}
+static void WCUmywalkaZ() { impulse[index][WC_UMYW_Z] += 1; }
+static void WCUmywalkaC() { impulse[index][WC_UMYW_C] += 1; }
+static void WCPralkaZ() { impulse[index][WC_PRALKA_Z] += 1; }
+static void WCPralkaC() { impulse[index][WC_PRALKA_C] += 1; }
+static void WCSedes() { impulse[index][WC_SEDES] += 1; }
+static void LazienkaWannaC() { impulse[index][LAZ_WANNA_C] += 1; }
+static void LazienkaWannaZ() { impulse[index][LAZ_WANNA_Z] += 1; }
+static void LazienkaUmywalkaC() { impulse[index][LAZ_UMYW_C] += 1; }
+static void LazienkaUmywalkaZ() { impulse[index][LAZ_UMYW_Z] += 1; }
+static void LazienkaPrysznicC() { impulse[index][LAZ_PRYSZ_C] += 1; }
+static void LazienkaPrysznicZ() { impulse[index][LAZ_PRYSZ_Z] += 1; }
+static void LazienkaSedes() { impulse[index][LAZ_SEDES] += 1; }
+static void KuchniaUmywalkaZ() { impulse[index][KUCH_UMYW_Z] += 1; }
+static void KuchniaUmywalkaC() { impulse[index][KUCH_UMYW_C] += 1; }
+static void KuchniaZmywarka() { impulse[index][KUCH_ZMYW_Z] += 1; }
 
-static void WCUmywalkaC()
-{
-  impulse[index][WC_UMYW_C] += 1;
-}
-
-static void WCPralkaZ()
-{
-  impulse[index][WC_PRALKA_Z] += 1;
-}
-
-static void WCPralkaC()
-{
-  impulse[index][WC_PRALKA_C] += 1;
-}
-
-static void WCSedes()
-{
-  impulse[index][WC_SEDES] += 1;
-}
-
-static void LazienkaWannaC()
-{
-  impulse[index][LAZ_WANNA_C] += 1;
-}
-
-static void LazienkaWannaZ()
-{
-  impulse[index][LAZ_WANNA_Z] += 1;
-}
-
-static void LazienkaUmywalkaC()
-{
-  impulse[index][LAZ_UMYW_C] += 1;
-}
-
-static void LazienkaUmywalkaZ()
-{
-  impulse[index][LAZ_UMYW_Z] += 1;
-}
-
-static void LazienkaPrysznicC()
-{
-  impulse[index][LAZ_PRYSZ_C] += 1;
-}
-
-static void LazienkaPrysznicZ()
-{
-  impulse[index][LAZ_PRYSZ_Z] += 1;
-}
-
-static void LazienkaSedes()
-{
-  impulse[index][LAZ_SEDES] += 1;
-}
-
-static void KuchniaUmywalkaZ()
-{
-  impulse[index][KUCH_UMYW_Z] += 1;
-}
-
-static void KuchniaUmywalkaC()
-{
-  impulse[index][KUCH_UMYW_C] += 1;
-}
-
-static void KuchniaZmywarka()
-{
-  impulse[index][KUCH_ZMYW] += 1;
-}
 struct PinInterr {
   short pin;
   void (*fun)();
@@ -167,8 +158,31 @@ void setup()
     pinMode(mapsPin[i].pin, INPUT);
     attachInterrupt(digitalPinToInterrupt(mapsPin[i].pin), mapsPin[i].fun, FALLING); 
   }
-  //Serial.begin(115200);
+
+  for (int i = 0; i < 15; ++i) {
+    flowMsg[i].flowMsg = new flowMsg(i+1,V_FLOW);
+    flowMsg[i].volumeMsg = new flowMsg(i+1,V_VOLUME);
+    flowMsg[i].lastCounterMsg = new flowMsg(i+1,V_VAR1);
+
+    request(i+1, V_VAR1);
+  }
+
+  if (mcp.begin_I2C()) {
+      mcp.pinMode(BUTTON_PIN, INPUT_PULLUP);
+  }
+  Serial.begin(115200);
   sei();
+}
+
+void presentation()
+{
+	// Send the sketch version information to the gateway and Controller
+	sendSketchInfo("Water Meter", "1.1");
+
+	// Register this device as Water flow sensor
+	for (int i = 0; i < 15; ++i) {
+    present(i+1, S_WATER);
+  }
 }
 
 unsigned short textPos = 0;
@@ -205,3 +219,14 @@ void loop() {
 
 }
 
+void receive(const MyMessage &message)
+{
+	if (message.getType()==V_VAR1) {
+    uint8_t id = message.getSender();
+
+    if (id >= 1 && id <= 15) {
+        impulseAll[id-1]=message.getULong();
+    }
+		
+	}
+}
