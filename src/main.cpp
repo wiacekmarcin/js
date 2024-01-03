@@ -12,15 +12,15 @@ Adafruit_MCP23X17 mcp;
 
 #include "io.h"
 #include "my_sens.h"
-//#include "timerclass.hpp"
 #include "wodomierze.h"
 #include "wentylator.hpp"
+#include "zaworgaz.hpp"
 
-Wentylator WentKuch(&mcp, KUCH_WENT, 30, false, 40) ;
-Wentylator WentLaz(&mcp, LAZ_WENT, 30, false, 41) ;
-Wentylator WentWC(&mcp, WC_WENT, 30, false, 42) ;
+MyWentylator WentKuch(&mcp, 4, KUCH_WENT, 30, false, 40) ;
+MyWentylator WentLaz(&mcp, 2, LAZ_WENT, 30, false, 41) ;
+MyWentylator WentWC(&mcp, 3, WC_WENT, 30, false, 42) ;
 
-MyMessage zaworGazu
+
 
 struct flowMsg {
   MyMessage* flowMsg;
@@ -51,25 +51,19 @@ void KuchniaUmywalkaZ() { impulse[index][KUCH_UMYW_Z] += 1; }
 void KuchniaUmywalkaC() { impulse[index][KUCH_UMYW_C] += 1; }
 void KuchniaZmywarka() { impulse[index][KUCH_ZMYW_Z] += 1; }
 
-void WentylatorKuchnia(bool on)
+void WentylatorKuchnia()
 {
-  mcp.digitalWrite(KUCH_WENT, on ? HIGH : LOW);
-  WentKuchMsg.set(on);
-  send(WentKuchMsg);
+  WentKuch.pushBtn();
 }
 
 void WentylatorWC(bool on)
 {
-  mcp.digitalWrite(WC_WENT, on ? HIGH : LOW);
-  WentWcMsg.set(on);
-  send(WentWcMsg);
+  WentWC.pushBtn();
 }
 
 void WentylatorLazienka(bool on)
 {
-  mcp.digitalWrite(LAZ_WENT, on ? HIGH : LOW);
-  WentLazMsg.set(on);
-  send(WentLazMsg);
+  WentLaz.pushBtn();
 }
 
 
@@ -115,14 +109,21 @@ void setup()
   }
 #endif
 
-#ifdef IOFLOW 
   for (int i = 0; i < 15; ++i) {
     pinMode(mapsPin[i].pin, INPUT);
     attachInterrupt(digitalPinToInterrupt(mapsPin[i].pin), mapsPin[i].fun, FALLING); 
   }
-#endif
+ 
+  mcp.pinMode(LAZ_UMY_W, OUTPUT);
+  mcp.pinMode(LAZ_WAN_W, OUTPUT);
+  mcp.pinMode(LAZ_PRYSZ_W, OUTPUT);
+  mcp.pinMode(LAZ_SEDES_W, OUTPUT);  
+  mcp.pinMode(WC_SEDES_W, OUTPUT);
+  mcp.pinMode(WC_PRALKA_W, OUTPUT);
+  mcp.pinMode(KUCH_ZMYW_W, OUTPUT);
+  mcp.pinMode(WC_UMYW_W, OUTPUT);
+  mcp.pinMode(KUCH_UMYW_W, OUTPUT);
 
-#ifdef MSENS
   for (int i = 0; i < 15; ++i) {
     flowMessages[i].flowMsg = new MyMessage(i+1,V_FLOW);
     flowMessages[i].volumeMsg = new MyMessage(i+1,V_VOLUME);
@@ -130,24 +131,11 @@ void setup()
 
     request(i+1, V_VAR1);
   }
-#endif
 
-#ifdef MCPIO
-  if (mcp.begin_I2C()) {
-    for (uint8_t i = MCP_FIRST; i < MCP_LAST; ++i) {
-      mcp.pinMode(i, OUTPUT);
-    }
-  }
-#endif
-
-  WentKuch.init();
-  WentLaz.init();
-  WentWC.init();
+  WentKuch.init(WentylatorKuchnia);
+  WentLaz.init(WentylatorLazienka);
+  WentWC.init(WentylatorWC);
   
-  WentKuch.set(false);
-  WentLaz.set(false);
-  WentWC.set(false);
-
   setupInterrupts();
   sei();
 }
@@ -159,12 +147,13 @@ void presentation()
 
 	// Register this device as Water flow sensor
 	for (int i = 0; i < 15; ++i) {
-    present(i+1, S_WATER);
+    present(i+1, S_WATER, info[i]);
   }
 
-  present(40, S_BINARY);
-  present(41, S_BINARY);
-  present(42, S_BINARY);
+  WentKuch.presentation("Went. Kuch");
+  WentLaz.presentation("Went. Laz");
+  WentWC.presentation("Went. WC");
+
 }
 
 unsigned short textPos = 0;
@@ -178,6 +167,10 @@ void loop() {
 
     Int1Sec = false;
     Serial.println(millis(), DEC);
+
+    WentKuch.tick();
+    WentLaz.tick();
+    WentWC.tick();
     return;
 
     unsigned short actIndex = index;

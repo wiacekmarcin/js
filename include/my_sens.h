@@ -8,7 +8,7 @@
 //#define ARDUINO_ARCH_MEGAAVR
 //#define ARDUINO_ARCH_AVR
 
-#include "../lib/MySensors_onlySerialGw/MySensors.h"
+#include "mysensor/MySensors.h"
 #define SLEEP_MODE false                        // flowvalue can only be reported when sleep mode is false.
 #define MAX_FLOW 60   
 

@@ -1,8 +1,9 @@
 #include "wentylator.hpp"
 
-MyWentylator::MyWentylator(Adafruit_MCP23X17 * mcp_, uint8_t p, unsigned int czasOnMin, bool reverse_, uint8_t id)
+MyWentylator::MyWentylator(Adafruit_MCP23X17 * mcp_, uint8_t in_, uint8_t out_, unsigned int czasOnMin, bool reverse_, uint8_t id)
 :    mcp(mcp_), 
-    uint8_t pin(p), 
+    in(in_),
+    out(out_),  
     lastAction(0L), 
     maxtick1s(60*czasOnMin), 
     ticks(0L),
@@ -13,9 +14,16 @@ MyWentylator::MyWentylator(Adafruit_MCP23X17 * mcp_, uint8_t p, unsigned int cza
 
 }
 
-void MyWentylator::init()
+void MyWentylator::init(void (*fun)())
 {
-    mcp->pinMode(pin, OUTPUT);    
+    pinMode(in, INPUT);
+    attachInterrupt(digitalPinToInterrupt(in), fun, FALLING); 
+    mcp->pinMode(out, OUTPUT);    
+}
+
+void MyWentylator::presentation(const char * descr)
+{
+    present(msg.getSensor(), S_BINARY, descr);
 }
 
 void MyWentylator::pushBtn()
@@ -36,17 +44,17 @@ void MyWentylator::set(bool on)
 void MyWentylator::setPin(bool val)
 {
     bool v = reverse ? !val : val;
-    mcp->digitalWrite(pin, v ? HIGH : LOW);
+    mcp->digitalWrite(out, v ? HIGH : LOW);
 }
 
 void MyWentylator::tick()
 {
     if (enable)
         return;
-    if (tick1s == 0) {
+    if (ticks == 0) {
         set(false);
         return;
     }
-    tick1s--;
+    ticks--;
 }
 
