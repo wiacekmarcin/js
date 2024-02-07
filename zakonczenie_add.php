@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 
 $pmid=$_GET["pmid"];
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
+$con = db_connect();
 mysqli_set_charset($con, "utf8");
 
 $query = "SELECT `id`, `nazwa`, `kod` FROM `rodzaj_zakonczenia` WHERE 1";

@@ -6,7 +6,7 @@ require_once "database.php";
 error_reporting( E_ALL );
 ini_set('display_errors', 1);
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
+$con = db_connect();
 mysqli_set_charset($con, "utf8");
 
 $query = "SELECT `id`, `nazwa`, `mnazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, ";
