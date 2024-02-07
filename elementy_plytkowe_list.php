@@ -5,7 +5,7 @@ require_once "database.php";
 error_reporting( E_ALL );
 ini_set('display_errors', 1);
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
+$con = db_connect();
 mysqli_set_charset($con, "utf8");
 
 $query = "SELECT `id`, `nazwa`, `ilosc_pin`, `plytka_id`, `pnazwa`, `urzadzenie_nazwa`, `miejsce_id`, `mnazwa`, `opis`, `zbiorcze`, ";
