@@ -5,7 +5,7 @@ error_reporting( E_ALL );
 ini_set('display_errors', 1);
 require_once "database.php";
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
+$con = db_connect();
 mysqli_set_charset($con, "utf8");
 
 $index = 0;

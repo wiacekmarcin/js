@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 require_once "database.php";
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
+$con = db_connect();
 mysqli_set_charset($con, "utf8");
 
 $query = "SELECT `kolor_id`, count(`kolor_id`) as `cnt` FROM `zyla` Group by `kolor_id`";
