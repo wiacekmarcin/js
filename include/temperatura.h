@@ -1,7 +1,7 @@
 #ifndef _TEMP_H_
 #define _TEMO_H_
 
-#include "OneWire.h"
+#include <OneWire.h>
 #include <DallasTemperature.h>
 
 // na 9 pinie jest temperatury

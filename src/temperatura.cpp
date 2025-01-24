@@ -26,7 +26,7 @@ void printTemperature(DeviceAddress deviceAddress)
   float tempC = sensors.getTempC(deviceAddress);
   if(tempC == DEVICE_DISCONNECTED_C) 
   {
-    tempC == -100.0;
+    tempC = -100.0;
     return;
   }
   Serial.print("Temp C: ");
