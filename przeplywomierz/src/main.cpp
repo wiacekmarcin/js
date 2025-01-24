@@ -1,5 +1,4 @@
 #include <Arduino.h>
-
 #define U8X8_HAVE_HW_I2C
 
 #ifdef U8X8_HAVE_HW_SPI
