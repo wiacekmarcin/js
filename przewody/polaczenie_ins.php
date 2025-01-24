@@ -1,7 +1,7 @@
 <?php
 require_once "database.php";
 
-$con = db_connect();
+$con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con,"utf8");
 
 $params = array();
@@ -22,18 +22,10 @@ for ($i = 0 ; $i < $count; $i++) {
 
 $query = '';
 for ($i = 0 ; $i < 2*$count; $i++) {
-    //$query = "INSERT INTO `polaczenie_zyla`(`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES (NULL,";
-    //$query .= $params[$i]['pmid'] . ',' . $params[$i]['id1'] . ',' . $params[$i]['id2'] .  ')';
-	$query = "INSERT INTO `polaczenie_zyla`(`id`, `zakonczenie_zyly_id`, `zyla_id`) VALUES (NULL,";
-    $query .= $params[$i]['pmid'] . ',' . $params[$i]['id1'] . ')';
+    $query = "INSERT INTO `polaczenie_zyla`(`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES (NULL,";
+    $query .= $params[$i]['pmid'] . ',' . $params[$i]['id1'] . ',' . $params[$i]['id2'] .  ')';
     $result = mysqli_query($con, $query);
-	echo $query . ";";
-    //echo $i . ($result ? '-OK ' : '-ERR '. $query . ' | ');
-	$query = "INSERT INTO `polaczenie_zyla`(`id`, `zakonczenie_zyly_id`, `zyla_id`) VALUES (NULL,";
-    $query .= $params[$i]['pmid'] . ',' . $params[$i]['id2'] . ')';
-    $result = mysqli_query($con, $query);
-	echo $query . ";";
-    //echo $i . ($result ? '-OK ' : '-ERR '. $query . ' | ');
+    echo $i . ($result ? '-OK ' : '-ERR ');
 }
 
 mysqli_close($con);

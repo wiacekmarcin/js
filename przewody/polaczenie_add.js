@@ -3,24 +3,21 @@ app.controller('polaczenieadd-ctrl', ['$scope', '$http', function($scope, $http)
     $scope.przewody = []
     $scope.zyla2 = {};
     $scope.choose = true;
-    $scope.polaczenia = [];
-    $scope.przewod_id = -1;
+    $scope.polmiejsca = [];
     $http.get("polaczenie_add.php").then(function(response) { 
         $scope.zbiorcze = response.data.zbiorcze;
-        $scope.polmiejsca = response.data.polmiejsca;
+        $scope.polaczniamiejsca = response.data.polmiejsca;
         $scope.zyly = response.data.zyly;
         $scope.miejsca = response.data.miejsca;
     });
 
-    $scope.zmianaMiejsca = function() {
+    $scope.zmianaMiejsca = function(miejsce) {
         $scope.przewody = this.id_miejsce.kable;
-        $scope.polaczenia = $scope.polmiejsca[this.id_miejsce.id];
+        $scope.polmiejsca = $scope.polaczniamiejsca[this.id_miejsce.id];
     }
 
-
     $scope.zmianaPolMiejsca = function() {
-        $scope.przewod1 = this.zak_id.przewod_id;
-        $scope.zyly1 = $scope.zyly[$scope.przewod1];
+        $scope.przewody = $scope.id_miejsce.kable;
     }
 
     $scope.zmianaPrzewodu1 = function() {
@@ -47,18 +44,18 @@ app.controller('polaczenieadd-ctrl', ['$scope', '$http', function($scope, $http)
         $scope.choose = bl;
     }
     
-    $scope.insertPolaczenia = function(zid, z1, z2)
+    $scope.insertPolaczenia = function(z1, z2)
     {
         var s1 = 'INSERT INTO `polaczenie_zyla`(`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES ';
-        s1 += '(NULL,' + zid + ', '  + z1 + ',' + z2 + ')';
+        s1 += '(NULL, 1, '  + z1 + ',' + z2 + ')';
         var s2 = 'INSERT INTO `polaczenie_zyla`(`id`, `polaczenie_id`, `zyla_id_1`, `zyla_id_2`) VALUES ';
-        s2 += '(NULL, ' + zid + ', '  + z2 + ',' + z1 + ')';
+        s2 += '(NULL, 1, '  + z2 + ',' + z1 + ')';
         console.log(s1);
         console.log(s2);
     }
 
     $scope.addPolaczenie = function() {
-        var params =  {'polaczenie_miejsce_id' : $scope.zak_id.id , 'count' : 0};
+        var params =  {'polaczenie_miejsce_id' : $scope.id_polmiejsce.id , 'count' : 0};
         var i = 0;
         for (var m in $scope.zyla2) {
             if ($scope.zyla2[m] == undefined)
