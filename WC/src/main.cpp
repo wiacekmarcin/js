@@ -203,6 +203,8 @@ void loop() {
         expWejscia.print();
         lampa.set(false);
         expWyjscia.print("main:155");
+    //if (isChange) {
+     //   lampa.set(false);
       /*
           //Serial.println("------------------------------------------------\nWykroto zmiany: Wyjscie przed:");
           //expWyjscia.print("MAIN BEFORE");
