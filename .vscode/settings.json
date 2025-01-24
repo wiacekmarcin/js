@@ -55,5 +55,9 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false
+  "C_Cpp_Runner.msvcSecureNoWarnings": false,
+  "cmake.sourceDirectory": "/home/marcin/mar.devel/PrzeplywomierzDomowy/PrzeplywomierzDomowy/.pio/libdeps/nano_every/Adafruit BusIO",
+  "files.associations": {
+    "common.h": "c"
+  }
 }
