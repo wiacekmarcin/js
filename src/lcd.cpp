@@ -2,6 +2,7 @@
 #include "util.h"
 #include "Arduino.h"
 
+#ifdef LCD_DEBUG
 #include <LiquidCrystal_I2C.h>
 // set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x3F,16,4); 
@@ -54,3 +55,4 @@ void lcd_print(uint8_t inD)
         lcd.cursor_off();
     }
 }
+#endif

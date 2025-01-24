@@ -1,11 +1,11 @@
 #ifndef __WYJSCIA_H__
 #define __WYJSCIA_H__
 #include <Arduino.h>
-#include <Adafruit_MCP23017.h>
+#include <Adafruit_MCP23X17.h>
 //#define DEBUG
 class Wyjscia {
 public:
-    Wyjscia(Adafruit_MCP23017 & wyjscia);
+    Wyjscia(Adafruit_MCP23X17 & wyjscia);
 
     void init();
 
@@ -16,7 +16,7 @@ public:
     void setSwiatlo(bool on = true, unsigned long timeout = 10*60)
         { set(SWIATLO, on, timeout); }
 
-    void setSzafka(bool on = true, unsigned long timeout = 0)
+    void setRegal(bool on = true, unsigned long timeout = 0)
         { set(SZAFKA, on, timeout); }
 
     void setZawor(bool on = true, unsigned long timeout = 30 )
@@ -32,7 +32,7 @@ public:
     bool getSwiatlo()
         { return on[SWIATLO]; }
 
-    bool getSzafka()
+    bool getRegal()
         { return on[SZAFKA]; }
 
     bool getZawor()
@@ -50,6 +50,9 @@ public:
     void addLustro(unsigned int timeout = 10*60)
         { add(LUSTRO, timeout); }
 
+    void addRegal(unsigned int timeout = 10*60)
+        { add(SZAFKA, timeout); }
+
     inline static uint8_t lo(bool value) { return value ? LOW : HIGH; }
     inline static uint8_t ho(bool value) { return value ? HIGH : LOW; }
 
@@ -66,7 +69,7 @@ protected:
 
 private:
 
-    Adafruit_MCP23017 & wyjscia;
+    Adafruit_MCP23X17 & wyjscia;
 
     static constexpr uint8_t ZAWOR = 5; //fiolet
     static constexpr uint8_t LUSTRO = 4;  //niebieski

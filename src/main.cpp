@@ -9,14 +9,14 @@
 #include "lcd.h"
 
 #include <Wire.h>
-#include <Adafruit_MCP23017.h>
+#include <Adafruit_MCP23X17.h>
 
 constexpr unsigned short DELAY = 200; //50;
 constexpr unsigned long TIMEBEFORESLEEP = SEC(5);
 constexpr unsigned int CNTMAXLOOP = TIMEBEFORESLEEP / DELAY;
 
 
-Adafruit_MCP23017 wejsciawyjscia;
+Adafruit_MCP23X17 wejsciawyjscia;
 Wejscia expWejscia(wejsciawyjscia);
 Wyjscia expWyjscia(wejsciawyjscia);
 Swiatlo lampa(expWejscia, expWyjscia);
@@ -49,17 +49,23 @@ bool mydelay(unsigned long ms)
 }
 
 void setup() {  
-    wejsciawyjscia.begin();
+    Serial.begin(115200);
+    delay(10000);
+    if (!wejsciawyjscia.begin_I2C()) {
+        Serial.println("Error.");
+        while (1);
+    }
     
     expWejscia.init(keyPressedOn);
     expWyjscia.init();
   
-    Serial.begin(115200);
-
+    
+   
 
     temp_init();
+#ifdef LCD_DEBUG    
     lcd_init();
-
+#endif
     cntLoop = 0;
     expWejscia.get(0, 0);
     delay(2000);
@@ -72,6 +78,7 @@ unsigned long prevmls = 0L;
 uint8_t prevLcd = 1;
 void loop()
 {
+
 #ifdef MYINTERUPTS
     if (cntLoop == CNTMAXLOOP) {
         timeInt = millis();  //nastapilo przerwanie
@@ -128,7 +135,7 @@ void loop()
         lampa.set(mls);
     }
 
-    delay(50);
+    delay(500);
     
 
 #ifdef DEBUG    

@@ -2,7 +2,7 @@
 #define __WEJSCIA_H__
 
 
-#include <Adafruit_MCP23017.h>
+#include <Adafruit_MCP23X17.h>
 #include "in.h"
 //#define DEBUG
 
@@ -12,7 +12,7 @@
 class LiquidCrystal_I2C;
 class Wejscia {
 public:
-    Wejscia(Adafruit_MCP23017 & wyjscia);
+    Wejscia(Adafruit_MCP23X17 & wyjscia);
 
     void init(void(*fun)());
 
@@ -38,7 +38,7 @@ public:
 
 private:
     
-    Adafruit_MCP23017 & wejscia;
+    Adafruit_MCP23X17 & wejscia;
 
 
         

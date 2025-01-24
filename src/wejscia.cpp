@@ -3,7 +3,7 @@
 #include "lcd.h"
 #include "debug.h"
 
-Wejscia::Wejscia(Adafruit_MCP23017 & wej) :
+Wejscia::Wejscia(Adafruit_MCP23X17 & wej) :
     wejscia(wej)
 {
 
@@ -50,7 +50,9 @@ void Wejscia::get(unsigned long timeInt, unsigned int timeAfterInt)
     
     if (inD != inSave) {
         inSave = inD;
+#ifdef LCD_DEBUG        
         lcd_print(inD);
+#endif        
     }
 
     wl.ustaw(MASK(inD, KLAWISZ), timeInt, timeAfterInt);

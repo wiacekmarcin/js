@@ -21,6 +21,11 @@ public:
     void zapalLustro(int mls = 5*60);
     void przedluzLustro(int mls = 5*60);
     void zgasLustro();
+
+        /* Lsustro */
+    void zapalRegal(int mls = 5*60);
+    void przedluzRegal(int mls = 5*60);
+    void zgasRegal();
 protected:
 
     unsigned long czasZapaleniaSwiatlo(bool noc, bool otwarte_drzwi) {
@@ -35,7 +40,7 @@ private:
     Wejscia & wej;
     Wyjscia & wyj;
 
-    bool lustroJakoSwiatlo; //w jakim trybie swieci lustro
+    bool regaljakoSwiatlo; //w jakim trybie swieci lustro
 };
 
 #endif //! ___LAMPA_H__
