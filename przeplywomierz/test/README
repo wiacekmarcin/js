@@ -3,6 +3,7 @@ This directory is intended for PlatformIO Test Runner and project tests.
 This directory is intended for PIO Unit Testing and project tests.
 This directory is intended for PlatformIO Unit Testing and project tests.
 This directory is intended for PlatformIO Test Runner and project tests.
+This directory is intended for PIO Unit Testing and project tests.
 
 Unit Testing is a software testing method by which individual units of
 source code, sets of one or more MCU program modules together with associated
@@ -16,3 +17,5 @@ More information about PIO Unit Testing:
 - https://docs.platformio.org/page/plus/unit-testing.html
 - https://docs.platformio.org/page/plus/unit-testing.html
 - https://docs.platformio.org/en/latest/advanced/unit-testing/index.html
+More information about PIO Unit Testing:
+- https://docs.platformio.org/page/plus/unit-testing.html
