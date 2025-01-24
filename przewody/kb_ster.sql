@@ -256,7 +256,17 @@ INSERT INTO `elementy_plytkowe` (`id`, `nazwa`, `ilosc_pin`, `plytka_id`, `rodza
 (192, 'C.D.31', 6, 11, 5),
 (193, 'C.E.50', 10, 11, 5),
 (194, 'C.F.51', 4, 11, 5),
-(195, 'C.G.69', 8, 11, 5);
+(195, 'C.G.69', 8, 11, 5),
+(196, 'A.200', 8, 18, 5),
+(197, 'B.201', 8, 18, 5),
+(198, 'L7805CV', 3, 18, 3),
+(199, 'R4_7', 2, 18, 3),
+(200, '24ON', 2, 18, 3),
+(201, '24OFF', 2, 18, 3),
+(202, 'SO', 2, 18, 3),
+(203, 'OU201', 8, 19, 5),
+(204, 'IN202', 2, 19, 5),
+(205, 'IN203', 3, 19, 5);
 
 -- --------------------------------------------------------
 
@@ -1465,7 +1475,47 @@ INSERT INTO `elementy_plytkowe_pin` (`id`, `nazwa`, `pos`, `element_plytkowy_id`
 (1727, 'GND', 5, 195),
 (1728, 'W101', 6, 195),
 (1729, 'W102', 7, 195),
-(1730, 'W103', 8, 195);
+(1730, 'W103', 8, 195),
+(1731, '+24V_OFF', 1, 196),
+(1732, 'GND', 2, 196),
+(1733, 'SO-', 3, 196),
+(1734, 'A200.4-B201.6', 4, 196),
+(1735, 'A200.5-B201.5', 5, 196),
+(1736, 'A200.6-201.4', 6, 196),
+(1737, '+24V_ON', 7, 196),
+(1738, 'GND', 8, 196),
+(1739, '-', 1, 197),
+(1740, '-', 2, 197),
+(1741, '-', 3, 197),
+(1742, 'A200.6-B201.4', 4, 197),
+(1743, 'A200.5-B201.5', 5, 197),
+(1744, 'A200.4-B201.6', 6, 197),
+(1745, 'GND', 7, 197),
+(1746, '+5V', 8, 197),
+(1747, 'IN', 1, 198),
+(1748, 'GND', 2, 198),
+(1749, 'OUT', 3, 198),
+(1750, 'R1', 1, 199),
+(1751, 'R2', 2, 199),
+(1752, '+24V (F119)', 1, 200),
+(1753, 'GND (F120)', 2, 200),
+(1754, '+24V (F128)', 1, 201),
+(1755, 'GND (F127)', 2, 201),
+(1756, 'SO+ (F130)', 1, 202),
+(1757, 'SO- (F129)', 2, 202),
+(1758, 'GND', 1, 203),
+(1759, 'Styk', 2, 203),
+(1760, '-', 3, 203),
+(1761, '-', 4, 203),
+(1762, '-', 5, 203),
+(1763, '-', 6, 203),
+(1764, 'Sygnał', 7, 203),
+(1765, '+5V', 8, 203),
+(1766, 'Styk', 1, 204),
+(1767, 'GND', 2, 204),
+(1768, '+5V', 1, 205),
+(1769, 'Sygnał', 2, 205),
+(1770, 'GND', 3, 205);
 
 -- --------------------------------------------------------
 
@@ -1647,7 +1697,6 @@ INSERT INTO `miejsce` (`id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `k
 
 --
 -- Zastąpiona struktura widoku `MiejscePrzewodView`
--- (See below for the actual view)
 -- (See below for the actual view)
 --
 CREATE TABLE `MiejscePrzewodView` (
@@ -2087,7 +2136,20 @@ INSERT INTO `polaczenie_plytka` (`id`, `nazwa`, `plytka_id`) VALUES
 (452, 'GAZ1', 11),
 (453, 'GAZ2', 11),
 (454, 'W106.D16', 11),
-(455, 'W107.D17', 11);
+(455, 'W107.D17', 11),
+(456, 'GND', 18),
+(457, '+24ON', 18),
+(458, '+24OFF', 18),
+(459, '+5V', 18),
+(460, 'SO+', 18),
+(461, 'SO-', 18),
+(462, 'A6.B4', 18),
+(463, 'A5.B5', 18),
+(464, 'A4.B6', 18),
+(465, 'GND', 19),
+(466, '+5V', 19),
+(467, 'Kontaktron', 19),
+(468, 'Czujka', 19);
 
 -- --------------------------------------------------------
 
@@ -3401,10 +3463,10 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (142, 'Salon, do ukrytej puszki w salonie dla rolet', 8),
 (143, 'Jadalnia, kabel oznakowany jako jadalnia w rozdzielni głównej', 8),
 (144, 'Salon, kabel oznakowany jako salon, być może dochodzi do TV', 8),
-(145, 'Lazienka - kabel w puszcze do włacznikow', 10),
-(146, 'Lazienka, pokoje kabel do wlacznikow', 10),
-(147, 'WC procesor, zasilanie i i2c układu wejścia/wyjścia 0x01', 4),
-(148, 'WC procesor, zasilanie i i2c układu wejścia/wyjścia 0x00', 4),
+(145, 'Lazienka - kabel w puszcze do włacznikow', 12),
+(146, 'Lazienka, pokoje kabel do wlacznikow', 12),
+(147, 'Przewód do przycisku', 2),
+(148, 'Łącznik z płytką do wodomierzy', 12),
 (149, 'WC sufit zasilanie 4 przekaźników', 6),
 (150, 'WC sufit, zasilanie 2 przekaźników', 4),
 (151, 'Zasilanie przekaźników mechanicznych 2x LED/Zawór', 4),
@@ -5828,7 +5890,6 @@ CREATE TABLE `ZewnetrzneKableView` (
 -- --------------------------------------------------------
 
 --
-
 -- Struktura tabeli dla tabeli `zlacze`
 --
 
@@ -7364,7 +7425,6 @@ CREATE TABLE `ZylaWidok` (
 -- --------------------------------------------------------
 
 --
-
 -- Struktura tabeli dla tabeli `ZylaZlaczeKolejnoscView`
 --
 
