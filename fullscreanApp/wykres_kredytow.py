@@ -9,7 +9,7 @@ from dateutil.relativedelta import relativedelta
 import mysql.connector
 
 def countL(y, m):
-	return y*12+m
+	return (y-2000)*12+m
 
 def textlength(draw, str, font):
 	return draw.textsize(str, font)[0]
@@ -22,14 +22,14 @@ maxMonth = 0
 if cnx and cnx.is_connected():
 	with cnx.cursor() as cursor:
 		ddact = datetime.date.today()
-		liczba = countL(ddact.year-2000, ddact.month)
+		liczba = countL(ddact.year, ddact.month)
 
 		sql='SELECT * FROM `RataWidok` WHERE data = %d' % liczba
-		print(sql)
+		#print(sql)
 		cursor.execute(sql)
 
 		for k in cursor.fetchall():
-			print(k)
+			#print(k)
 			kred = {}
 			kred['opis'] = k[5]
 			kred['wys_raty'] = k[8]
@@ -49,8 +49,10 @@ if cnx and cnx.is_connected():
 
 		
 maxMonth += 6
-kredyty.sort(key=lambda x : x['stopa']*x['do_splacenia'])
-print(kredyty)
+
+#kredyty.sort(key=lambda x : x['stopa']*x['do_splacenia'])
+kredyty.sort(key=lambda x : x['koniec'])
+#print(kredyty)
 #sys.exit(0)
 
 #fontpath = '/home/marcin/git.devel.marcin/fulscreanapp/fullscreanApp/fonts/robotic/Roboto-Regular.ttf'
@@ -62,14 +64,11 @@ def createBackground():
 	
 	
 	ddact = datetime.date.today()
-	print(maxMonth)
-	print(ddact.year)
-	print(ddact.month)
 	maxM = maxMonth - 12* (ddact.year -2000) - ddact.month
-	print(maxM)
+	#print(maxM)
 	wm = 5
 	wh = 12
-	width = 330+maxM*wm
+	width = 370+maxM*wm + int(maxMonth/12)*wm
 	height = 16 + (len(kredyty)+1)*wh
 	
 	margin = 130
@@ -131,10 +130,13 @@ def createBackground():
 	draw.text((max_opis+max_dzien+5-textlength(draw,"Dz",font=font8),0), u"Dz", font = font8, fill="white")
 	draw.text((max_opis+max_dzien+max_kwota_raty+10-textlength(draw,"Rata",font=font8), 0), u"Rata", font = font8, fill="white")
 	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+15-textlength(draw,"Odset.",font=font8), 0), u"Odset.", font = font8, fill="white")
+	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+20-textlength(draw,"Zostalo",font=font8), 0), u"Zostalo", font = font8, fill="white")
+	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+25-textlength(draw,"Wolumen",font=font8), 0), u"Wolumen", font = font8, fill="white")
+
 	#draw.text((max_opis + max_dzien + max_kwota_raty + max_odsetki + 20, 0), u"Miesieczne raty", font = font8, fill="white")
-	margin = max_opis + max_dzien + max_kwota_raty + max_odsetki + 20
-	draw.text((width-max_wolumen-5, 0), u"Wolumen", font = font8, fill="white")
-	draw.text((width-max_wolumen-max_zostalo_kwota-10, 0), u"Zostalo", font = font8, fill="white")
+	margin = max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+35
+	#draw.text((width-max_wolumen-5, 0), u"Wolumen", font = font8, fill="white")
+	#draw.text((width-max_wolumen-max_zostalo_kwota-10, 0), u"Zostalo", font = font8, fill="white")
 		
 	for h in range(len(kredyty)):
 		opis = kredyty[h]['opis']
@@ -155,11 +157,13 @@ def createBackground():
 		tl = textlength(draw, "%0.2f" % odsetki, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+20-tl, 16+h*wh), "%0.2f" % odsetki, font=font8, fill="white")
 		
-		tl = textlength(draw, "%.2f" % cala_kwota, font=font8)
-		draw.text((width-tl, 16+h*wh), "%.2f" % cala_kwota, font=font8, fill="white")
-		
 		tl = textlength(draw, "%0.2f" % zostala_kwota, font=font8)
-		draw.text((width-max_wolumen-5-tl, 16+h*wh), " %.2f " % zostala_kwota, font=font8, fill="white")
+		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+25-tl, 16+h*wh), " %.2f " % zostala_kwota, font=font8, fill="white")
+		
+		tl = textlength(draw, "%.2f" % cala_kwota, font=font8)
+		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+30-tl, 16+h*wh), "%.2f" % cala_kwota, font=font8, fill="white")
+		
+		
 		
 		sumaRat += kwota_raty 
 		sumaKredytow += cala_kwota
@@ -176,34 +180,39 @@ def createBackground():
 		tl = textlength(draw, "%0.2f" % sumaOdsetek, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+20-tl, 16+len(kredyty)*wh), "%0.2f" % sumaOdsetek, font=font8, fill="white")
 		
-		tl = textlength(draw, "%.2f" % sumaKredytow, font=font8)
-		draw.text((width-tl, 16+len(kredyty)*wh), "%.2f" % sumaKredytow, font=font8, fill="white")
-		
 		tl = textlength(draw, "%0.2f" % sumaPozostalo, font=font8)
-		draw.text((width-max_wolumen-5-tl, 16+len(kredyty)*wh), " %.2f " % sumaPozostalo, font=font8, fill="white")
+		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+25-tl, 16+len(kredyty)*wh), " %.2f " % sumaPozostalo, font=font8, fill="white")
+
+		tl = textlength(draw, "%.2f" % sumaKredytow, font=font8)
+		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+30-tl, 16+len(kredyty)*wh), "%.2f" % sumaKredytow, font=font8, fill="white")
+				
+	beginL = countL(ddact.year, ddact.month)
+	actL = beginL
+	mon = 0
+	while actL-beginL <= maxM:
+		y = int(actL/12) + 2000 
+		if actL % 12 == 0:
+			mon = mon + 1
 		
-	for mon in range(maxM):
-		dd = ddact + relativedelta(months=mon)
-		m = dd.month
-		y = dd.year-2000
-		#print(y, m)
-		if m == 1:
+		if actL % 12 == 1:
 			draw.text((margin+mon*wm, 0), "%d" % y, font = font, fill="white")
-			
+
 		for h in range(len(kredyty)):
 			ilosc_rat_przeszlych = kredyty[h]['nr_raty']
 			ilosc_rat_przyszlych = kredyty[h]['poz_rat']
 			ilosc_rat_wszystkich = ilosc_rat_przeszlych + ilosc_rat_przyszlych
 			k = kredyty[h]['koniec']
-			if k > y*12+m:
+			if k > actL:
 				draw.rectangle((margin+mon*wm+1, h*wh+16+1, margin+mon*wm+4, h*wh+16+wh-1), fill="gray", outline="gray")
-			if k == y*12+m:
+			if k == actL:
 				draw.text((margin+mon*wm+5, 16+h*wh), "Rata %d z %d" % (ilosc_rat_przeszlych, ilosc_rat_przeszlych + ilosc_rat_przyszlych), font = font8, fill="white")
 				#tl = textlength(draw, "%.2f / %.2f" % (cala_kwota-zostala_kwota, cala_kwota), font = font8)
 				#draw.text((width-tl, 16+h*wh), "%.2f / %.2f" % (cala_kwota-zostala_kwota, cala_kwota), font = font8, fill="white")
+		actL += 1
+		mon = mon + 1
 	
 	fpath = '/home/pi/tmp/kredyty_%d_%02d.png' % (ddact.year, ddact.month)
-	im.show()
-	print(im.size)
+	#im.show()
+	#print(im.size)
 	im.save(fpath)
 createBackground()

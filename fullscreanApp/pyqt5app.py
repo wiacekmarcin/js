@@ -12,6 +12,7 @@ import read_serial
 import stats
 import rss
 import kredyty
+import mqtt_client
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -55,7 +56,8 @@ class MainWindow(QMainWindow):
     def update1Sec(self):
         dt = QDateTime.currentDateTime()
         #print("--")
-        try:
+        #try:
+        if 1:
             for p in self.plgs:
                 #print(p)
                 try:
@@ -63,9 +65,9 @@ class MainWindow(QMainWindow):
                 except :
                     pass
             self.update()
-        except KeyboardInterrupt:
-            print("ctrl-c")
-            sys.exit(0)
+        #except KeyboardInterrupt:
+        #    print("ctrl-c")
+        #    sys.exit(0)
 
     def sendNotification(self, valueDict):
         for p in self.plgs:
@@ -195,6 +197,7 @@ if __name__ == '__main__':
                 stats.StatsWidget(mainWin.widget),
                 rss.RSS(mainWin.widget),
                 kredyty.Kredyty(mainWin.widget),
+                mqtt_client.PahoMqttWriter(mainWin.widget)
                 ]
     #mainWin.setWindowState(mainWin.WindowFullScreen)
     mainWin.setGeometry(0,0,1080,1920)

@@ -112,27 +112,13 @@ void setup() {
 
   //pinMode(INTERRUPTPIN, INPUT);
   //attachInterrupt(digitalPinToInterrupt(INTERRUPTPIN), inputchg, FALLING);
-
-  Adafruit_I2CDevice i2c_dev = Adafruit_I2CDevice(0x20, &wire);
-  Adafruit_BusIO_Register GPPU(&i2c_dev, nullptr, MCP23XXX_SPIREG,
-    getRegister(MCP23XXX_GPPU, MCP_PORT(pin)));
-
 }
-
-/**************************************************************************/
-uint16_t getRegister(uint8_t baseAddress, uint8_t port) {
-  // MCP23x08
-  uint16_t reg = baseAddress;
-  // MCP23x17 BANK=0
-    reg <<= 1;
-    reg |= port;
-}
-
-
+ 
 uint8_t actPos = 100;
 uint16_t prev[4] = {0, 0, 0, 0};
 uint16_t chg[4];
 uint16_t act[4];
+
 void loop() {
 
   // put your main code here, to run repeatedly:
@@ -143,7 +129,7 @@ void loop() {
   //  Serial.print(" ");
   //  Serial.println(mcp[i].readGPIO(1), HEX);
   //}
-  #if 0
+  #if 1
   if (Serial.available()) {
     Serial.read();
     if (actPos < 64) {
@@ -162,8 +148,7 @@ void loop() {
     mcp_digitalWrite(actPos, HIGH);
   }
   delay(50);
-
-  #endif
+#else
 
   if (true || interr) {
     interr = false;
@@ -187,4 +172,5 @@ void loop() {
   }
   delay(200);
   Serial.print(".");
+  #endif
 }

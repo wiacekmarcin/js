@@ -25,7 +25,7 @@ class Worker(QObject):
         """Long-running task."""
         self.isRun = True
         self.ser = serial.Serial(
-            port='/dev/ttyACM0',\
+            port='/dev/serial/by-id/usb-Arduino_LLC_Arduino_Micro-if00',\
             baudrate=9600,\
             parity=serial.PARITY_NONE,\
             stopbits=serial.STOPBITS_ONE,\

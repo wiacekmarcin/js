@@ -23,7 +23,7 @@ class Kredyty(blackwidget.BlackWidget):
         
 
     def getRect(self):
-        return QRect(1080-710, 1920-125, 710, 125)
+        return QRect(1080-800, 1920-150, 800, 150)
     
     def setupUi(self, Kredyty):
         self.kred.setupUi(Kredyty)
