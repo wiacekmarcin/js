@@ -9,6 +9,7 @@
 #include "sypialnia.hpp"
 #include "salon.hpp"
 #include "hol.hpp"
+
 TwoWire wire;
 Adafruit_MCP23X17 mcp[4];
 
@@ -108,8 +109,30 @@ void setup() {
   taryfa2 = !((actR & SIG_2TARYFA) == SIG_2TARYFA);
   zasAwar = !((actR & SIG_ZAS_AWAR) == SIG_ZAS_AWAR);
 
+  // TIMER 1 for interrupt frequency 1 Hz:
+  cli(); // stop interrupts
+  TCCR1A = 0; // set entire TCCR1A register to 0
+  TCCR1B = 0; // same for TCCR1B
+  TCNT1  = 0; // initialize counter value to 0
+  // set compare match register for 1 Hz increments
+  OCR1A = 62499; // = 16000000 / (256 * 1) - 1 (must be <65536)
+  // turn on CTC mode
+  TCCR1B |= (1 << WGM12);
+  // Set CS12, CS11 and CS10 bits for 256 prescaler
+  TCCR1B |= (1 << CS12) | (0 << CS11) | (0 << CS10);
+  // enable timer compare interrupt
+  TIMSK1 |= (1 << OCIE1A);
+  sei(); // allow interrupts
+
+  Serial1.begin(115200);
+
 }
- 
+
+volatile bool tiktokInter = false;
+ISR(TIMER0_COMPA_vect){
+  //interrupt commands for TIMER 0 here
+  tiktokInter = true;
+}
 
 bool led1 = false, led2 = false, led3 = false, led4 = false;
 bool salon1 = false, salon2 = false;
@@ -166,15 +189,19 @@ void loop() {
 
     if ((chgR & SIG_ZAS_AWAR) == SIG_ZAS_AWAR) {
       zasAwar = !((actR & SIG_ZAS_AWAR) == SIG_ZAS_AWAR);
-      if (zasAwar) {
-        for (short p = 0; p < 64; p++) {
-          if (mcp_getPinMode(p) == OUTPUT)
-            mcp_digitalWrite(p, LOW);
-        }
+      for (short p = 0; p < 64; p++) {
+        if (p == GWAR_L || p == GWAR_N)
+          continue;
+        if (mcp_getPinMode(p) == OUTPUT)
+          mcp_digitalWrite(p, LOW);
       }
+      
       delay(50);
-      mcp_digitalWrite(GWAR_N, HIGH);
-      mcp_digitalWrite(GWAR_L, HIGH);
+      mcp_digitalWrite(GWAR_N, zasAwar ? HIGH : LOW);
+      mcp_digitalWrite(GWAR_L, zasAwar ? HIGH : LOW);
+      
+      SypialniaZasAwar(wieczor, zasAwar);
+      SalonZasAwar(wieczor, zasAwar);
 
       if (wieczor) {
         mcp_digitalWrite(OSW_SALON1, HIGH);
@@ -284,7 +311,37 @@ void loop() {
   }
 
 
+  if (tiktokInter) {
+    tiktokInter = false;
+    hol_tiktok();
+    Serial.println("tik tok");
 
+  }
+
+  if (Serial1.available()) {
+    uint8_t data[32] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    size_t r = Serial1.readBytes(data, 31);
+    if ( r < 2 )
+      return;
+    if (data[0] == 'I'  && data[1] != ';') {
+      Serial1.println("S;");
+      return;
+    }
+    
+    if (data[0] != 'S' && data[1] != ';')
+      return;
+    
+    if (data[2] == 'S' && data[3] == ';') {
+      uint8_t index = data[4] - '0';
+      if (data[5] >= '0' && data[5] <= '9') {
+        index = index * 10 + data[5] - '0';
+        if (data[6] != ';')
+          return; 
+      } else if (data[5] != ';')
+        return;
+      //TODO dodac algo wlaczania swiatla
+    }
+  }
   
 
   return;

@@ -1,10 +1,13 @@
 #ifndef _HOL_HPP_
 #define _HOL_HPP_
 #include <Arduino.h>
+#include "ledy.hpp"
 
-extern uint8_t bhol;
-void Hol(bool wieczor, bool noc, bool awaria, bool klLA1, bool klPA1, bool klLA2, bool klPA2,
-    bool klLB1, bool klPB1, bool klLB2, bool klPB2,
+void Hol(bool wieczor, bool noc, bool awaria, 
+    bool kl3L1, bool kl3P1, bool kl3L2, bool kl3P2,
+    bool kl4L1, bool kl4P1, bool kl4L2, bool kl4P2,
     bool klPok, bool klWej);
+
+void hol_tiktok();
 
 #endif

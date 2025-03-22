@@ -292,3 +292,31 @@ void SalonLedLaz(bool wieczor, bool noc, bool awaria, bool klL, bool klP)
 
     return;
 }
+
+void SalonZasAwar(bool wieczor, bool zasAwar)
+{
+    if (zasAwar) {
+        salon2 = false;
+        led1 = false;
+        led2 = false;
+        led3 = false;
+        led4 = false;
+
+        if (!wieczor) { //dla wieczora utrzymaj swiatlo dla innej pory dnia wylacz
+            salon1 = false;
+        } 
+        mcp_digitalWrite(OSW_SALON1, salon1 ? HIGH : LOW);
+        mcp_digitalWrite(OSW_SALON2, LOW);
+        mcp_digitalWrite(ZAS12V, LOW); 
+        mcp_digitalWrite(LED1_LAZIENKA1, LOW);
+        mcp_digitalWrite(LED2_LAZIENKA2, LOW);
+        mcp_digitalWrite(LED3_SYPIALNIA1, LOW);
+        mcp_digitalWrite(LED4_SYPIALNIA2, LOW);
+
+
+    } else {
+        salon2 = salon1;
+        mcp_digitalWrite(OSW_SALON1, salon1 ? HIGH : LOW);
+        mcp_digitalWrite(OSW_SALON2, salon2 ? HIGH : LOW);
+    }   
+}

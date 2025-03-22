@@ -18,7 +18,7 @@ void Salon(bool wieczor, bool noc, bool awaria, bool klL, bool klP);
 
 void SalonLedLaz(bool wieczor, bool noc, bool awaria, bool klL, bool klP);
 
-
+void SalonZasAwar(bool wieczor, bool zasAwar);
 
 
 

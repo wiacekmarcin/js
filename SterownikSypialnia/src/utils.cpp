@@ -97,6 +97,13 @@ void mcp_digitalWrite(short ps, short value) {
   Serial.print(_pins[ps].name);
   Serial.print(") => ");
   Serial.println(value);
+
+  Serial1.print("S;V;");
+  Serial1.print(ps, DEC);
+  Serial1.print(";");
+  Serial1.print(value, DEC);
+  Serial1.println(";");
+  
   short svalue = (ps == GWAR_L || ps == GWAR_N || ps == Z213_3_LEDY_CH1 || ps == Z213_4_LEDY_CH2 
           || ps == Z213_5_LEDY_CH3|| ps == Z213_6_LEDY_CH4) ? !value : value;
   if (_pins[ps].io_type == OUTPUT) {

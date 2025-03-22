@@ -1,97 +1,125 @@
 #include "hol.hpp"
 #include "def_io.h"
 #include "utils.hpp"
+uint8_t A[3]{OSW_HOL_A1, OSW_HOL_A2, OSW_HOL_A3};
+uint8_t B[4]{OSW_HOL_B1, OSW_HOL_B2, OSW_HOL_B3, OSW_HOL_B4};
 
-void Hol(bool wieczor, bool noc, bool awaria, bool klLA1, bool klPA1, bool klLA2, bool klPA2,
-    bool klLB1, bool klPB1, bool klLB2, bool klPB2,
-  bool klPok, bool klWej)
+LampaLed holL3(3, A);
+LampaLed holL4(4, B);
+bool l4_230 = false;
+
+void Hol(bool wieczor, bool noc, bool awaria, 
+    bool kl3L1, bool kl3P1, bool kl3L2, bool kl3P2,
+    bool kl4L1, bool kl4P1, bool kl4L2, bool kl4P2,
+    bool klPok, bool klWej)
 {
     Serial.println("Hol");
-    Serial.println("ALL ALP APL APP | BLL BLP BPL BPP | POK WEJ");
+    Serial.println("3L1 3P1 3L2 3P2 | 4L1 4P1 4L2 4P2 | POK WEJ | WIE NOC AWA");
     Serial.print(" ");
-    Serial.print(klLA1);
+    Serial.print(kl3L1);
     Serial.print("   ");
-    Serial.print(klPA1);
+    Serial.print(kl3P1);
     Serial.print("   ");
-    Serial.print(klLA2);
+    Serial.print(kl3L2);
     Serial.print("   ");
-    Serial.print(klPA2);
+    Serial.print(kl3P2);
     Serial.print("  |  ");
-    Serial.print(klLB1);
+    Serial.print(kl4L1);
     Serial.print("   ");
-    Serial.print(klPB1);
+    Serial.print(kl4P1);
     Serial.print("   ");
-    Serial.print(klLB2);
+    Serial.print(kl4L2);
     Serial.print("   ");
-    Serial.print(klPB2);
+    Serial.print(kl4P2);
     Serial.print("  |  ");
     Serial.print(klPok);
     Serial.print("   ");
-    Serial.println(klWej);
-
+    Serial.print(klWej);
+    Serial.print("  |  ");
+    Serial.print(wieczor);
+    Serial.print("   ");
+    Serial.print(noc);
+    Serial.print("   ");
+    Serial.print(awaria);
+    Serial.print("   ");
 
     if (awaria) {
-        if (klLA1 || klPA1 || klLA2 || klPA2 || klLB1 || klPB1 || klLB2 || klPB2 || klPok || klWej) {
-            bhol = bhol ^ (0x1);
-            mcp_digitalWrite(OSW_HOL_0, ((bhol & 0x1) == 0x01) ? HIGH : LOW);
+        holL3.off();
+        holL4.off();
+
+        if (kl3L1 || kl3P1 || kl3L2 || kl3P2 || kl4L1 || kl4P1 || kl4L2 || kl4P2 || klPok || klWej) {
+            l4_230 = ! l4_230;
+            mcp_digitalWrite(OSW_HOL_0, l4_230 ? HIGH : LOW);
         return;
         }
     }
 
+    bool allOff = !holL3.isOn() && !holL4.isOn() && !l4_230;
     if (noc) {
-        if ((klLA1 || klPA1 || klLA2 || klPA2 || klLB1 || klPB1 || klLB2 || klPB2 || klPok || klWej) && bhol == 0x00) {
-            bhol = bhol ^ (0x1);
-            mcp_digitalWrite(OSW_HOL_0, ((bhol & 0x1) == 0x01) ? HIGH : LOW);
+        
+        if ((kl3L1 || kl3P1 || kl3L2 || kl3P2 || kl4L1 || kl4P1 || kl4L2 || kl4P2 || klPok || klWej) && allOff) {
+            //dowolny klawisz bez swiatla
+            l4_230 = true;
+            mcp_digitalWrite(OSW_HOL_0, HIGH);
         return;
         }
+
     }
 
-    if (noc) {
-        if ((klLA1 || klPA1 || klLA2 || klPA2 || klLB1 || klPB1 || klLB2 || klPB2 || klPok || klWej) && bhol == 0x01) {
-            bhol = 0x00;
+    if (! allOff && (klPok || klWej) ) {
+        //klawisz przy pokojach przy wlaczonym swietle
+        l4_230 = false;
+        mcp_digitalWrite(OSW_HOL_0, LOW);
+        holL3.off();
+        holL4.off();
+    }
+
+    if (kl3P1 || kl3P2) {
+        l4_230 = false;
+        mcp_digitalWrite(OSW_HOL_0, LOW);
+        holL3.on1();
+    }
+
+    if (kl3L1 || kl3L2) {
+        holL3.off1();
+    }
+
+    if ((kl3L1 && kl3P1) || (kl3L2 && kl3P2)) {
+        holL3.off();
+    }  
+
+    if (kl4P1 || kl4P2) {
+        if (noc && !holL4.isAll()) {
+            l4_230 = false;
             mcp_digitalWrite(OSW_HOL_0, LOW);
+        } else if (holL4.isAll() && !l4_230) {
+            l4_230 = true;
+            mcp_digitalWrite(OSW_HOL_0, HIGH);
+        } else if (holL4.isAll() && l4_230) {
+            holL4.off();
+        } else {
+            holL4.on1();
         }
     }
 
-    if (wieczor) {
-        if ((klLA1 || klPA1 || klLA2 || klPA2 || klLB1 || klPB1 || klLB2 || klPB2 || klPok || klWej) && bhol == 0x00) {
-            bhol = 0x01;
-            mcp_digitalWrite(OSW_HOL_0, HIGH);
-            return;
-        }
-    
-
-        if (klPA1 || klPA2) {
-            if ((bhol & 0x1f) == 0x01) {
-                bhol |= 0x02;
-                mcp_digitalWrite(OSW_HOL_0, LOW);
-                mcp_digitalWrite(OSW_HOL_B1, HIGH);
-                return;
-            }
-        }
-
-        if ((bhol & 0x1f) == 0x1e) {
-            bhol |= 0xe1;
-            mcp_digitalWrite(OSW_HOL_0, HIGH);
-            return;
-        }
-
-        if ((bhol & 0x1f) == 0x1f) {
-            bhol &= 0x01;
-            mcp_digitalWrite(OSW_HOL_0, HIGH);
-            mcp_digitalWrite(OSW_HOL_B1, LOW);
-            mcp_digitalWrite(OSW_HOL_B2, LOW);
-            mcp_digitalWrite(OSW_HOL_B3, LOW);
-            mcp_digitalWrite(OSW_HOL_B4, LOW);
-            return;
-        }
-
-        for (uint8_t mask = 0x02; mask < 0x20; mask <<= 1) {
-            if ((bhol & mask) == mask)
-                continue;
-
-            bhol |= mask;
-            break;
+    if (kl4L1 || kl4L2) {
+        if (l4_230) { 
+            l4_230 = false;
+            mcp_digitalWrite(OSW_HOL_0, LOW);
+        } else {
+            holL4.off1();
         }
     }
+
+    if ((kl4L1 && kl4P1) || (kl4L2 && kl4P2)) {
+        holL4.off();
+        l4_230 = false;
+        mcp_digitalWrite(OSW_HOL_0, LOW);
+    }      
+}
+
+void hol_tiktok()
+{
+    holL4.tiktok();
+    holL3.tiktok();
 }
