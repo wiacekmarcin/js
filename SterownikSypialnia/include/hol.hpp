@@ -10,4 +10,8 @@ void Hol(bool wieczor, bool noc, bool awaria,
 
 void hol_tiktok();
 
+void hol_req(uint8_t index, bool val);
+
+bool hol_isOn();
+
 #endif

@@ -1,6 +1,14 @@
 #include "salon.hpp"
 #include "utils.hpp"
 #include "def_io.h"
+#include "hol.hpp"
+
+extern bool salon1;
+extern bool salon2;
+extern bool led1;
+extern bool led2;
+extern bool led3;
+extern bool led4;
 
 void SalonJadalnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, bool klPL, bool klPP)
 {
@@ -320,3 +328,59 @@ void SalonZasAwar(bool wieczor, bool zasAwar)
         mcp_digitalWrite(OSW_SALON2, salon2 ? HIGH : LOW);
     }   
 }
+
+void salon_req(uint8_t index, bool val)
+{
+    switch(index) {
+        case 4: //ledy kolo lazienki 1
+            led1 = val; 
+            mcp_digitalWrite(LED1_LAZIENKA1, val ? HIGH : LOW);
+            mcp_digitalWrite(ZAS12V, (led1 || led2 || led3 || led4) ? HIGH : LOW);
+            mcp_digitalWrite(SWIATLO_SALON, (led1 || led2 || led3 || led4 || salon1 || salon2) ? HIGH : LOW);
+            mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
+            break;
+
+        case 5: //ledy kolo lazienki 2
+            led2 = val; 
+            mcp_digitalWrite(LED2_LAZIENKA2, val ? HIGH : LOW);
+            mcp_digitalWrite(ZAS12V, (led1 || led2 || led3 || led4) ? HIGH : LOW);
+            mcp_digitalWrite(SWIATLO_SALON, (led1 || led2 || led3 || led4 || salon1 || salon2) ? HIGH : LOW);
+            mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
+            break;
+
+
+        case 14: //ledy kolo salonu 2
+            led4 = val; 
+            mcp_digitalWrite(LED4_SYPIALNIA2, val ? HIGH : LOW);
+            mcp_digitalWrite(ZAS12V, (led1 || led2 || led3 || led4) ? HIGH : LOW);
+            mcp_digitalWrite(SWIATLO_SALON, (led1 || led2 || led3 || led4 || salon1 || salon2) ? HIGH : LOW);
+            mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
+            break;
+
+        case 15: //ledy kolo salonu 1
+            led3 = val; 
+            mcp_digitalWrite(LED3_SYPIALNIA1, val ? HIGH : LOW);
+            mcp_digitalWrite(ZAS12V, (led1 || led2 || led3 || led4) ? HIGH : LOW);
+            mcp_digitalWrite(SWIATLO_SALON, (led1 || led2 || led3 || led4 || salon1 || salon2) ? HIGH : LOW);
+            mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
+            break;
+
+        case 16+12: //Salon 2
+            salon2 = val; 
+            mcp_digitalWrite(OSW_SALON2, val ? HIGH : LOW);
+            mcp_digitalWrite(SWIATLO_SALON, (led1 || led2 || led3 || led4 || salon1 || salon2) ? HIGH : LOW);
+            mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
+            break;
+
+        case 16+15: //Salon 1
+            salon1 = val;
+            mcp_digitalWrite(OSW_SALON1, val ? HIGH : LOW);
+            mcp_digitalWrite(SWIATLO_SALON, (led1 || led2 || led3 || led4 || salon1 || salon2) ? HIGH : LOW);
+            mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
+            break;
+        
+        default :
+            return;
+    }
+}
+    

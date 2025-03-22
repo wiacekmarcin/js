@@ -117,3 +117,14 @@ bool LampaLed::isAll()
     }
     return true;
 }
+
+void LampaLed::set(uint8_t index, bool val)
+{
+    for (uint8_t i = 0; i < lsize; ++i) {
+        if (index == t[i].index) {
+            t[index].on = val;
+            mcp_digitalWrite(index, val ? HIGH : LOW);
+            return;
+        }
+    }
+}

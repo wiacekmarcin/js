@@ -21,6 +21,8 @@ class LampaLed
     bool isOn();
     bool isAll();
 
+    void set(uint8_t index, bool val);
+
     private:
     const uint8_t lsize;
     TLedOne * t;

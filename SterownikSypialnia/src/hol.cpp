@@ -8,6 +8,14 @@ LampaLed holL3(3, A);
 LampaLed holL4(4, B);
 bool l4_230 = false;
 
+extern bool salon1;
+extern bool salon2;
+extern bool led1;
+extern bool led2;
+extern bool led3;
+extern bool led4;
+
+
 void Hol(bool wieczor, bool noc, bool awaria, 
     bool kl3L1, bool kl3P1, bool kl3L2, bool kl3P2,
     bool kl4L1, bool kl4P1, bool kl4L2, bool kl4P2,
@@ -122,4 +130,35 @@ void hol_tiktok()
 {
     holL4.tiktok();
     holL3.tiktok();
+}
+
+void hol_req(uint8_t index, bool val)
+{
+    switch(index) {
+        case 6: //hol 3.1
+        case 7: //hol 3.2
+        case 8: //hol 3.3
+            holL3.set(index, val); break;
+        
+        case 9: //hol 4.4
+        case 10: //hol 4.3
+        case 11: //hol 4.2
+        case 12: //hol 4.1
+            holL4.set(index, val); break;
+
+        case 16+10:
+            l4_230 = val;
+            mcp_digitalWrite(OSW_HOL_0, val ? HIGH : LOW);
+            break;
+        default: return;
+    }
+    mcp_digitalWrite(SWIATLO_HOL, hol_isOn() ? HIGH : LOW);
+    mcp_digitalWrite(PODSW_HOL_B, hol_isOn() ? LOW : HIGH);
+    mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
+
+}
+
+bool hol_isOn()
+{
+    return holL3.isOn() || holL4.isOn() || l4_230;
 }

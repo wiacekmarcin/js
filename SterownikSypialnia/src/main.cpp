@@ -137,7 +137,7 @@ ISR(TIMER0_COMPA_vect){
 bool led1 = false, led2 = false, led3 = false, led4 = false;
 bool salon1 = false, salon2 = false;
 bool sypialnia1 = false, sypialnia2 = false;
-uint8_t bhol = 0x00;
+
 
 uint8_t actPos = 100;
 uint64_t act;
@@ -288,13 +288,13 @@ void loop() {
     mcp_digitalWrite(ZAS12V, (led1 || led2 || led3 || led4) ? HIGH : LOW);
     mcp_digitalWrite(SWIATLO_SALON, (led1 || led2 || led3 || led4 || salon1 || salon2) ? HIGH : LOW); //wyjscia opto
     mcp_digitalWrite(SWIATLO_SYPIALNIA, (sypialnia1 || sypialnia2) ? HIGH : LOW); //wyjscia opto
-    mcp_digitalWrite(SWIATLO_HOL, (bhol != 0) ? HIGH : LOW); //wyjscia opto
+    mcp_digitalWrite(SWIATLO_HOL, hol_isOn() ? HIGH : LOW); //wyjscia opto
 
 
     if (!zasAwar && wieczor) {
       mcp_digitalWrite(PODSW_SALON_A, (led1 || led2 || led3 || led4 || salon1 || salon2) ? LOW : HIGH);
-      mcp_digitalWrite(PODSW_HOL_B, (bhol != 0x00) ? LOW : HIGH);
-      mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || bhol != 0x00) ? LOW : HIGH);
+      mcp_digitalWrite(PODSW_HOL_B, hol_isOn() ? LOW : HIGH);
+      mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
     }
 
     mcp_digitalWrite(OSW_SYPIALNIA3, zasAwar ? LOW : HIGH);
@@ -328,73 +328,80 @@ void loop() {
       return;
     }
     
-    if (data[0] != 'S' && data[1] != ';')
+    if (data[0] != 'S' && data[1] != ';') {
+      Serial1.print("S;E;");
+      Serial1.print(__LINE__, DEC);
+      Serial1.print(";");
       return;
+    }
     
     if (data[2] == 'S' && data[3] == ';') {
+      uint8_t valPos = 6;
       uint8_t index = data[4] - '0';
       if (data[5] >= '0' && data[5] <= '9') {
         index = index * 10 + data[5] - '0';
-        if (data[6] != ';')
+        ++valPos;
+        if (data[6] != ';') {
+          Serial1.print("S;E;");
+          Serial1.print(__LINE__, DEC);
+          Serial1.print(";");
           return; 
-      } else if (data[5] != ';')
+        }
+      } else if (data[5] != ';') {
+        Serial1.print("S;E;");
+        Serial1.print(__LINE__, DEC);
+        Serial1.print(";");
         return;
-      //TODO dodac algo wlaczania swiatla
-    }
-  }
-  
-
-  return;
-  // put your main code here, to run repeatedly:
-  //for (short i = 0; i < 4; ++i) {
-  //  Serial.print(i, DEC);
-  //  Serial.print(" ");
-  //  Serial.print(mcp[i].readGPIO(0), HEX);
-  //  Serial.print(" ");
-  //  Serial.println(mcp[i].readGPIO(1), HEX);
-  //}
-  #if 1
-  if (Serial.available()) {
-    Serial.read();
-    if (actPos < 64) {
-      //Serial.print("L-> ");
-      //mcp_print(actPos);
-      mcp_digitalWrite(actPos, LOW);
-    }
-    do {
-      actPos = (actPos >= 63) ? 0 : actPos+1;
-      if (_pins[actPos].io_type == OUTPUT)
-        break;
-
-    } while (true);
-    Serial.print("H-> ");
-    mcp_print(actPos);
-    mcp_digitalWrite(actPos, HIGH);
-  }
-  delay(50);
-#else
-
-  if (true || interr) {
-    interr = false;
-    uint16_t s = 0;
-    for (uint8_t t = 0; t < 4; ++t) {
-      act[t] = mcp[t].readGPIOAB();
-      //mcp[t].clearInterrupts(); 
-      chg[t] = prev[t] ^ act[t];
-      prev[t] = act[t];
-      s+= chg[t];
-    }
-    if (s != 0) {
-      Serial.println("");
-      for (uint8_t t = 0; t < 4; ++t) {
-        Serial.print(chg[t], HEX);
-        Serial.print(" ");
       }
-      Serial.println();
-    }
+      
+      //TODO dodac algo wlaczania swiatla
+      uint8_t val = 0;
+      if (data[valPos] != '0' && data[valPos] != '1' && data[valPos+1] != ';') {
+        Serial1.print("S;E;");
+        Serial1.print(__LINE__, DEC);
+        Serial1.print(";");
+        return;
+      } else {
+        val = data[valPos] - '0';
+      }
+      
+      Serial1.println("S;A;");
 
+      switch(index) {
+        case 4: //ledy kolo lazienki 1
+        case 5: //ledy kolo lazienki 2
+        case 14: //ledy kolo salonu 2
+        case 15: //ledy kolo salonu 1
+        case 16+12: //Salon 2
+        case 16+15: //Salon 1
+          salon_req(index, val); break;
+        
+        case 6: //hol 3.1
+        case 7: //hol 3.2
+        case 8: //hol 3.3 
+        case 9: //hol 4.4
+        case 10: //hol 4.3
+        case 11: //hol 4.2
+        case 12: //hol 4.1
+        case 16+10: //Przedpokoj A0
+          hol_req(index, val); break;
+
+        case 16+8: //sypialnia 2
+        case 16+9: //sypialnia kinkiety
+        case 16+11: //sypialnia 1
+          sypialnia_req(index, val); break;
+
+        case 16+5: //podswitelenie mix
+          mcp_digitalWrite(PODSW_MIX_C, val); break; 
+          
+        case 16+6: //podswitelenie holu
+          mcp_digitalWrite(PODSW_HOL_B, val); break;
+
+        case 16+7: //podswitelenie salonu
+          mcp_digitalWrite(PODSW_SALON_A, val); break;
+
+        default: break;
+      }
+    }
   }
-  delay(200);
-  Serial.print(".");
-  #endif
 }

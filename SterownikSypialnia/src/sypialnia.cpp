@@ -2,6 +2,9 @@
 #include "utils.hpp"
 #include "def_io.h"
 
+extern bool sypialnia1;
+extern bool sypialnia2;
+
 void Sypialnia(bool wieczor, bool noc, bool awaria, bool klL, bool klP)
 {
   static unsigned long mls = 0;
@@ -55,9 +58,24 @@ void SypialniaZasAwar(bool wieczor, bool on)  {
     }
 }
 
+void sypialnia_req(uint8_t index, bool val)
+{
+  switch(index) {
+    case 16+8: //sypialnia 2
+      sypialnia2 = val;
+      mcp_digitalWrite(OSW_SYPIALNIA2, sypialnia2 ? HIGH : LOW);
+      mcp_digitalWrite(SWIATLO_SYPIALNIA, (sypialnia1 || sypialnia2) ? HIGH : LOW); 
+      break;
 
-
-
-
-
-
+    case 16+9: //sypialnia kinkiety
+      mcp_digitalWrite(OSW_SYPIALNIA3, val ? HIGH : LOW);
+      mcp_digitalWrite(SWIATLO_SYPIALNIA, (sypialnia1 || sypialnia2) ? HIGH : LOW); 
+      break; 
+      
+    case 16+11: //sypialnia 1
+      sypialnia1 = val;
+      mcp_digitalWrite(OSW_SYPIALNIA1, sypialnia1 ? HIGH : LOW);
+      break;
+    default: return;
+  }
+}

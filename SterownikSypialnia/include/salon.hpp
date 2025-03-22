@@ -1,12 +1,6 @@
 #ifndef _SALON_HPP_
 #define _SALON_HPP_
-
-extern bool salon1;
-extern bool salon2;
-extern bool led1;
-extern bool led2;
-extern bool led3;
-extern bool led4;
+#include <Arduino.h>
 
 void SalonJadalnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, bool klPL, bool klPP);
 
@@ -20,15 +14,6 @@ void SalonLedLaz(bool wieczor, bool noc, bool awaria, bool klL, bool klP);
 
 void SalonZasAwar(bool wieczor, bool zasAwar);
 
-
-
-
-
-
-
-
-
-
-
+void salon_req(uint8_t index, bool val);
 
 #endif
