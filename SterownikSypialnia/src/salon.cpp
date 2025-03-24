@@ -15,7 +15,7 @@ void SalonJadalnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, bo
     static unsigned long mls = 0;
     if (millis() - mls < 50)
         return;
-
+#ifdef DEBUG_CODE
     Serial.println("SalonJadalnia");
     Serial.println("LL LP PL PP");
     Serial.print(" ");
@@ -26,6 +26,7 @@ void SalonJadalnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, bo
     Serial.print(klPL);
     Serial.print("  ");
     Serial.println(klPP);
+#endif    
     mls = millis();
 
     if (awaria)
@@ -80,7 +81,7 @@ void SalonKuchnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, boo
     static unsigned long mls = 0;
     if (millis() - mls < 50)
         return;
-
+#ifdef DEBUG_CODE
     Serial.println("SalonKuchnia");
     Serial.println("LL LP PL PP");
     Serial.print(" ");
@@ -91,6 +92,7 @@ void SalonKuchnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, boo
     Serial.print(klPL);
     Serial.print("  ");
     Serial.println(klPP);
+#endif    
     mls = millis();
 
     if (awaria)
@@ -145,7 +147,7 @@ void SalonSypialnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, b
     static unsigned long mls = 0;
     if (millis() - mls < 50)
         return;
-
+#ifdef DEBUG_CODE        
     Serial.println("SalonSypialnia");
     Serial.println("LL LP PL PP");
     Serial.print(" ");
@@ -156,6 +158,7 @@ void SalonSypialnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, b
     Serial.print(klPL);
     Serial.print("  ");
     Serial.println(klPP);
+#endif    
     mls = millis();
 
     if (awaria)
@@ -210,12 +213,14 @@ void Salon(bool wieczor, bool noc, bool awaria, bool klL, bool klP)
     static unsigned long mls = 0;
     if (millis() - mls < 50)
         return;
-
+#ifdef DEBUG_CODE
     Serial.println("Salon");
     Serial.println("L P");
     Serial.print(klL);
     Serial.print(" ");
     Serial.println(klP);
+#endif
+
     mls = millis();
 
     if (awaria)
@@ -259,11 +264,13 @@ void SalonLedLaz(bool wieczor, bool noc, bool awaria, bool klL, bool klP)
     if (millis() - mls < 50)
         return;
 
+#ifdef DEBUG_CODE
     Serial.println("SalonLedLaz");
     Serial.println("L P");
     Serial.print(klL);
     Serial.print(" ");
     Serial.println(klP);
+#endif    
     mls = millis();
 
     if (awaria)
@@ -301,7 +308,7 @@ void SalonLedLaz(bool wieczor, bool noc, bool awaria, bool klL, bool klP)
     return;
 }
 
-void SalonZasAwar(bool wieczor, bool zasAwar)
+void SalonZasAwar(bool wieczor, bool noc, bool zasAwar)
 {
     if (zasAwar) {
         salon2 = false;
@@ -310,9 +317,7 @@ void SalonZasAwar(bool wieczor, bool zasAwar)
         led3 = false;
         led4 = false;
 
-        if (!wieczor) { //dla wieczora utrzymaj swiatlo dla innej pory dnia wylacz
-            salon1 = false;
-        } 
+        salon1 = salon1 && wieczor && !noc;
         mcp_digitalWrite(OSW_SALON1, salon1 ? HIGH : LOW);
         mcp_digitalWrite(OSW_SALON2, LOW);
         mcp_digitalWrite(ZAS12V, LOW); 
@@ -320,17 +325,44 @@ void SalonZasAwar(bool wieczor, bool zasAwar)
         mcp_digitalWrite(LED2_LAZIENKA2, LOW);
         mcp_digitalWrite(LED3_SYPIALNIA1, LOW);
         mcp_digitalWrite(LED4_SYPIALNIA2, LOW);
-
-
     } else {
+        salon1 = salon1 && wieczor && !noc;
         salon2 = salon1;
+        led1 = false;
+        led2 = false;
+        led3 = false;
+        led4 = false;
         mcp_digitalWrite(OSW_SALON1, salon1 ? HIGH : LOW);
         mcp_digitalWrite(OSW_SALON2, salon2 ? HIGH : LOW);
+        mcp_digitalWrite(ZAS12V, LOW); 
+        mcp_digitalWrite(LED1_LAZIENKA1, LOW);
+        mcp_digitalWrite(LED2_LAZIENKA2, LOW);
+        mcp_digitalWrite(LED3_SYPIALNIA1, LOW);
+        mcp_digitalWrite(LED4_SYPIALNIA2, LOW);
     }   
 }
 
+bool salon_isOn()
+{
+    return salon1 || salon2 || led1 || led2 || led3 || led4;
+}
+
+void salon_off()
+{
+    salon1 = salon2 = led1 = led2 = led3 = led4 = false;
+    mcp_digitalWrite(OSW_SALON1, LOW);
+    mcp_digitalWrite(OSW_SALON2, LOW);
+    mcp_digitalWrite(ZAS12V, LOW); 
+    mcp_digitalWrite(LED1_LAZIENKA1, LOW);
+    mcp_digitalWrite(LED2_LAZIENKA2, LOW);
+    mcp_digitalWrite(LED3_SYPIALNIA1, LOW);
+    mcp_digitalWrite(LED4_SYPIALNIA2, LOW);
+}
+
+#ifdef RS485
 void salon_req(uint8_t index, bool val)
 {
+
     switch(index) {
         case 4: //ledy kolo lazienki 1
             led1 = val; 
@@ -383,4 +415,4 @@ void salon_req(uint8_t index, bool val)
             return;
     }
 }
-    
+#endif    

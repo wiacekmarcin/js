@@ -1,6 +1,7 @@
 #ifndef _LEDY_HPP_
 #define _LEDY_HPP_
 #include <Arduino.h>
+#include "decl_io.hpp"
 
 typedef struct _ledOne {
     uint32_t a_time;
@@ -20,6 +21,7 @@ class LampaLed
     void off();
     bool isOn();
     bool isAll();
+    void on();
 
     void set(uint8_t index, bool val);
 

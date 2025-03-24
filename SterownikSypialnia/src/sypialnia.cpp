@@ -10,12 +10,13 @@ void Sypialnia(bool wieczor, bool noc, bool awaria, bool klL, bool klP)
   static unsigned long mls = 0;
   if (millis() - mls < 50)
     return;
-
+#ifdef DEBUG_CODE
   Serial.println("Sypialnia");
   Serial.println("L P");
   Serial.print(klL);
   Serial.print(" ");
   Serial.println(klP);
+#endif
 
   mls = millis();
 
@@ -41,23 +42,38 @@ void Sypialnia(bool wieczor, bool noc, bool awaria, bool klL, bool klP)
   return;
 }
 
-void SypialniaZasAwar(bool wieczor, bool on)  {
+void SypialniaZasAwar(bool wieczor, bool noc, bool on)  {
     if (on) {
         sypialnia2 = false;
-        if (!wieczor) { //dla wieczora utrzymaj swiatlo dla innej pory dnia wylacz
-            sypialnia1 = false;
-        } 
+        sypialnia1 = sypialnia1 && wieczor && !noc;
+
         mcp_digitalWrite(OSW_SYPIALNIA1, sypialnia1 ? HIGH : LOW);
         mcp_digitalWrite(OSW_SYPIALNIA2, LOW);
         mcp_digitalWrite(OSW_SYPIALNIA3, LOW); //kinkiety
 
     } else {
+        sypialnia1 = sypialnia1 && wieczor && !noc;
+        sypialnia2 = false;
         mcp_digitalWrite(OSW_SYPIALNIA1, sypialnia1 ? HIGH : LOW);
         mcp_digitalWrite(OSW_SYPIALNIA2, sypialnia2 ? HIGH : LOW);
         mcp_digitalWrite(OSW_SYPIALNIA3, HIGH); //kinkiety
     }
 }
 
+bool sypialnia_isOn()
+{
+  return sypialnia1 || sypialnia2;
+}
+
+void sypialnia_off()
+{
+  sypialnia1 = sypialnia2 = false;
+  mcp_digitalWrite(OSW_SYPIALNIA1, LOW);
+  mcp_digitalWrite(OSW_SYPIALNIA2, LOW);
+  mcp_digitalWrite(OSW_SYPIALNIA3, LOW); 
+
+}
+#ifdef RS485
 void sypialnia_req(uint8_t index, bool val)
 {
   switch(index) {
@@ -79,3 +95,4 @@ void sypialnia_req(uint8_t index, bool val)
     default: return;
   }
 }
+#endif

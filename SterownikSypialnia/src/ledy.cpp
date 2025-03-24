@@ -118,6 +118,14 @@ bool LampaLed::isAll()
     return true;
 }
 
+void LampaLed::on()
+{
+    for (uint8_t i = 0; i < lsize; ++i) {
+        t[i].on = true;
+        mcp_digitalWrite(t[i].index, HIGH);
+    }
+}
+
 void LampaLed::set(uint8_t index, bool val)
 {
     for (uint8_t i = 0; i < lsize; ++i) {

@@ -1,11 +1,12 @@
 #include "utils.hpp"
 #include "def_io.h"
-//#include "decl_io.h"
+//#include "decl_io.hpp"
 
 #include <Adafruit_MCP23X17.h>
 extern Adafruit_MCP23X17 mcp[4];
 extern struct _iotable _pins[64];
 
+#ifdef DEBUG_CODE
 void print_64val(uint64_t value)
 {
   uint8_t val;
@@ -83,21 +84,74 @@ void print_64Out(uint64_t value)
     }
   }
   Serial.println("**********");
+}
 
-} 
+void mcp_print(short ps) {
+  Serial.print(ps);
+  Serial.print(":");
+  Serial.print(mod_id(ps));
+  Serial.print(":");
+  if (pin_id(ps) < 8) {
+    Serial.print("A");
+    Serial.print(pin_id(ps));
+  } else {
+    Serial.print("B");
+    Serial.print(pin_id(ps)-8);
+  }
+  Serial.print(":");
+#ifdef  _EXT_CODE_
+  Serial.print(_pins[ps].name);
+#endif  
+  Serial.println("");
+}
+#endif
+
+void print1_64bin(uint64_t value)
+{
+  uint8_t val;
+
+  for (int8_t m = 63; m >= 0; m--) {
+    val = value >> m;
+    val &= val & 0x1;
+    Serial1.print(val, HEX);
+    if (m % 16 == 0)
+      Serial1.print(" ");
+    if (m % 8 == 0)
+      Serial1.print(" ");
+  }
+}
+
+void print1_64val(uint64_t value)
+{
+  uint8_t val;
+
+  for (int8_t m = 60; m >= 0; m-=4) {
+    val = value >> m;
+    val &= val & 0xf;
+    Serial1.print(val, HEX);
+    if (m % 16 == 0)
+      Serial1.print(" ");
+  }
+}
 
 void mcp_pinMode(short ps) {
-  mcp[_pins[ps].mod_id].pinMode(_pins[ps].pin_id, _pins[ps].io_type);
+  mcp[mod_id(ps)].pinMode(pin_id(ps), _pins[ps].io_type);
 }
 
 void mcp_digitalWrite(short ps, short value) {
+#ifdef DEBUG_CODE  
   Serial.print("pos=");
   Serial.print(ps);
+#ifdef _EXT_CODE_
   Serial.print(" (");
   Serial.print(_pins[ps].name);
   Serial.print(") => ");
+#else
+Serial.print(" => ");
+#endif
+  
   Serial.println(value);
-
+#endif
   Serial1.print("S;V;");
   Serial1.print(ps, DEC);
   Serial1.print(";");
@@ -107,9 +161,8 @@ void mcp_digitalWrite(short ps, short value) {
   short svalue = (ps == GWAR_L || ps == GWAR_N || ps == Z213_3_LEDY_CH1 || ps == Z213_4_LEDY_CH2 
           || ps == Z213_5_LEDY_CH3|| ps == Z213_6_LEDY_CH4) ? !value : value;
   if (_pins[ps].io_type == OUTPUT) {
-    mcp[_pins[ps].mod_id].digitalWrite(_pins[ps].pin_id, svalue);
+    mcp[mod_id(ps)].digitalWrite(pin_id(ps), svalue);
   }
-  //mcp[_pins[ps].mod_id].
 }
 
 bool isOutput(short ps) {
@@ -117,24 +170,7 @@ bool isOutput(short ps) {
 }
 
 void mcp_pinAttactInterrupt(short ps) {
-  mcp[_pins[ps].mod_id].setupInterruptPin(_pins[ps].pin_id, CHANGE);
-}
-
-void mcp_print(short ps) {
-  Serial.print(ps);
-  Serial.print(":");
-  Serial.print(_pins[ps].mod_id);
-  Serial.print(":");
-  if (_pins[ps].pin_id < 8) {
-    Serial.print("A");
-    Serial.print(_pins[ps].pin_id);
-  } else {
-    Serial.print("B");
-    Serial.print(_pins[ps].pin_id-8);
-  }
-  Serial.print(":");
-  Serial.println(_pins[ps].name);
-
+  mcp[mod_id(ps)].setupInterruptPin(pin_id(ps), CHANGE);
 }
 
 short mcp_getPinMode(short ps) {
