@@ -44,13 +44,14 @@ void print_64Out(uint64_t value)
   uint8_t val;
   Serial.println("**********");
   for (int8_t m = 63; m >= 0; m--) {
-    val = value >> m;
-    val &= val & 0x1;
+    val = (value >> m) & 0x1;
+
     if (_pins[m].io_type == INPUT)
       continue;
-    val = (m == GWAR_L || m == GWAR_N || m == Z213_3_LEDY_CH1 || m == Z213_4_LEDY_CH2 
-        || m == Z213_5_LEDY_CH3|| m == Z213_6_LEDY_CH4) ? !val : val;
-    if (!val)
+
+    bool bval = (m == GWAR_L || m == GWAR_N || m == Z213_3_LEDY_CH1 || m == Z213_4_LEDY_CH2 
+        || m == Z213_5_LEDY_CH3|| m == Z213_6_LEDY_CH4) ? val == 0 : val == 1;
+    if (!bval)
       continue;
     switch(m) {
       case Z213_3_LEDY_CH1 : Serial.println("Led k. Laz 1"); break;
@@ -139,19 +140,11 @@ void mcp_pinMode(short ps) {
 }
 
 void mcp_digitalWrite(short ps, short value) {
-#ifdef DEBUG_CODE  
   Serial.print("pos=");
   Serial.print(ps);
-#ifdef _EXT_CODE_
-  Serial.print(" (");
-  Serial.print(_pins[ps].name);
-  Serial.print(") => ");
-#else
-Serial.print(" => ");
-#endif
-  
+  Serial.print("=>");
   Serial.println(value);
-#endif
+
   Serial1.print("S;V;");
   Serial1.print(ps, DEC);
   Serial1.print(";");

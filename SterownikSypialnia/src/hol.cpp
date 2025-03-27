@@ -1,19 +1,13 @@
 #include "hol.hpp"
 #include "def_io.h"
 #include "utils.hpp"
+#include "salon.hpp"
 uint8_t A[3]{OSW_HOL_A1, OSW_HOL_A2, OSW_HOL_A3};
 uint8_t B[4]{OSW_HOL_B1, OSW_HOL_B2, OSW_HOL_B3, OSW_HOL_B4};
 
 LampaLed holL3(3, A);
 LampaLed holL4(4, B);
 bool l4_230 = false;
-
-extern bool salon1;
-extern bool salon2;
-extern bool led1;
-extern bool led2;
-extern bool led3;
-extern bool led4;
 
 uint16_t wylaczLampePoPrzywrZas = 0; //30 minut
 
@@ -185,7 +179,7 @@ void hol_req(uint8_t index, bool val)
     }
     mcp_digitalWrite(SWIATLO_HOL, hol_isOn() ? HIGH : LOW);
     mcp_digitalWrite(PODSW_HOL_B, hol_isOn() ? LOW : HIGH);
-    mcp_digitalWrite(PODSW_MIX_C, (led1 || led2 || led3 || led4 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
+    mcp_digitalWrite(PODSW_MIX_C, (salon_isOn() || hol_isOn()) ? LOW : HIGH);
 }
 #endif
 

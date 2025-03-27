@@ -82,10 +82,10 @@ class InputCl:
         self.z216_3 = val
     
     def setZ214_3(self, val):
-        self.z214_4 = val
+        self.z214_3 = val
 
     def setZ216_4(self, val):
-        self.z216_3 = val
+        self.z216_4 = val
     
     def setZ214_4(self, val):
         self.z214_4 = val
@@ -121,37 +121,37 @@ class InputCl:
         self.z214_10 = val
 
     def setZ58_1(self, val):
-        self.Z58_1 = val
+        self.z58_1 = val
     
     def setZ58_2(self, val):
-        self.Z58_2 = val
+        self.z58_2 = val
 
     def setZ58_3(self, val):
-        self.Z58_3 = val
+        self.z58_3 = val
 
     def setZ58_4(self, val):
-        self.Z58_4 = val
+        self.z58_4 = val
 
     def setZ58_5(self, val):
-        self.Z58_5 = val
+        self.z58_5 = val
 
     def setZ58_6(self, val):
-        self.Z58_6 = val
+        self.z58_6 = val
 
     def setZ58_7(self, val):
-        self.Z58_7 = val
+        self.z58_7 = val
 
     def setZ58_8(self, val):
-        self.Z58_8 = val
+        self.z58_8 = val
 
     def setZ217_2(self, val):
-        self.Z217_2 = val
+        self.z217_2 = val
     
     def setZ217_3(self, val):
-        self.Z217_3 = val
+        self.z217_3 = val
 
     def getInput(self):
-        buf = "I="
+        buf = "I=["
         b_0A = 0
         b_0B = 0
         b_1A = 0
@@ -182,52 +182,52 @@ class InputCl:
         if self.v24_off:
             b_1A += 0x1 << 2
 
-        if not self.z216_1:
+        if not self.z214_1:
             b_2B += 0x1 << 2
         
-        if not self.z214_1:
+        if not self.z216_1:
             b_3A += 0x1 << 6
 
-        if not self.z216_2:
-            b_2B += 0x1 << 1
-        
         if not self.z214_2:
-            b_3A += 0x1 << 5
+            b_2B += 0x1 << 1  
 
-        if not self.z216_3:
-            b_2B += 0x1 
+        if not self.z216_2:
+            b_3A += 0x1 << 5
         
         if not self.z214_3:
+            b_2B += 0x1 
+        
+        if not self.z216_3:
             b_3A += 0x1 << 4
 
-        if not self.z216_4:
+        if not self.z214_4:
             b_2A += 0x1 << 6
         
-        if not self.z214_4:
+        if not self.z216_4:
             b_3A += 0x1 << 3
 
-        if not self.z216_5:
+        if not self.z214_5:
             b_2A += 0x1 << 5
         
-        if not self.z214_5:
+        if not self.z216_5:
             b_3A += 0x1 << 2
 
-        if not self.z216_6:
+        if not self.z214_6:
             b_2A += 0x1 << 4
         
-        if not self.z214_6:
+        if not self.z216_6:
             b_3A += 0x1 << 1
 
-        if not self.z216_7:
+        if not self.z214_7:
             b_2A += 0x1 << 3
         
-        if not self.z214_7:
+        if not self.z216_7:
             b_3A += 0x1 
 
-        if not self.z216_8:
+        if not self.z214_8:
             b_2A += 0x1 << 2
         
-        if not self.z214_8:
+        if not self.z216_8:
             b_2B += 0x1 << 3
         
         if not self.z214_9:
@@ -267,12 +267,11 @@ class InputCl:
             b_3B += 0x1 << 5
 
 
-        buf += "%s %s %s %s %s %s %s %s \n\r" % (b_3B, b_3A,b_2B, b_2A,b_1B, b_1A, b_0B, b_0A)
+        buf += "%03d %03d %03d %03d %03d %03d %03d %03d ]\n\r" % (b_3B, b_3A,b_2B, b_2A,b_1B, b_1A, b_0B, b_0A)
+        print("%02x %02x %02x %02x %02x %02x %02x %02x" % (b_3B, b_3A,b_2B, b_2A,b_1B, b_1A, b_0B, b_0A))
         return buf
 
     
-
-
 class Widget2(QtWidgets.QWidget, Ui_Form):
     def __init__(self, *args, obj=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -342,13 +341,13 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
 
         
 
-        self.serial1 = QtSerialPort.QSerialPort(
+        self.serial_arduino = QtSerialPort.QSerialPort(
             '/dev/ttyACM0',
             baudRate=QtSerialPort.QSerialPort.Baud115200,
             readyRead=self.receive_acm0
         )
         
-        self.serial2 = QtSerialPort.QSerialPort(
+        self.serial_rs485 = QtSerialPort.QSerialPort(
             '/dev/ttyUSB0',
             baudRate=QtSerialPort.QSerialPort.Baud115200,
             readyRead=self.receive_usb0
@@ -356,17 +355,93 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
 
     @QtCore.pyqtSlot()
     def receive_usb0(self):
-        while self.serial2.canReadLine():
-            text = self.serial2.readLine().data().decode()
+        while self.serial_rs485.canReadLine():
+            text = self.serial_rs485.readLine().data().decode()
             text = text.rstrip('\r\n')
             self.te_usb0.append(text)
+            if text[:4] == 'S;V;':
+                _, _, spos, sval, _ = text.split(";")
+
+                pos = int(spos)
+                val = sval == '1'
+
+                if pos == 4:
+                    self.led4.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 5:
+                    self.led3.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 14:
+                    self.led1.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 15:
+                    self.led2.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+
+                elif pos == 6:
+                    self.led3_2.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 7:
+                    self.led4_4.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 8:
+                    self.led4_3.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 9:
+                    self.led4_2.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 10:
+                    self.led4_1.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 11:
+                    self.led3_1.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 12:
+                    self.led3_3.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 13:
+                    self.zasilacz12v.setStyleSheet("background: \"%s\"" % ("green" if val else "white"))
+                
+                elif pos == 24:
+                    self.sypialnia2.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 25:
+                    self.kinkiety.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+
+                elif pos == 26:
+                    self.led4_0.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 27:
+                    self.sypialnia1.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 28:
+                    self.salon2.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                elif pos == 31:
+                    self.salon1.setStyleSheet("background: \"%s\"" % ("yellow" if val else "white"))
+                
+                elif pos == 21:
+                    self.mix_podswielenie_1.setStyleSheet("background: \"%s\"" % ("blue" if val else "white"))
+                    self.mix_podswietlenie_2.setStyleSheet("background: \"%s\"" % ("blue" if val else "white"))
+                
+                elif pos == 22:
+                    self.podswietlenie_hol_1.setStyleSheet("background: \"%s\"" % ("blue" if val else "white"))
+                    self.hol_podswietlenie_2.setStyleSheet("background: \"%s\"" % ("blue" if val else "white"))
+                    self.hol_podswietlenie_3.setStyleSheet("background: \"%s\"" % ("blue" if val else "white"))
+                
+                elif pos == 23:
+                    self.salon_podswietlenie_1.setStyleSheet("background: \"%s\"" % ("blue" if val else "white"))
+                    self.salon_podswietlenie_2.setStyleSheet("background: \"%s\"" % ("blue" if val else "white"))
+                    self.salon_podswietlenie_3.setStyleSheet("background: \"%s\"" % ("blue" if val else "white"))
+
+                elif pos == 29:
+                    self.gwarantowane_n.setStyleSheet("background: \"%s\"" % ("red" if val else "white"))
+                elif pos == 30:
+                    self.gwarantowane_l.setStyleSheet("background: \"%s\"" % ("red" if val else "white"))
+                
+                elif pos == 19:
+                    self.swiatlo_sypialnia.setStyleSheet("background: \"%s\"" % ("green" if val else "white"))
+                elif pos == 20:
+                    self.czujka_ruchu.setStyleSheet("background: \"%s\"" % ("green" if val else "white"))
+                elif pos == 39:
+                    self.swiatlo_hol.setStyleSheet("background: \"%s\"" % ("green" if val else "white"))
+                elif pos == 47:
+                    self.swiatlo_salon.setStyleSheet("background: \"%s\"" % ("green" if val else "white"))
+
+
 
     @QtCore.pyqtSlot()
     def receive_acm0(self):
-        while self.serial1.canReadLine():
-            text = self.serial1.readLine().data().decode()
+        while self.serial_arduino.canReadLine():
+            text = self.serial_arduino.readLine().data().decode()
             text = text.rstrip('\r\n')
             self.te_acm0.append(text)
+            
 
     @QtCore.pyqtSlot(bool)
     def on_toggled_24V(self, val):
@@ -735,37 +810,36 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
     def sendMsg(self):
-        self.serial1.write(self.message_le.text().encode())
+        self.serial_rs485.write(self.message_le.text().encode())
 
     def sendInput(self):
-        msg = self.inReg.getInput().encode()
-        print(self.inReg.getInput())
-        self.serial2.write(msg)
+        msg = self.inReg.getInput()
+        self.te_acm0.append("Send:"+msg)
+        self.serial_arduino.write(msg.encode())
 
     @QtCore.pyqtSlot(bool)
     def on_toggled_usb0(self, checked):
-        print("on_toggled_usb0 ", checked)
         self.pbusb0.setText(u"Rozlacz" if checked else u"Połącz")
         if checked:
-            if not self.serial2.isOpen():
-                if not self.serial2.open(QtCore.QIODevice.ReadWrite):
+            if not self.serial_rs485.isOpen():
+                if not self.serial_rs485.open(QtCore.QIODevice.ReadWrite):
                     self.pbusb0.setChecked(False)
             else:
-                self.serial2.close()
+                self.serial_rs485.close()
 
     @QtCore.pyqtSlot(bool)
     def on_toggled_acm0(self, checked):
-        print("on_toggled_acm0 ", checked)
         self.pbacm0.setText(u"Rozlacz" if checked else u"Połącz")
         if checked:
-            if not self.serial1.isOpen():
-                if not self.serial1.open(QtCore.QIODevice.ReadWrite):
+            if not self.serial_arduino.isOpen():
+                if not self.serial_arduino.open(QtCore.QIODevice.ReadWrite):
                     self.pbacm0.setChecked(False)
             else:
-                self.serial1.close()
+                self.serial_arduino.close()
     
     def closeEvent(self, event):
-        self.serial1.close()
+        self.serial_arduino.close()
+        self.serial_rs485.close()
 
 """"
 class Widget(QtWidgets.QWidget):

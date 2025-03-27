@@ -9,11 +9,15 @@ void SalonKuchnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, boo
 
 void SalonSypialnia(bool wieczor, bool noc, bool awaria, bool klLL, bool klLP, bool klPL, bool klPP);
 
-void Salon(bool wieczor, bool noc, bool awaria, bool klL, bool klP);
+void SalonSalon(bool wieczor, bool noc, bool awaria, bool klL, bool klP);
 
 void SalonLedLaz(bool wieczor, bool noc, bool awaria, bool klL, bool klP);
 
 void SalonZasAwar(bool wieczor, bool noc, bool zasAwar);
+
+void SalonMain(bool wieczor, bool noc, bool awaria, 
+    bool klL_Laz, bool klP_Laz, bool klL_sal, bool klP_sal, bool klL_Syp, bool klP_Syp,
+    bool ledSyp);
 
 bool salon_isOn();
 
