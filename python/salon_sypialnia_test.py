@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets, QtSerialPort
+from PySide6 import QtCore, QtWidgets, QtSerialPort
 
 from salon_sypialnia_hol import Ui_Form
 
@@ -339,21 +339,23 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.pb_58_7x8.clicked.connect(self.clicked_pb_58_7x8)
 
 
-        
-
+    def connectUsb(self, arduinoSer, rs485):
+        self.ardTty = arduinoSer
+        self.rs485 = rs485
+        self.ltty_ard.setText(self.ardTty)
         self.serial_arduino = QtSerialPort.QSerialPort(
-            '/dev/ttyACM0',
+            self.ardTty,
             baudRate=QtSerialPort.QSerialPort.Baud115200,
             readyRead=self.receive_acm0
         )
-        
+        self.lttyRs485.setText(self.rs485)
         self.serial_rs485 = QtSerialPort.QSerialPort(
-            '/dev/ttyUSB0',
+            self.rs485,
             baudRate=QtSerialPort.QSerialPort.Baud115200,
             readyRead=self.receive_usb0
         )
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def receive_usb0(self):
         while self.serial_rs485.canReadLine():
             text = self.serial_rs485.readLine().data().decode()
@@ -435,7 +437,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
 
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def receive_acm0(self):
         while self.serial_arduino.canReadLine():
             text = self.serial_arduino.readLine().data().decode()
@@ -443,37 +445,37 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
             self.te_acm0.append(text)
             
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_24V(self, val):
         self.inReg.setV24_off(val)
         self.sendInput()
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_noc(self, val):
         self.inReg.setNoc(val)
         self.sendInput()
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_wieczor(self, val):
         self.inReg.setWieczor(val)
         self.sendInput()
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_zasawar(self, val):
         self.inReg.setZasAwar(val)
         self.sendInput()
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_czujka1(self, val):
         self.inReg.setCzujka1(val)
         self.sendInput()
     
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_czujka2(self, val):
         self.inReg.setCzujka2(val)
         self.sendInput()
     
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_1(self):
         self.inReg.setZ216_1(True)
         self.sendInput()
@@ -481,14 +483,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_1(self):
         self.inReg.setZ214_1(True)
         self.sendInput()
         self.inReg.setZ214_1(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_21x_1(self):
         self.inReg.setZ216_1(True)
         self.inReg.setZ214_1(True)
@@ -498,7 +500,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_2(self):
         self.inReg.setZ216_2(True)
         self.sendInput()
@@ -506,14 +508,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_2(self):
         self.inReg.setZ214_2(True)
         self.sendInput()
         self.inReg.setZ214_2(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_21x_2(self):
         self.inReg.setZ216_2(True)
         self.inReg.setZ214_2(True)
@@ -523,7 +525,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_3(self):
         self.inReg.setZ216_3(True)
         self.sendInput()
@@ -531,14 +533,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_3(self):
         self.inReg.setZ214_3(True)
         self.sendInput()
         self.inReg.setZ214_3(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_21x_3(self):
         self.inReg.setZ216_3(True)
         self.inReg.setZ214_3(True)
@@ -548,7 +550,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_4(self):
         self.inReg.setZ216_4(True)
         self.sendInput()
@@ -556,14 +558,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_4(self):
         self.inReg.setZ214_4(True)
         self.sendInput()
         self.inReg.setZ214_4(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_21x_4(self):
         self.inReg.setZ216_4(True)
         self.inReg.setZ214_4(True)
@@ -573,7 +575,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_5(self):
         self.inReg.setZ216_5(True)
         self.sendInput()
@@ -581,14 +583,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_5(self):
         self.inReg.setZ214_5(True)
         self.sendInput()
         self.inReg.setZ214_5(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_21x_5(self):
         self.inReg.setZ216_5(True)
         self.inReg.setZ214_5(True)
@@ -598,7 +600,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_6(self):
         self.inReg.setZ216_6(True)
         self.sendInput()
@@ -606,14 +608,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_6(self):
         self.inReg.setZ214_6(True)
         self.sendInput()
         self.inReg.setZ214_6(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_21x_6(self):
         self.inReg.setZ216_6(True)
         self.inReg.setZ214_6(True)
@@ -623,7 +625,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_7(self):
         self.inReg.setZ216_7(True)
         self.sendInput()
@@ -631,14 +633,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_7(self):
         self.inReg.setZ214_7(True)
         self.sendInput()
         self.inReg.setZ214_7(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_21x_7(self):
         self.inReg.setZ216_7(True)
         self.inReg.setZ214_7(True)
@@ -648,7 +650,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_8(self):
         self.inReg.setZ216_8(True)
         self.sendInput()
@@ -656,14 +658,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_8(self):
         self.inReg.setZ214_8(True)
         self.sendInput()
         self.inReg.setZ214_8(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_21x_8(self):
         self.inReg.setZ216_8(True)
         self.inReg.setZ214_8(True)
@@ -672,21 +674,21 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.inReg.setZ214_8(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_9(self):
         self.inReg.setZ214_9(True)
         self.sendInput()
         self.inReg.setZ214_9(False)
         self.sendInput()
     
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_10(self):
         self.inReg.setZ214_10(True)
         self.sendInput()
         self.inReg.setZ214_10(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_1(self):
         self.inReg.setZ58_1(True)
         self.sendInput()
@@ -694,14 +696,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_2(self):
         self.inReg.setZ58_2(True)
         self.sendInput()
         self.inReg.setZ58_2(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_1x2(self):
         self.inReg.setZ58_1(True)
         self.inReg.setZ58_2(True)
@@ -711,7 +713,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_3(self):
         self.inReg.setZ58_3(True)
         self.sendInput()
@@ -719,14 +721,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_4(self):
         self.inReg.setZ58_4(True)
         self.sendInput()
         self.inReg.setZ58_4(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_3x4(self):
         self.inReg.setZ58_3(True)
         self.inReg.setZ58_4(True)
@@ -736,7 +738,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_5(self):
         self.inReg.setZ58_5(True)
         self.sendInput()
@@ -744,14 +746,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_6(self):
         self.inReg.setZ58_6(True)
         self.sendInput()
         self.inReg.setZ58_6(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_5x6(self):
         self.inReg.setZ58_5(True)
         self.inReg.setZ58_6(True)
@@ -761,7 +763,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_7(self):
         self.inReg.setZ58_7(True)
         self.sendInput()
@@ -769,14 +771,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_8(self):
         self.inReg.setZ58_8(True)
         self.sendInput()
         self.inReg.setZ58_8(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_58_7x8(self):
         self.inReg.setZ58_7(True)
         self.inReg.setZ58_8(True)
@@ -785,7 +787,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.inReg.setZ58_8(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_217_2(self):
         self.inReg.setZ217_2(True)
         self.sendInput()
@@ -793,14 +795,14 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.sendInput()
 
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_217_3(self):
         self.inReg.setZ217_3(True)
         self.sendInput()
         self.inReg.setZ217_3(False)
         self.sendInput()
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_217_x(self):
         self.inReg.setZ217_2(True)
         self.inReg.setZ217_3(True)
@@ -817,7 +819,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         self.te_acm0.append("Send:"+msg)
         self.serial_arduino.write(msg.encode())
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_usb0(self, checked):
         self.pbusb0.setText(u"Rozlacz" if checked else u"Połącz")
         if checked:
@@ -827,7 +829,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
             else:
                 self.serial_rs485.close()
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_acm0(self, checked):
         self.pbacm0.setText(u"Rozlacz" if checked else u"Połącz")
         if checked:
@@ -870,18 +872,18 @@ class Widget(QtWidgets.QWidget):
             readyRead=self.receive
         )
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def receive(self):
         while self.serial.canReadLine():
             text = self.serial.readLine().data().decode()
             text = text.rstrip('\r\n')
             self.output_te.append(text)
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def send(self):
         self.serial.write(self.message_le.text().encode())
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled(self, checked):
         self.button.setText("Disconnect" if checked else "Connect")
         if checked:
@@ -894,7 +896,12 @@ class Widget(QtWidgets.QWidget):
 
 if __name__ == '__main__':
     import sys
+    #if len(sys.argv) == 3:
+    #    usb485 = sys.argv[1]
+    #    usbusb = sys.argv[2]
+    #print(usb485, usbusb)
     app = QtWidgets.QApplication(sys.argv)
     w = Widget2()
     w.show()
+    w.connectUsb("/dev/serial/by-id/usb-SparkFun_SparkFun_Pro_Micro-if00", "/dev/serial/by-id/usb-WCH.CN_USB_Quad_Serial_BC5644ABCD-if00")
     sys.exit(app.exec())

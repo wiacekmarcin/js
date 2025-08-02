@@ -20,10 +20,11 @@ class PahoMqttWriter(blackwidget.BlackWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.clientmqtt = mqtt.Client(client_id="lustroCID")
+        self.clientmqtt.username_pw_set("mqtt", "mqtt")
         self.clientmqtt.on_connect = on_connect
         self.clientmqtt.on_message = on_message
         try:
-            self.clientmqtt.connect("192.168.10.254", 1883, 60)
+            self.clientmqtt.connect("192.168.10.250", 1883, 60)
             self.connect = True
         except:
             self.connect = False 
@@ -226,6 +227,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
         print(dictValue)
         if not self.connect:
             try:
+                self.clientmqtt.username_pw_set("mqtt", "mqtt")
                 self.clientmqtt.connect("192.168.10.254", 1883, 60)
                 self.connect = True
             except:

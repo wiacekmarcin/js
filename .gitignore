@@ -87,3 +87,8 @@ schematy/Płytka_sypialnia-backups/Płytka_sypialnia-2025-01-24_155458.zip
 fullscreanApp/ekran.png
 schematy/#auto_saved_files#
 schematy/~Płytka_sypialnia.kicad_sch.lck
+python/__pycache__/*
+python/.venv
+python/bin/*
+python/lib/*
+python/include/*

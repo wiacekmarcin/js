@@ -1,4 +1,4 @@
-from PyQt6 import QtCore, QtWidgets, QtSerialPort
+from PySide6 import QtCore, QtWidgets, QtSerialPort
 
 from salon_sypialnia_hol import Ui_Form
 
@@ -28,34 +28,34 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
             readyRead=self.receive_usb0
         )
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def receive_usb0(self):
         while self.serial2.canReadLine():
             text = self.serial2.readLine().data().decode()
             text = text.rstrip('\r\n')
             self.te_usb0.append(text)
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def receive_acm0(self):
         while self.serial2.canReadLine():
             text = self.serial2.readLine().data().decode()
             text = text.rstrip('\r\n')
             self.te_acm0.append(text)
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_216_1(self):
         print("Sypialnia 1")
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def clicked_pb_214_1(self):
         print("Sypialnia 2")
 
-    @QtCore.pyqtSlot()
+    @QtCore.Slot()
     def send(self):
         #self.serial.write(self.message_le.text().encode())
         pass
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_usb0(self, checked):
         print("on_toggled_usb0")
         self.pbusb0.setText(u"Rozlacz" if checked else u"Połącz")
@@ -66,7 +66,7 @@ class Widget2(QtWidgets.QWidget, Ui_Form):
         else:
             self.serial2.close()
 
-    @QtCore.pyqtSlot(bool)
+    @QtCore.Slot(bool)
     def on_toggled_acm0(self, checked):
         print("on_toggled_acm0")
         self.pbacm0.setText(u"Rozlacz" if checked else u"Połącz")

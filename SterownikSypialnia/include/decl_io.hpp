@@ -146,8 +146,8 @@ constexpr uint64_t Z216_07 = (0x0001ull << 48);
 #define KL09_HOLSYP_PL  Z214_06 
 #define KL10_HOLSYP_LP  Z216_07 
 #define KL10_HOLSYP_LL  Z214_07 
-#define KL11_SALLAZ_L   Z216_07 
-#define KL11_SALLAZ_P   Z214_07 
+#define KL11_SALLAZ_L   Z216_05 
+#define KL11_SALLAZ_P   Z214_05 
 #define KL12_HOLLAZ_P   Z216_08 
 #define KL12_HOLLAZ_L   Z214_08 
 #define KL13_HOLPOK     Z214_09 
