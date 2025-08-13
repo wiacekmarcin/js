@@ -8,156 +8,206 @@
 #include <Arduino.h>
 
 extern uint64_t g_actR;
+extern uint64_t outputValue;
+
+static void rozkaz2(uint8_t* off, size_t * r, uint8_t data[]);
+static uint8_t getPos(uint8_t* off, size_t * r, uint8_t data[], uint8_t * val);
+static bool getVal(uint8_t* off, size_t * r, uint8_t data[], uint8_t * val);
+static void setVal(uint8_t index, uint8_t val);
+
 void rozkaz()
 {
-#ifdef RS485
   uint8_t data[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   size_t r = Serial1.readBytes(data, 16);
 
   if ( r < 2 ) {
     return;
   }
+  uint8_t off = 0;
+  while (r > 0) {
+    switch(data[0+off]) {
+      case 'I':
+        if (data[1+off] == ';') {
+          Serial1.println("S;");
+          r -= 2;
+          off += 2;
+        }
+        break;
 
-  if (data[0] == 'I'  && data[1] == ';') {
-    Serial1.println("S;");
-    return;
+      case 'S':
+        if (data[1+off] != ';') {
+          Serial1.print("S;E;");
+          Serial1.print(__LINE__, DEC);
+          Serial1.println(";");
+          r -= 2;
+          off += 2;
+        } else {
+          r -= 2;
+          off += 2;
+          rozkaz2(&off, &r, data + off + 2);
+        }
+        break;
+      
+      default:
+        r -= 1;
+        off += 1;
+        break;
+    }
   }
+}
+
+static void rozkaz2(uint8_t* off, size_t * r, uint8_t * data)
+{
+  uint8_t val = 0, res = 0, index = 0;
+  switch(data[0]) {
+    case 'I':
+      if (data[1] == ';') {
+#ifdef DEBUG_CODE
+        Serial.print("act=");
+        print_64val(g_actR);
+        Serial.println("");
+#endif
+        Serial1.print("S;I;");
+        print1_64val(g_actR);
+        Serial1.println(";");
+        print1_64val(outputValue);
+        Serial1.println(";");
+      } else {
+        Serial1.print("S;E;");
+        Serial1.print(__LINE__, DEC);
+        Serial1.print(";");
+      }
+      *r -= 2;
+      *off += 2;
+      return;
   
-  if (data[0] == 'S' && data[1] != ';') {
+    case 'S':  
+      if (data[1] == ';') {
+        res = getPos(off, r, data+1, &val);
+        if (res > 0) {
+          Serial.print("index=");
+          Serial.println(val, DEC);
+          *r -= 2;
+          *off += 2;
+          index = val;
+          if (getVal(off, r, data+1+res, &val)) {
+            setVal(index, val);
+            Serial1.print("S;A;");
+          }
+        return;
+        }
+      } else {
+        Serial1.print("S;E;");
+        Serial1.print(__LINE__, DEC);
+        Serial1.print(";");
+        *r -= 2;
+        *off += 2;
+        return;
+      }
+      return;
+
+    default:
+      break;
+  }
+}
+
+static uint8_t getPos(uint8_t* off, size_t * r, uint8_t * data, uint8_t * val)
+{
+  if (data[0] < '0' || data[0] > '9') {
     Serial1.print("S;E;");
     Serial1.print(__LINE__, DEC);
-    Serial1.println(";");
-    return;
+    Serial1.print(";");
+    *r -= 1;
+    *off += 1;
+    return 0;
   }
 
-  if (data[2] == 'I' && data[3] == ';') {
-#ifdef DEBUG_CODE
-    Serial.print("act=");
-    print_64val(g_actR);
-    Serial.println("");
-#endif
-    Serial1.print("S;I;");
-    print1_64val(g_actR);
-    Serial1.println(";");
+  if (data[1] == ';') {
+    *val = data[0] - '0';
+    *r -= 1;
+    *off += 1;
+    return 1;
   }
 
-  if (data[2] == 'F' && data[3] == ';') {
-    uint8_t valPos = 6;
-    uint8_t index = data[4] - '0';
-    if (data[5] >= '0' && data[5] <= '9') {
-      index = index * 10 + data[5] - '0';
-      ++valPos;
-      if (data[6] != ';') {
-        Serial1.print("S;E;");
-        Serial1.print(__LINE__, DEC);
-        Serial1.print(";");
-        return; 
-      }
-    } else if (data[5] != ';') {
-      Serial1.print("S;E;");
-      Serial1.print(__LINE__, DEC);
-      Serial1.print(";");
-      return;
-    }
-
-    Serial.print("k_index=");
-    Serial.println(index, DEC);
-    
-    uint8_t val = 0;
-    if (data[valPos] != '0' && data[valPos] != '1' && data[valPos+1] != ';') {
-      Serial1.print("S;E;");
-      Serial1.print(__LINE__, DEC);
-      Serial1.print(";");
-      return;
-    } else {
-      val = data[valPos] - '0';
-    }
-    
-    Serial1.println("S;A;");
-    uint64_t chgR;
-    switch(index) {
-      case 0:
-        chgR |= Z216_01;
-        g_actR = val ? (g_actR | Z216_01) : (g_actR & ~Z216_01);
-        inputChange(chgR, g_actR);
-        break;
-
-      default:
-        break;
-    }
+  if (data[1] < '0' || data[1] > '9') {
+    Serial1.print("S;E;");
+    Serial1.print(__LINE__, DEC);
+    Serial1.print(";");
+    *r -= 2;
+    *off += 2;
+    return 2;
   }
   
-  if (data[2] == 'S' && data[3] == ';') {
-    uint8_t valPos = 6;
-    uint8_t index = data[4] - '0';
-    if (data[5] >= '0' && data[5] <= '9') {
-      index = index * 10 + data[5] - '0';
-      ++valPos;
-      if (data[6] != ';') {
-        Serial1.print("S;E;");
-        Serial1.print(__LINE__, DEC);
-        Serial1.print(";");
-        return; 
-      }
-    } else if (data[5] != ';') {
-      Serial1.print("S;E;");
-      Serial1.print(__LINE__, DEC);
-      Serial1.print(";");
-      return;
-    }
-
-    Serial.print("index=");
-    Serial.println(index, DEC);
-    
-    //TODO dodac algo wlaczania swiatla
-    uint8_t val = 0;
-    if (data[valPos] != '0' && data[valPos] != '1' && data[valPos+1] != ';') {
-      Serial1.print("S;E;");
-      Serial1.print(__LINE__, DEC);
-      Serial1.print(";");
-      return;
-    } else {
-      val = data[valPos] - '0';
-    }
-    
-    Serial1.println("S;A;");
-
-    switch(index) {
-      case 4: //ledy kolo lazienki 1
-      case 5: //ledy kolo lazienki 2
-      case 14: //ledy kolo salonu 2
-      case 15: //ledy kolo salonu 1
-      case 16+12: //Salon 2
-      case 16+15: //Salon 1
-        salon_req(index, val); break;
-      
-      case 6: //hol 3.1
-      case 7: //hol 3.2
-      case 8: //hol 3.3 
-      case 9: //hol 4.4
-      case 10: //hol 4.3
-      case 11: //hol 4.2
-      case 12: //hol 4.1
-      case 16+10: //Przedpokoj A0
-        hol_req(index, val); break;
-
-      case 16+8: //sypialnia 2
-      case 16+9: //sypialnia kinkiety
-      case 16+11: //sypialnia 1
-        sypialnia_req(index, val); break;
-
-      case 16+5: //podswitelenie mix
-        mcp_digitalWrite(PODSW_MIX_C, val); break; 
-        
-      case 16+6: //podswitelenie holu
-        mcp_digitalWrite(PODSW_HOL_B, val); break;
-
-      case 16+7: //podswitelenie salonu
-        mcp_digitalWrite(PODSW_SALON_A, val); break;
-
-      default: break;
-    }
+  if (data[2] == ';') {
+    *val = 10*(data[0]-'0') + (data[1]-'0');
+    *r -= 2;
+    *off += 2;
+    return 2;
   }
+  Serial1.print("S;E;");
+  Serial1.print(__LINE__, DEC);
+  Serial1.print(";");
+  *r -= 2;
+  *off += 2;
+  return 0;
+}
+
+static bool getVal(uint8_t* off, size_t * r, uint8_t * data, uint8_t * val)
+{
+
+  if ((data[0] == '0' || data[0] != '1') && data[1] == ';') {
+    *val = data[0] - '0';
+    *r -= 2;
+    *off += 2;
+    return true;
+  } else {
+    Serial1.print("S;E;");
+    Serial1.print(__LINE__, DEC);
+    Serial1.print(";");
+    *r -= 2;
+    *off += 2;
+  }
+  return false;
+}
+    
+static void setVal(uint8_t index, uint8_t val)
+{
+  switch(index) {
+    case LED1_LAZIENKA1: //ledy kolo lazienki 1
+    case LED2_LAZIENKA2: //ledy kolo lazienki 2
+    case LED3_SYPIALNIA1: //ledy kolo salonu 1
+    case LED4_SYPIALNIA2: //ledy kolo salonu 2
+    case OSW_SALON1: //Salon 2
+    case OSW_SALON2: //Salon 1
+      salon_req(index, val); break;
+        
+    case OSW_HOL_A1: //hol 3.1
+    case OSW_HOL_A2: //hol 3.2
+    case OSW_HOL_A3: //hol 3.3 
+    case OSW_HOL_B1: //hol 4.4
+    case OSW_HOL_B2: //hol 4.3
+    case OSW_HOL_B3: //hol 4.2
+    case OSW_HOL_B4: //hol 4.1
+    case OSW_HOL_0: //Przedpokoj A0
+      hol_req(index, val); break;
+
+    case OSW_SYPIALNIA1: //sypialnia 2
+    case OSW_SYPIALNIA2: //sypialnia 1
+    case OSW_SYPIALNIA3: //sypialnia kinkiety
+      sypialnia_req(index, val); break;
+
+    case PODSW_MIX_C: //podswitelenie mix
+      mcp_digitalWrite(PODSW_MIX_C, val); break; 
+      
+    case PODSW_HOL_B: //podswitelenie holu
+      mcp_digitalWrite(PODSW_HOL_B, val); break;
+
+    case PODSW_SALON_A: //podswitelenie salonu
+      mcp_digitalWrite(PODSW_SALON_A, val); break;
+
+    default: break;
+  }
+}
 
 #ifdef TEMP
   if (data[2] == 'T' && data[3] == ';') {
@@ -168,5 +218,3 @@ void rozkaz()
     Serial.print(";");
   }
 #endif  
-#endif  
-}
