@@ -265,7 +265,7 @@ void salon_req(uint8_t index, bool val)
 {
 
     switch(index) {
-        case 4: //ledy kolo lazienki 1
+        case LED1_LAZIENKA1: //ledy kolo lazienki 1
             ledL1 = val; 
             mcp_digitalWrite(LED1_LAZIENKA1, val ? HIGH : LOW);
             mcp_digitalWrite(ZAS12V, (ledL1 || ledL2 || ledS1 || ledS2) ? HIGH : LOW);
@@ -273,7 +273,7 @@ void salon_req(uint8_t index, bool val)
             mcp_digitalWrite(PODSW_MIX_C, (ledL1 || ledL2 || ledS1 || ledS2 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
             break;
 
-        case 5: //ledy kolo lazienki 2
+        case LED2_LAZIENKA2: //ledy kolo lazienki 2
             ledL2 = val; 
             mcp_digitalWrite(LED2_LAZIENKA2, val ? HIGH : LOW);
             mcp_digitalWrite(ZAS12V, (ledL1 || ledL2 || ledS1 || ledS2) ? HIGH : LOW);
@@ -281,7 +281,7 @@ void salon_req(uint8_t index, bool val)
             mcp_digitalWrite(PODSW_MIX_C, (ledL1 || ledL2 || ledS1 || ledS2 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
             break;
 
-        case 14: //ledy kolo salonu 2
+        case LED4_SYPIALNIA2: //ledy kolo salonu 2
             ledS2 = val; 
             mcp_digitalWrite(LED4_SYPIALNIA2, val ? HIGH : LOW);
             mcp_digitalWrite(ZAS12V, (ledL1 || ledL2 || ledS1 || ledS2) ? HIGH : LOW);
@@ -289,7 +289,7 @@ void salon_req(uint8_t index, bool val)
             mcp_digitalWrite(PODSW_MIX_C, (ledL1 || ledL2 || ledS1 || ledS2 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
             break;
 
-        case 15: //ledy kolo salonu 1
+        case LED3_SYPIALNIA1: //ledy kolo salonu 1
             ledS1 = val; 
             mcp_digitalWrite(LED3_SYPIALNIA1, val ? HIGH : LOW);
             mcp_digitalWrite(ZAS12V, (ledL1 || ledL2 || ledS1 || ledS2) ? HIGH : LOW);
@@ -297,14 +297,14 @@ void salon_req(uint8_t index, bool val)
             mcp_digitalWrite(PODSW_MIX_C, (ledL1 || ledL2 || ledS1 || ledS2 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
             break;
 
-        case 16+12: //Salon 2
+        case OSW_SALON2: //Salon 2
             salon2 = val; 
             mcp_digitalWrite(OSW_SALON2, val ? HIGH : LOW);
             mcp_digitalWrite(SWIATLO_SALON, (ledL1 || ledL2 || ledS1 || ledS2 || salon1 || salon2) ? HIGH : LOW);
             mcp_digitalWrite(PODSW_MIX_C, (ledL1 || ledL2 || ledS1 || ledS2 || salon1 || salon2 || hol_isOn()) ? LOW : HIGH);
             break;
 
-        case 16+15: //Salon 1
+        case OSW_SALON1: //Salon 1
             salon1 = val;
             mcp_digitalWrite(OSW_SALON1, val ? HIGH : LOW);
             mcp_digitalWrite(SWIATLO_SALON, (ledL1 || ledL2 || ledS1 || ledS2 || salon1 || salon2) ? HIGH : LOW);

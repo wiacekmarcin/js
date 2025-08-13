@@ -77,18 +77,18 @@ void sypialnia_off()
 void sypialnia_req(uint8_t index, bool val)
 {
   switch(index) {
-    case 16+8: //sypialnia 2
+    case OSW_SYPIALNIA2: //sypialnia 2
       sypialnia2 = val;
       mcp_digitalWrite(OSW_SYPIALNIA2, sypialnia2 ? HIGH : LOW);
       mcp_digitalWrite(SWIATLO_SYPIALNIA, (sypialnia1 || sypialnia2) ? HIGH : LOW); 
       break;
 
-    case 16+9: //sypialnia kinkiety
+    case OSW_SYPIALNIA3: //sypialnia kinkiety
       mcp_digitalWrite(OSW_SYPIALNIA3, val ? HIGH : LOW);
       mcp_digitalWrite(SWIATLO_SYPIALNIA, (sypialnia1 || sypialnia2) ? HIGH : LOW); 
       break; 
       
-    case 16+11: //sypialnia 1
+    case OSW_SYPIALNIA1: //sypialnia 1
       sypialnia1 = val;
       mcp_digitalWrite(OSW_SYPIALNIA1, sypialnia1 ? HIGH : LOW);
       break;

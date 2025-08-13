@@ -6,6 +6,7 @@
 
 #ifdef DEBUG_CODE
 void print_64val(uint64_t value);
+void print_64val1(uint64_t value);
 
 void print_64bin(uint64_t value, bool input);
 

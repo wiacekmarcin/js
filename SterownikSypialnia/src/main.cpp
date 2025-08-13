@@ -49,6 +49,7 @@ volatile uint64_t g_prevR = 0L;
 
 #define INIT_PIN_LOW(X) mcp_pinMode(X); mcp_digitalWrite(X, LOW);
 
+uint64_t outputValue = 0x0;
 void setup() {
   // start serial port
   
@@ -65,9 +66,6 @@ void setup() {
       Serial1.print(0x20+i, HEX);
       Serial1.println(" not found;");
     } else {
-      Serial1.print("S;D;Address ");
-      Serial1.print(0x20+i, HEX);
-      Serial1.println(" initialize successfully;");
       mcp[i].setupInterrupts(true, true, LOW);
     }
   }
@@ -114,6 +112,7 @@ void setup() {
 #endif  
   Serial1.println("S;D;End setup;");
   interr = true;
+  incVal = true;
 }
 
 
@@ -134,11 +133,6 @@ void loop() {
     interr = false;
     incVal = false;
     
-    Serial1.println("S;D;Change incoming;");
-    Serial.print("Change incoming;\r\nprev=");
-    print_64val(g_prevR); Serial.print("\r\nact_=");
-    
-
     if (readVal) {
       g_prevR = g_actR;
       readVal = false;
@@ -149,8 +143,16 @@ void loop() {
         g_actR |= act << (i*16);
       }
     }
-
+    Serial1.print("S;H;Change incoming;");
+    if (interr)
+      Serial1.print("I;");
+    if (incVal)
+      Serial1.print("V;");
+    print_64val1(g_actR); Serial1.println(";");
+    Serial.print("Change incoming;\r\nprev=");
+    print_64val(g_prevR); Serial.print("\r\nact_=");
     print_64val(g_actR); Serial.print("\r\nchg_=");
+  
 
     uint64_t chg_R = g_prevR ^ g_actR;
     uint64_t chg_I = chg_R & 0x7f7f7f7f0007000f;
@@ -161,6 +163,9 @@ void loop() {
     if (chg_I != 0x00) {
       inputChange(chg_I, g_actR);
     }
+
+    Serial1.print("S;H;After output;");
+    print_64val1(outputValue); Serial1.println(";");
     Serial.print("End function;\r\nprev=");
     print_64val(g_prevR); Serial.print("\r\nact_=");
     print_64val(g_actR); Serial.println("");
@@ -176,7 +181,7 @@ void loop() {
   }
 
   if (Serial.available()) {
-    Serial1.println("S;D;Incoming data;");
+    //Serial1.print("S;D;Incoming data;V;");
     uint8_t data[38];
     size_t r = Serial.readBytes(data, 38);
   
@@ -201,7 +206,8 @@ void loop() {
         actR += val;
       }
     }
-    Serial1.println("S;D;Incoming data;");
+    //print_64val1(g_actR);
+    //Serial1.println(';');
     Serial.print("Incoming data: prev=");
     print_64val(g_prevR); Serial.print("\r\nact_=");
     print_64val(g_actR); Serial.print("\r\ninc_=");

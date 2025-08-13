@@ -20,6 +20,17 @@ void print_64val(uint64_t value)
   }
 }
 
+void print_64val1(uint64_t value)
+{
+  uint8_t val;
+
+  for (int8_t m = 60; m >= 0; m-=4) {
+    val = value >> m;
+    val &= val & 0xf;
+    Serial1.print(val, HEX);
+  }
+}
+
 void print_64bin(uint64_t value, bool input)
 {
   uint8_t val;
@@ -130,8 +141,6 @@ void print1_64val(uint64_t value)
     val = value >> m;
     val &= val & 0xf;
     Serial1.print(val, HEX);
-    if (m % 16 == 0)
-      Serial1.print(" ");
   }
 }
 
@@ -139,7 +148,11 @@ void mcp_pinMode(short ps) {
   mcp[mod_id(ps)].pinMode(pin_id(ps), _pins[ps].io_type);
 }
 
+
+extern uint64_t outputValue;
 void mcp_digitalWrite(short ps, short value) {
+  bitWrite(outputValue, ps, value); 
+  
   Serial.print("pos=");
   Serial.print(ps);
   Serial.print("=>");

@@ -160,18 +160,18 @@ void hol_req(uint8_t index, bool val)
 {
     
     switch(index) {
-        case 6: //hol 3.1
-        case 7: //hol 3.2
-        case 8: //hol 3.3
+        case OSW_HOL_A1: //hol 3.1
+        case OSW_HOL_A2: //hol 3.2
+        case OSW_HOL_A3: //hol 3.3
             holL3.set(index, val); break;
         
-        case 9: //hol 4.4
-        case 10: //hol 4.3
-        case 11: //hol 4.2
-        case 12: //hol 4.1
+        case OSW_HOL_B4: //hol 4.4
+        case OSW_HOL_B3: //hol 4.3
+        case OSW_HOL_B2: //hol 4.2
+        case OSW_HOL_B1: //hol 4.1
             holL4.set(index, val); break;
 
-        case 16+10:
+        case OSW_HOL_0:
             l4_230 = val;
             mcp_digitalWrite(OSW_HOL_0, val ? HIGH : LOW);
             break;
