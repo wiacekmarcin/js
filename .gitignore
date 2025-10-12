@@ -92,3 +92,6 @@ python/.venv
 python/bin/*
 python/lib/*
 python/include/*
+HA/debug.log
+python/__pycache__/*
+
