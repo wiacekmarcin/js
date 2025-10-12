@@ -1,0 +1,35 @@
+<div ng-controller="zylaadd-ctrl">
+    <div class="w3-cointaner" ng-if="!selectedZyla">
+        <table >
+            <tr ng-repeat="part in przewody track by $index">
+                <td><label>{{$index*50}} - {{$index*50+49}}</label></td>
+                <td style="text-align: left">
+                    <select ng-model="selectedId[$index]" 
+                    ng-options="przewod as przewod.id + ' ' + przewod.descr for przewod in part" 
+                    ng-change="choosePrzewod($index)"></select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button ng-click="dodajZyly(true)">Dodaj żyłę</button></td>
+            </tr>
+        </table>
+    </div>
+    <div class="w3-cointaner" ng-if="selectedZyla">
+        <h5>{{przewod_id.id}} {{przewod_id.descr}} ({{przewod_id.ilosc_zyl}}) </h5>
+        <table>
+            <tr ng-repeat="x in getNumber(przewod_id.ilosc_zyl) track by $index">
+                <td>{{$index+1}}</td>
+                <td>
+                    <select ng-model="selectedKolor[$index]" 
+                    ng-options="col as col.cname for col in colors track by col.id"
+                    ng-change="chooseZyla($index)">
+                    </select>
+                </td>
+                <td ng-style='{"background-color" : selectedHtml[$index]}'>&nbsp;</td>
+                <td><input type="text" ng-model="selectedOpis[$index]"></td>
+            </tr>
+        </table>
+        <button ng-click="dodajDoBazy()">Dodaj żyły</button> &nbsp; <button ng-click="dodajZyly(false)">Anuluj</button>
+    </div>
+
+</div>

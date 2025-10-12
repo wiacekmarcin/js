@@ -1,0 +1,1 @@
+SELECT * FROM `polaczenie_plytka_polaczenie` right join `elementy_plytkowe_pin` on (`polaczenie_plytka_polaczenie`.`elementy_plytkowe_piny_id` = `elementy_plytkowe_pin`.`id`) left join `polaczenie_plytka` on (`polaczenie_plytka_polaczenie`.`polaczenie_plytka_id` = `polaczenie_plytka`.`id`) WHERE `elementy_plytkowe_pin`.`element_plytkowy_id` = 191
