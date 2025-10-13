@@ -69,6 +69,7 @@ static void WCUmywalkaZ()
 }
 
 static void WCUmywalkaC()
+{
   impulse[index][WC_UMYW_C] += 1;
 }
 
@@ -161,23 +162,6 @@ PinInterr mapsPin[15] = {
   { 5, KuchniaZmywarka },
 };
 
-
-void setup() {
-void WCUmywalkaZ() { impulse[index][WC_UMYW_Z] += 1; }
-void WCUmywalkaC() { impulse[index][WC_UMYW_C] += 1; }
-void WCPralkaZ() { impulse[index][WC_PRALKA_Z] += 1; }
-void WCPralkaC() { impulse[index][WC_PRALKA_C] += 1; }
-void WCSedes() { impulse[index][WC_SEDES] += 1; }
-void LazienkaWannaC() { impulse[index][LAZ_WANNA_C] += 1; }
-void LazienkaUmywalkaC() { impulse[index][LAZ_UMYW_C] += 1; }
-void LazienkaUmywalkaZ() { impulse[index][LAZ_UMYW_Z] += 1; }
-void LazienkaPrysznicC() { impulse[index][LAZ_PRYSZ_C] += 1; }
-void LazienkaPrysznicZ() { impulse[index][LAZ_PRYSZ_Z] += 1; }
-void LazienkaSedes() { impulse[index][LAZ_SEDES] += 1; }
-void KuchniaUmywalkaZ() { impulse[index][KUCH_UMYW_Z] += 1; }
-void KuchniaUmywalkaC() { impulse[index][KUCH_UMYW_C] += 1; }
-void KuchniaZmywarka() { impulse[index][KUCH_ZMYW_Z] += 1; }
-
 void WentylatorKuchnia()
 {
   WentKuch.pushBtn();
@@ -192,7 +176,6 @@ void WentylatorLazienka(bool on)
 {
   WentLaz.pushBtn();
 }
-
 
 volatile bool Int1Sec = false;
 ISR(RTC_PIT_vect) { Int1Sec = true; RTC.PITINTFLAGS = 1; }
@@ -219,8 +202,6 @@ void setupInterrupts() {
   return;
   
 }
-
-
 
 void setup()
 {
@@ -326,146 +307,7 @@ void loop() {
 
 }
 
-#include "main.h"
-
-#ifndef NEW_BOARD
-#include <PCF8574.h>
-#else
-#include <Adafruit_MCP23017.h>
-#include "io.h"
-#endif
-
-#include <LiquidCrystal_I2C.h>
-#define ISLCD 9
-
-
 LiquidCrystal_I2C lcd(0x3F,16,2);  
-
-#include "wejscia.h"
-#include "podswietlenie.h"
-#include "swiatloled.h"
-#include "swiatlojadalnia.h"
-#include "swiatlosufit.h"
-
-#ifdef NEW_BOARD
-Adafruit_MCP23017 o20;
-Adafruit_MCP23017 io24;
-#else
-PCF8574 expWejscia(0x20);
-PCF8574 expLedy(0x25);
-PCF8574 expOczka(0x26);
-PCF8574 expPozostale(0x27);
-#endif
-
-
-
-Wejscia w;
-Podswietlenie swPod;
-SwiatloLED swLED;
-SwiatloSufit swSufit;
-SwiatloJadalnia swJadalnia;
-
-bool change(unsigned long timeinsKuchnia, unsigned long timeimsDrzwi) {
-	static unsigned long prevmaskawejsc = 0x00;
-	unsigned long maskawejsc = 0x00;
-
-	maskawejsc |= w.czyklJadDown() << 1;
-	maskawejsc |= w.czyklJadUp() << 2;
-	maskawejsc |= w.czyklKuchADown() << 3;
-	maskawejsc |= w.czyklKuchAUp() << 4;
-	maskawejsc |= w.czyklKuchBDown() << 5;
-	maskawejsc |= w.czyklKuchUp() << 6;
-	maskawejsc |= w.czyDrzwiOtwarte() << 7;
-	maskawejsc |= w.czyNoc() << 8;
-	maskawejsc |= w.czyWieczor() << 9;
-	maskawejsc |= w.czyRuchDrzwi(SwiatloLED::czasSwiecenieLED) << 10;
-	maskawejsc |= w.czyRuchKuchnia(1000*timeinsKuchnia) << 11;
-	
-
-	if (prevmaskawejsc == maskawejsc)
-		return false;
-
-	if (maskawejsc & 0x3f) { // jaki kolwiek klawsz to znaczy jest ruch w kuchni 
-		w.setRuch();
-	}
-	prevmaskawejsc = maskawejsc;
-	return true;
-}
-
-void printW(const long & t, const Wejscia &w, bool force = false) 
-{
-/*	
-	Serial.println(t);
-	Serial.println("JAD UP | JAD DOWN | KUCH A UP | KUCH A DOWN | KUCH B UP | KUCH B DOWN | DRZWI_OTW | WIE | NOC | RUCH_DRZWI | RUCH_KUCH ");
-	Serial.print  ("      ");
-	Serial.print (w.czyklJadUp(), DEC);
-	Serial.print ("|         ");
-	Serial.print (w.czyklJadDown(), DEC);
-	Serial.print ("|          ");
-	Serial.print (w.czyklKuchAUp(), DEC);
-	Serial.print ("|            ");
-	Serial.print (w.czyklKuchADown(), DEC);
-	Serial.print ("|          ");
-	Serial.print (w.czyklKuchBUp(), DEC);
-	Serial.print ("|            ");
-	Serial.print (w.czyklKuchBDown(), DEC);
-	Serial.print ("|          ");
-	Serial.print (w.czyDrzwiOtwarte());
-	Serial.print ("|    ");
-	Serial.print (w.czyWieczor());
-	Serial.print ("|    ");
-	Serial.print (w.czyNoc());
-	Serial.print ("|          ");
-	Serial.print (w.czyRuchDrzwi(2000));
-	Serial.print ("|         ");
-	Serial.println (w.czyRuchKuchnia(2000));
-	Serial.println('-');
-*/	
-}
-
-unsigned long t = 0;
-
-
-void setup() {
-
-#ifdef NEW_BOARD
-
-	zapalPrzekazniki(false);
-	zapalZasAwar(false);
-	zapalLEDZasilacz(false);
-	io_init();
-	Serial.begin(115200);
-	delay(500);
-	w.read(false, NULL);
-	//if (w.czyZasilanieAwaryjne) { zapalZasAwar(true); delay(50); }
-	zapalPrzekazniki(true);
-	zapalSzafki(true);
-	//if (w.czyWieczor()) {
-	//	zapalLedSufitLod(true);
-	//	zapalLEDZasilacz(true);
-	//}
-
-#else
-	expPozostale.begin();
-	
-	 //expOczka.begin(); -- w srodku jest funkcja begin
-
-	swJadalnia.init();
-    swPod.init();
-	swLED.init();
-	w.init();
-	 
-	expLedy.begin();
-	swPod.zapalSzafa(true);
-#endif
-
-	swSufit.init();
-	t = millis();
-
-	w.read(false, NULL);
-	//printW(t, w, true);
-
-}
 
 
 
@@ -475,109 +317,8 @@ bool prev = false;
 int passcnt = -1;
 bool connectLcd = false;
 
-void loop() {
-#if 0
-	//5, 6,  8
-	digitalWrite(5, HIGH);
-	o20.writeGPIOAB(0xffff);
-	delay(5000);
-	o20.writeGPIOAB(0x0000);
-	Serial.println("5 - LOW");
-	for (int i=0; i< 16;i++) {
-		delay(400);
-		o20.digitalWrite(i, LOW);
-	}
-	io24.digitalWrite(LEDDRZ1, LOW);
-	io24.digitalWrite(LEDSUFL, LOW);
-	io24.digitalWrite(LEDSUFJ, LOW);	
-	
+void setup() {
 
-	delay(5000);
-	Serial.println("5 - HIGH");
-	for (int i=0; i< 16;i++) {
-		delay(400);
-		o20.digitalWrite(i, HIGH);
-	}
-	io24.digitalWrite(LEDDRZ1, HIGH);
-	io24.digitalWrite(LEDSUFL, HIGH);
-	io24.digitalWrite(LEDSUFJ, HIGH);
-
-	digitalWrite(5, LOW);
-	
-	return;
-
-	if (Serial.available() > 0) {
-		uint8_t inc = Serial.read();
-		if (inc == 'a') {
-			Serial.print(inc, DEC);
-			Serial.print(" ");
-			printW(t, w, true);	
-		}
-
-		if (inc == 'u') {
-			++passcnt;
-			test(passcnt);
-		} else if (inc == 'd') {
-			--passcnt;
-			test(passcnt);
-		}
-
-
-	}
-#endif
-
-	 if (digitalRead(ISLCD) == LOW) {
-        if (!connectLcd) {
-            Serial.println("Inicjalizacja LCD");
-            lcd.init();                      // initialize the lcd 
-            lcd.clear();
-            
-            // Print a message to the LCD.
-            lcd.print("Staritng!");
-            connectLcd = true;
-			lcd.clear();
-            lcd.setBacklight(true);
-            lcd.setCursor(0,0);
-            lcd.print('1');
-            lcd.print(' ');
-            lcd.print('2');
-            lcd.print(' ');
-            lcd.print('3');
-            lcd.print(' ');
-            lcd.print('4');
-        } 
-    } else if (connectLcd) {
-        connectLcd = false;
-        Serial.println("Rozlaczenie LCD");
-    }
-
-	w.read(connectLcd, &lcd);
-	//lcd.setCursor(0,1);
-
-
-	//delay(110);
-	//return;
-
-	t = millis();
-	swSufit.rotate();
-	swSufit.tiktok(t);
-	if (!change(30*60, 5*60)) {
-		delay(100);
-		return;
-	}
-#ifdef DBG
-	printW(t, w);
-#endif	
-	swJadalnia.zapal(w);
-	swSufit.zapal(w, swLED);
-	swLED.zapal(w, swSufit.czyZapalone());
-	swPod.zapal(w.czyZasilanieAwaryjne(), w.czyWieczor(), swSufit.czyZapalone(), swJadalnia.czyZapalone(), swLED.czyZapalonySufit());
-	
-	delay(100 - (millis() - t));
-
-
-}
- 
   mcp.pinMode(LAZ_UMY_W, OUTPUT);
   mcp.pinMode(LAZ_WAN_W, OUTPUT);
   mcp.pinMode(LAZ_PRYSZ_W, OUTPUT);
