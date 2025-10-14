@@ -1,5 +1,6 @@
 #ifndef MW_TEMP_H
 #define MW_TEMP_H
+#if 0
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
@@ -28,4 +29,5 @@ private:
   float temp;
 };
 
+#endif
 #endif

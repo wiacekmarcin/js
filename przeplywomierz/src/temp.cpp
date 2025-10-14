@@ -1,5 +1,5 @@
 #include "temp.h"
-
+#if 0
 void Temp::loadTemp() {
 	sensors.requestTemperatures(); // Send the command to get temperatures
 	float tempC = sensors.getTempCByIndex(0);
@@ -7,3 +7,4 @@ void Temp::loadTemp() {
 	if(tempC != DEVICE_DISCONNECTED_C)
 		temp = tempC;
 }
+#endif

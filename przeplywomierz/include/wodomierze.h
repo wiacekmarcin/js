@@ -37,8 +37,8 @@ const char info[15][9] = {
   "KU_ZMYWA",
 };
 
-extern unsigned int impulse[2][15];
-extern unsigned short index;
+extern uint16_t impulse[2][15];
+extern uint8_t index;
 
 extern void WCUmywalkaZ();
 extern void WCUmywalkaC();

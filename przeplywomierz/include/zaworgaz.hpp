@@ -2,7 +2,6 @@
 #define ZAWORGAZ
 
 #include <Adafruit_MCP23X17.h>
-#include "my_sens.h"
 class MyZaworGaz {
 public:
     MyZaworGaz(Adafruit_MCP23X17 * mcp, uint8_t in, uint8_t out1, uint8_t out2, uint8_t id);
@@ -19,8 +18,7 @@ private:
     uint8_t pinF2;
     unsigned long lastAction;
     bool enable;
-    
-    MyMessage msg;
+    uint8_t id;
 };
 
 #endif // DEBUG
