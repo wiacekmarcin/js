@@ -47,9 +47,10 @@ void MyWentylator::setPin(bool val)
 
 void MyWentylator::tick()
 {
-    if (enable)
+    if (!enable)
         return;
-    if (ticks == 0) {
+        
+    if (enable && ticks == 0) {
         set(false);
         return;
     }

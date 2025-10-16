@@ -12,10 +12,13 @@ FlowMessage flowMsg;
 #include "wodomierze.h"
 #include "graphic.h"
 
-MyWentylator WentKuch(&mcp, 4, KUCH_WENT, 30, false, 40) ;
-MyWentylator WentLaz(&mcp, 2, LAZ_WENT, 30, false, 41) ;
-MyWentylator WentWC(&mcp, 3, WC_WENT, 30, false, 42) ;
+MyWentylator WentKuch(&mcp, 4, KUCH_WENT, 30, false, 1) ;
+MyWentylator WentLaz(&mcp, 2, LAZ_WENT, 30, false, 2) ;
+MyWentylator WentWC(&mcp, 3, WC_WENT, 30, false, 3) ;
 
+//MyZaworGaz gaz(&mcp, 3, 0, F_GAZ_1, F_GAZ_2, 1);
+
+void parseCommand(uint8_t * table, uint8_t actIdx, uint8_t lenCmd);
 
 uint8_t index = 0;
 uint32_t impulseAll[15];
@@ -111,28 +114,21 @@ static inline void KuchniaZmywarka()
   impulse[index][KUCH_ZMYW_Z] += 1;
 }
 
-volatile bool Int1Sec = false;
-ISR(RTC_PIT_vect) { Int1Sec = true; RTC.PITINTFLAGS = 1; }
+volatile bool Int2Sec = false;
+ISR(RTC_PIT_vect)
+{ 
+  Int2Sec = true; 
+  RTC.PITINTFLAGS = RTC_PI_bm;
+}
 
 void setupInterrupts() {
-
-  //To operate the PIT, follow these steps:
-  //1. Configure the RTC clock CLK_RTC as described in   Configure the Clock CLK_RTC.
-  RTC.CLKSEL = 0x00; //Use OSCULP32K oscillator
-    
-  //2. Enable the interrupt by writing a '1' to the Periodic Interrupt bit (PI) in the PIT Interrupt Control
-  //register (RTC.PITINTCTRL).
-  while (1 & RTC.PITSTATUS); //check if register isn't busy
   
-  RTC.PITINTCTRL = 0x01; //Enable interrupts
+  RTC.CLKSEL = RTC_CLKSEL_INT32K_gc; // set internal clock @ 32768 Hz
   
-  //3. Select the period for the interrupt and enable the PIT by writing the desired value to the PERIOD bit
-  //field and a '1' to the PIT Enable bit (PITEN) in the PIT Control A register (RTC.PITCTRLA).
-
-  while (1 & RTC.PITSTATUS); //check if register isn't busy
-
-  RTC.PITCTRLA = RTC_PERIOD_CYC32768_gc | 0x01; //0xFD; //This should set the clock to trigger an interrupt every 128 clock cycles (The clock frequency is 32768Hz, so every 1/256 seconds)
-
+  RTC.PITINTCTRL = RTC_PI_bm;  // enable PIT interrupt
+  RTC.PITCTRLA = RTC_PERIOD_CYC32768_gc | RTC_PITEN_bm;
+  
+ 
   return;
   
 }
@@ -171,12 +167,14 @@ void setup() {
 }
 
 uint16_t deltaImpulse[15];
+uint8_t bufforCmd[16];
+uint8_t actIdx = 0;
+uint8_t lenCmd = 0;
 void loop() {
-  
-  if (Int1Sec) {
+
+  if (Int2Sec) {
     auto m = millis();
-    Int1Sec = false;
-    Serial.println(m, DEC);
+    Int2Sec = false;
 
     WentKuch.tick();
     WentLaz.tick();
@@ -209,5 +207,68 @@ void loop() {
       }      
     }
   }
+
+  while(Serial.available()) {
+    char c = Serial.read();
+    if (c == '\n' || c == '\r') {
+      if (lenCmd > 0) {
+        parseCommand(bufforCmd, actIdx, lenCmd);
+      }
+      lenCmd = 0;
+    } else {
+      bufforCmd[actIdx] = c;
+      actIdx = (actIdx + 1) & 0x0f;
+      lenCmd = (lenCmd + 1) & 0x0f;
+    }
+  }
 }
 
+void parseCommand(uint8_t * table, uint8_t idx, uint8_t len)
+{
+  uint8_t cmd[16];
+  uint8_t * ptrCmd = cmd;
+  for (uint8_t i = 0 ; i < len; ++i) {
+    *ptrCmd = table[(idx - len + i) & 0x0f];
+    ++ptrCmd;
+  }
+
+  if (cmd[0] != 'W' && cmd[1] != 'G')
+    return;
+
+  if (cmd[1] != ';')
+    return;
+
+  if (!isDigit(cmd[2]))
+    return;
+
+  uint8_t id = cmd[2] - '0';
+  if (cmd[3] != ';')
+    return;
+
+  if (!isDigit(cmd[4]))
+    return;
+
+  uint8_t val = cmd[4] - '0';
+  if (val != 0 && val != 1)
+    return;
+
+  if (cmd[5] != ';')
+    return;
+
+  if (cmd[0] == 'W') {
+    switch(id) {
+      case 1:
+        WentKuch.set(val ? true: false); break;
+      case 2:
+        WentLaz.set(val ? true: false); break;
+      case 3:
+        WentWC.set(val ? true: false); break;
+      default: break;
+    }
+  } else {
+    if (id == 1) {
+      //gaz.set(val ? true: false); 
+      ;
+    }
+  }
+}
