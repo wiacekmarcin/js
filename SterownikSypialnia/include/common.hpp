@@ -5,7 +5,7 @@
 
 void zasilanieAwaryjne(bool wieczor, bool noc, bool zasAwar);
 void podswietlenie(bool wieczor, bool zasAwar);
-void inputChange(uint64_t ptrChgR, uint64_t ptrActR);
+void inputChange(uint64_t *ptrChgR);
 void rozkaz();
 uint8_t parseNum(uint8_t * data, uint8_t * pos, uint8_t *r);
 

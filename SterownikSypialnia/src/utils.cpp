@@ -150,20 +150,23 @@ void mcp_pinMode(short ps) {
 
 
 extern uint64_t outputValue;
+uint64_t outputValueBck;
 void mcp_digitalWrite(short ps, short value) {
-  bitWrite(outputValue, ps, value); 
-  
-  Serial.print("pos=");
-  Serial.print(ps);
-  Serial.print("=>");
-  Serial.println(value);
 
-  Serial1.print("S;V;");
-  Serial1.print(ps, DEC);
-  Serial1.print(";");
-  Serial1.print(value, DEC);
-  Serial1.println(";");
-  
+  bitWrite(outputValue, ps, value); 
+  if (outputValue != outputValueBck) {
+    Serial.print("pos=");
+    Serial.print(ps);
+    Serial.print("=>");
+    Serial.println(value);
+
+    Serial1.print("S;V;");
+    Serial1.print(ps, DEC);
+    Serial1.print(";");
+    Serial1.print(value, DEC);
+    Serial1.println(";");
+  }
+  outputValueBck = outputValue;
   short svalue = (ps == GWAR_L || ps == GWAR_N || ps == Z213_3_LEDY_CH1 || ps == Z213_4_LEDY_CH2 
           || ps == Z213_5_LEDY_CH3|| ps == Z213_6_LEDY_CH4) ? !value : value;
   if (_pins[ps].io_type == OUTPUT) {

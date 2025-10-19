@@ -7,18 +7,17 @@
 #include <Adafruit_MCP23X17.h>
 
 extern uint64_t g_actR;
-extern uint64_t g_prevR;
 
 extern Adafruit_MCP23X17 mcp[4];
 
-#define IN_KL(V) bool chg_ ## V = (chgR & V) == V; bool val_ ## V = ((~actR) & V) != 0; \
+#define IN_KL(V) bool chg_ ## V = (*chgR & V) == V; bool val_ ## V = ((~(g_actR)) & V) != 0; \
       if (chg_ ## V ) { Serial.print(#V); Serial.print( "=>"); Serial.println(val_ ## V); } \
       do { } while(0)
 #define C_KL(V) chg_ ## V
 #define V_KL(V) val_ ## V
 
 
-void inputChange(uint64_t chgR, uint64_t actR)
+void inputChange(uint64_t *chgR)
 {
   bool wieczor, noc, taryfa2, zasAwar;
 
@@ -26,7 +25,7 @@ void inputChange(uint64_t chgR, uint64_t actR)
   uint64_t mask_i = 0x1;
   Serial.print("CHG= ");
   for (uint8_t pos = 0; pos < 64; ++pos) {
-    if ((chgR & mask_i) == mask_i) {
+    if ((*chgR & mask_i) == mask_i) {
       Serial.print(' ');
       Serial.print(pos);
     }
@@ -36,24 +35,24 @@ void inputChange(uint64_t chgR, uint64_t actR)
 
 
   Serial.println("C1R C1V C2R C2V");
-  Serial.print((chgR & CZUJKA1) == CZUJKA1);
+  Serial.print((*chgR & CZUJKA1) == CZUJKA1);
   Serial.print("  ");
-  Serial.print((actR & CZUJKA1) > 0);
+  Serial.print((g_actR & CZUJKA1) > 0);
   Serial.print("  ");
-  Serial.print((chgR & CZUJKA2) == CZUJKA2);
+  Serial.print((*chgR & CZUJKA2) == CZUJKA2);
   Serial.print("  ");
-  Serial.println((actR & CZUJKA2) > 0);
+  Serial.println((g_actR & CZUJKA2) > 0);
 #endif
 
-  if (((chgR & CZUJKA1) == CZUJKA1) || ((chgR & CZUJKA2) == CZUJKA2)) {
+  if (((*chgR & CZUJKA1) == CZUJKA1) || ((*chgR & CZUJKA2) == CZUJKA2)) {
     Serial.println("zmiana czujki");
-    mcp_digitalWrite(CZUJKA_RUCHU, (((actR & CZUJKA1) | (actR & CZUJKA2)) > 0) ? HIGH : LOW);
+    mcp_digitalWrite(CZUJKA_RUCHU, (((g_actR & CZUJKA1) | (g_actR & CZUJKA2)) > 0) ? HIGH : LOW);
   }
 
-  wieczor = !((actR & SIG_WIECZOR) == SIG_WIECZOR);
-  noc = !((actR & SIG_NOC) == SIG_NOC);
-  taryfa2 = !((actR & SIG_2TARYFA) == SIG_2TARYFA);
-  zasAwar = !((actR & SIG_ZAS_AWAR) == SIG_ZAS_AWAR);
+  wieczor = !((g_actR & SIG_WIECZOR) == SIG_WIECZOR);
+  noc = !((g_actR & SIG_NOC) == SIG_NOC);
+  taryfa2 = !((g_actR & SIG_2TARYFA) == SIG_2TARYFA);
+  zasAwar = !((g_actR & SIG_ZAS_AWAR) == SIG_ZAS_AWAR);
 
 #ifdef DEBUG_CODE
   Serial.println("W N 2 A OFF/CH_OFF");
@@ -65,22 +64,22 @@ void inputChange(uint64_t chgR, uint64_t actR)
   Serial.print(' ');
   Serial.print(zasAwar);
   Serial.print(' ');
-  Serial.print(((actR & Z24_OFF) == 0) ? '0' : '1');
+  Serial.print(((g_actR & Z24_OFF) == 0) ? '0' : '1');
   Serial.print(' ');
-  Serial.println((chgR & Z24_OFF) == Z24_OFF);
+  Serial.println((*chgR & Z24_OFF) == Z24_OFF);
 #else
   (void)taryfa2;
 #endif  
 
-  if ((chgR & SIG_ZAS_AWAR) == SIG_ZAS_AWAR) {
+  if ((*chgR & SIG_ZAS_AWAR) == SIG_ZAS_AWAR) {
     Serial.println("Zasilanie awaryjne");
     zasilanieAwaryjne(wieczor, noc, zasAwar);
     podswietlenie(wieczor, zasAwar);
     return;
   }
 
-  if ((chgR & Z24_OFF) == Z24_OFF) {
-      if ((actR & Z24_OFF) == 0) {
+  if ((*chgR & Z24_OFF) == Z24_OFF) {
+      if ((g_actR & Z24_OFF) == 0) {
         Serial.println("Zmiana 24V");
         hol_off();
         sypialnia_off();

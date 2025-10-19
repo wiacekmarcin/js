@@ -15,6 +15,14 @@
 TwoWire wire;
 Adafruit_MCP23X17 mcp[4];
 
+uint16_t maskInput[4] {
+  0x000F,
+  0x0007,
+  0x7F7F,
+  0x7F7F
+};
+
+
 #ifdef TEMP
 #include <OneWire.h>
 #include <DallasTemperature.h>
@@ -86,8 +94,16 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(INTERRUPTPIN), inputchg, FALLING);
 
   uint64_t act;
+  g_actR = 0;
   for (short i = 0; i < 4; i++) {
     act = mcp[i].readGPIOAB();
+    print_64val(act);
+    Serial.print(" & ");
+    Serial.print(maskInput[i], HEX);
+    Serial.print(" => ");
+    act &= maskInput[i];
+    print_64val(act);
+    Serial.println();
     g_actR |= act << (i*16);
   }
   
@@ -121,54 +137,56 @@ bool ledS1 = false, ledS2 = false, ledL1 = false, ledL2 = false;
 bool salon1 = false, salon2 = false;
 bool sypialnia1 = false, sypialnia2 = false;
 
-
-
+uint16_t act;
+uint64_t chg_R;
 void loop() {
 
   if (interr || incVal) {
-    Serial.print("interr=");
-    Serial.println(interr);
-    Serial.print("incVal=");
-    Serial.println(incVal);
-    interr = false;
-    incVal = false;
     
     if (readVal) {
       g_prevR = g_actR;
       readVal = false;
       g_actR = 0L;
-      uint64_t act;
-      for (short i = 0; i < 4; i++) {
-        act = mcp[i].readGPIOAB();
-        g_actR |= act << (i*16);
+      act = 0;
+      for (short i = 3; i>=0; i--) {
+        act = mcp[i].readGPIOAB() & maskInput[i];
+        Serial.print(act, HEX);
+        Serial.print(", ");
+        g_actR |= act;
+        print_64val(g_actR); Serial.print(" =>");
+        if (i)
+          g_actR <<= 16;
+        print_64val(g_actR); Serial.println("");
       }
     }
-    Serial1.print("S;H;Change incoming;");
+
+    Serial1.print("S;H;");
     if (interr)
       Serial1.print("I;");
     if (incVal)
       Serial1.print("V;");
+    Serial1.print("Chg in;");
     print_64val1(g_actR); Serial1.println(";");
+    interr = false;
+    incVal = false;
+
     Serial.print("Change incoming;\r\nprev=");
     print_64val(g_prevR); Serial.print("\r\nact_=");
     print_64val(g_actR); Serial.print("\r\nchg_=");
   
 
-    uint64_t chg_R = g_prevR ^ g_actR;
-    uint64_t chg_I = chg_R & 0x7f7f7f7f0007000f;
+    chg_R = g_prevR ^ g_actR;
 
-    print_64val(chg_R);Serial.print("\r\nchgi=");
-    print_64val(chg_I);Serial.println("");
+
+    print_64val(chg_R);Serial.print("\r\n");
     print_64Out(g_actR);
-    if (chg_I != 0x00) {
-      inputChange(chg_I, g_actR);
+
+    if (chg_R != 0x00) {
+      inputChange(&chg_R);
     }
 
-    Serial1.print("S;H;After output;");
+    Serial1.print("S;H;Chg out;");
     print_64val1(outputValue); Serial1.println(";");
-    Serial.print("End function;\r\nprev=");
-    print_64val(g_prevR); Serial.print("\r\nact_=");
-    print_64val(g_actR); Serial.println("");
   }
     
   if (tiktokInter) {
@@ -206,11 +224,9 @@ void loop() {
         actR += val;
       }
     }
-    //print_64val1(g_actR);
-    //Serial1.println(';');
-    Serial.print("Incoming data: prev=");
-    print_64val(g_prevR); Serial.print("\r\nact_=");
-    print_64val(g_actR); Serial.print("\r\ninc_=");
+    actR &= 0x7F7F7F7F0007000F;
+
+    Serial.print("Incoming data: ");
     print_64val(actR); Serial.println("");
     g_prevR = g_actR;
     g_actR = actR;

@@ -1,8 +1,8 @@
 
-from PySide6.QtWidgets import QGraphicsScene, QDialog, QGraphicsLineItem, QApplication, QPushButton, QGraphicsEllipseItem, QGraphicsSimpleTextItem
-from PySide6.QtWidgets import QVBoxLayout, QGraphicsRectItem, QGraphicsPathItem
+from PySide6.QtWidgets import QGraphicsScene, QDialog, QFrame, QGraphicsLineItem, QApplication, QPushButton, QGraphicsEllipseItem, QGraphicsSimpleTextItem
+from PySide6.QtWidgets import QVBoxLayout, QGraphicsRectItem, QGraphicsPathItem, QGridLayout, QToolButton, QLabel
 from PySide6.QtGui import QBrush, QPen, QPolygonF, QPainterPath
-from PySide6.QtCore import Qt, Slot, QPoint, QRect, QIODevice, QTimer
+from PySide6.QtCore import Qt, Slot, QPoint, QRect, QIODevice, QTimer, QObject, QSize, Signal, Slot
 from PySide6 import QtSerialPort
 from random import randint
 import pyqtgraph as pg
@@ -83,6 +83,88 @@ pins = [
 others_pins = [
     ["217.02",  "107/1 kuchnia lewy klawisz prawy"],
 ]
+
+class FrameButton(QFrame):
+    def __init__(self, pionowo:bool, lefttxt:str, rigthtxt:str, clicked, parent=None):
+        super(FrameButton, self).__init__(parent)
+
+        if not self.objectName():
+            self.setObjectName(u"FrameButton")
+        if not pionowo:
+            self.resize(75, 25)
+        else:
+            self.resize(25, 75)
+        
+        self.gridLayout = QGridLayout(self)
+        self.gridLayout.setSpacing(1)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.pb_both = QToolButton(self)
+        self.pb_both.setObjectName(u"pb_both")
+        self.pb_both.setMinimumSize(QSize(10, 15))
+        self.pb_both.setMaximumSize(QSize(20, 20))
+        font = self.font()
+        font.setPointSize(6)
+        self.pb_both.setFont(font)
+
+        if not pionowo:
+            self.gridLayout.addWidget(self.pb_both, 0, 1, 1, 1)
+        else:
+            self.gridLayout.addWidget(self.pb_both, 1, 0, 1, 1)
+
+        self.label = QLabel(self)
+        self.label.setObjectName(u"label")
+        self.label.setMinimumSize(QSize(10, 10))
+        self.label.setMaximumSize(QSize(20, 10))
+        self.label.setStyleSheet(u"background-color: rgb(26, 95, 180);")
+        self.label.setFont(font)
+
+        if not pionowo:
+            self.gridLayout.addWidget(self.label, 1, 1, 1, 1)
+        else:
+            self.gridLayout.addWidget(self.label, 1, 1, 1, 1)
+
+        self.pb_left = QToolButton(self)
+        self.pb_left.setObjectName(u"pb_left")
+        self.pb_left.setText(lefttxt)
+        self.pb_left.setFont(font)
+
+        if not pionowo:
+            self.gridLayout.addWidget(self.pb_left, 0, 0, 2, 1)
+        else:
+            self.gridLayout.addWidget(self.pb_left, 0, 0, 1, 2)
+
+        self.pb_rigth = QToolButton(self)
+        self.pb_rigth.setObjectName(u"pb_rigth")
+        self.pb_rigth.setText(rigthtxt)
+        self.pb_rigth.setFont(font)
+
+        if not pionowo:
+            self.gridLayout.addWidget(self.pb_rigth, 0, 2, 2, 1)
+        else:
+            self.gridLayout.addWidget(self.pb_rigth, 2, 0, 1, 2)
+        self.label.setText("")
+        self.pb_both.setText("x")
+        self.pb_both.setFont(font)
+
+        _, pblid = lefttxt.split("\n")
+        _, pbrid = rigthtxt.split("\n")
+
+        self.pb_rigth.clicked.connect(lambda : clicked('', pbrid))
+        self.pb_both.clicked.connect(lambda : clicked(pblid, pbrid))
+        self.pb_left.clicked.connect(lambda : clicked(pblid, ''))
+
+        self.ligth = False
+        self.setValue(False)
+
+    def setValue(self, val:bool):
+        self.ligth = val
+        if val:
+            self.label.setStyleSheet(u"background-color: rgb(26, 95, 180);")
+        else:
+            self.label.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+
+
 
 class Wykres:
     def __init__(self, wykres):
@@ -326,7 +408,7 @@ class Wykres:
             y = self.posMap[k]
             y0 = y + 13
             y1 = y + 2
-            x = self.marginx
+            x = int(self.marginx)
             polyline.append(QPoint(x, y0))
             
             for iv in range(len(self.values[k])-1):
@@ -376,8 +458,9 @@ class Swiatlo:
         self.widgets[val].show()
         self.widgets[not val].hide()
 
-class KontrolkaBox:
+class KontrolkaBox(object):
     def __init__(self, scene, x:int, y:int, txt:str, color = Qt.GlobalColor.red):
+        super(KontrolkaBox, self).__init__()
         pen2 = QPen(Qt.GlobalColor.black)
         f = scene.font()
         f.setPointSize(8)
@@ -399,91 +482,103 @@ class KontrolkaBox:
         self.widgets[val].show()
         self.widgets[not val].hide()
 
-class Wlacznik:
-    def __init__(self, scene:QGraphicsScene, x:int, y:int, txtL:str, txtR:str, clickedL, clickedR, clickedX):
-        font = scene.font()
-        font.setPointSize(6)
-        self.items = []
+class Wlacznik(object):
+    def __init__(self, scene:QGraphicsScene, x:int, y:int, txtL:str, txtR:str, clicked):
+        super(Wlacznik, self).__init__()
+        #font = scene.font()
+        #font.setPointSize(6)
+        #self.items = []
         
-        self.left = QPushButton(txtL)
-        self.left.setGeometry(x, y, 30, 30)
-        self.left.clicked.connect(clickedL)
-        self.left.setFont(font)
-        self.items.append(scene.addWidget(self.left))
+        #self.left = QPushButton(txtL)
+        #self.left.setGeometry(x, y, 30, 30)
+        #self.left.clicked.connect(clickedL)
+        #self.left.setFont(font)
+        #self.items.append(scene.addWidget(self.left))
 
-        self.both = QPushButton("x")
-        self.both.setGeometry(x+26, y, 15, 30)
-        self.both.clicked.connect(clickedX) 
-        self.both.setFont(font)
-        self.items.append(scene.addWidget(self.both))
+        #self.both = QPushButton("x")
+        #self.both.setGeometry(x+26, y, 15, 30)
+        #self.both.clicked.connect(clickedX) 
+        #self.both.setFont(font)
+        #self.items.append(scene.addWidget(self.both))
 
-        self.right = QPushButton(txtR)
-        self.right.setGeometry(x+37, y, 30, 30)
-        self.right.clicked.connect(clickedR)
-        self.right.setFont(font)
-        self.items.append(scene.addWidget(self.right))
+        #self.right = QPushButton(txtR)
+        #self.right.setGeometry(x+37, y, 30, 30)
+        #self.right.clicked.connect(clickedR)
+        #self.right.setFont(font)
+        #self.items.append(scene.addWidget(self.right))
+        self.btns = FrameButton(False, txtL, txtR, clicked)
+        item = scene.addWidget(self.btns)
+        item.setPos(x, y)
 
 class WlacznikPods(Wlacznik):
-    def __init__(self, scene, x:int, y:int, txtL:str, txtR:str, clickedL, clickedR, clickedX, top:bool = True):
-        super(WlacznikPods, self).__init__(scene, x, y, txtL, txtR, clickedL, clickedR, clickedX)
-        self.widgets = { True : QGraphicsEllipseItem(QRect(0, 0, 10, 10)), False : QGraphicsEllipseItem(QRect(0, 0, 10, 10))}        
-        pen2 = QPen(Qt.GlobalColor.black)
-        pen2.setWidth(1)
-        for s in [True, False]:
-            self.widgets[s].setPos(x+31, y+35 if top else y-15)
-            self.widgets[s].setPen(pen2)
-            scene.addItem(self.widgets[s])
+    def __init__(self, scene, x:int, y:int, txtL:str, txtR:str, clicked, top:bool = True):
+        super(WlacznikPods, self).__init__(scene, x, y, txtL, txtR, clicked)
+        #self.widgets = { True : QGraphicsEllipseItem(QRect(0, 0, 10, 10)), False : QGraphicsEllipseItem(QRect(0, 0, 10, 10))}        
+        #pen2 = QPen(Qt.GlobalColor.black)
+        #pen2.setWidth(1)
+        #for s in [True, False]:
+        #    self.widgets[s].setPos(x+31, y+35 if top else y-15)
+        #    self.widgets[s].setPen(pen2)
+        #    scene.addItem(self.widgets[s])
 
-        self.widgets[True].setBrush(Qt.GlobalColor.blue)
-        self.widgets[True].hide()
-        self.widgets[False].setBrush(Qt.GlobalColor.gray)
+        #self.widgets[True].setBrush(Qt.GlobalColor.blue)
+        #self.widgets[True].hide()
+        #self.widgets[False].setBrush(Qt.GlobalColor.gray)
 
-    def setVal(self, val:bool):
-        self.widgets[val].show()
-        self.widgets[not val].hide()
+    #def setVal(self, val:bool):
+    #    self.widgets[val].show()
+    #    self.widgets[not val].hide()
 
 class WlacznikR:
-    def __init__(self, scene:QGraphicsScene, x:int, y:int, txtL:str, txtR:str, clickedL, clickedR, clickedX):
-        font = scene.font()
-        font.setPointSize(6)
-        self.items = []
+    def __init__(self, scene:QGraphicsScene, x:int, y:int, txtL:str, txtR:str, clicked):
+        #font = scene.font()
+        #font.setPointSize(6)
+        #self.items = []
         
-        self.left = QPushButton(txtL)
-        self.left.setGeometry(x, y, 30, 30)
-        self.left.clicked.connect(clickedL)
-        self.left.setFont(font)
-        self.items.append(scene.addWidget(self.left))
+        #self.left = QPushButton(txtL)
+        #self.left.setGeometry(x, y, 30, 30)
+        #self.left.clicked.connect(clickedL)
+        #self.left.setFont(font)
+        #self.items.append(scene.addWidget(self.left))
 
-        self.both = QPushButton("x")
-        self.both.setGeometry(x, y+31, 30, 15)
-        self.both.clicked.connect(clickedX) 
-        self.both.setFont(font)
-        self.items.append(scene.addWidget(self.both))
+        #self.both = QPushButton("x")
+        #self.both.setGeometry(x, y+31, 30, 15)
+        #self.both.clicked.connect(clickedX) 
+        #self.both.setFont(font)
+        #self.items.append(scene.addWidget(self.both))
 
-        self.right = QPushButton(txtR)
-        self.right.setGeometry(x, y+46, 30, 30)
-        self.right.clicked.connect(clickedR)
-        self.right.setFont(font)
-        self.items.append(scene.addWidget(self.right))
+        #self.right = QPushButton(txtR)
+        #self.right.setGeometry(x, y+46, 30, 30)
+        #self.right.clicked.connect(clickedR)
+        #self.right.setFont(font)
+        #self.items.append(scene.addWidget(self.right))
+        self.btns = FrameButton(True, txtL, txtR, clicked)
+        self.btns.resize(25, 75)
+        item = scene.addWidget(self.btns)
+        item.setPos(x, y)
 
 class WlacznikPodsR(WlacznikR):
-    def __init__(self, scene, x:int, y:int, txtL:str, txtR:str, clickedL, clickedR, clickedX, right:bool = True):
-        super(WlacznikPodsR, self).__init__(scene, x, y, txtL, txtR, clickedL, clickedR, clickedX)
-        self.widgets = { True : QGraphicsEllipseItem(QRect(0, 0, 10, 10)), False : QGraphicsEllipseItem(QRect(0, 0, 10, 10))}        
-        pen2 = QPen(Qt.GlobalColor.black)
-        pen2.setWidth(1)
-        for s in [True, False]:
-            self.widgets[s].setPos(x+35 if right else x-15, y+34)
-            self.widgets[s].setPen(pen2)
-            scene.addItem(self.widgets[s])
+    def __init__(self, scene, x:int, y:int, txtL:str, txtR:str, clicked, right:bool = True):
+        super(WlacznikPodsR, self).__init__(scene, x, y, txtL, txtR, clicked)
+        #self.widgets = { True : QGraphicsEllipseItem(QRect(0, 0, 10, 10)), False : QGraphicsEllipseItem(QRect(0, 0, 10, 10))}        
+        #pen2 = QPen(Qt.GlobalColor.black)
+        #pen2.setWidth(1)
+        #for s in [True, False]:
+        #    self.widgets[s].setPos(x+35 if right else x-15, y+34)
+        #    self.widgets[s].setPen(pen2)
+        #    scene.addItem(self.widgets[s])
 
-        self.widgets[True].setBrush(Qt.GlobalColor.blue)
-        self.widgets[True].hide()
-        self.widgets[False].setBrush(Qt.GlobalColor.gray)
+        #self.widgets[True].setBrush(Qt.GlobalColor.blue)
+        #self.widgets[True].hide()
+        #self.widgets[False].setBrush(Qt.GlobalColor.gray)
+        self.btns = FrameButton(True, txtL, txtR, clicked)
+        self.btns.resize(25, 75)
+        item = scene.addWidget(self.btns)
+        item.setPos(x, y)
 
-    def setVal(self, val:bool):
-        self.widgets[val].show()
-        self.widgets[not val].hide()
+    #def setVal(self, val:bool):
+    #    self.widgets[val].show()
+    #    self.widgets[not val].hide()
 
 class Wlacznik1:
     def __init__(self, scene:QGraphicsScene, x:int, y:int, txt:str, clicked):
@@ -493,158 +588,56 @@ class Wlacznik1:
         
         self.pb = QPushButton(txt)
         self.pb.setGeometry(x, y, 30, 30)
-        self.pb.clicked.connect(clicked)
+
+        _, pbid = txt.split("\n")
+        self.pb.clicked.connect(lambda : clicked(pbid.strip(), ''))
         self.pb.setFont(font)
         self.items.append(scene.addWidget(self.pb))
 
 class InputCl:
     def __init__(self):
-        self.noc = False
-        self.wieczor = False
-        self.zas_awar = False
-        self.taryfa2 = False
-
-        self.czujka1 = False
-        self.czujka2 = False
-
-        self.v24_off = False
-
-        self.z216_1 = False
-        self.z214_1 = False
-        self.z216_2 = False
-        self.z214_2 = False
-        self.z216_3 = False
-        self.z214_3 = False
-        self.z216_4 = False
-        self.z214_4 = False
-        self.z216_5 = False
-        self.z214_5 = False
-        self.z216_6 = False
-        self.z214_6 = False
-        self.z216_7 = False
-        self.z214_7 = False
-        self.z216_8 = False
-        self.z214_8 = False
-        self.z214_9 = False
-        self.z214_10 = False
-
-        self.z58_1 = False
-        self.z58_2 = False
-        self.z58_3 = False
-        self.z58_4 = False
-        self.z58_5 = False
-        self.z58_6 = False
-        self.z58_7 = False
-        self.z58_8 = False
-
-        self.z217_2 = False
-        self.z217_3 = False
+        self.inputs = {}
+        self.mapP = {}
+        for p in pins:
+            idx = p[0]*16+p[1]
+            if p[2] == 'INPUT':
+                self.inputs[idx] = False if idx in [16,17,18] else True
+                try :
+                    d1, d2 = p[3].split('.')
+                    self.mapP['%d.%d' % (int(d1), int(d2))] = idx
+                except:
+                    pass
 
     def setNoc(self, val):
-        self.noc = val
+        self.inputs[2] = not val
 
     def setWieczor(self, val):
-        self.wieczor = val
+        self.inputs[3] = not val
 
     def setZasAwar(self, val):
-        self.zas_awar = val
+        self.inputs[0] = not val
 
     def setTaryfa2(self, val):
-        self.taryfa2 = val
+        self.inputs[1] = not val
 
     def setCzujka1(self, val):
-        self.czujka1 = val 
+        self.inputs[16] = val 
 
     def setCzujka2(self, val):
-        self.czujka2 = val
+        self.inputs[17] = val
     
     def setV24_off(self, val):
-        self.v24_off = val
-
-    def setZ216_1(self, val):
-        self.z216_1 = val
+        self.inputs[18] = val
     
-    def setZ214_1(self, val):
-        self.z214_1 = val
-
-    def setZ216_2(self, val):
-        self.z216_2 = val
+    def set(self, pos:str, val:bool):
+        print(pos, val)
+        if pos in self.mapP:
+            idx = self.mapP[pos]
+            print(idx)
+            self.inputs[idx] = not val
+        else:
+            print(self.mapP.keys())
     
-    def setZ214_2(self, val):
-        self.z214_2 = val
-
-    def setZ216_3(self, val):
-        self.z216_3 = val
-    
-    def setZ214_3(self, val):
-        self.z214_3 = val
-
-    def setZ216_4(self, val):
-        self.z216_4 = val
-    
-    def setZ214_4(self, val):
-        self.z214_4 = val
-    
-    def setZ216_5(self, val):
-        self.z216_5 = val
-    
-    def setZ214_5(self, val):
-        self.z214_5 = val
-
-    def setZ216_6(self, val):
-        self.z216_6 = val
-    
-    def setZ214_6(self, val):
-        self.z214_6 = val
-
-    def setZ216_7(self, val):
-        self.z216_7 = val
-    
-    def setZ214_7(self, val):
-        self.z214_7 = val
-
-    def setZ216_8(self, val):
-        self.z216_8 = val
-    
-    def setZ214_8(self, val):
-        self.z214_8 = val
-
-    def setZ214_9(self, val):
-        self.z214_9 = val
-    
-    def setZ214_10(self, val):
-        self.z214_10 = val
-
-    def setZ58_1(self, val):
-        self.z58_1 = val
-    
-    def setZ58_2(self, val):
-        self.z58_2 = val
-
-    def setZ58_3(self, val):
-        self.z58_3 = val
-
-    def setZ58_4(self, val):
-        self.z58_4 = val
-
-    def setZ58_5(self, val):
-        self.z58_5 = val
-
-    def setZ58_6(self, val):
-        self.z58_6 = val
-
-    def setZ58_7(self, val):
-        self.z58_7 = val
-
-    def setZ58_8(self, val):
-        self.z58_8 = val
-
-    def setZ217_2(self, val):
-        self.z217_2 = val
-    
-    def setZ217_3(self, val):
-        self.z217_3 = val
-
     def getInput(self):
         buf = "I=["
         b_0A = 0
@@ -656,115 +649,49 @@ class InputCl:
         b_3A = 0
         b_3B = 0
 
-        if not self.noc:
-            b_0A += 0x1 << 2
-        
-        if not self.wieczor:
-            b_0A += 0x1 << 3
+        for i in range(8):
+            idx = 56+i
+            if idx in self.inputs and self.inputs[idx]:
+                b_3B += 0x1 << i
 
-        if not self.zas_awar:
-            b_0A += 0x1
+        for i in range(8):
+            idx = 48+i
+            if idx in self.inputs and self.inputs[idx]:
+                b_3A += 0x1 << i
 
-        if not self.taryfa2:
-            b_0A += 0x1 << 1
-        
-        if self.czujka1:
-            b_1A += 0x1
+        for i in range(8):
+            idx = 40+i
+            if idx in self.inputs and self.inputs[idx]:
+                b_2B += 0x1 << i
 
-        if self.czujka2:
-            b_1A += 0x1 << 1
+        for i in range(8):
+            idx = 32+i
+            if idx in self.inputs and self.inputs[idx]:
+                b_2A += 0x1 << i
 
-        if self.v24_off:
-            b_1A += 0x1 << 2
+        for i in range(8):
+            idx = 24+i
+            if idx in self.inputs and self.inputs[idx]:
+                b_1B += 0x1 << i
 
-        if not self.z214_1:
-            b_2B += 0x1 << 2
-        
-        if not self.z216_1:
-            b_3A += 0x1 << 6
+        for i in range(8):
+            idx = 16+i
+            if idx in self.inputs and self.inputs[idx]:
+                b_1A += 0x1 << i
 
-        if not self.z214_2:
-            b_2B += 0x1 << 1  
+        for i in range(8):
+            idx = 8+i
+            if idx in self.inputs and self.inputs[idx]:
+                b_0B += 0x1 << i
 
-        if not self.z216_2:
-            b_3A += 0x1 << 5
-        
-        if not self.z214_3:
-            b_2B += 0x1 
-        
-        if not self.z216_3:
-            b_3A += 0x1 << 4
+        for i in range(8):
+            idx = i
+            if idx in self.inputs and self.inputs[idx]:
+                b_0A += 0x1 << i
 
-        if not self.z214_4:
-            b_2A += 0x1 << 6
-        
-        if not self.z216_4:
-            b_3A += 0x1 << 3
-
-        if not self.z214_5:
-            b_2A += 0x1 << 5
-        
-        if not self.z216_5:
-            b_3A += 0x1 << 2
-
-        if not self.z214_6:
-            b_2A += 0x1 << 4
-        
-        if not self.z216_6:
-            b_3A += 0x1 << 1
-
-        if not self.z214_7:
-            b_2A += 0x1 << 3
-        
-        if not self.z216_7:
-            b_3A += 0x1 
-
-        if not self.z214_8:
-            b_2A += 0x1 << 2
-        
-        if not self.z216_8:
-            b_2B += 0x1 << 3
-        
-        if not self.z214_9:
-            b_2A += 0x1 << 1
-        
-        if not self.z214_10:
-            b_2A += 0x1 
-
-        if not self.z58_1:
-            b_2B += 0x1 << 4
-
-        if not self.z58_2:
-            b_2B += 0x1 << 5
-
-        if not self.z58_3:
-            b_2B += 0x1 << 6
-
-        if not self.z58_4:
-            b_3B += 0x1 
-        
-        if not self.z58_5:
-            b_3B += 0x1 << 1
-
-        if not self.z58_6:
-            b_3B += 0x1 << 2
-
-        if not self.z58_7:
-            b_3B += 0x1 << 3
-
-        if not self.z58_8:
-            b_3B += 0x1 << 4
-
-        if not self.z217_2:
-            b_3B += 0x1 << 6
-
-        if not self.z217_3:
-            b_3B += 0x1 << 5
-
-
-        buf += "%03d %03d %03d %03d %03d %03d %03d %03d ]\n\r" % (b_3B, b_3A,b_2B, b_2A,b_1B, b_1A, b_0B, b_0A)
-        #print("%02x %02x %02x %02x %02x %02x %02x %02x" % (b_3B, b_3A,b_2B, b_2A,b_1B, b_1A, b_0B, b_0A))
-        return buf
+        buf += "%03d %03d %03d %03d %03d %03d %03d %03d ]\n\r" % (b_3B, b_3A, b_2B, b_2A,b_1B, b_1A, b_0B, b_0A)
+        buf2 = "%02x%02x %02x%02x %02x%02x %02x%02x" % (b_3B, b_3A,b_2B, b_2A,b_1B, b_1A, b_0B, b_0A)
+        return buf, buf2
 
 class Widget2(QDialog, Ui_SalonSypialniaHol):
     def __init__(self, *args, obj=None, **kwargs):
@@ -774,21 +701,21 @@ class Widget2(QDialog, Ui_SalonSypialniaHol):
         self.inReg = InputCl()
 
         self.opisKlawiszy = {
-            "sypialnia" : ("5P42\n214.1", "5L54\n216.1", self.clicked_pb_214_1, self.clicked_pb_21x_1, self.clicked_pb_216_1),
-            "salon_sypialnia_lewy": ("7L38\n216.4", "7P51\n214.4", self.clicked_pb_216_4, self.clicked_pb_21x_4, self.clicked_pb_214_4),
-            "salon_sypialnia_prawy": ("6L40\n216.3", "6P52\n214.3", self.clicked_pb_216_3, self.clicked_pb_21x_3, self.clicked_pb_214_3),
-            "salon_jadalnia_lewy": ("4L4\n58.1", "4P45\n58.2", self.clicked_pb_58_1, self.clicked_pb_58_1x2, self.clicked_pb_58_1),
-            "salon_jadalnia_prawy": ("3L46\n58.3", "3P56\n58.4", self.clicked_pb_58_3, self.clicked_pb_58_3x4, self.clicked_pb_58_4),
-            "salon_kuchnia_lewy": ("1L61\n217.2", "1P62\n217.3", self.clicked_pb_217_2, self.clicked_pb_217_x, self.clicked_pb_217_3),
-            "salon_kuchnia_prawy": ("2L57\n58.5", "2P58\n58.6", self.clicked_pb_58_5, self.clicked_pb_58_5x6, self.clicked_pb_58_6),
-            "salon": ("8L53\n216.2", "8P41\n214.2", self.clicked_pb_216_2, self.clicked_pb_21x_2, self.clicked_pb_214_2),
-            "salon_lazienka": ("11L51\n216.5", "11P37\n214.5", self.clicked_pb_216_5, self.clicked_pb_21x_5, self.clicked_pb_214_5),
-            "hol_lazienka": ("12L43\n216.8", "12P34\n214.8", self.clicked_pb_216_8, self.clicked_pb_21x_8, self.clicked_pb_214_8),
-            "hol_salon_lewy": ("10L48\n216.7", "10P35\n214.7", self.clicked_pb_216_7, self.clicked_pb_21x_7, self.clicked_pb_214_7),
-            "hol_salon_prawy": ("9L49\n216.6", "9P36\n214.6", self.clicked_pb_216_6, self.clicked_pb_21x_6, self.clicked_pb_214_6),
-            "hol_wc": ("14L59\n58.7", "14P60\n58.8", self.clicked_pb_58_7, self.clicked_pb_58_7x8, self.clicked_pb_58_8),
-            "hol_pokoje": ("13K33\n214.9", self.clicked_pb_214_9),
-            "hol_drzwi": ("15K32\n214.10", self.clicked_pb_214_10),
+            "sypialnia" : ("5P42\n214.1", "5L54\n216.1"),
+            "salon_sypialnia_lewy": ("7L38\n216.4", "7P51\n214.4"),
+            "salon_sypialnia_prawy": ("6L40\n216.3", "6P52\n214.3"),
+            "salon_jadalnia_lewy": ("4L4\n58.1", "4P45\n58.2"),
+            "salon_jadalnia_prawy": ("3L46\n58.3", "3P56\n58.4"),
+            "salon_kuchnia_lewy": ("1L61\n217.2", "1P62\n217.3"),
+            "salon_kuchnia_prawy": ("2L57\n58.5", "2P58\n58.6"),
+            "salon": ("8L53\n216.2", "8P41\n214.2"),
+            "salon_lazienka": ("11L51\n216.5", "11P37\n214.5"),
+            "hol_lazienka": ("12L43\n216.8", "12P34\n214.8"),
+            "hol_salon_lewy": ("10L48\n216.7", "10P35\n214.7"),
+            "hol_salon_prawy": ("9L49\n216.6", "9P36\n214.6"),
+            "hol_wc": ("14L59\n58.7", "14P60\n58.8"),
+            "hol_pokoje": ("13K33\n214.9",),
+            "hol_drzwi": ("15K32\n214.10",)
         }
 
         self.scene = QGraphicsScene(0, 0, 1160, 920)
@@ -927,8 +854,8 @@ class Widget2(QDialog, Ui_SalonSypialniaHol):
             lines9.append(QPoint(1140,900))
             lines.append(lines9)
             
-            brush = QBrush(Qt.black)
-            pen = QPen(Qt.black)
+            brush = QBrush(Qt.GlobalColor.black)
+            pen = QPen(Qt.GlobalColor.black)
             pen.setWidth(10)
             for lines in lines:
                 prev = None
@@ -942,7 +869,7 @@ class Widget2(QDialog, Ui_SalonSypialniaHol):
                     prev = p
 
     def sypialnia(self):
-        self.sypialniaSw = Wlacznik(self.scene, 920, 260, *self.opisKlawiszy["sypialnia"])
+        self.sypialniaSw = Wlacznik(self.scene, 920, 260, *self.opisKlawiszy["sypialnia"], self.clicked_pb)
         
         self.sypialnia1 = Swiatlo(self.scene, 675, 113, "1.27")
         self.sypialnia2 = Swiatlo(self.scene, 715, 113, "2.24")
@@ -958,23 +885,23 @@ class Widget2(QDialog, Ui_SalonSypialniaHol):
         self.led_salsyp1 = Swiatlo(self.scene, 1020, 490, "1.14")
         self.led_salsyp2 = Swiatlo(self.scene, 1020, 530, "2.15")
         
-        self.salonsw2 = WlacznikPods(self.scene, 840, 308, *self.opisKlawiszy["salon_sypialnia_lewy"])
-        self.salonsw1 = WlacznikPods(self.scene, 920, 308, *self.opisKlawiszy["salon_sypialnia_prawy"])
+        self.salonsw2 = WlacznikPods(self.scene, 840, 308, *self.opisKlawiszy["salon_sypialnia_lewy"], self.clicked_pb)
+        self.salonsw1 = WlacznikPods(self.scene, 920, 308, *self.opisKlawiszy["salon_sypialnia_prawy"], self.clicked_pb)
         self.salon_podswielenie.append(self.salonsw1)
         self.salon_podswielenie.append(self.salonsw2)
 
-        self.salonsw3 = WlacznikPods(self.scene, 387, 308, *self.opisKlawiszy["salon"])
+        self.salonsw3 = WlacznikPods(self.scene, 387, 308, *self.opisKlawiszy["salon"], self.clicked_pb)
         self.mix_podswielenie.append(self.salonsw3)
 
-        self.salonsw5 = WlacznikPods(self.scene, 750, 780, *self.opisKlawiszy["salon_jadalnia_prawy"], False)
-        self.salonsw4 = WlacznikPods(self.scene, 830, 780, *self.opisKlawiszy["salon_jadalnia_lewy"], False)
+        self.salonsw5 = WlacznikPods(self.scene, 750, 780, *self.opisKlawiszy["salon_jadalnia_prawy"], self.clicked_pb, False)
+        self.salonsw4 = WlacznikPods(self.scene, 830, 780, *self.opisKlawiszy["salon_jadalnia_lewy"], self.clicked_pb, False)
         self.salon_podswielenie.append(self.salonsw5)
         self.salon_podswielenie.append(self.salonsw4)
 
-        self.salonsw7 = WlacznikR(self.scene, 375, 780, *self.opisKlawiszy["salon_kuchnia_prawy"])
-        self.salonsw6 = WlacznikR(self.scene, 375, 690, *self.opisKlawiszy["salon_kuchnia_lewy"])
+        self.salonsw7 = WlacznikR(self.scene, 375, 780, *self.opisKlawiszy["salon_kuchnia_prawy"], self.clicked_pb)
+        self.salonsw6 = WlacznikR(self.scene, 375, 690, *self.opisKlawiszy["salon_kuchnia_lewy"], self.clicked_pb)
 
-        self.salonsw8 = WlacznikPodsR(self.scene, 308, 525, *self.opisKlawiszy["salon_lazienka"])
+        self.salonsw8 = WlacznikPodsR(self.scene, 308, 525, *self.opisKlawiszy["salon_lazienka"], self.clicked_pb)
         self.mix_podswielenie.append(self.salonsw8)
         
         self.led_sallaz1 = Swiatlo(self.scene, 375, 490, "1.04")
@@ -982,18 +909,18 @@ class Widget2(QDialog, Ui_SalonSypialniaHol):
         
     def hol(self):
         
-        self.salonsw11 = WlacznikPodsR(self.scene, 345, 220, *self.opisKlawiszy["hol_salon_prawy"], False)
-        self.salonsw10 = WlacznikPodsR(self.scene, 345, 140, *self.opisKlawiszy["hol_salon_lewy"], False)
+        self.salonsw11 = WlacznikPodsR(self.scene, 345, 220, *self.opisKlawiszy["hol_salon_prawy"], self.clicked_pb, False)
+        self.salonsw10 = WlacznikPodsR(self.scene, 345, 140, *self.opisKlawiszy["hol_salon_lewy"], self.clicked_pb, False)
         self.hol_podswielenie.append(self.salonsw11)
         self.hol_podswielenie.append(self.salonsw10)
 
-        self.salonsw12 = WlacznikPodsR(self.scene, 188, 156, *self.opisKlawiszy["hol_wc"])
+        self.salonsw12 = WlacznikPodsR(self.scene, 188, 156, *self.opisKlawiszy["hol_wc"], self.clicked_pb)
         self.hol_podswielenie.append(self.salonsw12)
 
-        self.salonsw13 = WlacznikPods(self.scene, 230, 490, *self.opisKlawiszy["hol_lazienka"], False)
+        self.salonsw13 = WlacznikPods(self.scene, 230, 490, *self.opisKlawiszy["hol_lazienka"], self.clicked_pb, False)
         self.hol_podswielenie.append(self.salonsw13)
-        self.salonsw14 = Wlacznik1(self.scene, 190, 40, *self.opisKlawiszy["hol_drzwi"])
-        self.salonsw15 = Wlacznik1(self.scene, 10, 360, *self.opisKlawiszy["hol_pokoje"])
+        self.salonsw14 = Wlacznik1(self.scene, 190, 40, *self.opisKlawiszy["hol_drzwi"], self.clicked_pb)
+        self.salonsw15 = Wlacznik1(self.scene, 10, 360, *self.opisKlawiszy["hol_pokoje"], self.clicked_pb)
 
         self.led_3_1 = Swiatlo(self.scene, 255, 40, "1.11")
         self.led_3_2 = Swiatlo(self.scene, 255, 80, "2.06")
@@ -1101,11 +1028,12 @@ class Widget2(QDialog, Ui_SalonSypialniaHol):
                 elif pos == 47:
                     self.swiatlo_salon.setVal(val)
             elif text[:4] == 'S;H;':
-                _, _, txt, hex, _ = text.split(";")
-                if txt == 'Change incoming':
-                    self.wykresClass.setInput(hex)
-                elif txt == 'After output':
-                    self.wykresClass.setOutput(hex)
+                chks = text.split(";")
+                
+                if chks[2] == 'Chg in':
+                    self.wykresClass.setInput(chks[3])
+                elif chks[2] == 'Chg out':
+                    self.wykresClass.setOutput(chks[3])
             elif text[:4] == 'S;I;':
                 _, _, txt, hexI, hexO = text.split(";")
                 self.wykresClass.setInput(hexI)
@@ -1147,6 +1075,7 @@ class Widget2(QDialog, Ui_SalonSypialniaHol):
 
     @Slot()
     def on_clicked_zasawar(self):
+        print("on_clicked_zasawar")
         k = "zasawar"
         val = not self.inputs[k]
         self.inputs[k] = val
@@ -1177,329 +1106,38 @@ class Widget2(QDialog, Ui_SalonSypialniaHol):
         k = "2taryfa"
         val = not self.inputs[k]
         self.inputs[k] = val
-        self.inReg.setTaryfa2(self, val)
+        self.inReg.setTaryfa2(val)
         self.sendInput()
         self.taryfa2.setVal(val)
 
-    @Slot()
-    def clicked_pb_216_1(self):
-        self.inReg.setZ216_1(True)
-        self.sendInput()
-        self.inReg.setZ216_1(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_1(self):
-        self.inReg.setZ214_1(True)
-        self.sendInput()
-        self.inReg.setZ214_1(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_21x_1(self):
-        self.inReg.setZ216_1(True)
-        self.inReg.setZ214_1(True)
-        self.sendInput()
-        self.inReg.setZ216_1(False)
-        self.inReg.setZ214_1(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_216_2(self):
-        self.inReg.setZ216_2(True)
-        self.sendInput()
-        self.inReg.setZ216_2(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_2(self):
-        self.inReg.setZ214_2(True)
-        self.sendInput()
-        self.inReg.setZ214_2(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_21x_2(self):
-        self.inReg.setZ216_2(True)
-        self.inReg.setZ214_2(True)
-        self.sendInput()
-        self.inReg.setZ216_2(False)
-        self.inReg.setZ214_2(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_216_3(self):
-        self.inReg.setZ216_3(True)
-        self.sendInput()
-        self.inReg.setZ216_3(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_3(self):
-        self.inReg.setZ214_3(True)
-        self.sendInput()
-        self.inReg.setZ214_3(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_21x_3(self):
-        self.inReg.setZ216_3(True)
-        self.inReg.setZ214_3(True)
-        self.sendInput()
-        self.inReg.setZ216_3(False)
-        self.inReg.setZ214_3(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_216_4(self):
-        self.inReg.setZ216_4(True)
-        self.sendInput()
-        self.inReg.setZ216_4(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_4(self):
-        self.inReg.setZ214_4(True)
-        self.sendInput()
-        self.inReg.setZ214_4(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_21x_4(self):
-        self.inReg.setZ216_4(True)
-        self.inReg.setZ214_4(True)
-        self.sendInput()
-        self.inReg.setZ216_4(False)
-        self.inReg.setZ214_4(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_216_5(self):
-        self.inReg.setZ216_5(True)
-        self.sendInput()
-        self.inReg.setZ216_5(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_5(self):
-        self.inReg.setZ214_5(True)
-        self.sendInput()
-        self.inReg.setZ214_5(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_21x_5(self):
-        self.inReg.setZ216_5(True)
-        self.inReg.setZ214_5(True)
-        self.sendInput()
-        self.inReg.setZ216_5(False)
-        self.inReg.setZ214_5(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_216_6(self):
-        self.inReg.setZ216_6(True)
-        self.sendInput()
-        self.inReg.setZ216_6(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_6(self):
-        self.inReg.setZ214_6(True)
-        self.sendInput()
-        self.inReg.setZ214_6(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_21x_6(self):
-        self.inReg.setZ216_6(True)
-        self.inReg.setZ214_6(True)
-        self.sendInput()
-        self.inReg.setZ216_6(False)
-        self.inReg.setZ214_6(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_216_7(self):
-        self.inReg.setZ216_7(True)
-        self.sendInput()
-        self.inReg.setZ216_7(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_7(self):
-        self.inReg.setZ214_7(True)
-        self.sendInput()
-        self.inReg.setZ214_7(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_21x_7(self):
-        self.inReg.setZ216_7(True)
-        self.inReg.setZ214_7(True)
-        self.sendInput()
-        self.inReg.setZ216_7(False)
-        self.inReg.setZ214_7(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_216_8(self):
-        self.inReg.setZ216_8(True)
-        self.sendInput()
-        self.inReg.setZ216_8(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_8(self):
-        self.inReg.setZ214_8(True)
-        self.sendInput()
-        self.inReg.setZ214_8(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_21x_8(self):
-        self.inReg.setZ216_8(True)
-        self.inReg.setZ214_8(True)
-        self.sendInput()
-        self.inReg.setZ216_8(False)
-        self.inReg.setZ214_8(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_214_9(self):
-        self.inReg.setZ214_9(True)
-        self.sendInput()
-        self.inReg.setZ214_9(False)
-        self.sendInput()
+    def clicked_pb(self, left:str, right:str):
+        if len(left) > 0 and len(right) > 0:
+            self.inReg.set(left, True)
+            self.inReg.set(right, True)
+            self.sendInput()    
+            self.inReg.set(left, False)
+            self.inReg.set(right, False)
+            self.sendInput()
+        elif len(left) > 0:
+            self.inReg.set(left, True)
+            self.sendInput()    
+            self.inReg.set(left, False)
+            self.sendInput()
+        elif len(right) > 0:
+            self.inReg.set(right, True)
+            self.sendInput()    
+            self.inReg.set(right, False)
+            self.sendInput()
     
-    @Slot()
-    def clicked_pb_214_10(self):
-        self.inReg.setZ214_10(True)
-        self.sendInput()
-        self.inReg.setZ214_10(False)
-        self.sendInput()
 
-    @Slot()
-    def clicked_pb_58_1(self):
-        self.inReg.setZ58_1(True)
-        self.sendInput()
-        self.inReg.setZ58_1(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_2(self):
-        self.inReg.setZ58_2(True)
-        self.sendInput()
-        self.inReg.setZ58_2(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_1x2(self):
-        self.inReg.setZ58_1(True)
-        self.inReg.setZ58_2(True)
-        self.sendInput()
-        self.inReg.setZ58_1(False)
-        self.inReg.setZ58_2(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_3(self):
-        self.inReg.setZ58_3(True)
-        self.sendInput()
-        self.inReg.setZ58_3(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_4(self):
-        self.inReg.setZ58_4(True)
-        self.sendInput()
-        self.inReg.setZ58_4(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_3x4(self):
-        self.inReg.setZ58_3(True)
-        self.inReg.setZ58_4(True)
-        self.sendInput()
-        self.inReg.setZ58_3(False)
-        self.inReg.setZ58_4(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_5(self):
-        self.inReg.setZ58_5(True)
-        self.sendInput()
-        self.inReg.setZ58_5(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_6(self):
-        self.inReg.setZ58_6(True)
-        self.sendInput()
-        self.inReg.setZ58_6(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_5x6(self):
-        self.inReg.setZ58_5(True)
-        self.inReg.setZ58_6(True)
-        self.sendInput()
-        self.inReg.setZ58_5(False)
-        self.inReg.setZ58_6(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_7(self):
-        self.inReg.setZ58_7(True)
-        self.sendInput()
-        self.inReg.setZ58_7(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_8(self):
-        self.inReg.setZ58_8(True)
-        self.sendInput()
-        self.inReg.setZ58_8(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_58_7x8(self):
-        self.inReg.setZ58_7(True)
-        self.inReg.setZ58_8(True)
-        self.sendInput()
-        self.inReg.setZ58_7(False)
-        self.inReg.setZ58_8(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_217_2(self):
-        self.inReg.setZ217_2(True)
-        self.sendInput()
-        self.inReg.setZ217_2(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_217_3(self):
-        self.inReg.setZ217_3(True)
-        self.sendInput()
-        self.inReg.setZ217_3(False)
-        self.sendInput()
-
-    @Slot()
-    def clicked_pb_217_x(self):
-        self.inReg.setZ217_2(True)
-        self.inReg.setZ217_3(True)
-        self.sendInput()
-        self.inReg.setZ217_2(False)
-        self.inReg.setZ217_3(False)
-        self.sendInput()
 
     def sendMsg(self):
         self.serial_rs485.write(self.message_le.text().encode())
 
     def sendInput(self):
-        msg = self.inReg.getInput()
+        msg, dgb = self.inReg.getInput()
         self.te_acm0.append("Send:"+msg)
+        self.te_acm0.append("INPUT:"+dgb)
         self.serial_arduino.write(msg.encode())
 
     @Slot()

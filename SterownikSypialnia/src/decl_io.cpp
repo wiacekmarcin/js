@@ -252,7 +252,7 @@ struct _iotable _pins[64] {
         ,"216.06"
 #endif
                 }, //216.6 5 9 Hol na ścianie sypialnie prawy klawisz lewy
-  {3,  2,  INPUT
+  {3,  2,  INPUT_PULLUP
 #ifdef _EXT_CODE_
         ,"216.05"
 #endif
