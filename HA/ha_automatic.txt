@@ -1,0 +1,374 @@
+alias: decoder_vectra_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.dekoder_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/decoder_vectra
+      payload: "{{ states('sensor.dekoder_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: charger2_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.ladowarka_2_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/charger2
+      payload: "{{ states('sensor.ladowarka_2_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: microwave_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.mikrofala_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/microwave
+      payload: "{{ states('sensor.mikrofala_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: lights_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.oswietlenie_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/lights
+      payload: "{{ states('sensor.oswietlenie_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: roaster_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.piekarnik_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/roaster
+      payload: "{{ states('sensor.piekarnik_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: kettle_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.czajnik_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/kettle
+      payload: "{{ states('sensor.czajnik_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: computer_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.komputer_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/computer
+      payload: "{{ states('sensor.komputer_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: fridge_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.lodowka_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/fridge
+      payload: "{{ states('sensor.lodowka_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: charger1_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.ladowarka_1_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/charger1
+      payload: "{{ states('sensor.ladowarka_1_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: dvd_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.odtwarzacz_dvd_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/dvd
+      payload: "{{ states('sensor.odtwarzacz_dvd_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: heat_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.ogrzewanie_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/heat
+      payload: "{{ states('sensor.ogrzewanie_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: washing_machine_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.pralka_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/washing_machine
+      payload: "{{ states('sensor.pralka_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: electric_dryer_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.suszarka_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/electric_dryer
+      payload: "{{ states('sensor.suszarka_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: bathroom_el_socket_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.suszarka_do_wlosow_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/bathroom_el_socket
+      payload: "{{ states('sensor.suszarka_do_wlosow_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: kitchen_hood_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.wyciag_powietrza_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/kitchen_hood
+      payload: "{{ states('sensor.wyciag_powietrza_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: power_supply_24V_OFF_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.zasilacz_24v_off_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/power_supply_24V_OFF
+      payload: "{{ states('sensor.zasilacz_24v_off_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: power_supply_24V_ON_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.zasilacz_24v_on_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/power_supply_24V_ON
+      payload: "{{ states('sensor.zasilacz_24v_on_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: dishwasher_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.zmywarka_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/dishwasher
+      payload: "{{ states('sensor.zmywarka_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: power_supply_guaranteed_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.zasilanie_gwarantowane_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/power_supply_guaranteed
+      payload: "{{ states('sensor.zasilanie_gwarantowane_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: main_switch_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.wlacznik_glowny_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/main_switch
+      payload: "{{ states('sensor.wlacznik_glowny_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: iron_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.zelazko_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/iron
+      payload: "{{ states('sensor.zelazko_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
+alias: vacuum_cleaner_mqtt
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.odkurzacz_energy
+conditions: []
+actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      qos: "2"
+      topic: hmd/sensor/energy/vacuum_cleaner
+      payload: "{{ states('sensor.odkurzacz_energy') | float(0) }}"
+      evaluate_payload: false
+mode: single
+
