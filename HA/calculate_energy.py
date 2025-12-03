@@ -3,8 +3,9 @@
 from ha_mqtt_discoverable import Settings, DeviceInfo
 from ha_mqtt_discoverable.sensors import Sensor, SensorInfo
 
+from paho.mqtt.enums import CallbackAPIVersion
 import paho.mqtt.client as mqtt
-import time
+from datetime import datetime
 import json
 
 import os
@@ -13,9 +14,10 @@ def on_connect(client, userdata, flags, reason_code, properties):
     print(f"Connected with result code {reason_code}")
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("hmd/sensor/energy/#")
+    client.subscribe("zigbee2mqtt/#")
+    client.subscribe("hmd/sensor/tauron_taryfa")
 
-mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+mqttc = mqtt.Client(CallbackAPIVersion.VERSION2)
 mqttc.on_connect = on_connect
 
 
@@ -29,206 +31,430 @@ mqttc.connect("192.168.10.250", 1883, 60)
 
 mqtt_settings = Settings.MQTT(client=mqttc)
 
-
+try:
+    os.mkdir("data")
+except:
+    pass    
 class MqttConn:
     def __init__(self):
         # Configure the required parameters for the MQTT broker
         self.mqtt_settings = mqtt_settings
 
         # Define the device. At least one of `identifiers` or `connections` must be supplied
-        self.device_info = DeviceInfo(name="EnergyCalculator", identifiers="energy_calculator_bodycha_120")
+        self.device_info = DeviceInfo(name="ECalc", identifiers="energy_calculator_bodycha_120")
 
+class EnergyCost():
+    def __init__(self):
+        self.tariff_1 = False
+        self.price = 0.70
+        self.price_g11 = 1.15
 
+    def setParams(self, day: bool, price: float, price_g11:float):
+        self.tariff_1 = day
+        self.price = float(price)
+        self.price_g11 = float(price_g11)
 class Tariff(MqttConn):
     def __init__(self, tariff:str, short_tariff:str, who:str, who_id:str):
         super(Tariff, self).__init__()
-        self.sum_energy = 0.0
-        self.sum_cost = 0.0
-        self.fname_e = '.%s_%s_energy.txt' % (who_id, short_tariff)
-        self.fname_c = '.%s_%s_cost.txt' % (who_id, short_tariff)
+        self.sum_energy_y = 0.0
+        self.sum_cost_y = 0.0
+        self.sum_energy_m = 0.0
+        self.sum_cost_m = 0.0
+
+        dt = datetime.now()
+        y = dt.year
+        m = dt.month
+
+        self.who_id = who_id
+        self.short_tariff = short_tariff
+        self.prev_m = m
+
+        energy_info_m = SensorInfo(
+                #name="%s energy %s taryfa (m)" % (who, tariff),
+                name="%s_energy_%s_m" % (who_id, tariff),
+                object_id="%s_energy_%s_m" % (who_id, tariff),
+                unique_id="%s_energy_%s_m" % (who_id, tariff),
+                device_class="energy",
+                state_class= "total",
+                unit_of_measurement="kWh",
+                device=self.device_info,
+        )
+
+        energy_settings_m = Settings(mqtt=mqtt_settings, entity=energy_info_m)
+        self.energy_sensor_m = Sensor(energy_settings_m)
         
-        f_bck_e = os.path.join("../backup", self.fname_e)
-        if os.path.exists(f_bck_e):
-            with open(f_bck_e, 'r') as feb:
-                start_energy = float(feb.readline())
+        cost_info_m = SensorInfo(
+                #name="%s koszt %s taryfa (m)" % (who, tariff),
+                name="%s_cost_%s_m" % (who_id, tariff),
+                object_id="%s_cost_%s_m" % (who_id, tariff),
+                device_class="monetary",
+                state_class= "total",
+                unit_of_measurement="PLN",
+                device=self.device_info,
+                unique_id="%s_cost_%s_m" % (who_id, tariff)
+        )
+
+        cost_settings_m = Settings(mqtt=mqtt_settings, entity=cost_info_m)
+        self.cost_sensor_m = Sensor(cost_settings_m)
+
+        energy_info_y = SensorInfo(
+                #name="%s energy %s taryfa (y)" % (who, tariff),
+                name="%s_energy_%s_y" % (who_id, tariff),
+                unique_id="%s_energy_%s_y" % (who_id, tariff),
+                object_id="%s_energy_%s_y" % (who_id, tariff),
+                device_class="energy",
+                state_class= "total",
+                unit_of_measurement="kWh",
+                device=self.device_info,
+        )
+
+        energy_settings_y = Settings(mqtt=mqtt_settings, entity=energy_info_y)
+        self.energy_sensor_y = Sensor(energy_settings_y)
+        
+        cost_info_y = SensorInfo(
+                #name="%s koszt %s taryfa (y)" % (who, tariff),
+                name="%s_cost_%s_y" % (who_id, tariff),
+                object_id="%s_cost_%s_y" % (who_id, tariff),
+                device_class="monetary",
+                state_class= "total",
+                unit_of_measurement="PLN",
+                device=self.device_info,
+                unique_id="%s_cost_%s_y" % (who_id, tariff)
+        )
+
+        cost_settings_y = Settings(mqtt=mqtt_settings, entity=cost_info_y)
+        self.cost_sensor_y = Sensor(cost_settings_y)
+
+        cost_info_g11_m = SensorInfo(
+                #name="%s koszt g11 (m)" % (who),
+                name="%s_koszt_g11_m" % (who_id),
+                object_id="%s_koszt_g11_m" % (who_id),
+                device_class="monetary",
+                state_class= "total",
+                unit_of_measurement="PLN",
+                device=self.device_info,
+                unique_id="%s_koszt_g11_m" % (who_id)
+        )
+
+        cost_settings_g11_m = Settings(mqtt=mqtt_settings, entity=cost_info_g11_m)
+        self.cost_sensor_g11_m = Sensor(cost_settings_g11_m)
+
+        self.initialize(m, y)
+
+    def initialize(self, m, y):
+        
+        self.prev_m = m
+        self.fname_e_y = 'data/%s_%s_energy_%d.txt' % (self.who_id, self.short_tariff, y)
+        self.fname_c_y = 'data/%s_%s_cost_%d.txt' % (self.who_id, self.short_tariff, y)
+        
+        self.fname_e_m = 'data/%s_%s_energy_%02d_%d.txt' % (self.who_id, self.short_tariff, m, y)
+        self.fname_c_m = 'data/%s_%s_cost_%02d_%d.txt' % (self.who_id, self.short_tariff, m, m)
+        
+
+        if os.path.exists(self.fname_e_y):
+            with open(self.fname_e_y, 'r') as fe:
+                self.sum_energy_y = float(fe.readline())
         else:
-            start_energy = 0
-        
-        f_bck_c = os.path.join("../backup", self.fname_c)
-        if os.path.exists(f_bck_c):
-            with open(f_bck_c, 'r') as fcb:
-                start_cost = float(fcb.readline())
-        else:
-            start_cost = 0
-        
-        
-        if os.path.exists(self.fname_e):
-            with open(self.fname_e, 'r') as fe:
-                self.sum_energy = float(fe.readline())
-            self.sum_energy -= start_energy
-            with open(self.fname_e, 'w+') as fe:
-                fe.write('%f\n' % self.sum_energy)
-        else:
-            with open(self.fname_e, 'w+') as fe:
+            self.sum_energy_y = 0.0
+            with open(self.fname_e_y, 'w+') as fe:
                 fe.write('0\n')
         
-        if os.path.exists(self.fname_c):                
-            with open(self.fname_c, 'r') as fc:
-                self.sum_cost = float(fc.readline())
-            self.sum_cost -= start_cost
-            with open(self.fname_c, 'w+') as fc:
-                fc.write('%f\n' % self.sum_cost)
+        if os.path.exists(self.fname_c_y):                
+            with open(self.fname_c_y, 'r') as fc:
+                self.sum_cost_y = float(fc.readline())
         else:
-            with open(self.fname_c, 'w+') as fc:
+            self.sum_cost_y = 0.0
+            with open(self.fname_c_y, 'w+') as fc:
+                fc.write('0\n')
+        
+        if os.path.exists(self.fname_e_m):
+            with open(self.fname_e_m, 'r') as fe:
+                self.sum_energy_m = float(fe.readline())
+        else:
+            self.sum_energy_m = 0.0
+            with open(self.fname_e_m, 'w+') as fe:
+                fe.write('0\n')
+        
+        if os.path.exists(self.fname_c_m):                
+            with open(self.fname_c_m, 'r') as fc:
+                self.sum_cost_m = float(fc.readline())
+        else:
+            self.sum_cost_m = 0.0
+            with open(self.fname_c_m, 'w+') as fc:
                 fc.write('0\n')
 
-
-        energy_info = SensorInfo(name="%s energia %s taryfa" % (who, tariff),
-                                 device_class="energy",
-                                 state_class= "total",
-                                 unit_of_measurement="kWh",
-                                 device=self.device_info,
-                                 unique_id="%s_energia_%s" % (who_id, short_tariff)
-                                 )
-
-        energy_settings = Settings(mqtt=mqtt_settings, entity=energy_info)
-        self.energy_sensor = Sensor(energy_settings)
-        
-        cost_info = SensorInfo(name="%s koszt %s taryfa" % (who, tariff),
-                               device_class="monetary",
-                               state_class= "total",
-                               unit_of_measurement="PLN",
-                               device=self.device_info,
-                               unique_id="%s_koszt_%s" % (who_id, short_tariff)
-                               )
-
-        cost_settings = Settings(mqtt=mqtt_settings, entity=cost_info)
-        self.cost_sensor = Sensor(cost_settings)
-
-        self.energy_sensor.set_state(self.sum_energy)
-        self.cost_sensor.set_state(self.sum_cost)
+        self.energy_sensor_m.set_state(self.sum_energy_m)
+        self.cost_sensor_m.set_state(self.sum_cost_m)
+        self.energy_sensor_y.set_state(self.sum_energy_y)
+        self.cost_sensor_y.set_state(self.sum_cost_y)
         
 
     def calculate(self, price: float, energy: float):
-        self.sum_energy += energy
-        self.sum_cost += price*energy
+        
+        dt = datetime.now()
+        y = dt.year
+        m = dt.month
 
-        self.energy_sensor.set_state(self.sum_energy)
-        self.cost_sensor.set_state(self.sum_cost)
+        if m != self.prev_m:
+            self.initialize(m, y)
 
-        with open(self.fname_e, 'w') as fe:
-            fe.write("%f\n" % self.sum_energy)
-        with open(self.fname_c, 'w') as fc:
-            fc.write("%f\n" % self.sum_cost)
+        self.sum_energy_m += energy
+        self.sum_cost_m += price*energy
+        self.sum_energy_y += energy
+        self.sum_cost_y += price*energy
+
+        self.energy_sensor_m.set_state(self.sum_energy_m)
+        self.cost_sensor_m.set_state(self.sum_cost_m)
+        self.energy_sensor_y.set_state(self.sum_energy_y)
+        self.cost_sensor_y.set_state(self.sum_cost_y)
+
+        with open(self.fname_e_y, 'w') as fey:
+            fey.write("%f\n" % self.sum_energy_y)
+        with open(self.fname_e_m, 'w') as fem:
+            fem.write("%f\n" % self.sum_energy_m)
+        with open(self.fname_c_y, 'w') as fcy:
+            fcy.write("%f\n" % self.sum_cost_y)
+        with open(self.fname_c_m, 'w') as fcm:
+            fcm.write("%f\n" % self.sum_cost_m)
 
 
 class BothTariff(MqttConn):
-    def __init__(self, who:str):
+    def __init__(self, who_s:str, wid_s=None):
         super(BothTariff, self).__init__()
-        wid = who.lower().replace(' ', '_').replace('ą','a').replace('ć','c').replace('ę','e').replace('ó','o').replace('ś','s').replace('ł','l').replace('ż','z').replace('ź','z').replace('ń','ń')
+        if wid_s is None:
+            wid = who_s.lower().replace(' ', '_').replace('ą','a').replace('ć','c').replace('ę','e').replace('ó','o').replace('ś','s').replace('ł','l').replace('ż','z').replace('ź','z').replace('ń','ń')
+            who = who_s
+        else:
+            wid = who_s
+            who = wid_s
+
         self.day = Tariff("dzienna", "day", who, wid)
         self.night = Tariff("nocna", "night", who, wid)
-        self.sum_energy = 0
         self.prev_energy = None
-        self.sum_cost = 0
-        self.sum_cost_g11 = 0
-        self.price_g11 = 1.15
+        self.sum_energy_y = 0
+        self.sum_energy_m = 0
+        self.sum_cost_y = 0
+        self.sum_cost_m = 0
+        self.sum_cost_g11_y = 0
+        self.sum_cost_g11_m = 0
+        
+
+        dt = datetime.now()
+        y = dt.year
+        m = dt.month
+
+        self.wid = wid
+        self.prev_m = m
+        #self.price_g11 = 1.15
         #1.21
         #0.75
 
-        self.fname_e = '.%s_all_energy.txt' % wid
-        self.fname_c = '.%s_all_cost.txt' % wid
-        self.fname_c11 = '.%s_all_cost_g11.txt' % wid
-        self.fname_prev_energy = '.%s_prev_energy.txt' % wid
+        sensor_info_m = SensorInfo(
+            #name="%s suma energi (m)" % who,
+            name="%s_energy_all_m" % wid,
+            object_id="%s_energy_all_m" % wid,
+            device_class="energy",
+            state_class= "total",
+            unit_of_measurement="kWh",
+            device=self.device_info,
+            unique_id="%s_energy_all_m" % wid
+        )
+
+        energy_settings_m = Settings(mqtt=mqtt_settings, entity=sensor_info_m)
+        self.energy_sensor_m = Sensor(energy_settings_m)
+
+        sensor_info_y = SensorInfo(
+            #name="%s suma energi (y)" % who,
+            name="%s_energy_all_y" % wid,
+            object_id="%s_energy_all_y" % wid,
+            device_class="energy",
+            state_class= "total",
+            unit_of_measurement="kWh",
+            device=self.device_info,
+            unique_id="%s_energy_all_y" % wid
+        )
+
+        energy_settings_y = Settings(mqtt=mqtt_settings, entity=sensor_info_y)
+        self.energy_sensor_y = Sensor(energy_settings_y)
+
+        cost_info_m = SensorInfo(
+            #name="%s całkowity koszt (m)" % who,
+            name="%s_cost_all_m" % wid,
+            object_id="%s_cost_all_m" % wid,
+            device_class="monetary",
+            state_class= "total",
+            unit_of_measurement="PLN",
+            device=self.device_info,
+            unique_id="%s_cost_all_m" % wid
+        )
+
+        cost_settings_m = Settings(mqtt=mqtt_settings, entity=cost_info_m)
+        self.cost_sensor_m = Sensor(cost_settings_m)
+
+
+        cost_info_y = SensorInfo(
+            #name="%s całkowity koszt (y)" % who,
+            name="%s_cost_all_y" % wid,
+            object_id="%s_cost_all_y" % wid,
+            device_class="monetary",
+            state_class= "total",
+            unit_of_measurement="PLN",
+            device=self.device_info,
+            unique_id="%s_cost_all_y" % wid
+        )
+
+        cost_settings_y = Settings(mqtt=mqtt_settings, entity=cost_info_y)
+        self.cost_sensor_y = Sensor(cost_settings_y)
+
+        cost_info11_m = SensorInfo(
+            #name="%s koszt g11 (m)" % who,
+            name="%s_cost_g11_m" % wid,
+            object_id="%s_cost_g11_m" % wid,
+            device_class="monetary",
+            state_class= "total",
+            unit_of_measurement="PLN",
+            device=self.device_info,
+            unique_id="%s_cost_g11_m" % wid
+        )
+
+        cost_settings11_m = Settings(mqtt=mqtt_settings, entity=cost_info11_m)
+        self.cost_sensor11_m = Sensor(cost_settings11_m)
+
+        cost_info11_y = SensorInfo(
+            #name="%s koszt g11 (y)" % who,
+            name="%s_cost_g11_y" % wid,
+            object_id="%s_cost_g11_y" % wid,
+            device_class="monetary",
+            state_class= "total",
+            unit_of_measurement="PLN",
+            device=self.device_info,
+            unique_id="%s_cost_g11_y" % wid
+                               )
+
+        cost_settings11_y = Settings(mqtt=mqtt_settings, entity=cost_info11_y)
+        self.cost_sensor11_y = Sensor(cost_settings11_y)
+        self.initialize(m, y)
+
+    def initialize(self, m, y):
+        self.prev_m = m
+        self.fname_e_y = 'data/%s_all_energy_%d.txt' % (self.wid, y)
+        self.fname_e_m = 'data/%s_all_energy_%02d_%d.txt' % (self.wid, m, y)
+        self.fname_c_y = 'data/%s_all_cost_%d.txt' % (self.wid, y)
+        self.fname_c_m = 'data/%s_all_cost_%02d_%d.txt' % (self.wid, m, y)
+        self.fname_c11_y = 'data/%s_all_cost_g11_%d.txt' % (self.wid, y)
+        self.fname_c11_m = 'data/%s_all_cost_g11_%02d_%d.txt' % (self.wid, m, y)
+        self.fname_prev_energy = 'data/%s_prev_energy.txt' % self.wid
         
-
-
-        if os.path.exists(self.fname_e):
-            with open(self.fname_e, 'r') as fe:
-                self.sum_energy = float(fe.readline())
+        if os.path.exists(self.fname_e_y):
+            with open(self.fname_e_y, 'r') as fey:
+                self.sum_energy_y = float(fey.readline())
         else:
-            with open(self.fname_e, 'w+') as fe:
-                fe.write('0\n')
+            self.sum_energy_y = 0.0
+            with open(self.fname_e_y, 'w+') as fey:
+                fey.write('0\n')
 
-        if os.path.exists(self.fname_c):                
-            with open(self.fname_c, 'r') as fc:
-                self.sum_cost = float(fc.readline())
+        if os.path.exists(self.fname_e_m):
+            with open(self.fname_e_m, 'r') as fem:
+                self.sum_energy_m = float(fem.readline())
         else:
-            with open(self.fname_c, 'w+') as fc:
-                fc.write('0\n')
+            self.sum_energy_m = 0.0
+            with open(self.fname_e_m, 'w+') as fem:
+                fem.write('0\n')
 
-        if os.path.exists(self.fname_c11):                
-            with open(self.fname_c11, 'r') as fc11:
-                self.sum_cost_g11 = float(fc11.readline())
+        if os.path.exists(self.fname_c_y):                
+            with open(self.fname_c_y, 'r') as fcy:
+                self.sum_cost_y = float(fcy.readline())
         else:
-            with open(self.fname_c11, 'w+') as fc11:
-                fc11.write('0\n')
+            self.sum_cost_y = 0
+            with open(self.fname_c_y, 'w+') as fcy:
+                fcy.write('0\n')
+
+        if os.path.exists(self.fname_c_m):                
+            with open(self.fname_c_m, 'r') as fcm:
+                self.sum_cost_m = float(fcm.readline())
+        else:
+            self.sum_cost_m = 0
+            with open(self.fname_c_m, 'w+') as fcm:
+                fcm.write('0\n')
+
+        if os.path.exists(self.fname_c11_y):                
+            with open(self.fname_c11_y, 'r') as fc11y:
+                self.sum_cost_g11_y = float(fc11y.readline())
+        else:
+            self.sum_cost_g11_y = 0
+            with open(self.fname_c11_y, 'w+') as fc11y:
+                fc11y.write('0\n')
+
+        if os.path.exists(self.fname_c11_m):                
+            with open(self.fname_c11_m, 'r') as fc11m:
+                self.sum_cost_g11_m = float(fc11m.readline())
+        else:
+            self.sum_cost_g11_m = 0
+            with open(self.fname_c11_m, 'w+') as fc11m:
+                fc11m.write('0\n')
 
         if os.path.exists(self.fname_prev_energy):                 
             with open(self.fname_prev_energy, 'r') as fpe:
                 self.prev_energy = float(fpe.readline())
 
-        sensor_info = SensorInfo(name="%s suma energi" % who,
-                                 device_class="energy",
-                                 state_class= "total",
-                                 unit_of_measurement="kWh",
-                                 device=self.device_info,
-                                 unique_id="%s_energy_all" % wid
-                                 )
 
-        energy_settings = Settings(mqtt=mqtt_settings, entity=sensor_info)
-        self.energy_sensor = Sensor(energy_settings)
 
-        cost_info = SensorInfo(name="%s całkowity koszt" % who,
-                               device_class="monetary",
-                               state_class= "total",
-                               unit_of_measurement="PLN",
-                               device=self.device_info,
-                               unique_id="%s_cost_all" % wid
-                               )
+        self.energy_sensor_y.set_state(self.sum_energy_y)
+        self.energy_sensor_m.set_state(self.sum_energy_m)
+        self.cost_sensor_y.set_state(self.sum_cost_y)
+        self.cost_sensor_m.set_state(self.sum_cost_m)
+        self.cost_sensor11_y.set_state(self.sum_cost_g11_y)
+        self.cost_sensor11_m.set_state(self.sum_cost_g11_m)
 
-        cost_settings = Settings(mqtt=mqtt_settings, entity=cost_info)
-        self.cost_sensor = Sensor(cost_settings)
+    def calculate(self, ob : EnergyCost, energy: float):
+        day = ob.tariff_1
+        price = ob.price
+        price_g11 = ob.price_g11
+        dt = datetime.now()
+        y = dt.year
+        m = dt.month
 
-        cost_info11 = SensorInfo(name="%s koszt g11" % who,
-                               device_class="monetary",
-                               state_class= "total",
-                               unit_of_measurement="PLN",
-                               device=self.device_info,
-                               unique_id="%s_cost_g11" % wid
-                               )
-
-        cost_settings11 = Settings(mqtt=mqtt_settings, entity=cost_info11)
-        self.cost_sensor11 = Sensor(cost_settings11)
-
-        self.energy_sensor.set_state(self.sum_energy)
-        self.cost_sensor.set_state(self.sum_cost)
-        self.cost_sensor11.set_state(self.sum_cost_g11)
-
-    def calculate(self, day: bool, price: float, energy: float):
+        if m != self.prev_m:
+            self.initialize(m, y)
+        
+        if energy == 0:
+            return 
+        
         if self.prev_energy is None:
             self.prev_energy = float(energy)
             return
 
         delta = float(energy) - float(self.prev_energy)
-        self.prev_energy = float(energy)
         if delta <= 0:
             return
+        self.prev_energy = float(energy)
 
-        self.sum_energy += delta
-        self.sum_cost += float(price)*delta
-        self.sum_cost_g11 += float(self.price_g11)*delta
+        self.sum_energy_y += delta
+        self.sum_energy_m += delta
+        self.sum_cost_y += float(price)*delta
+        self.sum_cost_m += float(price)*delta
+        self.sum_cost_g11_y += float(price_g11)*delta
+        self.sum_cost_g11_m += float(price_g11)*delta
 
-        self.energy_sensor.set_state(self.sum_energy)
-        self.cost_sensor.set_state(self.sum_cost)
-        self.cost_sensor11.set_state(self.sum_cost_g11)
+        self.energy_sensor_y.set_state(self.sum_energy_y)
+        self.energy_sensor_m.set_state(self.sum_energy_m)
+        self.cost_sensor_y.set_state(self.sum_cost_y)
+        self.cost_sensor_m.set_state(self.sum_cost_m)
+        self.cost_sensor11_y.set_state(self.sum_cost_g11_y)
+        self.cost_sensor11_m.set_state(self.sum_cost_g11_m)
 
-        with open(self.fname_e, 'w') as fe:
-            fe.write("%f\n" % self.sum_energy)
-        with open(self.fname_c, 'w') as fc:
-            fc.write("%f\n" % self.sum_cost)
-        with open(self.fname_c11, 'w') as fc11:
-            fc11.write("%f\n" % self.sum_cost_g11)
+        with open(self.fname_e_y, 'w') as fey:
+            fey.write("%f\n" % self.sum_energy_y)
+        with open(self.fname_e_m, 'w') as fem:
+            fem.write("%f\n" % self.sum_energy_m)
+        with open(self.fname_c_y, 'w') as fcy:
+            fcy.write("%f\n" % self.sum_cost_y)
+        with open(self.fname_c_m, 'w') as fcm:
+            fcm.write("%f\n" % self.sum_cost_m)
+        with open(self.fname_c11_y, 'w') as fc11y:
+            fc11y.write("%f\n" % self.sum_cost_g11_y)
+        with open(self.fname_c11_m, 'w') as fc11m:
+            fc11m.write("%f\n" % self.sum_cost_g11_m)
         with open(self.fname_prev_energy, 'w') as fprev:
             fprev.write("%f\n" % self.prev_energy)
 
@@ -237,21 +463,41 @@ class BothTariff(MqttConn):
         else:
             self.night.calculate(float(price), delta)
 
-class EnergyCost(BothTariff):
-    def __init__(self, who:str):
-        super(EnergyCost, self).__init__(who)
-        self.tariff_1 = True
-        self.price = 0.0
-
-    def setParams(self, day: bool, price: float, energy: float):
-        self.tariff_1 = day
-        self.price = float(price)
-        self.calculate(day, float(price), float(energy))
 
 
+param = EnergyCost()
+allE = BothTariff("Wszystko")
+objects = [
+    ('zigbee2mqtt/energy',              BothTariff("energys_all", "Całe zużycie")),
+    ('zigbee2mqtt/wifi_access_point_1', BothTariff("wifi_access_point_1", "Bramka WiFi 1")),
+    ('zigbee2mqtt/heating',             BothTariff("heating", "Ogrzewanie")),
+    ('zigbee2mqtt/power_24v_on',        BothTariff("power_24v_on", "Zasilacz 24V on")),
+    ('zigbee2mqtt/power_24v_off',       BothTariff("power_24v_off", "Zasilacz 24V off")),
+    ('zigbee2mqtt/light',               BothTariff("light", "Oświetlenie")),
+    ('zigbee2mqtt/power_guaranted',     BothTariff("power_guaranted", "Zasilanie gwarantowane")),
+    ('zigbee2mqtt/roaster',             BothTariff("roaster", "Piekarnik")),
+    ('zigbee2mqtt/main_power_switch',   BothTariff("main_power_switch", "Wyłącznik główny")),
+    ('zigbee2mqtt/electric_dryer',      BothTariff("electric_dryer", "Szuszarka elektryczna")),
+    ('zigbee2mqtt/teapot_electric',     BothTariff("teapot_electric", "Szuszarka elektryczna")),
+    ('zigbee2mqtt/vectra_decoder',      BothTariff("vectra_decoder", "Dekoder Vectry")),
+    ('zigbee2mqtt/charger_1',           BothTariff("charger_1", "Ładowarka tel. 1")),
+    ('zigbee2mqtt/charger_2',           BothTariff("charger_2", "Ładowarka tel. 2")),
+    ('zigbee2mqtt/microwave',           BothTariff("microwave", "Mikrofala")),
+    ('zigbee2mqtt/dvd_player',          BothTariff("microwave", "Odtwarzacz DVD")),
+    ('zigbee2mqtt/tv_samsung',          BothTariff("tv_samsung", "Telewizor Samsung")),
+    ('zigbee2mqtt/washing_machine',     BothTariff("washing_machine", "Pralka")),
+    ('zigbee2mqtt/bathroom_el_socket',  BothTariff("bathroom_el_socket", "Gniazda łazienka")),
+    ('zigbee2mqtt/kitchen_hood',        BothTariff("kitchen_hood", "Okap w kuchni")),
+    ('zigbee2mqtt/iron',                BothTariff("iron", "Żelazko")),
+    ('zigbee2mqtt/dishwasher',          BothTariff("dishwasher", "Zmywarka")),
+    ('zigbee2mqtt/brama_vectra',        BothTariff("brama_vectra", "Router Vectry")),
+    ('zigbee2mqtt/Centrala sieciowa',   BothTariff("Centrala sieciowa", "Centrala sieciowa")),
+    ('zigbee2mqtt/fridge',              BothTariff("fridge", "Lodówka")),
+    ('zigbee2mqtt/vacuum_cleaner',      BothTariff("vacuum_cleaner", "Odkurzacz")),
+    ('zigbee2mqtt/computer',            BothTariff("computer", "Komputer")),
+]
 
-allE = EnergyCost("Wszystko")
-bramka_wifi = BothTariff("Bramka Wifi")
+
 tv = BothTariff("Samsung TV")
 centsieciowa = BothTariff("Centrala Sieciowa")
 decoder_vectra = BothTariff("Dekoder Vectry")
@@ -286,115 +532,20 @@ decoder = json.JSONDecoder()
 def on_message(client, userdata, message):
 
     msgrec = message.payload.decode("utf-8")
-    print(message.topic, msgrec)
+    #print(message.topic, msgrec)
 
-    if message.topic == "hmd/sensor/energy/all":
+    if message.topic == "hmd/sensor/tauron_taryfa":
         payload = json.loads(msgrec)
-        energy = payload.get('energy', 0)
-        cost = payload.get('cost', 0)
-        dzien = payload.get('taryfa_dzien', "on")
-        allE.setParams(dzien == "on", float(cost), float(energy))
-        return
+        param.setParams(payload['taryfa'] == 'dzienna', float(payload['price']), float(payload['g11']))
+        print(payload)
+        #day: bool, price: float, price_g11:float
 
-    if message.topic == "hmd/sensor/energy/bramkawifi":
-        bramka_wifi.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/tv":
-        tv.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/centrala_sieciowa":
-        centsieciowa.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/decoder_vectra":
-        decoder_vectra.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/charger2":
-        charger2.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/microwave":
-        microwave.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/lights":
-        lights.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/roaster":
-        roaster.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/kettle":
-        kettle.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/computer":
-        computer.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/fridge":
-        fridge.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/charger1":
-        charger1.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/dvd":
-        dvd.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/heat":
-        heat.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/washing_machine":
-        washing_machine.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/electric_dryer":
-        electric_dryer.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/bathroom_el_socket":
-        bathroom_el_socket.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/kitchen_hood":
-        kitchen_hood.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/power_supply_24V_OFF":
-        power_supply_24V_OFF.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/power_supply_24V_ON":
-        power_supply_24V_ON.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/dishwasher":
-        dishwasher.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/power_supply_guaranteed":
-        power_supply_guaranteed.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/main_switch":
-        main_switch.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/iron":
-        iron.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
-
-    if message.topic == "hmd/sensor/energy/vacuum_cleaner":
-        vacuum_cleaner.calculate(allE.tariff_1, allE.price, float(msgrec))
-        return
+    for topic, o in objects:
+        if message.topic == topic:
+            payload = json.loads(msgrec)
+            o.calculate(param, float(payload['energy']))
+            break
+    
 
 
 

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>ATNEL OLED SENDER</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      position: relative;
+    }
+
+    header::after {
+      content: "";
+      display: block;
+      height: 4px;
+      background: linear-gradient(to right, #007bff, transparent);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 5px;
+      font-weight: 500;
+    }
+
+    label.ip-label {
+      color: #007bff;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+
+    .button-group {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      color: white;
+    }
+
+    /* Główny niebieski przycisk */
+    button:not(.cls-btn) {
+      background: #007bff;
+      box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
+    }
+
+    button:not(.cls-btn):hover {
+      background: #0056b3;
+      box-shadow: 0 4px 12px rgba(0, 86, 179, 0.5);
+    }
+
+    /* Przyciemniony przycisk CLS */
+    button.cls-btn {
+      background: #0056b3;
+      box-shadow: 0 3px 8px rgba(0, 86, 179, 0.3);
+    }
+
+    button.cls-btn:hover {
+      background: #003f8c;
+      box-shadow: 0 4px 12px rgba(0, 63, 140, 0.5);
+    }
+
+    #result {
+      margin-top: 25px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .ok { color: #28a745; }
+    .error { color: #dc3545; }
+  </style>
+</head>
+<body>
+
+  <header>
+    ATNEL OLED SENDER (POST)
+  </header>
+
+  <div class="container">
+    <label class="ip-label">Adres IP serwera:</label>
+    <input type="text" id="ip" value="192.168.1.139">
+
+    <label>Tekst:</label>
+    <input type="text" id="txt" value="Witaj Mirek!">
+
+    <label>X:</label>
+    <input type="number" id="x" value="10">
+
+    <label>Y:</label>
+    <input type="number" id="y" value="10">
+
+    <label>Rozmiar czcionki:</label>
+    <select id="font">
+      <option value="10">10 (mała)</option>
+      <option value="12" selected>12 (średnia)</option>
+      <option value="14">14 (duża)</option>
+      <option value="16">16 (bardzo duża)</option>
+      <option value="18">18 (ogromna)</option>
+      <option value="20">20 (mega)</option>
+    </select>
+
+    <label>
+      <input type="checkbox" id="frame"> Rysuj ramkę
+    </label>
+
+    <div class="button-group">
+      <button onclick="sendToOled()">Wyślij na OLED</button>
+      <button class="cls-btn" onclick="clearOled()">CLS</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function sendToOled() {
+      const ip = document.getElementById("ip").value.trim();
+      const data = {
+        txt: document.getElementById("txt").value,
+        x: parseInt(document.getElementById("x").value),
+        y: parseInt(document.getElementById("y").value),
+        font: document.getElementById("font").value,
+        box: document.getElementById("frame").checked
+      };
+
+      fetch("http://" + ip + ":8080/api/oled/text", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+        document.getElementById("result").innerHTML = "✔️ Tekst wysłany!";
+        document.getElementById("result").className = "ok";
+      })
+      .catch(error => {
+        document.getElementById("result").innerHTML = "❌ Błąd podczas wysyłania!";
+        document.getElementById("result").className = "error";
+      });
+    }
+
+    function clearOled() {
+      const ip = document.getElementById("ip").value.trim();
+
+      fetch("http://" + ip + ":8080/api/oled/clear", {
+        method: "POST"
+      })
+      .then(response => response.json())
+      .then(result => {
+        document.getElementById("result").innerHTML = "🧹 OLED wyczyszczony!";
+        document.getElementById("result").className = "ok";
+      })
+      .catch(error => {
+        document.getElementById("result").innerHTML = "❌ Błąd podczas czyszczenia OLED!";
+        document.getElementById("result").className = "error";
+      });
+    }
+  </script>
+
+</body>
+</html>
