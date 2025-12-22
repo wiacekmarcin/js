@@ -44,7 +44,7 @@ class MqttConn:
         self.mqtt_settings = mqtt_settings
 
         # Define the device. At least one of `identifiers` or `connections` must be supplied
-        self.device_info = DeviceInfo(name="EnergyCalc2Test", identifiers="energy_calculator_bodycha_120")
+        self.device_info = DeviceInfo(name="EnergyCalc2", identifiers="energy_calculator_bodycha_120")
 
 class EnergyCost():
     def __init__(self):
