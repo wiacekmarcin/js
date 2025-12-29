@@ -9,13 +9,15 @@ import paho.mqtt.client as mqtt
 from datetime import datetime
 import json
 
-#DEBUG=True
-DEBUG=False
+DEBUG=True
+#DEBUG=False
+
+DISCOVERABLE=False
 
 if not DEBUG:
     dir_data = '/root/data/'
 else:
-    dir_data = './data'
+    dir_data = '~/devel/mieszkanie/wlasny_addon/data'
 import os
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, reason_code, properties):
@@ -65,6 +67,7 @@ class EnergyCost():
         self.tariff_1 = day
         self.price = float(price)
         self.price_g11 = float(price_g11)
+
 class Tariff(MqttConn):
     def __init__(self, tariff:str, short_tariff:str, who:str, who_id:str):
         super(Tariff, self).__init__()
@@ -72,6 +75,7 @@ class Tariff(MqttConn):
         self.sum_cost_y = 0.0
         self.sum_energy_m = 0.0
         self.sum_cost_m = 0.0
+        self.sendMsg = False
 
         dt = datetime.now()
         y = dt.year
@@ -81,61 +85,62 @@ class Tariff(MqttConn):
         self.short_tariff = short_tariff
         self.prev_m = m
 
-        energy_info_m = SensorInfo(
-                #name="%s energy %s taryfa (m)" % (who, tariff),
-                name="%s_energy_%s_month" % (who_id, tariff),
-                #object_id="%s_energy_%s_m" % (who_id, tariff),
-                unique_id="%s_energy_%s_m" % (who_id, short_tariff),
-                device_class="energy",
-                state_class= "total",
-                unit_of_measurement="kWh",
-                device=self.device_info,
-        )
+        if DISCOVERABLE:
+            energy_info_m = SensorInfo(
+                    #name="%s energy %s taryfa (m)" % (who, tariff),
+                    name="%s_energy_%s_month" % (who_id, tariff),
+                    #object_id="%s_energy_%s_m" % (who_id, tariff),
+                    unique_id="%s_energy_%s_m" % (who_id, short_tariff),
+                    device_class="energy",
+                    state_class= "total",
+                    unit_of_measurement="kWh",
+                    device=self.device_info,
+            )
 
-        energy_settings_m = Settings(mqtt=mqtt_settings, entity=energy_info_m)
-        self.energy_sensor_m = Sensor(energy_settings_m)
+            energy_settings_m = Settings(mqtt=mqtt_settings, entity=energy_info_m)
+            self.energy_sensor_m = Sensor(energy_settings_m)
 
-        cost_info_m = SensorInfo(
-                #name="%s koszt %s taryfa (m)" % (who, tariff),
-                name="%s_cost_%s_month" % (who_id, tariff),
-                #object_id="%s_cost_%s_m" % (who_id, tariff),
-                device_class="monetary",
-                state_class= "total",
-                unit_of_measurement="PLN",
-                device=self.device_info,
-                unique_id="%s_cost_%s_m" % (who_id, short_tariff)
-        )
+            cost_info_m = SensorInfo(
+                    #name="%s koszt %s taryfa (m)" % (who, tariff),
+                    name="%s_cost_%s_month" % (who_id, tariff),
+                    #object_id="%s_cost_%s_m" % (who_id, tariff),
+                    device_class="monetary",
+                    state_class= "total",
+                    unit_of_measurement="PLN",
+                    device=self.device_info,
+                    unique_id="%s_cost_%s_m" % (who_id, short_tariff)
+            )
 
-        cost_settings_m = Settings(mqtt=mqtt_settings, entity=cost_info_m)
-        self.cost_sensor_m = Sensor(cost_settings_m)
+            cost_settings_m = Settings(mqtt=mqtt_settings, entity=cost_info_m)
+            self.cost_sensor_m = Sensor(cost_settings_m)
 
-        energy_info_y = SensorInfo(
-                #name="%s energy %s taryfa (y)" % (who, tariff),
-                name="%s_energy_%s_year" % (who_id, tariff),
-                unique_id="%s_energy_%s_y" % (who_id, short_tariff),
-                #object_id="%s_energy_%s_y" % (who_id, tariff),
-                device_class="energy",
-                state_class= "total",
-                unit_of_measurement="kWh",
-                device=self.device_info,
-        )
+            energy_info_y = SensorInfo(
+                    #name="%s energy %s taryfa (y)" % (who, tariff),
+                    name="%s_energy_%s_year" % (who_id, tariff),
+                    unique_id="%s_energy_%s_y" % (who_id, short_tariff),
+                    #object_id="%s_energy_%s_y" % (who_id, tariff),
+                    device_class="energy",
+                    state_class= "total",
+                    unit_of_measurement="kWh",
+                    device=self.device_info,
+            )
 
-        energy_settings_y = Settings(mqtt=mqtt_settings, entity=energy_info_y)
-        self.energy_sensor_y = Sensor(energy_settings_y)
+            energy_settings_y = Settings(mqtt=mqtt_settings, entity=energy_info_y)
+            self.energy_sensor_y = Sensor(energy_settings_y)
 
-        cost_info_y = SensorInfo(
-                #name="%s koszt %s taryfa (y)" % (who, tariff),
-                name="%s_cost_%s_year" % (who_id, tariff),
-                #object_id="%s_cost_%s_y" % (who_id, tariff),
-                device_class="monetary",
-                state_class= "total",
-                unit_of_measurement="PLN",
-                device=self.device_info,
-                unique_id="%s_cost_%s_y" % (who_id, short_tariff)
-        )
+            cost_info_y = SensorInfo(
+                    #name="%s koszt %s taryfa (y)" % (who, tariff),
+                    name="%s_cost_%s_year" % (who_id, tariff),
+                    #object_id="%s_cost_%s_y" % (who_id, tariff),
+                    device_class="monetary",
+                    state_class= "total",
+                    unit_of_measurement="PLN",
+                    device=self.device_info,
+                    unique_id="%s_cost_%s_y" % (who_id, short_tariff)
+            )
 
-        cost_settings_y = Settings(mqtt=mqtt_settings, entity=cost_info_y)
-        self.cost_sensor_y = Sensor(cost_settings_y)
+            cost_settings_y = Settings(mqtt=mqtt_settings, entity=cost_info_y)
+            self.cost_sensor_y = Sensor(cost_settings_y)
 
         self.initialize(m, y)
 
@@ -180,16 +185,14 @@ class Tariff(MqttConn):
             self.sum_cost_m = 0.0
             with open(self.fname_c_m, 'w+') as fc:
                 fc.write('0\n')
-
-        self.energy_sensor_m.set_state(self.sum_energy_m)
-        self.cost_sensor_m.set_state(self.sum_cost_m)
-        self.energy_sensor_y.set_state(self.sum_energy_y)
-        self.cost_sensor_y.set_state(self.sum_cost_y)
-
-
+        
+        if DISCOVERABLE:
+            self.energy_sensor_m.set_state(self.sum_energy_m)
+            self.cost_sensor_m.set_state(self.sum_cost_m)
+            self.energy_sensor_y.set_state(self.sum_energy_y)
+            self.cost_sensor_y.set_state(self.sum_cost_y)
+    
     def calculate(self, price: float, energy: float):
-
-
         dt = datetime.now()
         y = dt.year
         m = dt.month
@@ -202,10 +205,11 @@ class Tariff(MqttConn):
         self.sum_energy_y += energy
         self.sum_cost_y += price*energy
 
-        self.energy_sensor_m.set_state(self.sum_energy_m)
-        self.cost_sensor_m.set_state(self.sum_cost_m)
-        self.energy_sensor_y.set_state(self.sum_energy_y)
-        self.cost_sensor_y.set_state(self.sum_cost_y)
+        if DISCOVERABLE:
+            self.energy_sensor_m.set_state(self.sum_energy_m)
+            self.cost_sensor_m.set_state(self.sum_cost_m)
+            self.energy_sensor_y.set_state(self.sum_energy_y)
+            self.cost_sensor_y.set_state(self.sum_cost_y)
 
         with open(self.fname_e_y, 'w') as fey:
             fey.write("%f\n" % self.sum_energy_y)
@@ -215,7 +219,6 @@ class Tariff(MqttConn):
             fcy.write("%f\n" % self.sum_cost_y)
         with open(self.fname_c_m, 'w') as fcm:
             fcm.write("%f\n" % self.sum_cost_m)
-
 
 class BothTariff(MqttConn):
     def __init__(self, who_s:str, wid_s=None):
@@ -236,6 +239,7 @@ class BothTariff(MqttConn):
         self.sum_cost_m = 0
         self.sum_cost_g11_y = 0
         self.sum_cost_g11_m = 0
+        self.send_msg = True
 
 
         dt = datetime.now()
@@ -247,91 +251,92 @@ class BothTariff(MqttConn):
         #self.price_g11 = 1.15
         #1.21
         #0.75
+        if DISCOVERABLE:
+            sensor_info_m = SensorInfo(
+                #name="%s suma energi (m)" % who,
+                name="%s_energy_all_month" % wid,
+                #object_id="%s_energy_all_m" % wid,
+                device_class="energy",
+                state_class= "total",
+                unit_of_measurement="kWh",
+                device=self.device_info,
+                unique_id="%s_energy_all_m" % wid
+            )
 
-        sensor_info_m = SensorInfo(
-            #name="%s suma energi (m)" % who,
-            name="%s_energy_all_month" % wid,
-            #object_id="%s_energy_all_m" % wid,
-            device_class="energy",
-            state_class= "total",
-            unit_of_measurement="kWh",
-            device=self.device_info,
-            unique_id="%s_energy_all_m" % wid
-        )
+            energy_settings_m = Settings(mqtt=mqtt_settings, entity=sensor_info_m)
+            self.energy_sensor_m = Sensor(energy_settings_m)
 
-        energy_settings_m = Settings(mqtt=mqtt_settings, entity=sensor_info_m)
-        self.energy_sensor_m = Sensor(energy_settings_m)
+            sensor_info_y = SensorInfo(
+                #name="%s suma energi (y)" % who,
+                name="%s_energy_all_year" % wid,
+                #object_id="%s_energy_all_y" % wid,
+                device_class="energy",
+                state_class= "total",
+                unit_of_measurement="kWh",
+                device=self.device_info,
+                unique_id="%s_energy_all_y" % wid
+            )
 
-        sensor_info_y = SensorInfo(
-            #name="%s suma energi (y)" % who,
-            name="%s_energy_all_year" % wid,
-            #object_id="%s_energy_all_y" % wid,
-            device_class="energy",
-            state_class= "total",
-            unit_of_measurement="kWh",
-            device=self.device_info,
-            unique_id="%s_energy_all_y" % wid
-        )
+            energy_settings_y = Settings(mqtt=mqtt_settings, entity=sensor_info_y)
+            self.energy_sensor_y = Sensor(energy_settings_y)
 
-        energy_settings_y = Settings(mqtt=mqtt_settings, entity=sensor_info_y)
-        self.energy_sensor_y = Sensor(energy_settings_y)
+            cost_info_m = SensorInfo(
+                #name="%s całkowity koszt (m)" % who,
+                name="%s_cost_all_month" % wid,
+                #object_id="%s_cost_all_m" % wid,
+                device_class="monetary",
+                state_class= "total",
+                unit_of_measurement="PLN",
+                device=self.device_info,
+                unique_id="%s_cost_all_m" % wid
+            )
 
-        cost_info_m = SensorInfo(
-            #name="%s całkowity koszt (m)" % who,
-            name="%s_cost_all_month" % wid,
-            #object_id="%s_cost_all_m" % wid,
-            device_class="monetary",
-            state_class= "total",
-            unit_of_measurement="PLN",
-            device=self.device_info,
-            unique_id="%s_cost_all_m" % wid
-        )
-
-        cost_settings_m = Settings(mqtt=mqtt_settings, entity=cost_info_m)
-        self.cost_sensor_m = Sensor(cost_settings_m)
+            cost_settings_m = Settings(mqtt=mqtt_settings, entity=cost_info_m)
+            self.cost_sensor_m = Sensor(cost_settings_m)
 
 
-        cost_info_y = SensorInfo(
-            #name="%s całkowity koszt (y)" % who,
-            name="%s_cost_all_year" % wid,
-            #object_id="%s_cost_all_y" % wid,
-            device_class="monetary",
-            state_class= "total",
-            unit_of_measurement="PLN",
-            device=self.device_info,
-            unique_id="%s_cost_all_y" % wid
-        )
+            cost_info_y = SensorInfo(
+                #name="%s całkowity koszt (y)" % who,
+                name="%s_cost_all_year" % wid,
+                #object_id="%s_cost_all_y" % wid,
+                device_class="monetary",
+                state_class= "total",
+                unit_of_measurement="PLN",
+                device=self.device_info,
+                unique_id="%s_cost_all_y" % wid
+            )
 
-        cost_settings_y = Settings(mqtt=mqtt_settings, entity=cost_info_y)
-        self.cost_sensor_y = Sensor(cost_settings_y)
+            cost_settings_y = Settings(mqtt=mqtt_settings, entity=cost_info_y)
+            self.cost_sensor_y = Sensor(cost_settings_y)
 
-        cost_info11_m = SensorInfo(
-            #name="%s koszt g11 (m)" % who,
-            name="%s_cost_g11_month" % wid,
-            #object_id="%s_cost_g11_m" % wid,
-            device_class="monetary",
-            state_class= "total",
-            unit_of_measurement="PLN",
-            device=self.device_info,
-            unique_id="%s_cost_g11_m" % wid
-        )
+            cost_info11_m = SensorInfo(
+                #name="%s koszt g11 (m)" % who,
+                name="%s_cost_g11_month" % wid,
+                #object_id="%s_cost_g11_m" % wid,
+                device_class="monetary",
+                state_class= "total",
+                unit_of_measurement="PLN",
+                device=self.device_info,
+                unique_id="%s_cost_g11_m" % wid
+            )
 
-        cost_settings11_m = Settings(mqtt=mqtt_settings, entity=cost_info11_m)
-        self.cost_sensor11_m = Sensor(cost_settings11_m)
+            cost_settings11_m = Settings(mqtt=mqtt_settings, entity=cost_info11_m)
+            self.cost_sensor11_m = Sensor(cost_settings11_m)
 
-        cost_info11_y = SensorInfo(
-            #name="%s koszt g11 (y)" % who,
-            name="%s_cost_g11_year" % wid,
-            #object_id="%s_cost_g11_y" % wid,
-            device_class="monetary",
-            state_class= "total",
-            unit_of_measurement="PLN",
-            device=self.device_info,
-            unique_id="%s_cost_g11_y" % wid
-                               )
+            cost_info11_y = SensorInfo(
+                #name="%s koszt g11 (y)" % who,
+                name="%s_cost_g11_year" % wid,
+                #object_id="%s_cost_g11_y" % wid,
+                device_class="monetary",
+                state_class= "total",
+                unit_of_measurement="PLN",
+                device=self.device_info,
+                unique_id="%s_cost_g11_y" % wid
+                                )
 
-        cost_settings11_y = Settings(mqtt=mqtt_settings, entity=cost_info11_y)
-        self.cost_sensor11_y = Sensor(cost_settings11_y)
+            cost_settings11_y = Settings(mqtt=mqtt_settings, entity=cost_info11_y)
+            self.cost_sensor11_y = Sensor(cost_settings11_y)
+        
         self.initialize(m, y)
 
     def initialize(self, m, y):
@@ -395,38 +400,48 @@ class BothTariff(MqttConn):
         if os.path.exists(self.fname_prev_energy):
             with open(self.fname_prev_energy, 'r') as fpe:
                 self.prev_energy = float(fpe.readline())
+        else:
+            self.prev_energy = 0
+            with open(self.fname_prev_energy, 'w+') as fc11m:
+                fc11m.write('0\n')
 
+        if DISCOVERABLE:
+            self.energy_sensor_y.set_state(self.sum_energy_y)
+            self.energy_sensor_m.set_state(self.sum_energy_m)
+            self.cost_sensor_y.set_state(self.sum_cost_y)
+            self.cost_sensor_m.set_state(self.sum_cost_m)
+            self.cost_sensor11_y.set_state(self.sum_cost_g11_y)
+            self.cost_sensor11_m.set_state(self.sum_cost_g11_m)
 
-
-        self.energy_sensor_y.set_state(self.sum_energy_y)
-        self.energy_sensor_m.set_state(self.sum_energy_m)
-        self.cost_sensor_y.set_state(self.sum_cost_y)
-        self.cost_sensor_m.set_state(self.sum_cost_m)
-        self.cost_sensor11_y.set_state(self.sum_cost_g11_y)
-        self.cost_sensor11_m.set_state(self.sum_cost_g11_m)
-
-    def calculate(self, ob : EnergyCost, energy: float):
+    def calculate(self, ob : EnergyCost, senergy: float):
         day = ob.tariff_1
         price = ob.price
         price_g11 = ob.price_g11
         dt = datetime.now()
         y = dt.year
         m = dt.month
-
+        energy = float(senergy)    
         if m != self.prev_m:
             self.initialize(m, y)
 
         if energy == 0:
-            return
+            return False
 
         if self.prev_energy is None:
-            self.prev_energy = float(energy)
-            return
+            self.prev_energy = energy
+            return False
 
-        delta = float(energy) - float(self.prev_energy)
+        delta = energy - self.prev_energy
         if delta <= 0:
-            return
-        self.prev_energy = float(energy)
+            return False
+        
+        if abs(self.prev_energy - energy) < 0.001 or abs(self.prev_energy - energy) > 10.0:
+            self.prev_energy = energy
+            with open(self.fname_prev_energy, 'w') as fprev:
+                fprev.write("%f\n" % self.prev_energy)
+            return False
+
+        self.prev_energy = energy
 
         self.sum_energy_y += delta
         self.sum_energy_m += delta
@@ -435,12 +450,13 @@ class BothTariff(MqttConn):
         self.sum_cost_g11_y += float(price_g11)*delta
         self.sum_cost_g11_m += float(price_g11)*delta
 
-        self.energy_sensor_y.set_state(self.sum_energy_y)
-        self.energy_sensor_m.set_state(self.sum_energy_m)
-        self.cost_sensor_y.set_state(self.sum_cost_y)
-        self.cost_sensor_m.set_state(self.sum_cost_m)
-        self.cost_sensor11_y.set_state(self.sum_cost_g11_y)
-        self.cost_sensor11_m.set_state(self.sum_cost_g11_m)
+        if DISCOVERABLE:
+            self.energy_sensor_y.set_state(self.sum_energy_y)
+            self.energy_sensor_m.set_state(self.sum_energy_m)
+            self.cost_sensor_y.set_state(self.sum_cost_y)
+            self.cost_sensor_m.set_state(self.sum_cost_m)
+            self.cost_sensor11_y.set_state(self.sum_cost_g11_y)
+            self.cost_sensor11_m.set_state(self.sum_cost_g11_m)
 
         with open(self.fname_e_y, 'w') as fey:
             fey.write("%f\n" % self.sum_energy_y)
@@ -457,10 +473,14 @@ class BothTariff(MqttConn):
         with open(self.fname_prev_energy, 'w') as fprev:
             fprev.write("%f\n" % self.prev_energy)
 
+
         if day:
             self.day.calculate(float(price), delta)
         else:
             self.night.calculate(float(price), delta)
+        
+        if self.send_msg:
+            self.sendJsonMsg(senergy)
 
     def parseMsg(self, topic:str, param : EnergyCost, payload: dict):
         try:
@@ -470,81 +490,124 @@ class BothTariff(MqttConn):
         except:
             pass
 
+    def sendJsonMsg(self, act):
+
+        sjson = json.dumps(self.getJsonMsg(act))
+
+        topic = "hmd/sensor/CalcEn/%s/energy" % self.wid
+        mqttc.publish(topic, sjson, qos = 0)
+    
+    def getJsonMsg(self, act):
+        smap = {'energy' : {}, 'cost' : {}}
+        smap['energy'] = {'en' : { 'act' : '0', 'prev' : '0'}}
+        smap['energy']['en']['act'] = "%.3f" % act
+        smap['energy']['en']['prev'] = "%.3f" % self.prev_energy
+        smap['energy']['m'] = { 'd' : '0', 'n' : '0', 'a' : '0'}
+        smap['energy']['y'] = { 'd' : '0', 'n' : '0', 'a' : '0'}
+        smap['energy']['m']['d'] = "%.3f" % self.day.sum_energy_m
+        smap['energy']['m']['n'] = "%.3f" % self.night.sum_energy_m
+        smap['energy']['m']['a'] = "%.3f" % self.sum_energy_m
+        smap['energy']['y']['d'] = "%.3f" % self.day.sum_energy_y
+        smap['energy']['y']['n'] = "%.3f" % self.night.sum_energy_y
+        smap['energy']['y']['a'] = "%.3f" % self.sum_energy_y
+        smap['cost']['m'] = { 'd' : '0', 'n' : '0', 'g12w' : '0', 'g11' : '0'}
+        smap['cost']['y'] = { 'd' : '0', 'n' : '0', 'g12w' : '0', 'g11' : '0'}
+        smap['cost']['m']['d'] = "%.3f" % self.day.sum_cost_m
+        smap['cost']['m']['n'] = "%.3f" % self.night.sum_cost_m
+        smap['cost']['m']['g12w'] = "%.3f" % self.sum_cost_m
+        smap['cost']['m']['g11'] = "%.3f" % self.sum_cost_g11_m
+        smap['cost']['y']['d'] = "%.3f" % self.day.sum_cost_y
+        smap['cost']['y']['n'] = "%.3f" % self.night.sum_cost_y
+        smap['cost']['y']['g12w'] = "%.3f" % self.sum_cost_y
+        smap['cost']['y']['g11'] = "%.3f" % self.sum_cost_g11_y
+
+        return smap
+        
+        
+
 class VirtualDevice(BothTariff):
     def __init__(self, who_s:str, wid_s=None):
         super(VirtualDevice, self).__init__(who_s, wid_s)
 
         self.current = {}
+        self.sumcurrent = 0
         self.voltage = {}
+        self.maxvoltage = 0
         self.power = {}
+        self.sumpower = 0
         self.all_energy = 0.0
         self.energy = {}
+        if DISCOVERABLE:
+            entity_current = SensorInfo(
+                #name="%s suma energi (m)" % who,
+                name="%s_current" % self.wid,
+                #object_id="%s_energy_all_m" % wid,
+                device_class="current",
+                state_class= "measurent",
+                unit_of_measurement="A",
+                device=self.device_info,
+                unique_id="%s_current" % self.wid
+            )
 
-        entity_current = SensorInfo(
-            #name="%s suma energi (m)" % who,
-            name="%s_current" % self.wid,
-            #object_id="%s_energy_all_m" % wid,
-            device_class="current",
-            state_class= "measurent",
-            unit_of_measurement="A",
-            device=self.device_info,
-            unique_id="%s_current" % self.wid
-        )
+            settings_current = Settings(mqtt=mqtt_settings, entity=entity_current)
+            self.sensor_current = Sensor(settings_current)
+            self.sensor_current.set_state(0)
 
-        settings_current = Settings(mqtt=mqtt_settings, entity=entity_current)
-        self.sensor_current = Sensor(settings_current)
-        self.sensor_current.set_state(0)
+            entity_voltage = SensorInfo(
+                #name="%s suma energi (m)" % who,
+                name="%s_voltage" % self.wid,
+                #object_id="%s_energy_all_m" % wid,
+                device_class="voltage",
+                state_class= "measurent",
+                unit_of_measurement="V",
+                device=self.device_info,
+                unique_id="%s_voltage" % self.wid
+            )
 
-        entity_voltage = SensorInfo(
-            #name="%s suma energi (m)" % who,
-            name="%s_voltage" % self.wid,
-            #object_id="%s_energy_all_m" % wid,
-            device_class="voltage",
-            state_class= "measurent",
-            unit_of_measurement="V",
-            device=self.device_info,
-            unique_id="%s_voltage" % self.wid
-        )
+            settings_voltage = Settings(mqtt=mqtt_settings, entity=entity_voltage)
+            self.sensor_voltage = Sensor(settings_voltage)
+            self.sensor_voltage.set_state(0)
 
-        settings_voltage = Settings(mqtt=mqtt_settings, entity=entity_voltage)
-        self.sensor_voltage = Sensor(settings_voltage)
-        self.sensor_voltage.set_state(0)
+            entity_power = SensorInfo(
+                #name="%s suma energi (m)" % who,
+                name="%s_power" % self.wid,
+                #object_id="%s_energy_all_m" % wid,
+                device_class="power",
+                state_class= "measurent",
+                unit_of_measurement="W",
+                device=self.device_info,
+                unique_id="%s_power" % self.wid
+            )
 
-        entity_power = SensorInfo(
-            #name="%s suma energi (m)" % who,
-            name="%s_power" % self.wid,
-            #object_id="%s_energy_all_m" % wid,
-            device_class="power",
-            state_class= "measurent",
-            unit_of_measurement="W",
-            device=self.device_info,
-            unique_id="%s_power" % self.wid
-        )
+            settings_power = Settings(mqtt=mqtt_settings, entity=entity_power)
+            self.sensor_power = Sensor(settings_power)
+            self.sensor_power.set_state(0)
 
-        settings_power = Settings(mqtt=mqtt_settings, entity=entity_power)
-        self.sensor_power = Sensor(settings_power)
-        self.sensor_power.set_state(0)
+            entity_energy = SensorInfo(
+                #name="%s suma energi (m)" % who,
+                name="%s_energy" % self.wid,
+                #object_id="%s_energy_all_m" % wid,
+                device_class="energy",
+                state_class= "Total",
+                unit_of_measurement="kWh",
+                device=self.device_info,
+                unique_id="%s_energy" % self.wid
+            )
 
-        entity_energy = SensorInfo(
-            #name="%s suma energi (m)" % who,
-            name="%s_energy" % self.wid,
-            #object_id="%s_energy_all_m" % wid,
-            device_class="energy",
-            state_class= "Total",
-            unit_of_measurement="kWh",
-            device=self.device_info,
-            unique_id="%s_energy" % self.wid
-        )
-
-        settings_energy = Settings(mqtt=mqtt_settings, entity=entity_energy)
-        self.sensor_energy = Sensor(settings_energy)
-        self.sensor_energy.set_state(0)
+            settings_energy = Settings(mqtt=mqtt_settings, entity=entity_energy)
+            self.sensor_energy = Sensor(settings_energy)
+            self.sensor_energy.set_state(0)
 
     def parseMsg(self, topic:str, param : EnergyCost, payload: dict):
         self.parseCurrent(topic, param, payload)
         self.parsePower(topic, param, payload)
         self.parseVoltage(topic, param, payload)
         self.parseEnergy(topic, param, payload)
+        
+        sjson2 = json.dumps(self.getAllJsonMsg())
+
+        topic = "hmd/sensor/CalcEn/%s/state" % self.wid
+        mqttc.publish(topic, sjson2, qos=0)
         
     def parseCurrent(self, topic:str, param : EnergyCost, payload: dict):
         try:
@@ -553,7 +616,9 @@ class VirtualDevice(BothTariff):
             sumcurrent = 0           
             for curr in self.current:
                 sumcurrent += self.current[curr]
-            self.sensor_current.set_state(sumcurrent)
+            self.sumcurrent = sumcurrent
+            if DISCOVERABLE:
+                self.sensor_current.set_state(sumcurrent)
         except:
             pass
 
@@ -564,7 +629,9 @@ class VirtualDevice(BothTariff):
             sumpower = 0           
             for pow in self.power:
                 sumpower += self.power[pow]
-            self.sensor_power.set_state(sumpower)
+            self.sumpower = sumpower
+            if DISCOVERABLE:
+                self.sensor_power.set_state(sumpower)
         except:
             pass
 
@@ -575,7 +642,9 @@ class VirtualDevice(BothTariff):
             for voltage in self.voltage:
                 if self.voltage[voltage] > maxvoltage:
                     maxvoltage = self.voltage[voltage]
-            self.sensor_voltage.set_state(maxvoltage)
+            self.maxvoltage = maxvoltage
+            if DISCOVERABLE:
+                self.sensor_voltage.set_state(maxvoltage)
         except:
             pass
 
@@ -598,14 +667,23 @@ class VirtualDevice(BothTariff):
                 return
             
             self.all_energy += delta 
-            print(f"{topic} ({self.energy[topic]}) all={self.all_energy}")
+            #print(f"{topic} ({self.energy[topic]}) all={self.all_energy}")
 
             
-            self.sensor_energy.set_state(self.all_energy)
+            if DISCOVERABLE:
+                self.sensor_energy.set_state(self.all_energy)
             self.calculate(params, self.all_energy)
         except:
             pass
-
+    
+    def getAllJsonMsg(self):
+        smap = {"voltage" : "%0.1f" % self.maxvoltage,
+                "current" : "%0.2f" % self.sumcurrent,
+                "power" : "%0.2f" % self.sumpower,
+                "energy" : "%0.2f" % self.all_energy,
+                }
+        return smap
+        
 
 param = EnergyCost()
 centrala_sieciowa = VirtualDevice("centrala_sieciowa", "Centrala sieciowa")
@@ -661,17 +739,20 @@ def on_message(client, userdata, message):
         payload = json.loads(msgrec)
         try:
             param.setParams(payload['taryfa'] == 'dzienna', float(payload['price']), float(payload['g11']))
-            print(payload)
+            #print(payload)
         except:
             return
         #day: bool, price: float, price_g11:float
 
     for topic, objs in objects:
         if message.topic == topic:
-            payload = json.loads(msgrec)
-            for object in objs:
-                object.parseMsg(topic, param, payload)
-            break
+            try:
+                payload = json.loads(msgrec)
+                for object in objs:
+                    object.parseMsg(topic, param, payload)
+                break
+            except:
+                print("Err:", msgrec)
 
 
 
