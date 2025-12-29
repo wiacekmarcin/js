@@ -9,8 +9,13 @@ import paho.mqtt.client as mqtt
 from datetime import datetime
 import json
 
-dir_data = '/root/data/'
-#dir_data = './data'
+#DEBUG=True
+DEBUG=False
+
+if not DEBUG:
+    dir_data = '/root/data/'
+else:
+    dir_data = './data'
 import os
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, reason_code, properties):
@@ -44,7 +49,11 @@ class MqttConn:
         self.mqtt_settings = mqtt_settings
 
         # Define the device. At least one of `identifiers` or `connections` must be supplied
-        self.device_info = DeviceInfo(name="EnergyCalc2", identifiers="energy_calculator_bodycha_120")
+        if not DEBUG:
+            self.device_info = DeviceInfo(name="EnergyCalc2", identifiers="energy_calculator_bodycha_120")
+        else:
+            self.device_info = DeviceInfo(name="EnergyCalc2Test", identifiers="energy_calculator_bodycha_120")
+        
 
 class EnergyCost():
     def __init__(self):
@@ -468,7 +477,7 @@ class VirtualDevice(BothTariff):
         self.current = {}
         self.voltage = {}
         self.power = {}
-        self.prev_energy = {}
+        self.all_energy = 0.0
         self.energy = {}
 
         entity_current = SensorInfo(
@@ -575,25 +584,25 @@ class VirtualDevice(BothTariff):
             energy = float(payload.get('energy', 0))
             if energy == 0:
                 return
-            print(topic, energy)
+            
             if topic not in self.energy.keys():
                 self.energy[topic] = energy
-                self.prev_energy[topic] = energy
                 return
-            print(topic, energy)
-
-            self.prev_energy[topic] = self.energy[topic]
+            
+            if self.energy[topic] == energy:
+                return
+            
+            delta = energy - self.energy[topic]
             self.energy[topic] = energy
+            if delta <= 0:
+                return
+            
+            self.all_energy += delta 
+            print(f"{topic} ({self.energy[topic]}) all={self.all_energy}")
 
-            energy_all = 0
-            for t in self.energy.keys():
-                energy_all = self.energy[t] - self.prev_energy[t]
-            self.prev_energy[topic] = self.energy[topic]
-            print("----")
-            print(energy_all)
-            print("----")
-            self.sensor_energy.set_state(energy_all)
-            self.calculate(params, energy_all)
+            
+            self.sensor_energy.set_state(self.all_energy)
+            self.calculate(params, self.all_energy)
         except:
             pass
 
@@ -601,35 +610,36 @@ class VirtualDevice(BothTariff):
 param = EnergyCost()
 centrala_sieciowa = VirtualDevice("centrala_sieciowa", "Centrala sieciowa")
 tv_rozrywka = VirtualDevice("rozrywka", "TV Rozrywka")
+inne_gniazda = VirtualDevice("inne_gniazda", "Pozostały sprzęt agd")
+kuchnia_gniazda = VirtualDevice("kuchnia_gniazda", "Sprzęt AGD kuchnia")
 objects = [
     ('zigbee2mqtt/energy',              [BothTariff("energy_all", "Całe zużycie")]),
     ('zigbee2mqtt/bathroom_el_socket',  [BothTariff("bathroom_el_socket", "Gniazda łazienka")]),
     ('zigbee2mqtt/brama_vectra',        [BothTariff("brama_vectra", "Router Vectry"), centrala_sieciowa]),
-    #('zigbee2mqtt/Centrala sieciowa',   [BothTariff("Centrala sieciowa", "Centrala sieciowa")]),
-    ('zigbee2mqtt/charger_1',           [BothTariff("charger_1", "Ładowarka tel. 1")]),
-    ('zigbee2mqtt/charger_2',           [BothTariff("charger_2", "Ładowarka tel. 2")]),
-    ('zigbee2mqtt/computer',            [BothTariff("computer", "Komputer")]),
-    ('zigbee2mqtt/dishwasher',          [BothTariff("dishwasher", "Zmywarka")]),
+    ('zigbee2mqtt/charger_1',           [BothTariff("charger_1", "Ładowarka tel. 1"), inne_gniazda]),
+    ('zigbee2mqtt/charger_2',           [BothTariff("charger_2", "Ładowarka tel. 2"), inne_gniazda]),
+    ('zigbee2mqtt/computer',            [BothTariff("computer", "Komputer"), inne_gniazda]),
+    ('zigbee2mqtt/dishwasher',          [BothTariff("dishwasher", "Zmywarka"), kuchnia_gniazda]),
     ('zigbee2mqtt/dvd_player',          [BothTariff("dvd_player", "Odtwarzacz DVD"), tv_rozrywka]),
     ('zigbee2mqtt/electric_dryer',      [BothTariff("electric_dryer", "Szuszarka elektryczna")]),
     ('zigbee2mqtt/fridge',              [BothTariff("fridge", "Lodówka")]),
     ('zigbee2mqtt/heating',             [BothTariff("heating", "Ogrzewanie")]),
-    ('zigbee2mqtt/Inne',                [BothTariff("Inne", "Inne")]),
-    ('zigbee2mqtt/iron',                [BothTariff("iron", "Żelazko")]),
-    ('zigbee2mqtt/kitchen_hood',        [BothTariff("kitchen_hood", "Okap w kuchni")]),
+    ('zigbee2mqtt/choinka',             [BothTariff("choinka", "Choinka"), inne_gniazda]),
+    ('zigbee2mqtt/iron',                [BothTariff("iron", "Żelazko"),inne_gniazda]),
+    ('zigbee2mqtt/kitchen_hood',        [BothTariff("kitchen_hood", "Okap w kuchni"), kuchnia_gniazda]),
     ('zigbee2mqtt/light',               [BothTariff("light", "Oświetlenie")]),
     ('zigbee2mqtt/main_power_switch',   [BothTariff("main_power_switch", "Wyłącznik główny"), centrala_sieciowa]),
-    ('zigbee2mqtt/microwave',           [BothTariff("microwave", "Mikrofala")]),
+    ('zigbee2mqtt/microwave',           [BothTariff("microwave", "Mikrofala"), kuchnia_gniazda]),
     ('zigbee2mqtt/power_24v_on',        [BothTariff("power_24v_on", "Zasilacz 24V on"), centrala_sieciowa]),
     ('zigbee2mqtt/power_24v_off',       [BothTariff("power_24v_off", "Zasilacz 24V off"), centrala_sieciowa]),
     ('zigbee2mqtt/power_guaranted',     [BothTariff("power_guaranted", "Zasilanie gwarantowane"), centrala_sieciowa]),
     ('zigbee2mqtt/reserved_lte',        [BothTariff("reserved_lte", "Zapasowy router LTE"), centrala_sieciowa]),
-    ('zigbee2mqtt/roaster',             [BothTariff("roaster", "Piekarnik")]),
+    ('zigbee2mqtt/roaster',             [BothTariff("roaster", "Piekarnik"), kuchnia_gniazda]),
     ('zigbee2mqtt/server_ha',           [BothTariff("server_ha", "Server HA"), centrala_sieciowa]),
     ('zigbee2mqtt/server_nas',          [BothTariff("server_nas", "Server Synology"), centrala_sieciowa]),
-    ('zigbee2mqtt/teapot_electric',     [BothTariff("teapot_electric", "Czajnik elektryczny")]),
+    ('zigbee2mqtt/teapot_electric',     [BothTariff("teapot_electric", "Czajnik elektryczny"), kuchnia_gniazda]),
     ('zigbee2mqtt/tv_samsung',          [BothTariff("tv_samsung", "Telewizor Samsung"), tv_rozrywka]),
-    ('zigbee2mqtt/vacuum_cleaner',      [BothTariff("vacuum_cleaner", "Odkurzacz")]),
+    ('zigbee2mqtt/vacuum_cleaner',      [BothTariff("vacuum_cleaner", "Odkurzacz"), inne_gniazda]),
     ('zigbee2mqtt/vectra_decoder',      [BothTariff("vectra_decoder", "Dekoder Vectry"), tv_rozrywka]),
     ('zigbee2mqtt/washing_machine',     [BothTariff("washing_machine", "Pralka")]),
     ('zigbee2mqtt/wifi_access_point_1', [BothTariff("wifi_access_point_1", "Bramka WiFi 1"), centrala_sieciowa]),
