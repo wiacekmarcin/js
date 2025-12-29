@@ -1,5 +1,5 @@
 name: Analizator zużycia,kosztów energii       # Nazwa dodatku widoczna w HA
-version: "2.0"                         # Wersja dodatku
+version: "2.0.1"                         # Wersja dodatku
 slug: energy_analizator                # Krótka, unikalna nazwa dodatku (używana przez HA wewnętrznie)
 description: Obliczanie statystyk zużycia energi dla taryfy g12w , g11      # Krótki opis
 url: https://kruh.pl                  # Strona autora / dokumentacja

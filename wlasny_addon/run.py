@@ -9,8 +9,8 @@ import paho.mqtt.client as mqtt
 from datetime import datetime
 import json
 
-DEBUG=True
-#DEBUG=False
+#DEBUG=True
+DEBUG=False
 
 DISCOVERABLE=False
 
