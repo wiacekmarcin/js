@@ -17,6 +17,7 @@ tmpl = \
       identifiers:
       - %(device_id)s
       name: "%(device_name)s"
+      model: "Analizator zużycia energii"
     device_class: %(sensor_class)s
     name: "%(name)s"
     qos: 0.0

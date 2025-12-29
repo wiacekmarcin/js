@@ -15,9 +15,9 @@ DEBUG=False
 DISCOVERABLE=False
 
 if not DEBUG:
-    dir_data = '/root/data/'
+    dir_data = '/config/data/'
 else:
-    dir_data = '~/devel/mieszkanie/wlasny_addon/data'
+    dir_data = '/home/marcin/devel/mieszkanie/wlasny_addon/data/'
 import os
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, reason_code, properties):
@@ -145,13 +145,17 @@ class Tariff(MqttConn):
         self.initialize(m, y)
 
     def initialize(self, m, y):
-
+        sy = "%d" % y
+        sm = "%02d" % m
         self.prev_m = m
-        self.fname_e_y = dir_data + '%s_%s_energy_%d.txt' % (self.who_id, self.short_tariff, y)
-        self.fname_c_y = dir_data + '%s_%s_cost_%d.txt' % (self.who_id, self.short_tariff, y)
+        fpath = os.path.join(dir_data, self.who_id, sy, sm)
+        if not os.path.exists(fpath):
+            os.makedirs(fpath)
+        self.fname_e_y = os.path.join(dir_data, self.who_id, sy, 'energy_%s.txt' % (self.short_tariff))
+        self.fname_c_y = os.path.join(dir_data, self.who_id, sy, 'cost_%s.txt' % (self.short_tariff))
 
-        self.fname_e_m = dir_data + '%s_%s_energy_%02d_%d.txt' % (self.who_id, self.short_tariff, m, y)
-        self.fname_c_m = dir_data + '%s_%s_cost_%02d_%d.txt' % (self.who_id, self.short_tariff, m, m)
+        self.fname_e_m = os.path.join(dir_data, self.who_id, sy, sm, 'energy_%s.txt' % (self.short_tariff))
+        self.fname_c_m = os.path.join(dir_data, self.who_id, sy, sm, 'cost_%s.txt' % (self.short_tariff))
 
 
         if os.path.exists(self.fname_e_y):
@@ -199,6 +203,7 @@ class Tariff(MqttConn):
 
         if m != self.prev_m:
             self.initialize(m, y)
+            self.prev_m = m
 
         self.sum_energy_m += energy
         self.sum_cost_m += price*energy
@@ -341,13 +346,21 @@ class BothTariff(MqttConn):
 
     def initialize(self, m, y):
         self.prev_m = m
-        self.fname_e_y = dir_data + '%s_all_energy_%d.txt' % (self.wid, y)
-        self.fname_e_m = dir_data + '%s_all_energy_%02d_%d.txt' % (self.wid, m, y)
-        self.fname_c_y = dir_data + '%s_all_cost_%d.txt' % (self.wid, y)
-        self.fname_c_m = dir_data + '%s_all_cost_%02d_%d.txt' % (self.wid, m, y)
-        self.fname_c11_y = dir_data + '%s_all_cost_g11_%d.txt' % (self.wid, y)
-        self.fname_c11_m = dir_data + '%s_all_cost_g11_%02d_%d.txt' % (self.wid, m, y)
-        self.fname_prev_energy = dir_data + '%s_prev_energy.txt' % self.wid
+
+        sy = "%d" % y
+        sm = "%02d" % m
+        self.prev_m = m
+        fpath = os.path.join(dir_data, self.wid, sy, sm)
+        if not os.path.exists(fpath):
+            os.makedirs(fpath)
+
+        self.fname_e_y = os.path.join(dir_data, self.wid, sy, 'all_energy.txt')
+        self.fname_e_m = os.path.join(dir_data, self.wid, sy, sm, 'all_energy.txt')
+        self.fname_c_y = os.path.join(dir_data, self.wid, sy, 'all_cost.txt')
+        self.fname_c_m = os.path.join(dir_data, self.wid, sy, sm, 'all_cost.txt')
+        self.fname_c11_y = os.path.join(dir_data, self.wid, sy, 'all_cost_g11.txt')
+        self.fname_c11_m = os.path.join(dir_data, self.wid, sy, sm, 'all_cost_g11.txt')
+        self.fname_prev_energy = os.path.join(dir_data, self.wid, 'prev_energy.txt')
 
         if os.path.exists(self.fname_e_y):
             with open(self.fname_e_y, 'r') as fey:
