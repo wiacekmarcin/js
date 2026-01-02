@@ -15,6 +15,7 @@ import json
 font = ImageFont.truetype("/home/pi/fullscreanApp/fonts/roboto-slab/Roboto-Slab-Regular.ttf", 14)
 daysName = [u'Niedziela',u'Poniedziałek',u'Wtorek',u'Środa',u'Czwartek',u'Piątek',u'Sobota']
 fontW = ImageFont.truetype("/home/marcin/git.devel.marcin/fulscreanapp/fullscreanApp/fonts/weathericons-regular-webfont.ttf", 20)
+fontS = ImageFont.truetype("/home/marcin/git.devel.marcin/fulscreanapp/fullscreanApp/fonts/weathericons-regular-webfont.ttf", 14)
 
 iconMap = {}
 iconMap["01d"]="\uf00d" #"wi-day-sunny",
@@ -129,10 +130,17 @@ def createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoin
 		tempmin = pogodaPoints[k]['temp_min']
 		tempmax = pogodaPoints[k]['temp_max']
 		feelstemp = pogodaPoints[k]['feels_like']
-		draw.ellipse((margin + w3h*x -1 , (maxTemp-temp) * h1deg +1, 6, 6), fill='white', outline='red', width=2)
+
+		x0 = margin + w3h*x -1 -3
+		y0 = (maxTemp-temp) * h1deg +1 -3
+		x1 = x0 + 3
+		y1 = y0 + 3
+		draw.ellipse((x0, y0, x1, y1), fill='white', outline='red', width=2)
 		points1.append((margin + w3h*x , (maxTemp-tempmin) * h1deg))
 		points2.append((margin + w3h*x , (maxTemp-tempmax) * h1deg))
 		points3.append((margin + w3h*x , (maxTemp-feelstemp) * h1deg))
+		draw3.text((x0,  y0), "%2.1f" % temp, font=fontS, fill="white")
+		
 		draw3.text((margin + w3h*x, 0), iconMap[pogodaPoints[k]['icon']], font=fontW, fill="white")
 		
 		
@@ -175,7 +183,7 @@ def createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoin
 		points3fix.append((x_new3[i], y_new3[i]))
 
 	#draw.polygon(poly, fill="green", outline="green", width=3)
-	draw.polygon(poly, fill="green", outline="green")
+	draw.polygon(poly, fill="green", outline="green", width=3)
 	draw.line(points3fix, fill="red", width=2)
 
 	return (im, im2, im3)
@@ -243,7 +251,19 @@ def getPoints(cnth):
 		
 		if maxTemp is None or maxTemp < m['temp_max'] :
 			maxTemp = m['temp_max']
+
+		if m['temp'] < minTemp:
+			minTemp = m['temp']
 		
+		if m['feels_like'] < minTemp:
+			minTemp = m['feels_like']
+
+		if m['temp'] > maxTemp:
+			maxTemp = m['temp']
+		
+		if m['feels_like'] > maxTemp:
+			maxTemp = m['feels_like']
+	
 	return minTemp, maxTemp, keys, pogodaPoints
 	
 
@@ -287,6 +307,7 @@ w3h = 25
 cnth = int(24/3*5)
 
 minT, maxT, keys, pogodaPoints = getPoints(cnth)
+#print(f"{width}, {minTemp}, {maxTemp}, {h1deg}, {w3h}, {cnth}, {keys}, {pogodaPoints}")
 im, imL, imI = createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoints)
 createWykres(minT-2, maxT+2, maxTemp, width, h1deg, im, imL, imI)
 

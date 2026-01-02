@@ -13,7 +13,7 @@ import stats
 import rss
 import kredyty
 import mqtt_client
-
+#import wykres_zuzycia
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -196,8 +196,9 @@ if __name__ == '__main__':
                 read_serial.SerialReader(mainWin.widget),
                 stats.StatsWidget(mainWin.widget),
                 rss.RSS(mainWin.widget),
-                kredyty.Kredyty(mainWin.widget),
-                mqtt_client.PahoMqttWriter(mainWin.widget)
+                #kredyty.Kredyty(mainWin.widget),
+                mqtt_client.PahoMqttWriter(mainWin.widget),
+                #wykres_zuzycia.HA_WWW(mainWin.widget),
                 ]
     #mainWin.setWindowState(mainWin.WindowFullScreen)
     mainWin.setGeometry(0,0,1080,1920)
