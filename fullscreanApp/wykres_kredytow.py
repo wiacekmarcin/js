@@ -8,46 +8,53 @@ from dateutil.relativedelta import relativedelta
 
 import mysql.connector
 
+from contextlib import contextmanager
+
+@contextmanager
+def closing(thing):
+	try:
+		yield thing
+	finally:
+		thing.close()
+
 def countL(y, m):
 	return (y-2000)*12+m
 
-def textlength(draw, str, font):
-	return draw.textsize(str, font)[0]
+def textlength(draw, xy,  text, font):
+	box =  draw.textbbox(xy, text, font=font)
+	return box[2]
 
-cnx = mysql.connector.connect(user='kredyty', password='kredyty',
+ddact = datetime.date.today()
+liczba = countL(ddact.year, ddact.month)
+result = []
+with closing(mysql.connector.connect(user='kredyty', password='kredyty',
                               host='192.168.10.254',
-                              database='kredyty')
+                              database='kredyty')) as conn:
+		with closing(conn.cursor()) as cur:
+			cur.execute('SELECT * FROM `RataWidok` WHERE data = %d' % liczba)
+			result = cur.fetchall()
+
 kredyty = []
 maxMonth = 0
-if cnx and cnx.is_connected():
-	with cnx.cursor() as cursor:
-		ddact = datetime.date.today()
-		liczba = countL(ddact.year, ddact.month)
 
-		sql='SELECT * FROM `RataWidok` WHERE data = %d' % liczba
-		#print(sql)
-		cursor.execute(sql)
+for k in result:
+	kred = {}
+	kred['opis'] = k[5]
+	kred['wys_raty'] = k[8]
+	kred['koniec'] = k[10]
+	kred['poczatek'] = k[9]
+	kred['wolumen'] = k[6]
+	kred['dzien'] = k[7]
+	kred['stopa'] = k[11]
+	kred['nr_raty'] = k[12]
+	kred['poz_rat'] = k[13]
+	kred['rata_ods'] = k[3]
+	kred['rata_kap'] = k[2]
+	kred['do_splacenia'] = k[4]
+	if maxMonth < kred['koniec']:
+		maxMonth = kred['koniec']
+	kredyty.append(kred)
 
-		for k in cursor.fetchall():
-			#print(k)
-			kred = {}
-			kred['opis'] = k[5]
-			kred['wys_raty'] = k[8]
-			kred['koniec'] = k[10]
-			kred['poczatek'] = k[9]
-			kred['wolumen'] = k[6]
-			kred['dzien'] = k[7]
-			kred['stopa'] = k[11]
-			kred['nr_raty'] = k[12]
-			kred['poz_rat'] = k[13]
-			kred['rata_ods'] = k[3]
-			kred['rata_kap'] = k[2]
-			kred['do_splacenia'] = k[4]
-			if maxMonth < kred['koniec']:
-				maxMonth = kred['koniec'] 
-			kredyty.append(kred)
-
-		
 maxMonth += 6
 
 #kredyty.sort(key=lambda x : x['stopa']*x['do_splacenia'])
@@ -92,46 +99,46 @@ def createBackground():
 	sum_zostalo = 0
 	sum_wolumen = 0
 	for k in kredyty:
-		to = textlength(draw, "%s" % k['opis'], font=font8)
+		to = textlength(draw, (0,0), "%s" % k['opis'], font=font8)
 		if to > max_opis : max_opis = to
 		
-		td = textlength(draw, "%d" % k['dzien'], font=font8)
+		td = textlength(draw, (0,0), "%d" % k['dzien'], font=font8)
 		if td > max_dzien : max_dzien = td
 		
-		tk = textlength(draw, "%0.2f" % k['wys_raty'], font=font8)
+		tk = textlength(draw, (0,0), "%0.2f" % k['wys_raty'], font=font8)
 		if tk > max_kwota_raty : max_kwota_raty = tk
 		sum_kwota_raty += k['wys_raty']
 		
-		tk = textlength(draw, "%0.2f" % k['rata_ods'], font=font8)
+		tk = textlength(draw, (0,0), "%0.2f" % k['rata_ods'], font=font8)
 		if tk > max_odsetki : max_odsetki = tk
 		sum_odsetki +=  k['rata_ods']
 		
-		tk = textlength(draw, "%0.2f" % k['do_splacenia'], font=font8)
+		tk = textlength(draw, (0,0), "%0.2f" % k['do_splacenia'], font=font8)
 		if tk > max_zostalo_kwota : max_zostalo_kwota = tk
 		sum_zostalo += k['do_splacenia']
 		
-		tk = textlength(draw, "%0.2f" % k['wolumen'], font=font8)
+		tk = textlength(draw, (0,0), "%0.2f" % k['wolumen'], font=font8)
 		if tk > max_wolumen : max_wolumen = tk
 		sum_wolumen += k['wolumen']
 	
-	tk = textlength(draw, "%0.2f" % sum_kwota_raty, font=font8)
+	tk = textlength(draw, (0,0), "%0.2f" % sum_kwota_raty, font=font8)
 	if tk > max_kwota_raty : max_kwota_raty = tk
 		
-	tk = textlength(draw, "%0.2f" % sum_odsetki, font=font8)
+	tk = textlength(draw, (0,0), "%0.2f" % sum_odsetki, font=font8)
 	if tk > max_odsetki : max_odsetki = tk
 	
-	tk = textlength(draw, "%0.2f" % sum_zostalo, font=font8)
+	tk = textlength(draw, (0,0), "%0.2f" % sum_zostalo, font=font8)
 	if tk > max_zostalo_kwota : max_zostalo_kwota = tk
 		
-	tk = textlength(draw, "%0.2f" % sum_wolumen, font=font8)
+	tk = textlength(draw, (0,0), "%0.2f" % sum_wolumen, font=font8)
 	if tk > max_wolumen : max_wolumen = tk
 	
 	draw.text((0, 0), u"Opis", font = font8, fill="white")
-	draw.text((max_opis+max_dzien+5-textlength(draw,"Dz",font=font8),0), u"Dz", font = font8, fill="white")
-	draw.text((max_opis+max_dzien+max_kwota_raty+10-textlength(draw,"Rata",font=font8), 0), u"Rata", font = font8, fill="white")
-	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+15-textlength(draw,"Odset.",font=font8), 0), u"Odset.", font = font8, fill="white")
-	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+20-textlength(draw,"Zostalo",font=font8), 0), u"Zostalo", font = font8, fill="white")
-	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+25-textlength(draw,"Wolumen",font=font8), 0), u"Wolumen", font = font8, fill="white")
+	draw.text((max_opis+max_dzien+5-textlength(draw, (0,0), "Dz",font=font8),0), u"Dz", font = font8, fill="white")
+	draw.text((max_opis+max_dzien+max_kwota_raty+10-textlength(draw, (0,0), "Rata",font=font8), 0), u"Rata", font = font8, fill="white")
+	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+15-textlength(draw, (0,0), "Odset.",font=font8), 0), u"Odset.", font = font8, fill="white")
+	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+20-textlength(draw, (0,0), "Zostalo",font=font8), 0), u"Zostalo", font = font8, fill="white")
+	draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+25-textlength(draw, (0,0), "Wolumen",font=font8), 0), u"Wolumen", font = font8, fill="white")
 
 	#draw.text((max_opis + max_dzien + max_kwota_raty + max_odsetki + 20, 0), u"Miesieczne raty", font = font8, fill="white")
 	margin = max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+35
@@ -148,19 +155,19 @@ def createBackground():
 
 		draw.text((0, 16+h*wh), "%s" % (opis), font = font8, fill="white")
 		
-		tl = textlength(draw, "%d" % dzien, font=font8)
+		tl = textlength(draw,  (0,0), "%d" % dzien, font=font8)
 		draw.text((max_opis+max_dzien+10-tl, 16+h*wh), "%d" % dzien, font=font8, fill="white")
 		
-		tl = textlength(draw, "%0.2f" % kwota_raty, font=font8)
+		tl = textlength(draw,  (0,0), "%0.2f" % kwota_raty, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+15-tl, 16+h*wh), " %.2f " % kwota_raty, font=font8, fill="white")
 
-		tl = textlength(draw, "%0.2f" % odsetki, font=font8)
+		tl = textlength(draw,  (0,0), "%0.2f" % odsetki, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+20-tl, 16+h*wh), "%0.2f" % odsetki, font=font8, fill="white")
 		
-		tl = textlength(draw, "%0.2f" % zostala_kwota, font=font8)
+		tl = textlength(draw,  (0,0), "%0.2f" % zostala_kwota, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+25-tl, 16+h*wh), " %.2f " % zostala_kwota, font=font8, fill="white")
 		
-		tl = textlength(draw, "%.2f" % cala_kwota, font=font8)
+		tl = textlength(draw,  (0,0), "%.2f" % cala_kwota, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+30-tl, 16+h*wh), "%.2f" % cala_kwota, font=font8, fill="white")
 		
 		
@@ -174,16 +181,16 @@ def createBackground():
 
 	if sumaKredytow > 0:
 		
-		tl = textlength(draw, "%0.2f" % sumaRat, font=font8)
+		tl = textlength(draw,  (0,0), "%0.2f" % sumaRat, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+15-tl, 16+len(kredyty)*wh), " %.2f " % sumaRat, font=font8, fill="white")
 
-		tl = textlength(draw, "%0.2f" % sumaOdsetek, font=font8)
+		tl = textlength(draw,  (0,0), "%0.2f" % sumaOdsetek, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+20-tl, 16+len(kredyty)*wh), "%0.2f" % sumaOdsetek, font=font8, fill="white")
 		
-		tl = textlength(draw, "%0.2f" % sumaPozostalo, font=font8)
+		tl = textlength(draw, (0,0), "%0.2f" % sumaPozostalo, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+25-tl, 16+len(kredyty)*wh), " %.2f " % sumaPozostalo, font=font8, fill="white")
 
-		tl = textlength(draw, "%.2f" % sumaKredytow, font=font8)
+		tl = textlength(draw, (0,0), "%.2f" % sumaKredytow, font=font8)
 		draw.text((max_opis+max_dzien+max_kwota_raty+max_odsetki+max_zostalo_kwota+max_wolumen+30-tl, 16+len(kredyty)*wh), "%.2f" % sumaKredytow, font=font8, fill="white")
 				
 	beginL = countL(ddact.year, ddact.month)

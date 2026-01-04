@@ -14,8 +14,8 @@ import json
 
 font = ImageFont.truetype("/home/pi/fullscreanApp/fonts/roboto-slab/Roboto-Slab-Regular.ttf", 14)
 daysName = [u'Niedziela',u'Poniedziałek',u'Wtorek',u'Środa',u'Czwartek',u'Piątek',u'Sobota']
-fontW = ImageFont.truetype("/home/marcin/git.devel.marcin/fulscreanapp/fullscreanApp/fonts/weathericons-regular-webfont.ttf", 20)
-fontS = ImageFont.truetype("/home/marcin/git.devel.marcin/fulscreanapp/fullscreanApp/fonts/weathericons-regular-webfont.ttf", 14)
+fontW = ImageFont.truetype("/home/pi/fullscreanApp/fonts/weathericons-regular-webfont.ttf", 20)
+fontS = ImageFont.truetype("/home/pi/fullscreanApp/fonts/weathericons-regular-webfont.ttf", 14)
 
 iconMap = {}
 iconMap["01d"]="\uf00d" #"wi-day-sunny",
@@ -121,6 +121,7 @@ def createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoin
 	points1 = []
 	points2 = []
 	points3 = []
+	points4 = []
 
 	for x in range(len(keys)):
 		k = keys[x]
@@ -139,6 +140,7 @@ def createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoin
 		points1.append((margin + w3h*x , (maxTemp-tempmin) * h1deg))
 		points2.append((margin + w3h*x , (maxTemp-tempmax) * h1deg))
 		points3.append((margin + w3h*x , (maxTemp-feelstemp) * h1deg))
+		points4.append((margin + w3h*x , (maxTemp-temp) * h1deg))
 		draw3.text((x0,  y0), "%2.1f" % temp, font=fontS, fill="white")
 		
 		draw3.text((margin + w3h*x, 0), iconMap[pogodaPoints[k]['icon']], font=fontW, fill="white")
@@ -154,6 +156,9 @@ def createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoin
 	x3 = np.array([p[0] for p in points3])
 	y3 = np.array([p[1] for p in points3])
 
+	x4 = np.array([p[0] for p in points4])
+	y4 = np.array([p[1] for p in points4])
+
 	spl_1 = splrep(x1, y1)
 	f_1 = splev(x1, spl_1)
 
@@ -163,6 +168,9 @@ def createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoin
 	spl_3 = splrep(x3, y3)
 	f_3 = splev(x3, spl_3)
 
+	spl_4 = splrep(x4, y4)
+	f_4 = splev(x4, spl_4)
+
 	x_new1 = np.linspace(points1[0][0], points1[-1][0], (cnth+1)*w3h)
 	y_new1 = splev(x_new1, spl_1)
 
@@ -171,6 +179,10 @@ def createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoin
 	
 	x_new3 = np.linspace(points3[0][0], points3[-1][0], (cnth+1)*w3h)
 	y_new3 = splev(x_new3, spl_3)
+
+	x_new4 = np.linspace(points4[0][0], points4[-1][0], (cnth+1)*w3h)
+	y_new4 = splev(x_new4, spl_4)
+
 	poly = []
 	for i in range(len(x_new1)):
 		poly.append((x_new1[i], y_new1[i]))
@@ -182,9 +194,14 @@ def createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoin
 	for i in range(len(x_new3)):
 		points3fix.append((x_new3[i], y_new3[i]))
 
+	points4fix = []
+	for i in range(len(x_new4)):
+		points4fix.append((x_new4[i], y_new4[i]))
+
 	#draw.polygon(poly, fill="green", outline="green", width=3)
-	draw.polygon(poly, fill="green", outline="green", width=3)
+	#draw.polygon(poly, fill="green", outline="green", width=3)
 	draw.line(points3fix, fill="red", width=2)
+	draw.line(points4fix, fill="green", width=2)
 
 	return (im, im2, im3)
 

@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
+
 import blackwidget
 import resources
 
@@ -90,26 +91,21 @@ class Pogodav2(blackwidget.BlackWidget):
            self.lastTime = None
            return 
 
-        #print("Get Data", "T" if self.lastTime is not None else "N", "T" if self.lastTime + 600 < il_sec else "N")
-
         if self.lastTime is None:
             self.lastTime = il_sec
         else:
             if self.lastTime + 600 > il_sec:
-                #print("Skip")
                 return
-        #print("Get Data")
+
 
         self.lastTime = il_sec
         self.firstTime = False
 
-        #self.PogodaUi.nazwamiasta.setText(self.citiname)
-        #self.PogodaUi.czasAktualnoscidanych.setText(self.__getTimeRemaing(hour-self.pog_h, min-self.pog_m))
-        
         self.m_h = hour
         self.m_m = min
-        #try :
-        if 1:
+        mqtt_vals = {}
+        try :
+
             response = urlopen(self.url)
             data_json = json.loads(response.read().decode('utf-8'))
 
@@ -119,35 +115,34 @@ class Pogodav2(blackwidget.BlackWidget):
             
             self.pog_h = dtw.hour()
             self.pog_m = dtw.minute()
-            #self.PogodaUi.czasAktualnoscidanych.setText("Dane aktualne")
+            mqtt_vals["time"] = "%02d:%02d" % (self.pog_h, self.pog_m)
 
             self.sunrise = QDateTime.fromMSecsSinceEpoch(data_json["sys"]["sunrise"]*1000)
             self.sunset = QDateTime.fromMSecsSinceEpoch(data_json["sys"]["sunset"]*1000)
-        
-            value = { "sunrise" : self.sunrise.time(), "sunset" : self.sunset.time() }
-            self.sendNotification(value)
-
-            #emit setSunrise(sunrise.time().hour(), sunrise.time().minute());
-            #emit setSunset(sunset.time().hour(), sunset.time().minute());
+            mqtt_vals["sunrise"] = self.sunrise.toString()
+            mqtt_vals["sunset"] = self.sunset.toString()
 
             wind_speed = data_json["wind"]["speed"]
             wind_deg = data_json["wind"]["deg"]
+            mqtt_vals["wind_speed"] = wind_speed
+            mqtt_vals["wind_deg"] = wind_deg
             self.PogodaUi.ikonawiatru.setText(self._toBeaufortChar(self._ms2Beaufort(wind_speed)))
             self.PogodaUi.kierunekWiatru.setText(self._deg2Cardinal(wind_deg))
             self.PogodaUi.opiswiatru.setText(self._toDescrSilaWiatru(wind_speed))
 
-
             temp = data_json["main"]["temp"]
             feels_like = data_json["main"]["feels_like"]
+            mqtt_vals["temp"] = temp
+            mqtt_vals["feels_like"] = feels_like
 
             self.PogodaUi.temperatura.setText("%.1f\u00B0C" % temp)
             self.PogodaUi.temperaturaOdczuwalna.setText("%.1f\u00B0C" % feels_like)
 
-
-
             pressure = data_json["main"]["pressure"]
             huminidity = data_json["main"]["humidity"]
-            
+            mqtt_vals["pressure"] = pressure
+            mqtt_vals["huminidity"] = huminidity
+
             self.PogodaUi.wilgotnosc.setText("%.0f%%" % huminidity)
             self.PogodaUi.cisnienie.setText("%.0f hPa" % pressure)
 
@@ -164,24 +159,37 @@ class Pogodav2(blackwidget.BlackWidget):
                 if "1h" in data_json["snow"]:
                     self.PogodaUi.deszczsnieg.setText("%s" % data_json["snow"]["1h"])
                     self.PogodaUi.etdeszczsnieg.setText("mm/h")
+                    mqtt_vals["snow_1h"] = data_json["snow"]["1h"]
                 elif "3h" in data_json["snow"]:
                     self.PogodaUi.deszczsnieg.setText("%s" % data_json["snow"]["3h"])
                     self.PogodaUi.etdeszczsnieg.setText("mm/3h")
+                    mqtt_vals["snow_3h"] = data_json["snow"]["3h"]
             elif "rain" in data_json:
                 if "1h" in data_json["rain"]:
                     self.PogodaUi.deszczsnieg.setText("%s" % data_json["rain"]["1h"])
                     self.PogodaUi.etdeszczsnieg.setText("mm/h")
+                    mqtt_vals["snow_3h"] = data_json["rain"]["1h"]
                 elif "3h" in data_json["rain"]:
                     self.PogodaUi.deszczsnieg.setText("%s" % data_json["rain"]["3h"])
                     self.PogodaUi.etdeszczsnieg.setText("mm/3h")
+                    mqtt_vals["rain_3h"] = data_json["rain"]["3h"]
             elif "clouds" in data_json:
                 self.PogodaUi.deszczsnieg.setText("%s%%" % data_json["clouds"]["all"])
                 self.PogodaUi.etdeszczsnieg.setText("")
+                mqtt_vals["clouds"] = data_json["clouds"]["all"]
             else:
                 self.PogodaUi.deszczsnieg.setText("")
                 self.PogodaUi.etdeszczsnieg.setText("")
-        #except:
-        else:
+
+            vals = { "sunrise" : self.sunrise.time(), "sunset" : self.sunset.time() }
+            vals['minimum-temperature'] = data_json['main']['temp_min']
+            vals['maximum-temperature'] = data_json['main']['temp_max']
+            mqtt_vals['minimum-temperature'] = data_json['main']['temp_min']
+            mqtt_vals['maximum-temperature'] = data_json['main']['temp_max']
+            self.sendNotification(vals)
+            self.sendMqtt("lustro/pogoda", mqtt_vals)
+
+        except:
             pass
 
 

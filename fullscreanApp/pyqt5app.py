@@ -13,7 +13,9 @@ import stats
 import rss
 import kredyty
 import mqtt_client
-#import wykres_zuzycia
+import wykres_zuzycia
+import kalendarz
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -48,7 +50,7 @@ class MainWindow(QMainWindow):
         for p in plg:
             p.setMainWindow(self)
             r = p.getRect()
-            print(r)
+            print(p, r)
             p.setGeometry(r)
             p.update()
         self.repaint()    
@@ -60,10 +62,11 @@ class MainWindow(QMainWindow):
         if 1:
             for p in self.plgs:
                 #print(p)
-                try:
+                #try:
+                if 1:
                     p.timeout(dt)
-                except :
-                    pass
+                #except :
+                #    pass
             self.update()
         #except KeyboardInterrupt:
         #    print("ctrl-c")
@@ -72,6 +75,10 @@ class MainWindow(QMainWindow):
     def sendNotification(self, valueDict):
         for p in self.plgs:
             p.receiveNotfication(valueDict)
+
+    def sendMqtt(self, topic, valueDict):
+        for p in self.plgs:
+            p.receiveMqtt(topic, valueDict)
     
     def setBackground(self):
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -196,12 +203,16 @@ if __name__ == '__main__':
                 read_serial.SerialReader(mainWin.widget),
                 stats.StatsWidget(mainWin.widget),
                 rss.RSS(mainWin.widget),
-                #kredyty.Kredyty(mainWin.widget),
+                kredyty.Kredyty(mainWin.widget),
                 mqtt_client.PahoMqttWriter(mainWin.widget),
-                #wykres_zuzycia.HA_WWW(mainWin.widget),
+                wykres_zuzycia.HA_WWW(mainWin.widget),
+                #kalendarz.Kalendarz(mainWin.widget),
                 ]
     #mainWin.setWindowState(mainWin.WindowFullScreen)
+    
     mainWin.setGeometry(0,0,1080,1920)
+    #mainWin.setGeometry(0,0,540,960)
+    
     mainWin.setPlugins(pluggins)
     mainWin.showFullScreen()
     mainWin.show()

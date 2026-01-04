@@ -1,38 +1,9 @@
 import blackwidget
-
 from PyQt5.QtCore import *
-
 import paho.mqtt.client as mqtt
+import json
 
-# The callback for when the client receives a CONNACK response from the server.
-def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
-
-    # Subscribing in on_connect() means that if we lose the connection and
-    # reconnect then subscriptions will be renewed.
-    client.subscribe("$SYS/#")
-
-# The callback for when a PUBLISH message is received from the server.
-def on_message(client, userdata, msg):
-    print(msg.topic+" "+str(msg.payload))
-
-class PahoMqttWriter(blackwidget.BlackWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.clientmqtt = mqtt.Client(client_id="lustroCID")
-        self.clientmqtt.username_pw_set("mqtt", "mqtt")
-        self.clientmqtt.on_connect = on_connect
-        self.clientmqtt.on_message = on_message
-        try:
-            self.clientmqtt.connect("192.168.10.250", 1883, 60)
-            self.connect = True
-        except:
-            self.connect = False 
-            return
-
-
-        
-        tempConfig = \
+tempConfig = \
 """{
    "device_class":"temperature",
    "state_topic":"lustro/sensor/data/TiHLazienka1/state",
@@ -47,7 +18,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
       "model": "DHT 22",
    }
 }"""
-        humiConfig = \
+humiConfig = \
 """
 {
    "device_class":"humidity",
@@ -65,7 +36,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
 }
 """
 
-        tempMonConfig = \
+tempMonConfig = \
 """{
    "device_class":"temperature",
    "state_topic":"lustro/sensor/data/TLustroMon/state",
@@ -75,7 +46,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
    "device":{
       "identifiers":[
           "286cf90f0b0000ae",
-          "lazienkaTMonitor"  
+          "lazienkaTMonitor"
       ],
       "name":"Temperatura Monitora",
       "manufacturer": "Toshiba",
@@ -83,7 +54,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
    }
 }"""
 
-        tempRasConfig = \
+tempRasConfig = \
 """{
    "device_class":"temperature",
    "state_topic":"lustro/sensor/data/TLustroRas/state",
@@ -101,7 +72,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
    }
 }"""
 
-        tempRasCPUConfig = \
+tempRasCPUConfig = \
 """{
    "device_class":"temperature",
    "state_topic":"lustro/sensor/data/TLustroRasCPU/state",
@@ -117,7 +88,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
    }
 }"""
 
-        usageRasCPUConfig = \
+usageRasCPUConfig = \
 """{
    "device_class":"percentage",
    "state_topic":"lustro/sensor/data/CPULustroRas/state",
@@ -133,7 +104,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
    }
 }"""
 
-        freqRasCPUConfig = \
+freqRasCPUConfig = \
 """{
    "device_class":"frequency",
    "state_topic":"lustro/sensor/data/CPULustroRas/state",
@@ -145,9 +116,9 @@ class PahoMqttWriter(blackwidget.BlackWidget):
           "raspberry_lustro_cpu.freq"
       ],
    }
-""" 
+"""
 
-        voltageRasCPUConfig = \
+voltageRasCPUConfig = \
 """{
    "device_class":"voltage",
    "state_topic":"lustro/sensor/data/Ina219LustroRas/state",
@@ -163,7 +134,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
    }
 }"""
 
-        currentRasCPUConfig = \
+currentRasCPUConfig = \
 """{
    "device_class":"current",
    "state_topic":"lustro/sensor/data/Ina219LustroRas/state",
@@ -179,8 +150,7 @@ class PahoMqttWriter(blackwidget.BlackWidget):
    }
 }"""
 
-
-        powerRasCPUConfig = \
+powerRasCPUConfig = \
 """{
    "device_class":"power",
    "state_topic":"lustro/sensor/data/Ina219LustroRas/state",
@@ -194,8 +164,9 @@ class PahoMqttWriter(blackwidget.BlackWidget):
       "name":"Lustro - moc",
       "manufacturer": "Raspberry",
    }
-}""" 
-        energyRasCPUConfig = \
+}"""
+
+energyRasCPUConfig = \
 """{
    "device_class":"energy",
    "state_topic":"lustro/sensor/data/Ina219LustroRas/state",
@@ -211,49 +182,100 @@ class PahoMqttWriter(blackwidget.BlackWidget):
    }
 }"""
 
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/TiHLazienkaT/config", tempConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/TiHLazienkaH/config", humiConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/TLazienkaMon/config", tempMonConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/TLazienkaRas/config", tempRasConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/TLustroRasCPU/config", tempRasCPUConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/CPULustroRasUsage/config", usageRasCPUConfig)
-        #self.clientmqtt.publish("lustro/sensor/sensorConfig/sensorCPULustroRasFreq/config", freqRasCPUConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/VoltRasCPUConfig/config",voltageRasCPUConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/CurrRasCPUConfig/config",currentRasCPUConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/PowerRasCPUConfig/config",powerRasCPUConfig)
-        self.clientmqtt.publish("lustro/sensor/sensorConfig/EnergyRasCPUConfig/config", energyRasCPUConfig)
+class PahoMqttWriter(blackwidget.BlackWidget):
+    def msg_on_connect(self, client, userdata, flags, rc):
+        print("Connected with result code "+str(rc))
+
+        # Subscribing in on_connect() means that if we lose the connection and
+        # reconnect then subscriptions will be renewed.
+        client.subscribe("lustro/features/show_kredyty")
+        self.isconnect = True
+
+    def msg_on_message(self, client, userdata, msg):
+       val = msg.payload.decode('ascii')
+       bval = val == "on"
+       self.sendNotification({"feature.kredyty":bval })
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.clientmqtt = mqtt.Client(client_id="lustroCID")
+        self.clientmqtt.username_pw_set("mqtt", "mqtt")
+        self.clientmqtt.on_connect = self.msg_on_connect
+        self.clientmqtt.on_message = self.msg_on_message
+
+        self.isconnect = False
+        self.try_connect()
+
+    def try_connect(self):
+        if self.isconnect:
+            return
+
+        print("mqtt connect")
+        try:
+            self.clientmqtt.connect("192.168.10.250", 1883, 60)
+            self.isconnect = True
+            self.clientmqtt.loop_start()
+            print("ok")
+        except:
+            self.isconnect = False
+            return
+        try :
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TiHLazienkaT/config", tempConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TiHLazienkaH/config", humiConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TLazienkaMon/config", tempMonConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TLazienkaRas/config", tempRasConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TLustroRasCPU/config", tempRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/CPULustroRasUsage/config", usageRasCPUConfig)
+            #self.clientmqtt.publish("lustro/sensor/sensorConfig/sensorCPULustroRasFreq/config", freqRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/VoltRasCPUConfig/config",voltageRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/CurrRasCPUConfig/config",currentRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/PowerRasCPUConfig/config",powerRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/EnergyRasCPUConfig/config", energyRasCPUConfig)
+        except:
+            print("Err")
+            self.isconect = False
 
     def receiveNotfication(self, dictValue):
-        print(dictValue)
-        if not self.connect:
-            try:
-                self.clientmqtt.username_pw_set("mqtt", "mqtt")
-                self.clientmqtt.connect("192.168.10.254", 1883, 60)
-                self.connect = True
-            except:
-                self.connect = False 
-                return
-        if "lazienka_temp" in dictValue.keys() and "lazienka_humi" in dictValue.keys():
-            payload = '{ "temperature":%s, "humidity":%s }' % (dictValue["lazienka_temp"], dictValue["lazienka_humi"])
-            self.clientmqtt.publish("lustro/sensor/data/TiHLazienka1/state", payload)
-        if "286cf90f0b0000ae" in dictValue.keys():
-            payload = '{ "temperature":%s}' % (dictValue["286cf90f0b0000ae"])
-            self.clientmqtt.publish("lustro/sensor/data/TLustroRas/state", payload)   
-        if "28fff708640400a3" in dictValue.keys():
-            payload = '{ "temperature":%s}' % (dictValue["28fff708640400a3"])
-            self.clientmqtt.publish("lustro/sensor/data/TLustroMon/state", payload)   
 
-        if "tempGPU" in dictValue.keys():
-            payload = '{ "temperature":%s}' % (dictValue["tempGPU"])
-            self.clientmqtt.publish("lustro/sensor/data/TLustroRasCPU/state", payload) 
+        if not self.isconnect:
+            self.try_connect()
+            return
+        try:
+            if "lazienka_temp" in dictValue.keys() and "lazienka_humi" in dictValue.keys():
+                payload = '{ "temperature":%s, "humidity":%s }' % (dictValue["lazienka_temp"], dictValue["lazienka_humi"])
+                self.clientmqtt.publish("lustro/sensor/data/TiHLazienka1/state", payload)
+            if "286cf90f0b0000ae" in dictValue.keys():
+                payload = '{ "temperature":%s}' % (dictValue["286cf90f0b0000ae"])
+                self.clientmqtt.publish("lustro/sensor/data/TLustroRas/state", payload)
+            if "28fff708640400a3" in dictValue.keys():
+                payload = '{ "temperature":%s}' % (dictValue["28fff708640400a3"])
+                self.clientmqtt.publish("lustro/sensor/data/TLustroMon/state", payload)
 
-        if "cpuFreq" in dictValue.keys() and "cpuUse" in dictValue.keys():
-            payload = '{ "usage":%s, "freq":%s }' % (dictValue["cpuUse"], dictValue["cpuFreq"])
-            self.clientmqtt.publish("lustro/sensor/data/CPULustroRas/state", payload)
-        if "current" in dictValue.keys() and "voltage" in dictValue.keys() and "power" in dictValue.keys() and "energy" in dictValue.keys():
-            payload = '{ "power":%(power)s, "voltage":%(voltage)s, "current" : %(current)s , "energy" : %(energy)s }' % (dictValue)
-            self.clientmqtt.publish("lustro/sensor/data/Ina219LustroRas/state", payload)
+            if "tempGPU" in dictValue.keys():
+                payload = '{ "temperature":%s}' % (dictValue["tempGPU"])
+                self.clientmqtt.publish("lustro/sensor/data/TLustroRasCPU/state", payload)
 
+            if "cpuFreq" in dictValue.keys() and "cpuUse" in dictValue.keys():
+                payload = '{ "usage":%s, "freq":%s }' % (dictValue["cpuUse"], dictValue["cpuFreq"])
+                self.clientmqtt.publish("lustro/sensor/data/CPULustroRas/state", payload)
+            if "current" in dictValue.keys() and "voltage" in dictValue.keys() and "power" in dictValue.keys() and "energy" in dictValue.keys():
+                payload = '{ "power":%(power)s, "voltage":%(voltage)s, "current" : %(current)s , "energy" : %(energy)s }' % (dictValue)
+                self.clientmqtt.publish("lustro/sensor/data/Ina219LustroRas/state", payload)
+        except:
+            print("Err publishing")
+            self.isconnect = False
+            pass
+
+    def receiveMqtt(self, topic, dictValue):
+        if not self.isconnect:
+            self.try_connect()
+            return
+        try:
+            payload = json.dumps(dictValue)
+            self.clientmqtt.publish(topic, payload)
+        except:
+            print("Err publishing")
+            self.isconnect = False
 
     def getRect(self):
         return QRect(1080,1920,0,0)

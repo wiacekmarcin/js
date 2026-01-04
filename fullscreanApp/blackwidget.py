@@ -35,7 +35,12 @@ class BlackWidget(QFrame):
         if self.mainWindow:
             self.mainWindow.sendNotification(dictValue)
 
-        
+    def receiveMqtt(self, topic, dictValue):
+        pass
+
+    def sendMqtt(self, topic, dictValue):
+        if self.mainWindow:
+            self.mainWindow.sendMqtt(topic, dictValue)
 
     
   

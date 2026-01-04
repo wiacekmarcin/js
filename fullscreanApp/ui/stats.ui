@@ -7,23 +7,32 @@
     <x>0</x>
     <y>0</y>
     <width>593</width>
-    <height>430</height>
+    <height>464</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QGroupBox" name="cpuBox">
+    <widget class="QFrame" name="cpuBox">
      <property name="styleSheet">
       <string notr="true">border-color: rgb(186, 189, 182);</string>
-     </property>
-     <property name="title">
-      <string>Procesor</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
      </property>
      <layout class="QFormLayout" name="formLayoutProcesor">
       <property name="horizontalSpacing">
@@ -45,23 +54,6 @@
        <number>0</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="etCpuSpeed">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Prędkość</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
        <widget class="QLabel" name="label">
         <property name="font">
          <font>
@@ -78,7 +70,7 @@ background-color: rgb(0, 0, 0);</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="1">
        <widget class="QLabel" name="cpuUsage">
         <property name="font">
          <font>
@@ -95,38 +87,12 @@ background-color: rgb(0, 0, 0);</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="cpuSpeed">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>0 MHz</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="tempBox">
-     <property name="title">
-      <string>Temperatury</string>
-     </property>
-     <layout class="QFormLayout" name="formLayoutTemp">
-      <property name="horizontalSpacing">
-       <number>2</number>
-      </property>
-      <property name="verticalSpacing">
-       <number>2</number>
-      </property>
+    <widget class="QFrame" name="tempBox">
+     <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -139,92 +105,10 @@ background-color: rgb(0, 0, 0);</string>
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="etProcesro">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Procesor</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="tempGPU">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="etMonitor">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Monitor</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="tempMonitor">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="etRaspberry">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Raspberry</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="3">
        <widget class="QLabel" name="tempRasp">
         <property name="font">
          <font>
@@ -241,20 +125,65 @@ background-color: rgb(0, 0, 0);</string>
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="tempGPU">
+        <property name="font">
+         <font>
+          <family>Roboto Slab ExtraLight</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="etMonitor">
+        <property name="font">
+         <font>
+          <family>Roboto Slab ExtraLight</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>Proc/Rasp/Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="tempMonitor">
+        <property name="font">
+         <font>
+          <family>Roboto Slab ExtraLight</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="ipBox">
-     <property name="title">
-      <string>IP</string>
-     </property>
-     <layout class="QFormLayout" name="formLayoutIp">
-      <property name="horizontalSpacing">
-       <number>2</number>
-      </property>
+    <widget class="QFrame" name="ipBox">
+     <layout class="QFormLayout" name="formLayout_2">
       <property name="verticalSpacing">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -268,6 +197,44 @@ background-color: rgb(0, 0, 0);</string>
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="localIp">
+          <property name="font">
+           <font>
+            <family>Roboto Slab ExtraLight</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string>0.0.0.0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="zewnetrzneIp">
+          <property name="font">
+           <font>
+            <family>Roboto Slab ExtraLight</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string>0.0.0.0</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="etLocalIp">
         <property name="font">
@@ -281,92 +248,7 @@ background-color: rgb(0, 0, 0);</string>
 background-color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>Lokalne</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="localIp">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>0.0.0.0</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="etInternetIp">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Zewnetrzne</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="zewnetrzneIp">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>0.0.0.0</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="etConnected">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Połączenie</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="netstatus">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Brak internetu</string>
+         <string>IP</string>
         </property>
        </widget>
       </item>
@@ -374,17 +256,8 @@ background-color: rgb(0, 0, 0);</string>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="PowerBox">
-     <property name="title">
-      <string>IP</string>
-     </property>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="horizontalSpacing">
-       <number>2</number>
-      </property>
-      <property name="verticalSpacing">
-       <number>2</number>
-      </property>
+    <widget class="QFrame" name="PowerBox">
+     <layout class="QGridLayout" name="gridLayout_2">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -397,24 +270,10 @@ background-color: rgb(0, 0, 0);</string>
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item row="1" column="0">
-       <widget class="QLabel" name="etInternetIp_2">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Prąd</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
        <widget class="QLabel" name="etEnergia">
         <property name="font">
          <font>
@@ -444,7 +303,24 @@ background-color: rgb(0, 0, 0);</string>
 background-color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>Napięcie</string>
+         <string>U/I/P</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="power">
+        <property name="font">
+         <font>
+          <family>Roboto Slab ExtraLight</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>0W</string>
         </property>
        </widget>
       </item>
@@ -465,7 +341,7 @@ background-color: rgb(0, 0, 0);</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="2">
        <widget class="QLabel" name="current">
         <property name="font">
          <font>
@@ -482,41 +358,7 @@ background-color: rgb(0, 0, 0);</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="etPower">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>Moc</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="power">
-        <property name="font">
-         <font>
-          <family>Roboto Slab ExtraLight</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-        </property>
-        <property name="text">
-         <string>0W</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
+      <item row="1" column="1" colspan="3">
        <widget class="QLabel" name="energia">
         <property name="font">
          <font>
@@ -535,6 +377,19 @@ background-color: rgb(0, 0, 0);</string>
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

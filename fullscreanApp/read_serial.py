@@ -37,6 +37,7 @@ class Worker(QObject):
                 #sleep()
                 continue
             line = bline.decode('ascii').strip()
+            #print(line)
             obj = self.regexp.match(line)
             if obj is not None:
                 valg = obj.groupdict()

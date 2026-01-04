@@ -177,10 +177,10 @@ def getIP():
         return None
     return s.getsockname()[0]
 
-#def getIPOut():
-#    response = urlopen("http://httpbin.org/ip")
-#    data_json = json.loads(response.read().decode('utf-8'))
-    return "-"
+def getIPOut():
+    response = urlopen("http://httpbin.org/ip")
+    data_json = json.loads(response.read().decode('utf-8'))
+    return data_json.get("origin", "-")
     
 
 def getIP6():
@@ -316,25 +316,36 @@ class StatsWidget(blackwidget.BlackWidget):
         self.allEnergy = 0.0
 
     def getRect(self):
-        return QRect(0, 1920-400, 250, 400)
+        return QRect(0, 1920-150, 300, 150)
     
     def setupUi(self, StatsWidget):
         self.statsUi.setupUi(StatsWidget)
 
     def receiveNotfication(self, dictValue):
+        mqtt_vals = {}
+        s_mqtt = False
         if "28fff708640400a3" in dictValue:
             self.monitorTemp = dictValue["28fff708640400a3"]
+            s_mqtt = True
+            mqtt_vals["monitor-temp"] = self.monitorTemp
         if "286cf90f0b0000ae" in dictValue:
             self.raspTemp = dictValue["286cf90f0b0000ae"]
+            s_mqtt = True
+            mqtt_vals["raspberry-temp"] = self.monitorTemp
+        if 'lazienka_temp' in dictValue:
+            s_mqtt = True
+            mqtt_vals["lazienka-temp"] = dictValue['lazienka_temp']
+            mqtt_vals["lazienka-humi"] = dictValue['lazienka_humi']
+        print(s_mqtt)
+        print(mqtt_vals)
+        if s_mqtt:
+            self.sendMqtt("lustro/sensor/raspberry", mqtt_vals)
 
     def timeout(self, dt):
         hour = dt.time().hour()
         min = dt.time().minute()
         sec = dt.time().second()
         vals = {}
-
-        vals['cpuFreq'] = getCPUcurrentSpeed()
-        self.statsUi.cpuSpeed.setText("%d MHz" % vals['cpuFreq'])
 
         vals['cpuUse'] = getCPUuse()
         self.statsUi.cpuUsage.setText("%d %%" % vals['cpuUse'])
@@ -355,8 +366,8 @@ class StatsWidget(blackwidget.BlackWidget):
         p = (bus_voltage - 6)/2.4*100
         if(p > 100):p = 100
         if(p < 0):p = 0
-        if p < 20:
-            os.system("sudo sudo argonone-cli --manual --fan 100")
+        if p < 20 and float(vals['voltage']) > 5.0:
+            os.system("sudo argonone-cli --manual --fan 100")
             os.system("sudo shutdown -h now")
 
         self.statsUi.tempGPU.setText("%2.1f\u00B0C" % getCPUtemperature())
