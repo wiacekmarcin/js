@@ -46,7 +46,7 @@ bool Wyjscia::tiktok()
 {
     bool ret = false;
     unsigned long mls = millis();
-    bool ret = false;
+
     for (int i = 0; i < maxWyj; ++i) {
         if (on[i]) {
             ret = true;

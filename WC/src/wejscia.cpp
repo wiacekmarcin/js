@@ -37,8 +37,8 @@ void Wejscia::get(unsigned long timeInt, unsigned int timeAfterInt)
     uint8_t inD = wejscia.digitalReadAll();
     if (inD != inSave) {
         inSave = inD;
-        Serial.print("IN=");
-        Serial.println(inD, BIN);
+        ////Serial.print("IN=");
+        ////Serial.println(inD, BIN);
     }
     
 
@@ -59,10 +59,10 @@ void Wejscia::print() {
 
     
     
-    Serial.print(" ");
-    Serial.println(buff);
-    Serial.println(" --- Wejscia --- ");
-    Serial.print("- isChange : ");
+    //Serial.print(" ");
+    //Serial.println(buff);
+    //Serial.println(" --- Wejscia --- ");
+    //Serial.print("- isChange : ");
     
     const char et[] = { "| wlacznik  " 
                         "|   lustro  "
@@ -72,13 +72,13 @@ void Wejscia::print() {
                         "|      noc  |"};
     int klucze[] = { KLAWISZ, CZ_R_LUSTRO, CZ_R_WC, DRZWI, WIECZOR, NOC };
 
-    Serial.println(et);
+    //Serial.println(et);
     for (int n = 0; n < lenWej; n++) {
-        Serial.print("|     ");
-        Serial.print(in[klucze[n]] == LOW ? "L" : "H");
-        Serial.print("     ");
+        //Serial.print("|     ");
+        //Serial.print(in[klucze[n]] == LOW ? "L" : "H");
+        //Serial.print("     ");
     }
-    Serial.println("|");
+    //Serial.println("|");
     */
     wl.print();
 }
@@ -103,22 +103,22 @@ void Wejscia::printBin(uint8_t  inp)
     d.b = inp;
     struct DigitalInput in = d.a;
 
-    Serial.print("Hex:");
-    Serial.print(in.p7);
-    Serial.print(in.p6);
-    Serial.print(in.p5);
-    Serial.print(in.p4);
-    Serial.print(in.p3);
-    Serial.print(in.p2);
-    Serial.print(in.p1);
-    Serial.println(in.p0);
+    //Serial.print("Hex:");
+    //Serial.print(in.p7);
+    //Serial.print(in.p6);
+    //Serial.print(in.p5);
+    //Serial.print(in.p4);
+    //Serial.print(in.p3);
+    //Serial.print(in.p2);
+    //Serial.print(in.p1);
+    //Serial.println(in.p0);
 }
 
 
 Wlacznik::Wlacznik() : ValueBase(), m_prev(false), m_cntPush(0)
 {
-    unsigned long m_timeInt;
-    unsigned int m_timeAfterInt;
+    m_timeInt = 0;
+    m_timeAfterInt = 0;
 }
     
 void Wlacznik::clearState() 
@@ -129,26 +129,27 @@ void Wlacznik::clearState()
 }    
 void Wlacznik::set(uint8_t value, unsigned long timeInt, unsigned int timeAfterInt)
 {
-    
+    m_timeInt = timeInt;
+    m_timeAfterInt = timeAfterInt;
     m_prev = m_val;
     m_val = (value == LOW); //klawisz nacisniety
 
-    Serial.print("milis()=");
-    Serial.println(millis(), DEC);
-    Serial.print("value = ");
-    Serial.println(value, DEC);
-    Serial.print("val = ");
-    Serial.println(m_val, DEC);
-    Serial.print("prev = ");
-    Serial.println(m_prev, DEC);
-    Serial.print("timeInt=");
-    Serial.println(timeInt, DEC);
-    Serial.print("timeAfterInt=");
-    Serial.println(timeAfterInt, DEC);
+    ////Serial.print("milis()=");
+    ////Serial.println(millis(), DEC);
+    ////Serial.print("value = ");
+    ////Serial.println(value, DEC);
+    ////Serial.print("val = ");
+    ////Serial.println(m_val, DEC);
+    ////Serial.print("prev = ");
+    ////Serial.println(m_prev, DEC);
+    ////Serial.print("timeInt=");
+    ////Serial.println(timeInt, DEC);
+    ////Serial.print("timeAfterInt=");
+    ////Serial.println(timeAfterInt, DEC);
     
     if (m_timeInt != timeInt || timeAfterInt > SEC(10)) {
         m_timeInt = timeInt;
-        Serial.println("clear");
+        //Serial.println("clear");
         clearState();
     }
 
@@ -179,29 +180,29 @@ void Wlacznik::print() const
 
     if (mask2 != mask) {
         mask = mask2;
-        Serial.println("------- Wlacznik ------");
-        Serial.print("val = ");
-        Serial.println(m_val, DEC);
-        Serial.print("prev = ");
-        Serial.println(m_prev, DEC);
-        Serial.print("cntPush = ");
-        Serial.println(m_cntPush, DEC);
-        Serial.print("timePush = ");
-        Serial.println(m_timePush, DEC);
-        Serial.print("timeHold = ");
-        Serial.println(m_timeHold, DEC);
-        Serial.println("****");
-        Serial.print("nacisniety = ");
-        Serial.println(nacisniety(), DEC);
-        Serial.print("wcisniety = ");
-        Serial.println(wcisniety(), DEC);
-        Serial.print("czasWcisniecia = ");
-        Serial.println(czasWcisniecia(), DEC);
-        Serial.print("nacisnietyDrugiRaz = ");
-        Serial.println(nacisnietyDrugiRaz(), DEC);
-        Serial.print("nacisnietyTrzeciRaz = ");
-        Serial.println(nacisnietyTrzeciRaz(), DEC);
-        Serial.println("---------------------------");
+        //Serial.println("------- Wlacznik ------");
+        //Serial.print("val = ");
+        //Serial.println(m_val, DEC);
+        //Serial.print("prev = ");
+        //Serial.println(m_prev, DEC);
+        //Serial.print("cntPush = ");
+        //Serial.println(m_cntPush, DEC);
+        //Serial.print("timePush = ");
+        //Serial.println(m_timePush, DEC);
+        //Serial.print("timeHold = ");
+        //Serial.println(m_timeHold, DEC);
+        //Serial.println("****");
+        //Serial.print("nacisniety = ");
+        //Serial.println(nacisniety(), DEC);
+        //Serial.print("wcisniety = ");
+        //Serial.println(wcisniety(), DEC);
+        //Serial.print("czasWcisniecia = ");
+        //Serial.println(czasWcisniecia(), DEC);
+        //Serial.print("nacisnietyDrugiRaz = ");
+        //Serial.println(nacisnietyDrugiRaz(), DEC);
+        //Serial.print("nacisnietyTrzeciRaz = ");
+        //Serial.println(nacisnietyTrzeciRaz(), DEC);
+        //Serial.println("---------------------------");
     } 
 }
 

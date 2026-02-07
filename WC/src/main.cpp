@@ -13,11 +13,11 @@ constexpr unsigned short DELAY = 200; //50;
 constexpr unsigned long TIMEBEFORESLEEP = SEC(5);
 constexpr unsigned int CNTMAXLOOP = TIMEBEFORESLEEP / DELAY;
 
-//#include "OneWire.h"
-//#include "DallasTemperature.h"
+#include "OneWire.h"
+#include "DallasTemperature.h"
 
 // Data wire is plugged into port 2 on the Arduino
-//#define ONE_WIRE_BUS 9
+#define ONE_WIRE_BUS 4
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 //OneWire oneWire(ONE_WIRE_BUS);
@@ -99,11 +99,11 @@ void printAddress(DeviceAddress deviceAddress)
 }
 */
 
-unsigned long timeInt = 0L;
+volatile unsigned long timeInt = 0L;
 void keyPressedOnPCF8574()
 {
     cli();
-    if (!cntLoop)
+    if (cntLoop == 0)
         timeInt = millis();  
     cntLoop = CNTMAXLOOP;
     sei();
@@ -133,8 +133,15 @@ void loop() {
         --cntLoop;
         mls = millis();
         expWejscia.get(timeInt, mls - timeInt);
-        expWejscia.print();
-        //lampa.set(true);
+        //expWejscia.print();
+        
+        Wlacznik wl = expWejscia.getWlacznik();
+        bool onS = expWyjscia.getSwiatlo();
+
+        if (wl.nacisniety()) {
+          expWyjscia.setSwiatlo(!onS, 30*60); //30 min
+          expWyjscia.setLustro(false);
+        }        
 
         delay(50);
         if (cntLoop == 0) {
@@ -145,8 +152,10 @@ void loop() {
         mydelay(1000); //co 1s
     } else {
         mydelay(60L*1000); //co 1min
-        Serial.println(".");
+        //Serial.println(".");
     }
+
+    
 }
 
     /*
@@ -164,7 +173,7 @@ void loop() {
 
     */
     
-    //bool isChange = expWejscia.isChange();
+    
 
 /*
     Klawisz klawisz(expWejscia.getWlacznik());
@@ -197,8 +206,8 @@ void loop() {
     }
   */  
 
-    
-    if (isChange) {
+#if 0    
+  //  if (isChange) {
         Serial.println(millis(), DEC);
         expWejscia.print();
         lampa.set(false);
@@ -267,3 +276,4 @@ void loop() {
 
     //delay(100 - (millis() - mls));
 //}
+#endif

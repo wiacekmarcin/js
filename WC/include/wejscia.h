@@ -13,7 +13,9 @@ public:
     void clear() {}
     void print() const;
 protected:
-    bool m_val;    
+    bool m_val;
+    unsigned long m_timeInt;
+    unsigned int m_timeAfterInt;    
 };
 
 class Wlacznik : public ValueBase {
@@ -36,7 +38,6 @@ protected:
 private:
     bool m_prev;
     unsigned int m_cntPush;
-    unsigned long m_timeInt;
     unsigned long m_timePush;
     unsigned int m_timeHold;
 };
@@ -77,7 +78,7 @@ private:
     //ValueBase w[lenWej];
     uint8_t in[lenWej];
 
-    class Wlacznik wl;
+    Wlacznik wl;
 };
 
 

@@ -1187,5 +1187,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     w = Widget2()
     w.show()
-    w.connectUsb("/dev/serial/by-id/usb-SparkFun_SparkFun_Pro_Micro-if00", "/dev/serial/by-id/usb-WCH.CN_USB_Quad_Serial_BC5644ABCD-if00")
+    w.connectUsb("/dev/serial/by-id/usb-SparkFun_SparkFun_Pro_Micro-if00", "/dev/serial/by-id/usb-WCH.CN_USB_Quad_Serial_BC5644ABCD-if04")
     sys.exit(app.exec())
+
+
