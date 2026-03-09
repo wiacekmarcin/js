@@ -1,31 +1,47 @@
 #include "wyjscia.h"
 #include "util.h"
-
-Wyjscia::Wyjscia() :
-    wyjscia(0x21)
-{
-    for (int i = 0; i < maxWyj; ++i) {
-        on[i] = false;
-        timeout[i] = 0;
-    }
-    
-}
-
+#include "version.h"
 void Wyjscia::init()
 {
-    wyjscia.begin();      
-    wyjscia.pinMode(SWIATLO, OUTPUT, HIGH);
-    wyjscia.pinMode(SZAFKA, OUTPUT, HIGH);
-    wyjscia.pinMode(LUSTRO, OUTPUT, HIGH);
-    wyjscia.pinMode(ZAWOR, OUTPUT, HIGH);
-    wyjscia.pinMode(WY_SWIATLO, OUTPUT, HIGH);
-    wyjscia.pinMode(WIATRAK, OUTPUT, LOW);
-
-    for (int i = 0; i < maxWyj; ++i) {
-        set(i, false, 0);
-    }
+    mcp->pinMode(ZAWOR, OUTPUT);
+    mcp->pinMode(LUSTRO, OUTPUT);
+    mcp->pinMode(SWIATLO, OUTPUT);
+    mcp->pinMode(SZAFKA, OUTPUT);
+    mcp->pinMode(WY_KONTAKTRON, OUTPUT);
+    mcp->pinMode(WY_CZUJNIK_RUCHU, OUTPUT);
+    pinMode(WY_SWIATLO, OUTPUT);
+   
 }
 
+void Wyjscia::setExternal(uint8_t o, uint8_t val)
+{
+    switch(o) {
+        case 1:
+            mcp->digitalWrite(ZAWOR, val);
+            break;
+        case 2:
+            mcp->digitalWrite(LUSTRO, val);
+            break;
+        case 3:
+            mcp->digitalWrite(SWIATLO, val);
+            break;
+        case 4:
+            mcp->digitalWrite(SZAFKA, val);
+            break;
+        default:
+            return;
+    }
+
+    Serial1.print("S;");
+    Serial1.print(DEVICE);
+    Serial1.print(";");
+    Serial1.print(o, DEC);
+    Serial1.print(";");
+    Serial1.println(val, DEC);
+}
+
+
+#if 0
 void Wyjscia::set(uint8_t pos, bool value, unsigned int tmt)
 {
     unsigned long mls = millis();
@@ -116,9 +132,10 @@ void Wyjscia::print(const char * funn) const
     char buff[12];
     for (int i = 0; i < maxWyj; ++i) {
         Serial.print("|");
-        printtime(timeout[klucze[i]], buff);
+        //printtime(timeout[klucze[i]], buff);
         Serial.print(buff);
     }
     Serial.println("|");
 
 }
+#endif

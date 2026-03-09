@@ -1,41 +1,219 @@
 #include <Arduino.h>
 
-#include <Wire.h>
-#include <PCF8574.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
+#include <Adafruit_MCP23X17.h>
+
+#include "version.h"
 #include "wejscia.h"
 #include "wyjscia.h"
 
-#include "swiatlo.h"
-#include "util.h"
+#define INTERRUPTPIN 7
+#define RESETPIN A3
 
-constexpr unsigned short DELAY = 200; //50;
-constexpr unsigned long TIMEBEFORESLEEP = SEC(5);
-constexpr unsigned int CNTMAXLOOP = TIMEBEFORESLEEP / DELAY;
+//#define DEBUG
 
-#include "OneWire.h"
-#include "DallasTemperature.h"
+Adafruit_MCP23X17 mcp;
+Wejscia in_p(&mcp);
+Wyjscia out_p(&mcp, &in_p);
 
 // Data wire is plugged into port 2 on the Arduino
 #define ONE_WIRE_BUS 4
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
-//OneWire oneWire(ONE_WIRE_BUS);
+OneWire oneWire(ONE_WIRE_BUS);
 
-// Pass our oneWire reference to Dallas Temperature. 
-//DallasTemperature sensors(&oneWire);
+// Pass our oneWire reference to Dallas Temperature.
+DallasTemperature sensors(&oneWire);
+
+volatile bool mcp_interrupt = false;
+void io_interrupted()
+{
+  mcp_interrupt = true;
+}
+
+void setupTimer3() {
+  noInterrupts();
+  // Clear registers
+  TCCR3A = 0;
+  TCCR3B = 0;
+  TCNT3 = 0;
+
+  // 100.16025641025641 Hz (16000000/((155+1)*1024))
+  OCR3A = 62499; // = 16000000 / (256 * 1) - 1 (must be <65536)
+  // turn on CTC mode
+  TCCR3B |= (1 << WGM32);
+  // Set CS12, CS11 and CS10 bits for 256 prescaler
+  TCCR3B |= (1 << CS32) | (0 << CS31) | (0 << CS30);
+  // enable timer compare interrupt
+  TIMSK3 |= (1 << OCIE3A);
+  interrupts();
+}
+
+volatile uint32_t timerTick3 = 0;
+volatile bool timer_int3 = false;
+
+ISR(TIMER3_COMPA_vect) {
+  ++timerTick3;
+  timer_int3 = true;
+}
+
+void print_version()
+{
+  Serial1.print("V;");
+  Serial1.print(DEVICE);
+  Serial1.print(";");
+  Serial1.print(MAJOR);
+  Serial1.print(".");
+  Serial1.print(MINOR);
+  Serial1.print(".");
+  Serial1.println(NUMBER);
+}
 
 
-//PCF8574 expWejscia(0x20);
-void keyPressedOnPCF8574();
-Wejscia expWejscia(keyPressedOnPCF8574);
+void setup() {
+  
 
-//PCF8574 expWyjscia(0x21);
-Wyjscia expWyjscia;
+  pinMode(RESETPIN, OUTPUT);
+  digitalWrite(RESETPIN, HIGH);  
 
-//Swiatlo lampa(expWejscia, expWyjscia);
+  pinMode(INTERRUPTPIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(INTERRUPTPIN), io_interrupted, FALLING);
 
-//DeviceAddress insideThermometer;
+  setupTimer3();
+ 
+  Serial.begin(115200);
+
+  Serial1.begin(115200);
+  print_version();
+
+
+  // Start up the library
+  //sensors.begin();
+
+  int idx = 10;
+  if (!mcp.begin_I2C()) {
+    Serial1.println("I;2;E;NO-MCP");
+    while (idx--) {
+      Serial1.println("No mcp");
+      delay(1000);
+    }
+  } else {
+    Serial1.println("D;2;Found MCP");
+    in_p.init();
+  }
+  //out_p.init();
+
+}
+uint8_t count_idx = 0;
+
+uint8_t debug_bufor[32];
+bool chInput = false;
+
+void loop(void)
+{
+#ifdef DEBUG  
+  if (Serial.available()) {
+    uint8_t r = Serial.readBytes(debug_bufor, 32);
+    if (r < 6)
+      return;
+    if (!(debug_bufor[0] == 'D' && debug_bufor[1] == ';' 
+        && debug_bufor[2] == 'W' && debug_bufor[3] == ';'
+        && debug_bufor[4] == 'I' && debug_bufor[5] == ';' )) 
+      return;
+    uint8_t val = 0;
+    Serial1.print("D;W;I;");
+    for (uint8_t i = 0; i < 8 && i+6 < r; ++i) {
+      val += (debug_bufor[i] == '1') ? (1 << i) : 0;
+      Serial1.print(debug_bufor[i]);
+    }
+    Serial1.print(";");
+    Serial1.println(val);
+    chInput = in_p.set_input(val);
+  }
+#endif
+
+  if (Serial1.available()) {
+    size_t r = Serial.readBytes(debug_bufor, 32);
+    
+    if (r >= 2 && debug_bufor[0] == 'V' && debug_bufor[1] == ';' ) {
+      print_version();
+      return;  
+    }
+
+    if (r < 6)
+      return;
+    
+    if (!(debug_bufor[0] == 'S' && debug_bufor[1] == ';'  &&
+        debug_bufor[2] == 'W' && debug_bufor[3] == ';' &&
+        debug_bufor[5] == ';')) {
+      return;
+    }
+
+    if (debug_bufor[4] < '1' || debug_bufor[4] > '4')
+      return;
+
+    if (debug_bufor[4] != '0' && debug_bufor[4] != '1')
+      return;
+      
+    
+    uint8_t val = debug_bufor[6] - '0';
+    uint8_t id = debug_bufor[4] - '0';
+      
+    out_p.setExternal(id, val);
+  }
+
+
+  if (timer_int3) {
+    timer_int3 = false;
+    ++count_idx;
+#ifdef DEBUG    
+    //Serial.println(".");
+#endif    
+    /*
+    if (count_idx % 30 == 0) {
+      sensors.requestTemperatures(); // Send the command to get temperatures
+    } else if (count_idx % 30 == 1) {
+
+#ifdef DEBUG
+      Serial.print("Temp:");
+      Serial.println(sensors.getTempCByIndex(0));
+#endif      
+      Serial1.print("T;");
+      Serial1.print(DEVICE);
+      Serial1.print(";");
+      Serial1.println(sensors.getTempCByIndex(0));
+    }*/
+    //in_p.read();
+    //out_p.tiktok();
+    //delay(100)
+  }
+
+  if (mcp_interrupt) {
+#ifdef DEBUG
+    Serial.print("Interr:");
+#endif        
+    mcp_interrupt = false;
+    chInput = in_p.read();
+  }
+
+  if (chInput) {
+    //TODO
+  }
+
+}
+
+
+
+
+
+
+
+
+
+#if 0
+
 
 
 
@@ -276,4 +454,6 @@ void loop() {
 
     //delay(100 - (millis() - mls));
 //}
+#endif
+
 #endif

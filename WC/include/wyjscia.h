@@ -1,15 +1,21 @@
 #ifndef __WYJSCIA_H__
 #define __WYJSCIA_H__
 
-#include <PCF8574.h>
-
+#include <Adafruit_MCP23X17.h>
+#include "wejscia.h"
 #include "value.h"
+
+
 class Wyjscia {
 public:
-    Wyjscia();
+    Wyjscia(Adafruit_MCP23X17 * _mcp, Wejscia * _wejscia)
+     :  mcp(_mcp), wejscia(_wejscia)
+    {}
 
     void init();
 
+    void setExternal(uint8_t o, uint8_t val);
+#if 0
     bool tiktok();
 
     void setSwiatlo(bool on = true, unsigned int timeout = 10*60)
@@ -24,25 +30,6 @@ public:
     void setLustro(bool on = true, unsigned int timeout = 5*60)
         { set(LUSTRO, on, timeout); }
 
-    void setWiatrak(bool on = true, unsigned int timeout = 1)
-        { set(WIATRAK, on, timeout); }
-
-    
-    bool getSwiatlo()
-        { return on[SWIATLO]; }
-
-    bool getSzafka()
-        { return on[SZAFKA]; }
-
-    bool getZawor()
-        { return on[ZAWOR]; }
-
-    bool getLustro()
-        { return on[LUSTRO]; }
-
-    bool getWiatrak()
-        { return on[WIATRAK]; }
-
     inline static uint8_t lo(bool value) { return value ? LOW : HIGH; }
     inline static uint8_t ho(bool value) { return value ? HIGH : LOW; }
 
@@ -56,23 +43,24 @@ public:
 
 protected:
     void set(uint8_t pos, bool value, unsigned int timeout);
-
+#endif
 private:
 
-    PCF8574 wyjscia;
+    static constexpr uint8_t ZAWOR = 8+0; //fiolet
+    static constexpr uint8_t LUSTRO = 8+1;  //niebieski
+    static constexpr uint8_t SWIATLO = 8+2;  //bialy
+    static constexpr uint8_t SZAFKA = 8+3;   //zolty
+    static constexpr uint8_t WY_SWIATLO = A7; //procek
+    
+    static constexpr uint8_t WY_KONTAKTRON = 8+6;
+    static constexpr uint8_t WY_CZUJNIK_RUCHU = 8+7;
 
-    static constexpr uint8_t ZAWOR = 0; //fiolet
-    static constexpr uint8_t LUSTRO = 1;  //niebieski
-    static constexpr uint8_t SWIATLO = 2;  //bialy
-    static constexpr uint8_t SZAFKA = 3;   //zolty
-    static constexpr uint8_t WY_SWIATLO = 4;
-    static constexpr uint8_t WIATRAK = 5;
 
-    static constexpr uint8_t maxWyj = 6;
+    Adafruit_MCP23X17 * mcp;
+    Wejscia * wejscia;
 
-    bool on[maxWyj] = { false, false, false, false, false, false };
-    unsigned long timeout[maxWyj] = { 0, 0, 0, 0, 0, 0};
 
 };
+
 
 #endif // !__WYJSCIA_H__

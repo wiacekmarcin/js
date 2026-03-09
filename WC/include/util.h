@@ -6,6 +6,13 @@
 #include "Arduino.h"
 #include "value.h"
 
+
+
+
+
+
+#if 0
+
 void printtime(unsigned long mls, char * buf);
 
 #define SEC(X) ((unsigned long)(1000L*(X)))
@@ -81,7 +88,7 @@ public :
 
 };
 
-
+#endif
 
 
 #endif // !__UTIL_H__

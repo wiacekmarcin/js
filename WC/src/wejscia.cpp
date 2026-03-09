@@ -1,6 +1,154 @@
 #include "wejscia.h"
+#include "version.h"
+
+void print_input_bin16(Stream * serial, uint16_t val)
+{
+    uint16_t mask = 0;
+    for (int8_t m = 15; m >= 0; --m) {
+        if (m >= 7 && m != Wejscia::p_noc )  {
+            serial->print('X');
+        } else {
+            mask = 0x1 << m;
+
+            if ((val & mask) == mask)   
+                serial->print('1');
+            else
+                serial->print('0');
+        }
+    }
+}
+
+void print_input_bin_8corr(Stream * serial, uint8_t val)
+{
+    uint16_t mask = 0;
+    for (int8_t m = 7; m >= 0; --m) {
+        mask = 0x1 << m;
+
+        if ((val & mask) == mask)   
+            serial->print('1');
+        else
+            serial->print('0');
+    }
+}
+
+void Wejscia::init()
+{
+    mcp->pinMode(p_ruch, INPUT);
+    mcp->pinMode(p_zblizeniowy, INPUT);
+    mcp->pinMode(p_drzwi, INPUT);
+    mcp->pinMode(p_klawisz, INPUT);
+    mcp->pinMode(p_zasAwar, INPUT);
+    mcp->pinMode(p_2taryfa, INPUT);
+    mcp->pinMode(p_wieczor, INPUT);
+    mcp->pinMode(p_noc, INPUT);
+
+    
+    mcp->setupInterruptPin(p_klawisz, CHANGE);
+    mcp->setupInterruptPin(p_ruch, CHANGE);
+    mcp->setupInterruptPin(p_zblizeniowy, CHANGE);
+    mcp->setupInterruptPin(p_drzwi, CHANGE);
+    mcp->setupInterruptPin(p_zasAwar, CHANGE);
+
+    mcp->setupInterrupts(true, true, LOW) ;
+}
+
+ 
+
+bool Wejscia::read()
+{
+    unsigned long now = millis();
+    uint16_t input = mcp->readGPIOAB();
+#ifdef DEBUG
+    Serial1.print("INPUT:");
+    print_input_bin16(&Serial1, input);
+    Serial1.println();
+#endif
+    mcp->clearInterrupts();
+    unsigned long diff;
+    if (now > prev_read)
+        diff = now - prev_read;
+    else 
+        diff = (UINT32_MAX - prev_read) + now;
+    
+    if (diff < 50)
+        return false;
+
+    uint8_t val = input & 0x7f;
+    if ((input & p_noc_mask) == p_noc_mask)
+        val |= 0x80;
+    
+    
+    if (val == act_val)
+        return false;
+
+    return set_input(val);
+}
+
+bool Wejscia::set_input(uint8_t val)
+{
+    act_val = val;
+
+    Serial1.print("I;");
+    Serial1.print(DEVICE);
+    Serial1.print(";");
+    print_input_bin_8corr(&Serial1, val);
+    Serial1.println("");
+
+#ifdef DEBUG
+    Serial.print("INPUT_CORR:");
+    print_input_bin_8corr(&Serial, val);
+    Serial.println();
+#endif
+    uint8_t cntChange = 0;
+
+    if (bp_zasilanie_awaryjne != b_zasilanie_awaryjne)
+        ++cntChange;
+
+    bp_zasilanie_awaryjne = b_zasilanie_awaryjne;
+    b_zasilanie_awaryjne = act_val & ( 0x1 << p_zasAwar);
+
+    b_wieczor = act_val & ( 0x1 << p_wieczor);
+    b_noc = act_val & 0x80; //0x80 zamiast 12 bitu 7 bit
+
+    klawisz.set(act_val & ( 0x1 << p_klawisz));
+    cntChange += klawisz.isChange() ? 1 : 0;
+    
+    czLustro.set(act_val & ( 0x1 << p_zblizeniowy ));
+    cntChange += czLustro.isChange() ? 1 : 0;
+
+    czRuch.set(act_val & ( 0x1 << p_ruch));
+    cntChange += czRuch.isChange() ? 1 : 0;
+
+#ifdef DEBUG
+    Serial.print("Zmieniono wejscia:");
+    Serial.println(cntChange);
+#endif
+
+    return cntChange > 0;
+}
+
+
+
+
+
+#if 0
+
+
+
+
+
 #include "util.h"
 #include <PCF8574.h>
+
+
+
+
+
+
+
+
+
+
 
 // For arduino uno only pin 1 and 2 are interrupted
 #define ARDUINO_UNO_INTERRUPTED_PIN 7
@@ -205,7 +353,7 @@ void Wlacznik::print() const
         //Serial.println("---------------------------");
     } 
 }
-
+#endif
     
     
 

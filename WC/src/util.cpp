@@ -1,5 +1,6 @@
 #include "util.h"
 
+#if 0
 void printtime(unsigned long mls, char * buf) {
     unsigned long m = mls / 100;
        
@@ -77,3 +78,4 @@ void printtime(unsigned long mls, char * buf) {
     }
 }
 
+#endif
