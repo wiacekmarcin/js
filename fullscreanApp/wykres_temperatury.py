@@ -222,12 +222,12 @@ def getPoints(cnth):
 	cnt_items = int(data_json["cnt"]) or 0
 	if cnt_items == 0:
 		print("Brak danych")
-		return
+		return 0, 0, [], []
 
 	items = data_json["list"]
 	if items is None:
 		print("Brak danych")
-		return
+		return 0, 0, [], []
 
 	minTemp = None
 	maxTemp = None
@@ -314,6 +314,7 @@ def createWykres(minTemp, maxTemp, maxTempG, width, h1deg, im, imL, imI):
 	fpath = os.path.join("/home/pi/tmp", str(datetime.date.today()).replace(":","_").replace(" ", "_").replace("-","_")) + ".png"
 	print(fpath)
 	imB.save(fpath)
+	#imB.show()
 	
 
 width = 1024
@@ -326,7 +327,8 @@ cnth = int(24/3*5)
 minT, maxT, keys, pogodaPoints = getPoints(cnth)
 #print(f"{width}, {minTemp}, {maxTemp}, {h1deg}, {w3h}, {cnth}, {keys}, {pogodaPoints}")
 im, imL, imI = createBackground(width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoints)
-createWykres(minT-2, maxT+2, maxTemp, width, h1deg, im, imL, imI)
+if minT is not None and maxT is not None:
+	createWykres(minT-2, maxT+2, maxTemp, width, h1deg, im, imL, imI)
 
 
 
