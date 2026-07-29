@@ -98,3 +98,4 @@ python/__pycache__/*
 HA/.zelazko_all_cost.txt
 wlasny_addon/energy_calc.log
 wlasny_addon/data/*
+ctk/__pycache__/*

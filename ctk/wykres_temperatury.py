@@ -1,7 +1,7 @@
 #-*- encoding : utf-8 -*-
 import sys, os
 import datetime
-import math
+import re
 
 from PIL import Image, ImageDraw, ImageFont
 from image_utils import ImageText
@@ -12,7 +12,7 @@ from scipy.interpolate import splrep, splev
 from urllib.request import urlopen
 import json
 
-from wt_check_avg_temp import getWarningTemp, getWarningWind
+from wt_check_avg_temp import getWarningTemp, getWarningWind, getWarningRain, getWarningSnow
 from wt_calendar_events import getCalendarEvents
 from wt_events_utils import organize_warning, sumWarnings, reduce_warning_temp, reduce_warning_rain, reduce_warning_snow, reduce_warning_wind
 class Wykres:
@@ -24,6 +24,8 @@ class Wykres:
 		self.fontW = ImageFont.truetype("weathericons-regular-webfont.ttf", 20)
 		self.fontS = ImageFont.truetype("weathericons-regular-webfont.ttf", 14)
 		self.iconMap = {}
+		self.minDTemp = None
+		self.maxDTemp = None
 		self._initIconMap()
 
 
@@ -295,12 +297,20 @@ class Wykres:
 		tempwarning_time = []
 		windwarning_time = []
 
+		tdregex=re.compile("^%d-%02d-%02d .*$" % (dt.year, dt.month, dt.day))
+
+		rainMap = {
+			'słabe opady deszczu' : 'słaby deszcz',
+			'intensywne opady deszczu' : 'intensywny deszcz',
+		}
+
 		for i in items:
 			dt_txt = i["dt_txt"]
 
 			if i["dt_txt"] is None:
 				continue
-			
+
+		
 			m = i['main']
 			if not dt_txt in keys:
 				continue
@@ -341,10 +351,10 @@ class Wykres:
 
 			if icon in ['09d', '09n', '10d', '10n', '11d', '11n', '13d', '13n',  '50d', '50n']:
 				if rain_mm is not None:
-					rainwarning_time.append((dt_txt, (description, rain_mm)))
+					rainwarning_time.append((dt_txt, (getWarningRain(rain_mm), rain_mm)))
 
 				if snow_mm is not None:
-					snowwarning_time.append((dt_txt, (description, snow_mm)))
+					snowwarning_time.append((dt_txt, (getWarningSnow(snow_mm), snow_mm)))
 			if 'wind' in i.keys():
 				r = getWarningWind(float(i['wind']['speed']), float(i['wind']['gust'])) 
 				if r[0]:
@@ -355,6 +365,16 @@ class Wykres:
 				tempwarning_time.append((dt_txt, r[1:]))		
 		
 
+			if tdregex.match(dt_txt):
+				if self.minDTemp is None:
+					self.minDTemp = float(m['temp'])
+				elif float(m['temp']) < self.minDTemp:
+					self.minDTemp = float(m['temp'])
+
+				if self.maxDTemp is None:
+					self.maxDTemp = float(m['temp'])
+				elif float(m['temp']) > self.maxDTemp:
+					self.maxDTemp = float(m['temp'])
 
 			if minTemp is None or minTemp > float(m['temp_min']) :
 				minTemp = float(m['temp_min'])

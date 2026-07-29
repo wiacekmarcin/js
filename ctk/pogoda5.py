@@ -27,9 +27,14 @@ class Pogoda5Day(LFrame):
             if self.dayCalc is not None:
                 return
             self.dayCalc = dday
+            self.wykres.minDTemp = self.wykres.maxDTemp = None
             self.r_img = self.wykres.createImage()
-            print("Szie", self.r_img.size)
+            #print("Szie", self.r_img.size)
             t_img = CTkImage(self.r_img, size=self.r_img.size)
             self.photo_label.configure(image=t_img)
 
-            
+            print(self.wykres.minDTemp, self.wykres.maxDTemp)
+            if self.wykres.minDTemp is not None:
+                self.sendNotification({"minimum-temperature" : self.wykres.minDTemp})
+            if self.wykres.maxDTemp is not None:
+                self.sendNotification({"maximum-temperature" : self.wykres.maxDTemp})

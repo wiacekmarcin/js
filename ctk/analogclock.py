@@ -172,7 +172,7 @@ class AnalogClock(LFrame):
         self.photo_label.configure(image=t_img)
     
     def setMinimumTemp(self, ftemp):
-        temp = "%2.1f" % ftemp
+        temp = "%2.1f\u00B0C" % ftemp
         imgd = ImageDraw.Draw(self.r_img)
         x = 0
         y = self.wheight - 20
@@ -185,7 +185,7 @@ class AnalogClock(LFrame):
         self.photo_label.configure(image=t_img)
         
     def setMaximumTemp(self, ftemp):
-        temp = "%2.1f" % ftemp
+        temp = "%2.1f\u00B0C" % ftemp
         imgd = ImageDraw.Draw(self.r_img)
         x = self.wwidth - 50
         y = self.wheight - 20

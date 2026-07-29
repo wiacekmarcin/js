@@ -65,7 +65,7 @@ class Pogoda(LFrame):
         font_opisPogody = CTkFont("Roboto Slab", size=24, weight="bold", slant="roman")
         self.opisPogody = CTkLabel(self, text="",
                                     bg_color="black",fg_color="black", text_color="white", font=font_opisPogody,
-                                    justify="left", anchor="w")
+                                    justify="left", anchor="w", wraplength=270)
 
         
         
@@ -91,9 +91,9 @@ class Pogoda(LFrame):
                                     justify="left", anchor="w")
         
         self.font_e_feeltemp = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.e_feeltemp = CTkLabel(self, text="Temperatura odczuwalna",
-                                    bg_color="black",fg_color="black", text_color="white", font=self.font_e_feeltemp,
-                                    justify="left", anchor="n")
+        #self.e_feeltemp = CTkLabel(self, text="Temperatura odczuwalna",
+        #                            bg_color="black",fg_color="black", text_color="white", font=self.font_e_feeltemp,
+        #                            justify="left", anchor="n")
         
         self.frame = CTkFrame(master=self, width=self.wwidth, bg_color="black",fg_color="black")
         self.frame.grid_propagate(False)
@@ -218,13 +218,13 @@ class Pogoda(LFrame):
             self.opisPogody.place(x=38, y=36)
             self.deszczsnieg.place(x=0, y=78)
             self.opisdeszczsnieg.place(x=0, y=105)
-            self.w_odcztemp = self.font_e_feeltemp.measure("Temperatura odczuwalna")
-            self.e_feeltemp.place(x=self.wwidth - self.w_odcztemp - 5, y=71)
+            #self.w_odcztemp = self.font_e_feeltemp.measure("Temperatura odczuwalna")
+            #self.e_feeltemp.place(x=self.wwidth - self.w_odcztemp - 5, y=71)
             self.frame.place(x=0, y=140)
             self.frame.configure(height=self.wheight - 140)
         
         wtemp = self.font_temperatura.measure(self.temperatura.cget("text"))
-        self.temperatura.place(x=self.wwidth - wtemp - 5, y=90)
+        self.temperatura.place(x=self.wwidth - wtemp - 5, y=95)
             
         wdeszcz = self.font_deszczsnieg.measure(self.deszczsnieg.cget("text"))
         self.etdeszczsnieg.place(x=wdeszcz+3, y=78)
@@ -232,8 +232,8 @@ class Pogoda(LFrame):
         pxf = self.font_wiatru.measure(self.kierunekWiatru.cget("text"))
         self.opiswiatru.place(x=25 + pxf, y=0)
 
-        ftxt = self.font_wiatru.measure(self.kierunekWiatru.cget("text"))
-        self.opiswiatru.place(x=35 + ftxt, y=0)
+        #ftxt = self.font_wiatru.measure(self.kierunekWiatru.cget("text"))
+        #self.opiswiatru.place(x=35 + ftxt, y=0)
 
         
         
