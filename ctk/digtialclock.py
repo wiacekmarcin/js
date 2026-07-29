@@ -8,12 +8,12 @@ class DigitalClock(LFrame):
     def __init__(self, master, **kwargs):
         super().__init__(0, 0, 200, 70, master, **kwargs)
 
-        font_hour_min = CTkFont("Roboto Condensed", size=64, weight="normal", slant="roman")
+        font_hour_min = CTkFont("Roboto Condensed", size=64, weight="bold", slant="roman")
         self.lhour_min = CTkLabel(self, text="00:00", fg_color="black", bg_color="black", text_color="white", 
                                   font=font_hour_min, anchor="n")
         self.lhour_min.grid(row=0, column=0, sticky="n")
 
-        font_sec = CTkFont("Roboto Condensed", size=20, weight="normal", slant="roman")
+        font_sec = CTkFont("Roboto Condensed", size=20, weight="bold", slant="roman")
         self.lsecond = CTkLabel(self, text="00", fg_color="black", bg_color="black", text_color="white", font=font_sec)
         self.lsecond.grid(row=0, column=1, sticky="n")
         #print("---\nDigitalClock\n---")

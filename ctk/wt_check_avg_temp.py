@@ -127,3 +127,57 @@ def getWarningWind(w:float, d:float) -> tuple[bool, str, float, float]:
         idx += 1
 
     return (True, descr, w, d)
+
+
+def getWarningRain(rain3_h):
+               #'bardzo lekki deszcz 
+    if rain3_h < 3*0.25:
+        return 'b. lekki deszcz'
+    elif rain3_h < 3*1.0:
+        return 'lekki deszcz'
+    elif rain3_h < 3*4.0:
+        return 'umiarkow. deszcz'
+    elif rain3_h < 3*12.0:
+        return 'ulewny deszcz I'
+    elif rain3_h < 3*36.0:
+        return 'ulewny deszcz II'
+    elif rain3_h < 3*60.0:
+        return 'ulewny deszcz III'
+    elif rain3_h < 3*84.0:
+        return 'ulewa'
+    elif rain3_h < 3*114.0:
+        return 'silna ulewa'
+    elif rain3_h < 3*174.0:
+        return 'deszcz nawalny I'
+    elif rain3_h < 3*234.0:
+        return 'deszcz nawalny II'
+    elif rain3_h < 3*414.0:
+        return 'nawałnica'
+    else:
+        return 'nawałnica katas.'
+    
+def getWarningSnow(rain3_h):
+    if rain3_h < 3*0.25:
+        return 'b. lekki śnieg'
+    elif rain3_h < 3*1.0:
+        return 'lekki śnieg'
+    elif rain3_h < 3*4.0:
+        return 'umiarkow. śnieg'
+    elif rain3_h < 3*12.0:
+        return 'itensywny śnieg I'
+    elif rain3_h < 3*36.0:
+        return 'itensywny śnieg II'
+    elif rain3_h < 3*60.0:
+        return 'itensywny śnieg III'
+    elif rain3_h < 3*84.0:
+        return 'duży śnieg'
+    elif rain3_h < 3*114.0:
+        return 'b. duży śnieg'
+    elif rain3_h < 3*174.0:
+        return 'śnieg nawalny I'
+    elif rain3_h < 3*234.0:
+        return 'śnieg nawalny II'
+    elif rain3_h < 3*414.0:
+        return 'Nawałnica śnieżna'
+    else:
+        return 'Nawałnica katastrofalna'
