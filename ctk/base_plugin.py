@@ -2,18 +2,19 @@ from customtkinter import CTkFrame
 from base_app import LustroApp
 import datetime
 class LPlugin:
-    def __init__(self, master:LustroApp):
-        self.master:LustroApp = master
+    def __init__(self, app:LustroApp):
+        self._app:LustroApp = app
         self.frame = False
+        self._app.registerPlugin(self)
 
     def receiveNotfication(self, dictValue):
         pass
 
     def sendNotification(self, dictValue):
-        self.master.sendNotification(dictValue)
+        self._app.sendNotification(dictValue)
 
     def sendMqtt(self, topic, valueDict):
-        self.master.sendMqtt(topic, valueDict)
+        self._app.sendMqtt(topic, valueDict)
 
     def timeout(self, dt:datetime.datetime):
         pass
@@ -23,11 +24,11 @@ class LFrame(LPlugin, CTkFrame):
     wy = 0
     wwidth = 0
     wheight = 0
-    def __init__(self, x, y, w, h, master:LustroApp, **kwargs):
+    def __init__(self, x, y, w, h, master:CTkFrame, app:LustroApp, *args, **kwargs):
         #super(LPlugin).__init__(master)
         #super(CTkFrame).__init__(master, **kwargs)
-        LPlugin.__init__(self, master)
-        CTkFrame.__init__(self, master, **kwargs)
+        LPlugin.__init__(self, app)
+        CTkFrame.__init__(self, master, *args, **kwargs)
         #super().__init__(master, **kwargs)
         self.frame = True
         self.wx = x
@@ -40,6 +41,7 @@ class LFrame(LPlugin, CTkFrame):
         self.configure(width = w)
         self.configure(height = h)
 
+        #self.place(x=x, y=y, anchor='ne')
 
     def getRect(self) -> tuple[int, int, int, int]:
         return (self.wx, self.wy, self.wwidth, self.wheight)

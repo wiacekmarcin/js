@@ -31,8 +31,8 @@ def deaorganize(P):
 
 class AnalogClock(LFrame):
     
-    def __init__(self, master, **kwargs):
-        super().__init__(800, 0, 300, 300, master, **kwargs)
+    def __init__(self, master, app, **kwargs):
+        super().__init__(800, 0, 300, 300, master, app, **kwargs)
         self.setWschodZachod = 0
         self.startArcWschod = 0
         self.startArcZachod = 0
@@ -73,14 +73,14 @@ class AnalogClock(LFrame):
 
         im_s1 = Image.open('sun.png')
         im_s1 = im_s1.resize((24, 24))
-        self.r_img.paste(im_s1, (5, 26))
+        self.r_img.paste(im_s1, (5, 30))
 
         im_s2 = Image.open('moon.png')
         im_s2 = im_s2.resize((24, 24))
-        self.r_img.paste(im_s2, (self.wwidth - 26 - 5, 26))
+        self.r_img.paste(im_s2, (self.wwidth - 26 - 5, 30))
 
         # use a truetype font
-        self.font = ImageFont.truetype("Roboto-Regular.ttf", 18)
+        self.font = ImageFont.truetype("Roboto-Regular.ttf", 24)
 
         imgd = ImageDraw.Draw(self.r_img)
         imgd.text((0,5), text="??:??", fill="white", font=self.font)
