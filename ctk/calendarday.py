@@ -8,8 +8,8 @@ from base_plugin import LFrame
 
 
 class CalendarDay(LFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(320, 5, 500, 600, master, **kwargs)
+    def __init__(self, master, app, *args, **kwargs):
+        super().__init__(320, 5, 500, 600, master, app, *args, **kwargs)
         
         #self.configure(fg_color = "lightgray")
         self.dayCalc = None
@@ -34,7 +34,7 @@ class CalendarDay(LFrame):
                    "listopad",
                    "grudzień"]
         
-        font_mr = CTkFont("Roboto Condensed", size=20, weight="normal", slant="roman")
+        font_mr = CTkFont("Roboto Condensed", size=24, weight="bold", slant="roman")
         self.miesiac_rok = CTkLabel(self, text="miesiąć", fg_color="black", bg_color="black", text_color="white", font=font_mr)
         self.miesiac_rok.pack()
         
@@ -42,11 +42,11 @@ class CalendarDay(LFrame):
         self.info_day = CTkLabel(self, text="Kolejny dzień w raju", fg_color="black", bg_color="black", text_color="white", font=font_info)
         self.info_day.pack()
         
-        font_dzien = CTkFont("Roboto Condensed Light", size=24, weight="normal", slant="roman")
+        font_dzien = CTkFont("Roboto Condensed Light", size=24, weight="bold", slant="roman")
         self.dzien = CTkLabel(self, text="Dzień tygodnia", fg_color="black", bg_color="black", text_color="white", font=font_dzien)
         self.dzien.pack()
 
-        font_day = CTkFont("Roboto", size=64, weight="bold", slant="roman")
+        font_day = CTkFont("Roboto", size=80, weight="bold", slant="roman")
         self.day = CTkLabel(self, text="00", fg_color="black", bg_color="black", text_color="white", 
                             font=font_day)
         self.day.pack()
@@ -62,7 +62,7 @@ class CalendarDay(LFrame):
                                   )
         self.textbox.pack()
 
-
+        self.txtInfoList = []
 
         
         #self.swieto = CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
@@ -174,12 +174,12 @@ class CalendarDay(LFrame):
 
         div_imieniny = parsed_html.body.find('section', attrs={'class':'calCard-name-day'}) 
         if div_imieniny is not None:
-            font_imieniny = CTkFont("Roboto Condensed Light", size=16, weight="normal", slant="roman")
+            font_imieniny = CTkFont("Roboto Condensed Light", size=18, weight="normal", slant="roman")
             imieniny = self.convertString(div_imieniny.text, self.wwidth-40, font_imieniny)                                      
             self.txtInfoList.append((imieniny, font_imieniny))
         
         if divPrzyslowia is not None:
-            font_przyslowia = CTkFont("Roboto Condensed Light", size=14, weight="normal", slant="roman")
+            font_przyslowia = CTkFont("Roboto Condensed Light", size=18, weight="normal", slant="roman")
             div_przyslowia = divPrzyslowia.find('div', attrs={'class':'calCard_proverb-content'})                
             if div_przyslowia is not None:
                 przyslowia = self.convertString(div_przyslowia.text,
@@ -187,14 +187,14 @@ class CalendarDay(LFrame):
                 self.txtInfoList.append((przyslowia, font_przyslowia))
         
         if divCytat is not None:
-            font_cytat = CTkFont("Roboto Condensed Light", size=14, weight="normal", slant="roman")
+            font_cytat = CTkFont("Roboto Condensed Light", size=16, weight="normal", slant="roman")
             div_cytat = divCytat.find('div', attrs={'class':'calCard_proverb-content'})
             if div_cytat is not None:
                 cytat = self.convertString(div_cytat.text,
                                    self.wwidth-40, font_cytat)
                 self.txtInfoList.append((cytat, font_cytat))
 
-        font_inneS = CTkFont("Roboto Condensed Light", size=12, weight="bold", slant="roman")
+        font_inneS = CTkFont("Roboto Condensed Light", size=16, weight="bold", slant="roman")
         inneS_div = parsed_html.body.find('section', attrs={'class':'calCard-ententa'})
         if inneS_div is not None:
             inneS = self.convertString(inneS_div.text,

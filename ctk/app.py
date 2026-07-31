@@ -1,5 +1,4 @@
 import customtkinter
-import datetime, sys
 
 from analogclock import AnalogClock
 from calendarday import CalendarDay
@@ -7,30 +6,32 @@ from digtialclock import DigitalClock
 from pogoda import Pogoda
 from pogoda5 import Pogoda5Day
 from rss import RssInfo
-from base_app import LustroApp, TimeoutClass
+from read_serial import SerialReader
+from biganalogclock import BigAnalogClock
 
-
-
-
+from base_app import LustroApp
 
 plugs = [
-    AnalogClock,
+    AnalogClock, 
     CalendarDay,
     DigitalClock,
     Pogoda,
     Pogoda5Day,
-    RssInfo
+    RssInfo,
+    SerialReader
 ]
 
 class LApp(LustroApp):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.setPlugins(self, plugs)
-        self.t1sec = TimeoutClass(lambda : self.after(0, self.update1Sec))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.attributes('-fullscreen', True)
+        clock = BigAnalogClock(self.get_frame("zegar"), self)
+        #clock = AnalogClock(self.get_frame("zegar"), self)
+        x, y, _, _ = clock.getRect()
+        #clock.place(x=x, y=y, anchor='nw')
         
+        for P in plugs:
+            p = P(self.get_frame("normal"), self)
 
         self.after(0, lambda: self.state('normal'))
 
@@ -38,7 +39,7 @@ class LApp(LustroApp):
         #print("geometry", self.geometry())
         self.plgs = []
         for p in plg:
-            fr = p(master)
+            fr = p(master, self)
             if fr.frame:
                 x, y, w, h = fr.getRect()
                 #print("xywh", x, y, w, h)
@@ -53,21 +54,7 @@ class LApp(LustroApp):
         #self.plgs[0].setMinimumTemp("-6.2")
         #self.plgs[0].setMaximumTemp("26.2")
             
-    def update1Sec(self):
-        dt = datetime.datetime.now()
-        #return
-        #print("--")
-        try:
-            for p in self.plgs:
-                #try:
-                if 1:
-                    p.timeout(dt)
-                #except :
-                #    pass
-        except KeyboardInterrupt:
-            print("ctrl-c")
-            self.t1sec.stopTimer()
-            sys.exit(0)
+    
 
     
 

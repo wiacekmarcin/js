@@ -6,8 +6,8 @@ import random
 from base_plugin import LFrame
 
 class RssInfo(LFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(0, 1000, 1080, 600, master, **kwargs)
+    def __init__(self, master, app, *args, **kwargs):
+        super().__init__(0, 1000, 1080, 600, master, app, *args, **kwargs)
 
         self.font_head = CTkFont("Roboto Condensed", size=32, weight="bold", slant="roman")
         self.font_info = CTkFont("Roboto Condensed", size=18, weight="normal", slant="roman")

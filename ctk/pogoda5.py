@@ -5,8 +5,8 @@ from base_plugin import LFrame
 from PIL import Image
 from wykres_temperatury import Wykres
 class Pogoda5Day(LFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(0, 350, 1080, 600, master, **kwargs)
+    def __init__(self, master, app, *args, **kwargs):
+        super().__init__(0, 350, 1080, 600, master, app, *args, **kwargs)
         
         self.r_img = Image.new("RGB", (1080, 600), "black")
         img = CTkImage(self.r_img, size=self.r_img.size)
