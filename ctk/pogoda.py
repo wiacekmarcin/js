@@ -265,6 +265,7 @@ class Pogoda(LFrame):
 
             response = urlopen(self.url)
             data_json = json.loads(response.read().decode('utf-8'))
+            print(data_json)
 
             self.citiname = data_json["name"]
             utc = data_json["dt"]
@@ -272,7 +273,10 @@ class Pogoda(LFrame):
             
             self.pog_h = dtw.hour
             self.pog_m = dtw.minute
+            vals = {}
             mqtt_vals["time"] = "%02d:%02d" % (self.pog_h, self.pog_m)
+            vals["time"] = "%02d:%02d" % (self.pog_h, self.pog_m)
+
 
             self.sunrise = datetime.datetime.fromtimestamp(data_json["sys"]["sunrise"])
             self.sunset = datetime.datetime.fromtimestamp(data_json["sys"]["sunset"])
@@ -286,22 +290,29 @@ class Pogoda(LFrame):
             #wind_speed = 40
             wind_deg = data_json["wind"]["deg"]
             mqtt_vals["wind_speed"] = wind_speed
+            vals["wind_speed"] = wind_speed
             mqtt_vals["wind_deg"] = wind_deg
+            vals["wind_deg"] = wind_deg
             #print(f"wind_speed = {wind_speed}")
             
             self.ikonawiatru.configure(text=self._toBeaufortChar(self._ms2Beaufort(wind_speed)))
+            vals["ikonawiatru"] = self._toBeaufortChar(self._ms2Beaufort(wind_speed))
 
             txtW = self._deg2Cardinal(wind_deg)
             #ftxt = self.font_wiatru.measure(txtW)
+            vals["kierunekwiatru"] = txtW
 
             self.kierunekWiatru.configure(text=txtW)
             self.opiswiatru.configure(text=self._toDescrSilaWiatru(wind_speed))
+            vals['opiswiatru'] = self.B2Description(self._ms2Beaufort(wind_speed))
             #self.opiswiatru.place(x=28 + ftxt, y=0)
 
             temp = data_json["main"]["temp"]
             feels_like = data_json["main"]["feels_like"]
             mqtt_vals["temp"] = temp
             mqtt_vals["feels_like"] = feels_like
+            vals["temp"] = temp
+            vals["feels_like"] = feels_like
 
             self.temperatura.configure(text="%.1f\u00B0C" % feels_like)
             self.tempreal.configure(text="%.1f\u00B0C" % temp)
@@ -312,6 +323,9 @@ class Pogoda(LFrame):
             mqtt_vals["pressure"] = pressure
             mqtt_vals["huminidity"] = huminidity
 
+            vals["pressure"] = pressure
+            vals["huminidity"] = huminidity
+
             self.wilgotnosc.configure(text="%.0f%%" % huminidity)
             self.cisnienie.configure(text="%.0f hPa" % pressure)
 
@@ -320,7 +334,9 @@ class Pogoda(LFrame):
             weather_icon = data_json["weather"][0]["icon"]
             self.ikonapogody.configure(text=self.iconMap[weather_icon])
             self.opisPogody.configure(text=weather_descr)
-            
+            vals['ikonapogody']= self.iconMap[weather_icon]
+            vals['opisPogody']= weather_descr
+            vals['widocznosc']= data_json["visibility"]
             self.widocznosc.configure(text="%d m" % data_json["visibility"])
             #self.clouds.setText("%d%%" % data_json["clouds"]["all"])
             text_val = ""
@@ -333,30 +349,38 @@ class Pogoda(LFrame):
                     text_unit = "mm/h"
                     text_opis = self._getSnowName(float(text_val))
                     mqtt_vals["snow_1h"] = data_json["snow"]["1h"]
+                    vals["snow_1h"] = data_json["snow"]["1h"]
                 elif "3h" in data_json["snow"]:
                     text_val = "%s" % data_json["snow"]["3h"]
                     text_unit = "mm/3h"
                     text_opis = self._getSnowName(float(text_val)/3)
                     mqtt_vals["snow_3h"] = data_json["snow"]["3h"]
+                    vals["snow_3h"] = data_json["snow"]["3h"]
             elif "rain" in data_json:
                 if "1h" in data_json["rain"]:
                     text_val = "%s" % data_json["rain"]["1h"]
                     text_unit = "mm/h"
                     text_opis = self._getRainName(float(text_val))
                     mqtt_vals["rain_1h"] = data_json["rain"]["1h"]
+                    vals["rain_1h"] = data_json["rain"]["1h"]
                 elif "3h" in data_json["rain"]:
                     text_val = "%s" % data_json["rain"]["3h"]
                     text_unit = "mm/h"
                     text_opis = self._getRainName(float(text_val)/3)
                     mqtt_vals["rain_3h"] = data_json["rain"]["3h"]
+                    vals["rain_3h"] = data_json["rain"]["3h"]
             elif "clouds" in data_json:
                 text_val = "%s" % data_json["clouds"]["all"]
                 text_unit = "%"
                 mqtt_vals["clouds"] = data_json["clouds"]["all"]
+                vals["clouds"] = data_json["clouds"]["all"]
             else:
                 self.deszczsnieg.configure(text="")
                 self.etdeszczsnieg.configure(text="")
                 pass
+            vals['deszczsnieg'] = text_val
+            vals['etdeszczsnieg'] = text_unit
+            vals['opisdeszczsnieg'] = text_opis
             self.deszczsnieg.configure(text=text_val)
             self.etdeszczsnieg.configure(text=text_unit)
             self.opisdeszczsnieg.configure(text=text_opis)
@@ -368,7 +392,8 @@ class Pogoda(LFrame):
             self.setPlace()
             self.frame.update()
 
-            vals = { "sunrise" : self.sunrise.time(), "sunset" : self.sunset.time() }
+            vals["sunrise"] = self.sunrise.time()
+            vals["sunset"] = self.sunset.time() 
             #vals['minimum-temperature'] = data_json['main']['temp_min']
             #vals['maximum-temperature'] = data_json['main']['temp_max']
             #mqtt_vals['minimum-temperature'] = data_json['main']['temp_min']

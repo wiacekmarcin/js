@@ -33,13 +33,15 @@ class TimeoutClass(threading.Thread):
 
 class LustroApp(CTk):
     def __init__(self, *args, **kwargs): 
-        
+        _max_width = 1080
+        max_height = 1920
         # __init__ function for class Tk
         CTk.__init__(self, *args, **kwargs)
-        
+        self.config(cursor="none")
         # creating a container
-        self.container = tk.Frame(self, width=1080, height=1920,)  
+        self.container = tk.Frame(self, width=self._max_width, height=self._max_height)  
         self.container.pack(side = "top", fill = "both", expand = True) 
+        #self.container.place(x=0, y=0)
  
         self.container.grid_rowconfigure(0, weight = 1)
         self.container.grid_columnconfigure(0, weight = 1)
@@ -47,13 +49,17 @@ class LustroApp(CTk):
         # initializing frames to an empty array
 
         self.frames = {}
-
+        self.selected_frame = ''
         for fname in ["zegar", "normal"]:
-            frame = CTkFrame(master=self.container, width=1080, height=1920)
+            frame = CTkFrame(master=self.container, width=self._max_width, height=self._max_height)
             self.frames[fname] = frame
+            #frame.place(relx=0, rely=0, relwidth=1, relheight=1)
             frame.grid(row=0, column=0, sticky="nsew")
+            frame.configure(bg_color = "black")
+            frame.configure(fg_color = "black")
 
         self.show_frame("zegar")
+        self.auto_change = True
         self.cntFrame = 0
 
         #self.frame = CTkFrame(master=self.container, width=1080, height=1920)
@@ -61,15 +67,17 @@ class LustroApp(CTk):
         
         self.title("Lustro")
         w, h = self.winfo_screenwidth(), self.winfo_screenheight()
+        print(w, h)
         
         self.configure(bg_color = "black")
         self.configure(fg_color = "black")
 
         #self.geometry("%dx%d+0+0" % (w, h))
         #self.geometry("400x400")
-        if w==3000:
+        if w==3000 and h==1920:
             self.geometry("1080x1920+1920+0")
             self.attributes('-fullscreen', True)
+            pass
         elif w == 7680:
             self.geometry("1080x1920+3840+0")
         else:
@@ -79,17 +87,26 @@ class LustroApp(CTk):
         self.bind("<Escape>", lambda e: e.widget.quit())
         self.plgs = []
 
+        self.after(1000, self.startTimer)
+
+    def startTimer(self):
         self.t1sec = TimeoutClass(lambda : self.after(0, self.update1Sec))
 
     def show_frame(self, page_name:str):
         '''Show a frame for the given page name'''
-        frame = self.frames[page_name]
-        frame.tkraise()
-
-    def get_frame(self, page_name:str) -> CTkFrame:
+        self.selected_frame = page_name
+        if page_name == "auto":
+            self.auto_change = True
+            return
         if page_name in self.frames:
-            return self.frames[page_name]
-        return CTkFrame()
+            frame = self.frames[page_name]
+            frame.tkraise()
+
+    def get_frame(self, page_name:str) -> CTkFrame | None:
+        frame = None
+        if page_name in self.frames:
+            frame =  self.frames[page_name]
+        return frame
 
     def sendNotification(self, dictValue):
         self.after(0, self._sendNotification, dictValue)    
@@ -112,12 +129,15 @@ class LustroApp(CTk):
         dt = datetime.datetime.now()
         #return
         #print("--")
-        t = dt.time()
-        if t.second == 0:
-            self.cntFrame += 1
-            if self.cntFrame == len(self.frames):
-                self.cntFrame = 0
-            self.show_frame(["zegar", "normal"][self.cntFrame])
+        t = dt.time().hour
+
+        if self.auto_change:
+            zegar = t not in [6, 7, 8, 9, 19, 20, 21, 22, 23]
+            
+            if zegar and self.selected_frame != "zegar":
+                self.show_frame("zegar")
+            elif not zegar and self.selected_frame != "normal":
+                self.show_frame("normal")
         
         try:
             for p in self.plgs:

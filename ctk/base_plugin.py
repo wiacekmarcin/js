@@ -27,6 +27,7 @@ class LFrame(LPlugin, CTkFrame):
     def __init__(self, x, y, w, h, master:CTkFrame, app:LustroApp, *args, **kwargs):
         #super(LPlugin).__init__(master)
         #super(CTkFrame).__init__(master, **kwargs)
+
         LPlugin.__init__(self, app)
         CTkFrame.__init__(self, master, *args, **kwargs)
         #super().__init__(master, **kwargs)
@@ -42,6 +43,8 @@ class LFrame(LPlugin, CTkFrame):
         self.configure(height = h)
 
         #self.place(x=x, y=y, anchor='ne')
+        self.pack()
+        self.place(x=x, y=y, anchor='ne')
 
     def getRect(self) -> tuple[int, int, int, int]:
         return (self.wx, self.wy, self.wwidth, self.wheight)

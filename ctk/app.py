@@ -27,7 +27,7 @@ class LApp(LustroApp):
 
         clock = BigAnalogClock(self.get_frame("zegar"), self)
         #clock = AnalogClock(self.get_frame("zegar"), self)
-        x, y, _, _ = clock.getRect()
+        #x, y, _, _ = clock.getRect()
         #clock.place(x=x, y=y, anchor='nw')
         
         for P in plugs:
@@ -61,6 +61,7 @@ class LApp(LustroApp):
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 app = LApp()
+app.startTimer()
 app.mainloop()
 
 
