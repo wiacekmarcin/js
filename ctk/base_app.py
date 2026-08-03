@@ -32,9 +32,10 @@ class TimeoutClass(threading.Thread):
 
 
 class LustroApp(CTk):
+    _max_width = 1080
+    _max_height = 1920
     def __init__(self, *args, **kwargs): 
-        _max_width = 1080
-        max_height = 1920
+        
         # __init__ function for class Tk
         CTk.__init__(self, *args, **kwargs)
         self.config(cursor="none")
@@ -58,8 +59,8 @@ class LustroApp(CTk):
             frame.configure(bg_color = "black")
             frame.configure(fg_color = "black")
 
-        self.show_frame("zegar")
-        self.auto_change = True
+        self.show_frame("normal")
+        self.auto_change = False
         self.cntFrame = 0
 
         #self.frame = CTkFrame(master=self.container, width=1080, height=1920)

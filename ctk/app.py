@@ -10,7 +10,7 @@ from read_serial import SerialReader
 from biganalogclock import BigAnalogClock
 
 from base_app import LustroApp
-
+from normal_frame import TopBanner
 plugs = [
     AnalogClock, 
     CalendarDay,
@@ -26,12 +26,18 @@ class LApp(LustroApp):
         super().__init__(*args, **kwargs)
 
         clock = BigAnalogClock(self.get_frame("zegar"), self)
+
+        frame2 = self.get_frame("normal")
+        if frame2 is not None:
+            frame_time_calendar_clock = TopBanner(frame2, self)
+            frame_time_calendar_clock.pack()
         #clock = AnalogClock(self.get_frame("zegar"), self)
         #x, y, _, _ = clock.getRect()
         #clock.place(x=x, y=y, anchor='nw')
         
-        for P in plugs:
-            p = P(self.get_frame("normal"), self)
+
+        #for P in plugs:
+        #    p = P(self.get_frame("normal"), self)
 
         self.after(0, lambda: self.state('normal'))
 

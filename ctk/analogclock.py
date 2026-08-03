@@ -1,10 +1,10 @@
-from customtkinter import CTkFrame, CTkLabel, CTkImage
+from customtkinter import CTkFrame, CTkLabel, CTkImage, CTkFont
 from PIL import Image, ImageDraw, ImageFont
 
 import numpy as np
 import os, math, datetime
 
-from base_plugin import LFrame
+from base_plugin import LSimpleFrame
 
 def R(angle):
     cos_a = np.cos(angle)
@@ -29,10 +29,13 @@ def deaorganize(P):
         poly.append((P[i,0], P[i,1]))
     return poly
 
-class AnalogClock(LFrame):
-    
+class AnalogClock(LSimpleFrame):
+    _wwidth = 350
+    _wheight = 350
+    #def __init__(self, master, app, **kwargs):
+    #    super().__init__(800, 0, 300, 300, master, app, **kwargs)
     def __init__(self, master, app, **kwargs):
-        super().__init__(800, 0, 300, 300, master, app, **kwargs)
+        super().__init__(master, app, **kwargs)
         self.setWschodZachod = 0
         self.startArcWschod = 0
         self.startArcZachod = 0
@@ -43,85 +46,98 @@ class AnalogClock(LFrame):
         self.zachod = "23:59"
         self.minTemp = "\uf07b"
         self.maxTemp = "\uf07b"
-        self.configure(width=self.wwidth)
-        self.configure(height=self.wheight)
+        self.configure(width=self._wwidth)
+        self.configure(height=self._wheight)
 
-        
+        minR = min(self._wwidth, self._wheight)
+        self.Rclock = minR
         img_path = "analog2.png"
         if  1:
-            img_pil = Image.new(size=(300, 300), mode="RGB", color="black")
+            img_pil = Image.new(size=(minR, minR), mode="RGB", color="black")
             imd = ImageDraw.Draw(img_pil)
-            R1a = 250/2
-            R1b = 270/2
-            R2 = 280/2
+            R1a = 0.83*minR/2
+            R1b = 0.9*minR/2
+            R2 = 0.93*minR/2
             for m in range(60):
                 if m % 5 == 0:
                     R = R1a
-                    w = 3
+                    w = 5
                 else:
                     R = R1b
-                    w = 1
-                p1 = (int(150 + R*math.sin(m*2*math.pi/60)), int(150 + R*math.cos(m*2*math.pi/60)))
-                p2 = (int(150 + R2*math.sin(m*2*math.pi/60)), int(150 + R2*math.cos(m*2*math.pi/60)))
+                    w = 3
+                p1 = (int(minR/2 + R*math.sin(m*2*math.pi/60)), int(minR/2 + R*math.cos(m*2*math.pi/60)))
+                p2 = (int(minR/2 + R2*math.sin(m*2*math.pi/60)), int(minR/2 + R2*math.cos(m*2*math.pi/60)))
                 imd.line((p1, p2), fill="white", width=w)
                 self.r_img = img_pil
 
         else:
             img_pil = Image.open(img_path)
-            self.r_img = img_pil.resize((self.wwidth, self.wheight))
+            self.r_img = img_pil.resize((self._wwidth, self._wheight))
 
 
-        im_s1 = Image.open('sun.png')
-        im_s1 = im_s1.resize((24, 24))
-        self.r_img.paste(im_s1, (5, 30))
+        #im_s1 = Image.open('sun.png')
+        #im_s1 = im_s1.resize((32, 32))
+        #self.r_img.paste(im_s1, (1, 30))
 
-        im_s2 = Image.open('moon.png')
-        im_s2 = im_s2.resize((24, 24))
-        self.r_img.paste(im_s2, (self.wwidth - 26 - 5, 30))
+        #im_s2 = Image.open('moon.png')
+        #im_s2 = im_s2.resize((32, 32))
+        #self.r_img.paste(im_s2, (self._wwidth - 32 - 1, 30))
 
         # use a truetype font
-        self.font = ImageFont.truetype("Roboto-Regular.ttf", 24)
-
+        self.font = ImageFont.truetype("Roboto-Regular.ttf", 32)
+        self.tkfont = CTkFont(family="Roboto-Regular", size=32, weight="bold", slant="roman")
+        self.webfont = ImageFont.truetype("weathericons-regular-webfont.ttf", 32)
         imgd = ImageDraw.Draw(self.r_img)
-        imgd.text((0,5), text="??:??", fill="white", font=self.font)
+        
+        
+        imgd.text((0, 40), text="\uf051", fill="white", font=self.webfont)
+        imgd.text((self._wheight - 40, 40), text="\uf052", fill="white", font=self.webfont)
+
+        imgd.text((0, self._wheight - 75), text="\uf053\uf03c", fill="white", font=self.webfont)
+
+        txtw = self.webfont.getlength("\uf055\uf03c")
+        imgd.text((self._wwidth - txtw, self._wheight - 75),   text="\uf055\uf03c", fill="white", font=self.webfont)
+
+        #imgd.text((0,5), text="??:??", fill="white", font=self.font)
         self.txtw = 45
         #txtw = self.font.getlength("??:??")
         #txtw ~= 45px
         #print("txtw=",txtw)
 
-        imgd.text((self.wwidth-self.txtw-5,5), text="??:??", fill="white", font=self.font)
+        #imgd.text((self._wwidth-self.txtw-5,5), text="??:??", fill="white", font=self.font)
 
         # Convert the PIL Image to Tkinter PhotoImage
         img = CTkImage(self.r_img, size=self.r_img.size)
 
         self.photo_label = CTkLabel(self, fg_color="black", image=img, text="")
-        self.photo_label.place(x=0, y=0)
+        self.photo_label.place(x=(self._wwidth - self.Rclock)/2, y=(self._wheight - self.Rclock)/2)
         
-        #self.l_wschod_s = CTkLabel(self, text="?-1", fg_color="black", bg_color="black", text_color="white")
-        #self.l_wschod_s.place(x=0, y=0)
+        self.l_wschod_s = CTkLabel(self, text="7:51", fg_color="black", bg_color="black", text_color="white", font=self.tkfont)
+        self.l_wschod_s.place(x=0, y=0)
 
-        #self.l_zachod_s = CTkLabel(self, text="?-2", fg_color="black", bg_color="black", text_color="white")
-        #self.l_zachod_s.place(x=self.wwidth - 25, y=0)
+        self.l_zachod_s = CTkLabel(self, text="22:35", fg_color="black", bg_color="black", text_color="white", font=self.tkfont)
+        self.l_zachod_s.place(x=self._wwidth - 80, y=0)
 
 
-        #self.l_temp_min = CTkLabel(self, text="?-3", fg_color="black", bg_color="black", text_color="white")
-        #self.l_temp_min.place(x=0, y=self.wheight - 25)
+        self.l_temp_min = CTkLabel(self, text="n/a", fg_color="black", bg_color="black", text_color="white", font=self.tkfont)
+        self.l_temp_min.place(x=0, y=self._wheight - 35)
 
-        #self.l_temp_max = CTkLabel(self, text="?-4", fg_color="black", bg_color="black", text_color="white")
-        #self.l_temp_max.place(x=self.wwidth - 25, y=self.wheight - 25)
+        self.l_temp_max = CTkLabel(self, text="n/a", fg_color="black", bg_color="black", text_color="white", font=self.tkfont)
+        self.l_temp_max.place(x=self._wwidth - 75, y=self._wheight - 35)
 
-        self.webfont = ImageFont.truetype("weathericons-regular-webfont.ttf", 24)
         
-        imgd.text((0, self.wheight - 30 - 30),                  text="\uf053", fill="white", font=self.webfont)
-        imgd.text((self.wwidth - 20, self.wheight - 30 - 30),   text="\uf055", fill="white", font=self.webfont)
+        
+        #imgd.text((0, self._wheight - 30 - 30),                  text="\uf053", fill="white", font=self.webfont)
+        #imgd.text((self._wwidth - 20, self._wheight - 30 - 30),   text="\uf055", fill="white", font=self.webfont)
 
-        imgd.text((0, self.wheight - 30),                text="\uf07b \uf03c", fill="white", font=self.webfont)
-        imgd.text((self.wwidth - 50, self.wheight - 30), text="\uf07b \uf03c", fill="white", font=self.webfont)
+        #imgd.text((0, self._wheight - 30),                text="\uf07b \uf03c", fill="white", font=self.webfont)
+        #imgd.text((self._wwidth - 50, self._wheight - 30), text="\uf07b \uf03c", fill="white", font=self.webfont)
 
         #self.drawClock()
 
    
     def receiveNotfication(self, dictValue):
+        
         if "sunrise" in dictValue:
             self.setWschod(dictValue["sunrise"].hour, dictValue["sunrise"].minute)
         
@@ -142,60 +158,23 @@ class AnalogClock(LFrame):
             self.wschod += "0"
         self.wschod += "%d" % min
 
-        imgd = ImageDraw.Draw(self.r_img)
-        x = 0
-        y = 0
-        imgd.rectangle((x, y, x+50, y+25), fill="black", outline="black")
-
-        imgd.text((0,5), text=self.wschod, fill="white", font=self.font)
-        
-        self.act_img = self.r_img.copy()
-        t_img = CTkImage(self.act_img, size=self.act_img.size)
-        self.photo_label.configure(image=t_img)
+        self.l_wschod_s.configure(text=self.wschod)
    
     def setZachod(self, hour, min):
         self.zachod = "%d:" % hour
         if min < 10:
             self.zachod += "0"
         self.zachod += "%d" % min
-        
-        imgd = ImageDraw.Draw(self.r_img)
-
-        x = self.wwidth - self.txtw - 5
-        y = 0
-        imgd.rectangle((x, y, x + self.txtw + 5, y + 25), fill="black", outline="black")
-
-        imgd.text((self.wwidth - self.txtw, 5), text=self.zachod, fill="white", font=self.font)
-        
-        self.act_img = self.r_img.copy()
-        t_img = CTkImage(self.act_img, size=self.act_img.size)
-        self.photo_label.configure(image=t_img)
+        self.l_zachod_s.configure(text=self.zachod)
     
     def setMinimumTemp(self, ftemp):
-        temp = "%2.1f\u00B0C" % ftemp
-        imgd = ImageDraw.Draw(self.r_img)
-        x = 0
-        y = self.wheight - 20
-        imgd.rectangle((x, y, x+50, y+20), fill="black", outline="black")
-
-        imgd.text((5, self.wheight - 20), text=temp, fill="white", font=self.font)
-        
-        self.act_img = self.r_img.copy()
-        t_img = CTkImage(self.act_img, size=self.act_img.size)
-        self.photo_label.configure(image=t_img)
+        temp = "%2.1f" % ftemp
+        self.l_temp_min.configure(text=temp)
         
     def setMaximumTemp(self, ftemp):
-        temp = "%2.1f\u00B0C" % ftemp
-        imgd = ImageDraw.Draw(self.r_img)
-        x = self.wwidth - 50
-        y = self.wheight - 20
-        imgd.rectangle((x, y, x + 50, y + 20), fill="black", outline="black")
+        temp = "%2.1f" % ftemp
+        self.l_temp_max.configure(text=temp)
 
-        imgd.text((self.wwidth - 45, self.wheight - 20), text=temp, fill="white", font=self.font)
-        
-        self.act_img = self.r_img.copy()
-        t_img = CTkImage(self.act_img, size=self.act_img.size)
-        self.photo_label.configure(image=t_img)
     
     def timeout(self, dt):
 
@@ -207,10 +186,10 @@ class AnalogClock(LFrame):
         #    return
         
         self.act_img = self.r_img.copy()
-        R = min(self.wwidth, self.wheight) / 2
+        R = min(self._wwidth, self._wheight) / 2
 
-        c_x = int(self.wwidth / 2)
-        c_y = int(self.wheight / 2)
+        c_x = int(self._wwidth / 2)
+        c_y = int(self._wheight / 2)
 
         rot_secsH = 2 * math.pi * ((self.m_h % 12)*3600.0 + self.m_h * 60.0 + self.m_s) / (12.0*3600.0)
         rot_secsM = 2 * math.pi * (self.m_m * 60.0 + self.m_s) / (3600.0)
