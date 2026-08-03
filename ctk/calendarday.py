@@ -4,12 +4,15 @@ import datetime
 import urllib3
 from bs4  import BeautifulSoup
 
-from base_plugin import LFrame
-
-
-class CalendarDay(LFrame):
-    def __init__(self, master, app, *args, **kwargs):
-        super().__init__(320, 5, 500, 600, master, app, *args, **kwargs)
+from base_plugin import LFrame, LSimpleFrame
+from customtkinter import CTk, CTkFrame
+from base_app import LustroApp
+#class CalendarDay(LFrame):
+class CalendarDay(LSimpleFrame):
+    _wwidth = 300
+    def __init__(self, master:CTkFrame, app, *args, **kwargs):
+        #super().__init__(320, 5, 500, 600, master, app, *args, **kwargs)
+        super().__init__(master, app, *args, **kwargs)
         
         #self.configure(fg_color = "lightgray")
         self.dayCalc = None
@@ -56,7 +59,8 @@ class CalendarDay(LFrame):
                             font=font_swieto)
         self.swieto.pack()
 
-        self.textbox = CTkTextbox(master=self, width=self.wwidth-30, height=200, corner_radius=0, 
+    
+        self.textbox = CTkTextbox(master=self, height=200, width=self._wwidth-30, corner_radius=0, 
                                   bg_color="black", fg_color="black", text_color="white",
                                   activate_scrollbars=False,
                                   )
@@ -71,22 +75,22 @@ class CalendarDay(LFrame):
 
         #font_imieniny = CTkFont("Roboto Condensed Light", size=16, weight="normal", slant="roman")
         #self.imieniny =  CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
-        #                    font=font_imieniny, wraplength=self.wwidth)
+        #                    font=font_imieniny, wraplength=self._wwidth)
         #self.imieniny.grid(row=5, column=0)
 
         #font_przyslowia = CTkFont("Roboto Condensed Light", size=14, weight="normal", slant="roman")
         #self.przyslowia =  CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
-        #                    font=font_przyslowia, wraplength=self.wwidth-10)
+        #                    font=font_przyslowia, wraplength=self._wwidth-10)
         #self.przyslowia.grid(row=6, column=0)
 
         #font_cytat = CTkFont("Roboto Condensed Light", size=12, weight="normal", slant="roman")
         #self.cytat =  CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
-        #                    font=font_cytat, wraplength=self.wwidth-10)
+        #                    font=font_cytat, wraplength=self._wwidth-10)
         #self.cytat.grid(row=7, column=0)
 
         #font_inneS = CTkFont("Roboto Condensed Light", size=10, weight="normal", slant="roman")
         #self.inneS =  CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
-        #                    font=font_inneS, wraplength=self.wwidth-10)
+        #                    font=font_inneS, wraplength=self._wwidth-10)
         #self.inneS.grid(row=8, column=0)
 
 
@@ -175,7 +179,7 @@ class CalendarDay(LFrame):
         div_imieniny = parsed_html.body.find('section', attrs={'class':'calCard-name-day'}) 
         if div_imieniny is not None:
             font_imieniny = CTkFont("Roboto Condensed Light", size=18, weight="normal", slant="roman")
-            imieniny = self.convertString(div_imieniny.text, self.wwidth-40, font_imieniny)                                      
+            imieniny = self.convertString(div_imieniny.text, self._wwidth-40, font_imieniny)                                      
             self.txtInfoList.append((imieniny, font_imieniny))
         
         if divPrzyslowia is not None:
@@ -183,7 +187,7 @@ class CalendarDay(LFrame):
             div_przyslowia = divPrzyslowia.find('div', attrs={'class':'calCard_proverb-content'})                
             if div_przyslowia is not None:
                 przyslowia = self.convertString(div_przyslowia.text,
-                                        self.wwidth-40, font_przyslowia)
+                                        self._wwidth-40, font_przyslowia)
                 self.txtInfoList.append((przyslowia, font_przyslowia))
         
         if divCytat is not None:
@@ -191,14 +195,14 @@ class CalendarDay(LFrame):
             div_cytat = divCytat.find('div', attrs={'class':'calCard_proverb-content'})
             if div_cytat is not None:
                 cytat = self.convertString(div_cytat.text,
-                                   self.wwidth-40, font_cytat)
+                                   self._wwidth-40, font_cytat)
                 self.txtInfoList.append((cytat, font_cytat))
 
         font_inneS = CTkFont("Roboto Condensed Light", size=16, weight="bold", slant="roman")
         inneS_div = parsed_html.body.find('section', attrs={'class':'calCard-ententa'})
         if inneS_div is not None:
             inneS = self.convertString(inneS_div.text,
-                                    self.wwidth-45, font_inneS)
+                                    self._wwidth-45, font_inneS)
             self.txtInfoList.append((inneS, font_inneS))        
 
         self.textbox.insert("0.0", "")
