@@ -31,7 +31,7 @@ def deaorganize(P):
 
 class AnalogClock(LSimpleFrame):
     _wwidth = 350
-    _wheight = 350
+    _wheight = 450
     #def __init__(self, master, app, **kwargs):
     #    super().__init__(800, 0, 300, 300, master, app, **kwargs)
     def __init__(self, master, app, **kwargs):
@@ -48,16 +48,18 @@ class AnalogClock(LSimpleFrame):
         self.maxTemp = "\uf07b"
         self.configure(width=self._wwidth)
         self.configure(height=self._wheight)
+        self.clockXYR = (0, 0, min(self._wheight, self._wwidth))
+        cx, cy, clockW = self.clockXYR
 
-        minR = min(self._wwidth, self._wheight)
-        self.Rclock = minR
+        clockR = min(self._wwidth, self._wheight)/2
+        self.Rclock = clockR
         img_path = "analog2.png"
         if  1:
-            img_pil = Image.new(size=(minR, minR), mode="RGB", color="black")
+            img_pil = Image.new(size=(int(clockW), int(clockW)), mode="RGB", color="black")
             imd = ImageDraw.Draw(img_pil)
-            R1a = 0.83*minR/2
-            R1b = 0.9*minR/2
-            R2 = 0.93*minR/2
+            R1a = 0.83*clockR
+            R1b = 0.9*clockR
+            R2 = 0.93*clockR
             for m in range(60):
                 if m % 5 == 0:
                     R = R1a
@@ -65,8 +67,8 @@ class AnalogClock(LSimpleFrame):
                 else:
                     R = R1b
                     w = 3
-                p1 = (int(minR/2 + R*math.sin(m*2*math.pi/60)), int(minR/2 + R*math.cos(m*2*math.pi/60)))
-                p2 = (int(minR/2 + R2*math.sin(m*2*math.pi/60)), int(minR/2 + R2*math.cos(m*2*math.pi/60)))
+                p1 = (int(clockR + R*math.sin(m*2*math.pi/60)), int(clockR + R*math.cos(m*2*math.pi/60)))
+                p2 = (int(clockR + R2*math.sin(m*2*math.pi/60)), int(clockR + R2*math.cos(m*2*math.pi/60)))
                 imd.line((p1, p2), fill="white", width=w)
                 self.r_img = img_pil
 
@@ -90,16 +92,16 @@ class AnalogClock(LSimpleFrame):
         imgd = ImageDraw.Draw(self.r_img)
         
         
-        imgd.text((0, 40), text="\uf051", fill="white", font=self.webfont)
-        imgd.text((self._wheight - 40, 40), text="\uf052", fill="white", font=self.webfont)
+        imgd.text((0, 40), text="\uf051", fill="silver", font=self.webfont)
+        imgd.text((clockW - 40, 40), text="\uf052", fill="silver", font=self.webfont)
 
-        imgd.text((0, self._wheight - 75), text="\uf053\uf03c", fill="white", font=self.webfont)
+        imgd.text((0, clockW - 75), text="\uf053\uf03c", fill="silver", font=self.webfont)
 
         txtw = self.webfont.getlength("\uf055\uf03c")
-        imgd.text((self._wwidth - txtw, self._wheight - 75),   text="\uf055\uf03c", fill="white", font=self.webfont)
+        imgd.text((clockW - txtw, clockW - 75),   text="\uf055\uf03c", fill="silver", font=self.webfont)
 
         #imgd.text((0,5), text="??:??", fill="white", font=self.font)
-        self.txtw = 45
+        #self.txtw = 45
         #txtw = self.font.getlength("??:??")
         #txtw ~= 45px
         #print("txtw=",txtw)
@@ -110,20 +112,20 @@ class AnalogClock(LSimpleFrame):
         img = CTkImage(self.r_img, size=self.r_img.size)
 
         self.photo_label = CTkLabel(self, fg_color="black", image=img, text="")
-        self.photo_label.place(x=(self._wwidth - self.Rclock)/2, y=(self._wheight - self.Rclock)/2)
+        self.photo_label.place(x=cx, y=cy)
         
-        self.l_wschod_s = CTkLabel(self, text="7:51", fg_color="black", bg_color="black", text_color="white", font=self.tkfont)
-        self.l_wschod_s.place(x=0, y=0)
+        self.l_wschod_s = CTkLabel(self, text="-", fg_color="black", bg_color="black", text_color="#71706E", font=self.tkfont)
+        self.l_wschod_s.place(x=cx, y=cy)
 
-        self.l_zachod_s = CTkLabel(self, text="22:35", fg_color="black", bg_color="black", text_color="white", font=self.tkfont)
-        self.l_zachod_s.place(x=self._wwidth - 80, y=0)
+        self.l_zachod_s = CTkLabel(self, text="-", fg_color="black", bg_color="black", text_color="#71706E", font=self.tkfont)
+        self.l_zachod_s.place(x=cx + clockW - 80, y=cy)
 
 
-        self.l_temp_min = CTkLabel(self, text="n/a", fg_color="black", bg_color="black", text_color="white", font=self.tkfont)
-        self.l_temp_min.place(x=0, y=self._wheight - 35)
+        self.l_temp_min = CTkLabel(self, text="-", fg_color="black", bg_color="black", text_color="#71706E", font=self.tkfont)
+        self.l_temp_min.place(x=cx, y=cy + clockW  - 35)
 
-        self.l_temp_max = CTkLabel(self, text="n/a", fg_color="black", bg_color="black", text_color="white", font=self.tkfont)
-        self.l_temp_max.place(x=self._wwidth - 75, y=self._wheight - 35)
+        self.l_temp_max = CTkLabel(self, text="-", fg_color="black", bg_color="black", text_color="#71706E", font=self.tkfont)
+        self.l_temp_max.place(x=cx + clockW - 75, y=cy + clockW - 35)
 
         
         
@@ -135,6 +137,15 @@ class AnalogClock(LSimpleFrame):
 
         #self.drawClock()
 
+        self.font_hour_min = CTkFont("Roboto Condensed", size=96, weight="bold", slant="roman")
+        self.lhour_min = CTkLabel(self, text="00:00", fg_color="black", bg_color="black", text_color="white", 
+                                    font=self.font_hour_min, anchor="nw")
+        self.lhour_min.place(x=0, y=clockW)
+        whour= self.font_hour_min.measure("00:00")
+
+        font_sec = CTkFont("Roboto Condensed", size=48, weight="normal", slant="roman")
+        self.lsecond = CTkLabel(self, text="00", fg_color="black", bg_color="black", text_color="silver", font=font_sec)
+        self.lsecond.place(x=whour, y=clockW+25)
    
     def receiveNotfication(self, dictValue):
         
@@ -158,22 +169,24 @@ class AnalogClock(LSimpleFrame):
             self.wschod += "0"
         self.wschod += "%d" % min
 
-        self.l_wschod_s.configure(text=self.wschod)
+        self.l_wschod_s.configure(text=self.wschod, text_color="white")
    
     def setZachod(self, hour, min):
         self.zachod = "%d:" % hour
         if min < 10:
             self.zachod += "0"
         self.zachod += "%d" % min
-        self.l_zachod_s.configure(text=self.zachod)
+        zw = self.tkfont.measure(self.zachod)
+        self.l_zachod_s.configure(text=self.zachod, text_color="white", )
+        self.l_zachod_s.place(x=self._wwidth-zw-2, y=0)
     
     def setMinimumTemp(self, ftemp):
         temp = "%2.1f" % ftemp
-        self.l_temp_min.configure(text=temp)
+        self.l_temp_min.configure(text=temp, text_color="white")
         
     def setMaximumTemp(self, ftemp):
         temp = "%2.1f" % ftemp
-        self.l_temp_max.configure(text=temp)
+        self.l_temp_max.configure(text=temp, text_color="white")
 
     
     def timeout(self, dt):
@@ -182,26 +195,34 @@ class AnalogClock(LSimpleFrame):
         self.m_m = dt.time().minute
         self.m_s = dt.time().second
 
-        #if self.m_s != 0:
-        #    return
+        shour = ''
+        if self.m_h < 10:
+            shour+='0'
+        shour+='%d:' % self.m_h
+        if self.m_m < 10:
+            shour+='0'
+        shour+='%d' % self.m_m
+        self.lhour_min.configure(text=shour)
+        self.lsecond.configure(text="%02d" % self.m_s)
         
         self.act_img = self.r_img.copy()
-        R = min(self._wwidth, self._wheight) / 2
+        cx, cy, clockW = self.clockXYR
+        R = clockW / 2
 
-        c_x = int(self._wwidth / 2)
-        c_y = int(self._wheight / 2)
+        c_x = int(cx+R)
+        c_y = int(cy+R)
 
         rot_secsH = 2 * math.pi * ((self.m_h % 12)*3600.0 + self.m_h * 60.0 + self.m_s) / (12.0*3600.0)
         rot_secsM = 2 * math.pi * (self.m_m * 60.0 + self.m_s) / (3600.0)
         rot_secsS = 2 * math.pi * (self.m_s) / (60.0)
 
-        pHA = (c_x - 4, c_y - 4)
-        pHB = (c_x - 4, c_y + 4)
-        pHC = (c_x + 4, c_y + 4)
-        pHD = (c_x + 4, c_y - 4)
-        pHE = (c_x + 4, c_y - 70)
-        pHF = (c_x - 4, c_y - 70)
-        pHG = (c_x, c_y - 85)
+        pHA = (c_x - 4*R/150, c_y - 4*R/150)
+        pHB = (c_x - 4*R/150, c_y + 4*R/150)
+        pHC = (c_x + 4*R/150, c_y + 4*R/150)
+        pHD = (c_x + 4*R/150, c_y - 4*R/150)
+        pHE = (c_x + 4*R/150, c_y - 70*R/150)
+        pHF = (c_x - 4, c_y - 70*R/150)
+        pHG = (c_x, c_y - 83*R/150)
 
         xyH = [
             pHA,
@@ -225,13 +246,13 @@ class AnalogClock(LSimpleFrame):
         pointsH = deaorganize(P_new)
         img1.polygon(pointsH, fill ="darkgrey", outline ="darkgrey") 
 
-        pmA = (c_x - 2, c_y - 2)
-        pmB = (c_x - 2, c_y + 2)
-        pmC = (c_x + 2, c_y + 2)
-        pmD = (c_x + 2, c_y - 2)
-        pmE = (c_x + 2, c_y - 90)
-        pmF = (c_x - 2, c_y - 90)
-        pmG = (c_x, c_y - 100)
+        pmA = (c_x - 2*R/150, c_y - 2*R/150)
+        pmB = (c_x - 2*R/150, c_y + 2*R/150)
+        pmC = (c_x + 2*R/150, c_y + 2*R/150)
+        pmD = (c_x + 2*R/150, c_y - 2*R/150)
+        pmE = (c_x + 2*R/150, c_y - 100*R/150)
+        pmF = (c_x - 2*R/150, c_y - 100*R/150)
+        pmG = (c_x, c_y - 120*R/150)
 
         xym = [
             pmA,
@@ -251,8 +272,8 @@ class AnalogClock(LSimpleFrame):
         pointsm = deaorganize(P_new)
         img1.polygon(pointsm, fill ="white", outline ="white") 
 
-        R = 117
-        pSec = (int(c_x + R*math.sin(math.pi-rot_secsS)), int(c_y + R*math.cos(math.pi-rot_secsS)))
+        S = 0.9*R
+        pSec = (int(c_x + S*math.sin(math.pi-rot_secsS)), int(c_y + S*math.cos(math.pi-rot_secsS)))
 
         img1.line(((c_x, c_y), pSec), fill="silver", width=2)
 
