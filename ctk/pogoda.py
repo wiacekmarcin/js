@@ -9,7 +9,7 @@ import json
 
 class Pogoda(LFrame):
     def __init__(self, master, app, *args, **kwargs):
-        super().__init__(0, 110, 300, 250, master, app, *args, **kwargs)
+        super().__init__(0, 0, 300, 250, master, app, *args, **kwargs)
 
         #QNetworkAccessManager netMng
         self.url = "https://api.openweathermap.org/data/2.5/weather?appid=b176485875db690244cb8acf93637572&id=7532279&lang=pl&units=metric"

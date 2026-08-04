@@ -9,8 +9,8 @@ from customtkinter import CTk, CTkFrame
 from base_app import LustroApp
 #class CalendarDay(LFrame):
 class CalendarDay(LSimpleFrame):
-    _wwidth = 300
-    def __init__(self, master:CTkFrame, app, *args, **kwargs):
+    _wwidth = 400
+    def __init__(self, master:CTkFrame, app:LustroApp, *args, **kwargs):
         #super().__init__(320, 5, 500, 600, master, app, *args, **kwargs)
         super().__init__(master, app, *args, **kwargs)
         
@@ -39,28 +39,28 @@ class CalendarDay(LSimpleFrame):
         
         font_mr = CTkFont("Roboto Condensed", size=24, weight="bold", slant="roman")
         self.miesiac_rok = CTkLabel(self, text="miesiąć", fg_color="black", bg_color="black", text_color="white", font=font_mr)
-        self.miesiac_rok.pack()
+        self.miesiac_rok.pack(side='top', anchor='n', pady=5)
         
         font_info = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
         self.info_day = CTkLabel(self, text="Kolejny dzień w raju", fg_color="black", bg_color="black", text_color="white", font=font_info)
-        self.info_day.pack()
+        self.info_day.pack(anchor='n', pady=5)
         
         font_dzien = CTkFont("Roboto Condensed Light", size=24, weight="bold", slant="roman")
         self.dzien = CTkLabel(self, text="Dzień tygodnia", fg_color="black", bg_color="black", text_color="white", font=font_dzien)
-        self.dzien.pack()
+        self.dzien.pack(anchor='n', pady=5)
 
         font_day = CTkFont("Roboto", size=80, weight="bold", slant="roman")
         self.day = CTkLabel(self, text="00", fg_color="black", bg_color="black", text_color="white", 
                             font=font_day)
-        self.day.pack()
+        self.day.pack(anchor='n', pady=5)
 
         font_swieto = CTkFont("Roboto", size=20, weight="bold", slant="roman")
         self.swieto = CTkLabel(self, text="", fg_color="black", bg_color="black", text_color="white", 
                             font=font_swieto)
-        self.swieto.pack()
+        self.swieto.pack(anchor='n', pady=5)
 
     
-        self.textbox = CTkTextbox(master=self, height=200, width=self._wwidth-30, corner_radius=0, 
+        self.textbox = CTkTextbox(master=self, height=200, width=self._wwidth-10, corner_radius=0, 
                                   bg_color="black", fg_color="black", text_color="white",
                                   activate_scrollbars=False,
                                   )

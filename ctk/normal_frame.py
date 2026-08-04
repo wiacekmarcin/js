@@ -14,25 +14,16 @@ class TopBanner(CTkFrame):
 
         self.configure(width = 1080)
         
-        fr1 = CTkFrame(self)
-        fr1.pack(anchor='ne', expand=True, padx=5, side='left')
+        pogoda = Pogoda(self, app)
+        pogoda.pack(anchor='nw', expand=True, pady=5, side='left')
 
-        fr2 = CTkFrame(self)
-        calendar = CalendarDay(fr2, app)
-        fr2.pack(anchor='ne', expand=True, padx=5, side='left', after=fr1)
+        calendar = CalendarDay(self, app)
+        calendar.pack(anchor='nw', expand=True, padx=5, side='left')
 
         aclock = AnalogClock(self, app)
-        aclock.pack(anchor='ne', expand=True, padx=5, side='right', after=fr2)
+        aclock.pack(anchor='nw', expand=True, padx=5, side='left')
 
-        fr1a = CTkFrame(fr1)
-        #dclock = DigitalClock(fr1a, app)
-        #r3 = dclock.getRect()
-        #fr1a.pack(anchor='ne', expand=True, pady=5, side='top')
-
-        fr1b = CTkFrame(fr1)
-        #pogoda = Pogoda(fr1b, app)
-        #r4 = pogoda.getRect()
-        #fr1b.pack(anchor='ne', expand=True, pady=5, side='bottom')
+        
 
         #maxheight = max(maxheight, r3[3] + r4[3] + 5)
         #self.configure(height=maxheight)
