@@ -120,8 +120,9 @@ class LustroApp(CTk):
         self.after(0, self._sendMqtt, topic, valueDict)
 
     def _sendMqtt(self, topic, valueDict):
-        for p in self.plgs:
-            p.receiveMqtt(topic, valueDict)
+        #for p in self.plgs:
+        #    p.receiveMqtt(topic, valueDict)
+        pass
 
     def registerPlugin(self, plg):
         self.plgs.append(plg)
