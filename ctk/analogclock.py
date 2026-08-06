@@ -87,8 +87,9 @@ class AnalogClock(LSimpleFrame):
 
         # use a truetype font
         self.font = ImageFont.truetype("Roboto-Regular.ttf", 32)
-        self.tkfont = CTkFont(family="Roboto-Regular", size=32, weight="bold", slant="roman")
         self.webfont = ImageFont.truetype("weathericons-regular-webfont.ttf", 32)
+
+        self.tkfont = CTkFont(family="Roboto Regular", size=32, weight="bold", slant="roman")
         imgd = ImageDraw.Draw(self.r_img)
         
         

@@ -1,15 +1,18 @@
-#*-* coding:utf-8 *-*
 from customtkinter import CTkLabel, CTkFont, CTkFrame
 
-from base_plugin import LFrame
+from base_plugin import LSimpleFrame
 import datetime 
 from urllib.request import urlopen
 import json
 
 
-class Pogoda(LFrame):
+class Pogoda(LSimpleFrame):
+    _wwidth = 400
     def __init__(self, master, app, *args, **kwargs):
-        super().__init__(0, 0, 300, 250, master, app, *args, **kwargs)
+        #super().__init__(0, 0, 300, 250, master, app, *args, **kwargs)
+        super().__init__(master, app, *args, **kwargs)
+
+        self.configure(width=self._wwidth)
 
         #QNetworkAccessManager netMng
         self.url = "https://api.openweathermap.org/data/2.5/weather?appid=b176485875db690244cb8acf93637572&id=7532279&lang=pl&units=metric"
@@ -40,216 +43,415 @@ class Pogoda(LFrame):
         self.iconMap["11n"]="\uf03b" #"wi-night-thunderstorm",
         self.iconMap["13n"]="\uf038" #"wi-night-snow",
         self.iconMap["50n"]="\uf023" #"wi-night-alt-cloudy-windy"
+        self.configure(width=self._wwidth)
 
-        self.font_wiatru = CTkFont("Weather Icons", size=24, weight="normal", slant="roman")
-        self.ikonawiatru = CTkLabel(self, text=self._toBeaufortChar(self._ms2Beaufort(0)),
-                                    bg_color="black",fg_color="black", text_color="white", font=self.font_wiatru,
-                                    justify="left", anchor="w")
+        #Weather Icons
+        self.webfont = CTkFont("Weather Icons", size=48, weight="normal", slant="roman")
+        self.miniwebfont = CTkFont("Weather Icons", size=32, weight="normal", slant="roman")
+        self.ikona_wiatru_font= CTkFont("Weather Icons", size=48, weight="normal", slant="roman")
+        self.font_temperatura = CTkFont("Roboto Slab Regular", size=48, weight="bold", slant="roman")
+        self.font_wielkosci = CTkFont("Roboto Regular", size=20, weight="normal", slant="roman")
 
-        self.kierunekWiatru = CTkLabel(self, text=self._deg2Cardinal(0),
-                                    bg_color="black",fg_color="black", text_color="white", font=self.font_wiatru,
-                                    justify="left", anchor="w")
 
-        font_opiswiatru = CTkFont("Roboto Condensed Light", size=14, weight="normal", slant="roman")
-        self.opiswiatru = CTkLabel(self, text=self._toDescrSilaWiatru(0),
-                                    bg_color="black",fg_color="black", text_color="white", font=font_opiswiatru,
-                                    justify="left", anchor="w")
-                
-                
-        font_pogoda = CTkFont("Weather Icons", size=28, weight="bold", slant="roman")
-        self.ikonapogody = CTkLabel(self, text=self.iconMap["01d"],
-                                    bg_color="black",fg_color="black", text_color="white", font=font_pogoda,
-                                    justify="left", anchor="w")
+        self.topframe = CTkFrame(master=self, bg_color="black",fg_color="black")
+        self.topframe.pack(side='top', fill='x', expand=True) 
+
+        self.ikonatemperatury = CTkLabel(self.topframe, text="\uf044\uf053",
+                                            bg_color="black",fg_color="black", text_color="white",
+                                            font=self.miniwebfont, justify="left", anchor="w")
+        self.ikonatemperatury.grid(row=0, column=0, padx=2, pady=0)
+
+        self.realtemperatura = CTkLabel(self.topframe, text="-",
+                                                    bg_color="black",fg_color="black", text_color="white",
+                                                    font=self.font_wielkosci, justify="left", anchor="w")
+        self.realtemperatura.grid(row=1, column=0, padx=2, pady=0)
+
+        self.feeltemperatura = CTkLabel(self.topframe, text="-",
+                                            bg_color="black",fg_color="black", text_color="white",
+                                            font=self.font_temperatura, justify="left", anchor="w")
+        self.feeltemperatura.grid(row=0, column=1, rowspan=2, padx=2, pady=0)
+
+        self.ikonapogody = CTkLabel(self.topframe, text=self.iconMap["10n"],
+                            bg_color="black", fg_color="black", text_color="white", font=self.webfont,
+                            justify="left", anchor="w")
+        self.ikonapogody.grid(row=0, column=2, padx=5, pady=0)
         
+        self.wielkoscDeszczu = CTkLabel(self.topframe, text='0 mm',
+                                            bg_color="black",fg_color="black", text_color="white", font=self.font_wielkosci,
+                                            justify="left", anchor="w")
+        self.wielkoscDeszczu.grid(row=1, column=2, padx=2, pady=0)
 
-        font_opisPogody = CTkFont("Roboto Slab", size=24, weight="bold", slant="roman")
+        
+        #self.font_wiatru = CTkFont("Weather Icons", size=32, weight="normal", slant="roman")
+        self.ikonawiatru = CTkLabel(self.topframe, text=self._toBeaufortChar(self._ms2Beaufort(0)),
+                                    bg_color="black",fg_color="black", text_color="white", font=self.webfont,
+                                    justify="right", anchor="se")
+        self.ikonawiatru.grid(row=0, column=3, padx=2, sticky='s')
+
+        self.kierunekWiatru = CTkLabel(self.topframe, text=self._deg2Short(0),
+                                    bg_color="black",fg_color="black", text_color="white", font=self.webfont,
+                                    justify="left", anchor="sw")
+        self.kierunekWiatru.grid(row=0, column=4, padx=2, sticky='s')
+
+    
+        self.predkoscWiatru = CTkLabel(self.topframe, text='0',
+                                            bg_color="black",fg_color="black", text_color="white", font=self.font_wielkosci,
+                                            justify="left", anchor="nw")
+        self.predkoscWiatru.grid(row=1, column=3, columnspan=2, sticky='n')
+
+        self.ikonaWilgotnosci = CTkLabel(self.topframe, text="\uf07a",
+                                    bg_color="black",fg_color="black", text_color="white", font=self.miniwebfont,
+                                    justify="right", anchor="se")
+        self.ikonaWilgotnosci.grid(row=0, column=5, padx=5, sticky='s')
+
+    
+        self.wilgotnosc = CTkLabel(self.topframe, text='0%%',
+                                            bg_color="black",fg_color="black", text_color="white", font=self.font_wielkosci,
+                                            justify="right", anchor="ne")
+        self.wilgotnosc.grid(row=1, column=5, padx=5, sticky='n')
+
+
+        font_opisPogody = CTkFont("Roboto Slab", size=32, weight="bold", slant="roman")
         self.opisPogody = CTkLabel(self, text="",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_opisPogody,
-                                    justify="left", anchor="w", wraplength=270)
+                                bg_color="black",fg_color="black", text_color="white", font=font_opisPogody,
+                                justify="left", anchor="w", wraplength=self._wwidth - 10)
+        self.opisPogody.pack(side='top', fill='x', expand=True) 
+
+        #self.opisdeszczusniegu = CTkLabel(self, text="Brak deszczu i śniegu",
+        #                        bg_color="black",fg_color="black", text_color="silver", font=font_opisPogody,
+        #                        justify="left", anchor="w", wraplength=self._wwidth - 10)
+        #self.opisdeszczusniegu.pack(side='top', fill='x', expand=True) 
 
         
-        
-        self.font_deszczsnieg = CTkFont("Roboto Condensed", size=16, weight="bold", slant="roman")
-        self.deszczsnieg = CTkLabel(self, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=self.font_deszczsnieg,
-                                    justify="left", anchor="w")
-        
-        self.opisdeszczsnieg = CTkLabel(self, text="",
-                                    bg_color="black",fg_color="black", text_color="white", font=self.font_deszczsnieg,
-                                    justify="left", anchor="s")
-        
-        self.font_e_deszczsnieg = CTkFont("Roboto Condensed", size=10, weight="normal", slant="roman")
-        self.etdeszczsnieg = CTkLabel(self, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=self.font_e_deszczsnieg,
-                                    justify="left", anchor="s")
-        
-        self.w_deszczsnieg = max(self.font_deszczsnieg.measure("0"), self.font_e_deszczsnieg.measure("-")) + 5
+        #self.opiswiatru = CTkLabel(self, text=self._toDescrSilaWiatru(0),
+        #                            bg_color="black",fg_color="black", text_color="white", font=font_opisPogody,
+        #                            justify="left", anchor="w", wraplength=self._wwidth - 10)
+        #self.opiswiatru.pack(side='top', fill='x', expand=True) 
 
-        self.font_temperatura = CTkFont("RobotoBlack", size=36, weight="bold", slant="roman")
-        self.temperatura = CTkLabel(self, text="0.0\u00B0C",
-                                    bg_color="black",fg_color="black", text_color="white", font=self.font_temperatura,
-                                    justify="left", anchor="w")
-        
-        self.font_e_feeltemp = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        #self.e_feeltemp = CTkLabel(self, text="Temperatura odczuwalna",
-        #                            bg_color="black",fg_color="black", text_color="white", font=self.font_e_feeltemp,
-        #                            justify="left", anchor="n")
-        
-        self.frame = CTkFrame(master=self, width=self.wwidth, bg_color="black",fg_color="black")
-        self.frame.grid_propagate(False)
+        self.frame = CTkFrame(master=self, bg_color="black",fg_color="black")
+        self.frame.pack(side='top', fill='x', expand=True) 
 
         font_etWidocznosc = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.etWidocznosc = CTkLabel(self.frame, text="Widoczność",
+        self.etWidocznosc = CTkLabel(self.frame, text="Widoczność: ",
                                     bg_color="black",fg_color="black", text_color="white", font=font_etWidocznosc,
-                                    justify="left", anchor="w")
-        self.etWidocznosc.grid(row=0, column=0)
+                                            justify="left", anchor="w")
+        self.etWidocznosc.pack(side='left')
 
         font_widocznosc = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
         self.widocznosc = CTkLabel(self.frame, text=" 0 km",
                                     bg_color="black",fg_color="black", text_color="white", font=font_widocznosc,
                                     justify="left", anchor="w")
-        self.widocznosc.grid(row=1, column=0)
-
-        font_etWilgotnosc = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.etWilgotnosc = CTkLabel(self.frame, text="Wilgotność",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etWilgotnosc,
-                                    justify="left", anchor="w")
-        self.etWilgotnosc.grid(row=2, column=2)
-
-        font_wilgotnosc = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
-        self.wilgotnosc = CTkLabel(self.frame, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_wilgotnosc,
-                                    justify="left", anchor="w")
-        self.wilgotnosc.grid(row=3, column=2)
-
-        font_etCisnienie = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.etCisnienie = CTkLabel(self.frame, text="Ciśnienie",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etCisnienie,
-                                    justify="left", anchor="w")
-        self.etCisnienie.grid(row=2, column=0)
+        self.widocznosc.pack(side='left')
 
         font_cisnienie = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
         self.cisnienie = CTkLabel(self.frame, text="-",
                                     bg_color="black",fg_color="black", text_color="white", font=font_cisnienie,
                                     justify="left", anchor="w")
-        self.cisnienie.grid(row=3, column=0)
+        self.cisnienie.pack(side='right')
 
-
-        font_etTempReal = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.etTempReal = CTkLabel(self.frame, text="Temperatura",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etTempReal,
+        self.etCisnienie = CTkLabel(self.frame, text="Ciśnienie :",
+                                    bg_color="black",fg_color="black", text_color="white", font=font_etWidocznosc,
                                     justify="left", anchor="w")
-        self.etTempReal.grid(row=0, column=2)
-
-        font_tempreal = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
-        self.tempreal = CTkLabel(self.frame, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_tempreal,
-                                    justify="left", anchor="w")
-        self.tempreal.grid(row=1, column=2)
-        
-        
-        font_etTempLaz = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.etTempLaz = CTkLabel(self.frame, text="Temp. Łazienka",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etTempLaz,
-                                    justify="left", anchor="w")
-        self.etTempLaz.grid(row=0, column=4)
-
-        font_templaz = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
-        self.templaz = CTkLabel(self.frame, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_templaz,
-                                    justify="left", anchor="w")
-        self.templaz.grid(row=1, column=4)
-        
-        space = CTkLabel(self.frame, text="",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_tempreal,
-                                    justify="left", anchor="w")
-        space2 = CTkLabel(self.frame, text="",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_tempreal,
-                                    justify="left", anchor="w")
-
-        font_etHumiLaz = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.etHumiLaz = CTkLabel(self.frame, text="Wilg. Łazienka",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etHumiLaz,
-                                    justify="left", anchor="w")
-        self.etHumiLaz.grid(row=2, column=4)
-
-        font_humilaz = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
-        self.humilaz = CTkLabel(self.frame, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_humilaz,
-                                    justify="left", anchor="w")
-        self.humilaz.grid(row=3, column=4)
-                                          
-        
-        space.grid(row=0, column=1, padx=5)
-        space2.grid(row=0, column=3, padx=5)
-
-        self.setPlace(True)
-
-
+        self.etCisnienie.pack(side='right')
 
         
+        self.frame2 = CTkFrame(master=self, bg_color="black",fg_color="black")
+        self.frame2.pack(side='top', fill='x', expand=True) 
 
-        #self.etWidocznosc.place(x=160, y=60)
-        
-        
-        #self.PogodaUi.tempIcon.setText("\uf055")
-        #self.PogodaUi.lazienkaTempIkona.setText("\uf055")
-        #self.PogodaUi.ikonaCisnienia.setText("\uf079")
-        #self.PogodaUi.ikonaWilgotnosci.setText("\uf07a")
-        #self.PogodaUi.lazienkaHumiIkona.setText("\uf07a")
-        #self.PogodaUi.ikonaWidocznosci.setText("\uf075")
+        self.etTempOutSide = CTkLabel(self.frame2, text="Temperatura: ",
+                                    bg_color="black",fg_color="black", text_color="white", font=font_etWidocznosc,
+                                    justify="left", anchor="w")
+        self.etTempOutSide.pack(side='left')
 
-        self.temperaturaLazienka = 0.0
-        self.wilgotnoscLazienka = 0
+        self.tempOutSide = CTkLabel(self.frame2, text="-",
+                                    bg_color="black",fg_color="black", text_color="white", font=font_widocznosc,
+                                    justify="left", anchor="w")
+        self.tempOutSide.pack(side='left')
+        self.val_tempOutSide = [None, 0]
+
+        self.humiOutSide = CTkLabel(self.frame2, text="-",
+                                    bg_color="black",fg_color="black", text_color="white", font=font_cisnienie,
+                                    justify="left", anchor="w")
+        self.humiOutSide.pack(side='right')
+        self.val_humiOutSide = [None, 0]
+
+        self.etWilgotnosc = CTkLabel(self.frame2, text="Wilgotność :",
+                                    bg_color="black",fg_color="black", text_color="white", font=font_etWidocznosc,
+                                    justify="left", anchor="w")
+        self.etWilgotnosc.pack(side='right')
+
+        
+        self.frameTiH = CTkFrame(master=self, width=self._wwidth, 
+                                 bg_color="black", fg_color="black")
+        self.frameTiH.pack(side='left', fill='x', expand=True)
+
+        self.et_tih = CTkFont("Weather Icons", size=20, weight="normal", slant="roman")
+
+        self.etTemperatura1 = CTkLabel(self.frameTiH, text="\uf055",
+                                       bg_color="black",fg_color="black", text_color="white", font=self.et_tih, 
+                                       justify="center", anchor="w")
+        self.etTemperatura1.grid(row=0, column=1, padx=5, pady=5)
+
+        self.etWilgotnosc1 = CTkLabel(self.frameTiH, text="\uf078",
+                                               bg_color="black",fg_color="black", text_color="white", font=self.et_tih, 
+                                               justify="center", anchor="w")
+        self.etWilgotnosc1.grid(row=0, column=2, padx=5, pady=5)
+
+        self.etTemperatura2 = CTkLabel(self.frameTiH, text="\uf055",
+                                               bg_color="black",fg_color="black", text_color="white", font=self.et_tih, 
+                                               justify="center", anchor="w")
+        self.etTemperatura2.grid(row=0, column=5, padx=5, pady=5)
+        
+        self.etWilgotnosc2 = CTkLabel(self.frameTiH, text="\uf078",
+                                                       bg_color="black",fg_color="black", text_color="white", font=self.et_tih, 
+                                                       justify="center", anchor="w")
+        self.etWilgotnosc2.grid(row=0, column=6, padx=5, pady=5)
+
+       
+        widget = []
+        font_EtTempHumi = CTkFont("Roboto Condensed", size=24, weight="normal", slant="roman")
+
+        self.tih_lazienka = [
+            CTkLabel(self.frameTiH, text="Łaz.",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="left", anchor="w"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            [None, None, 0]
+
+        ]
+        widget.append(self.tih_lazienka)
+
+        self.tih_kuchnia = (
+            CTkLabel(self.frameTiH, text="Kuch.",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="left", anchor="w"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            [None, None, 0]
+        )
+        widget.append(self.tih_kuchnia)
+
+        self.tih_wc = (
+            CTkLabel(self.frameTiH, text="WC",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="left", anchor="w"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+             [None, None, 0]
+        )
+        widget.append(self.tih_wc)
+        
+        self.tih_hol = (
+            CTkLabel(self.frameTiH, text="Hol",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="left", anchor="w"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+             [None, None, 0]
+        )
+        widget.append(self.tih_hol)
+
+        self.tih_salon = (
+            CTkLabel(self.frameTiH, text="Sal.",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="left", anchor="w"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            [None, None, 0]
+        )
+        widget.append(self.tih_salon)
+
+        self.tih_sypialnia = (
+            CTkLabel(self.frameTiH, text="Syp.",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="left", anchor="w"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            [None, None, 0]
+        )
+        widget.append(self.tih_sypialnia)
+
+        self.tih_pracownia = (
+            CTkLabel(self.frameTiH, text="Prac.",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="left", anchor="w"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            [None, None, 0]
+        )
+        widget.append(self.tih_pracownia)
+
+        self.tih_dzieci = (
+            CTkLabel(self.frameTiH, text="Dziec.",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="left", anchor="w"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            CTkLabel(self.frameTiH, text="-",
+                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                justify="right", anchor="e"),
+            [None, None, 0]
+        )
+        widget.append(self.tih_dzieci)
+
+        for w in widget:
+            if widget.index(w) < 4:
+                w[0].grid(row=widget.index(w)+1, column=0, padx=5, pady=5)
+                w[1].grid(row=widget.index(w)+1, column=1, padx=5, pady=5)
+                w[2].grid(row=widget.index(w)+1, column=2, padx=5, pady=5)
+            else:
+                w[0].grid(row=widget.index(w)-3, column=4, padx=5, pady=5)
+                w[1].grid(row=widget.index(w)-3, column=5, padx=5, pady=5)
+                w[2].grid(row=widget.index(w)-3, column=6, padx=5, pady=5)
+
+        
         
     def receiveNotfication(self, values):
         if  'lazienka_temp' in values:
-            self.temperaturaLazienka = values['lazienka_temp']
-            self.templaz.configure(text="%s\u00B0C" % self.temperaturaLazienka)
+            self.tih_lazienka[3][2] = 3600
+            self.tih_lazienka[3][0] = float(values['lazienka_temp'])
+            self.tih_lazienka[1].configure(text="%2.1f\u00B0C" % self.tih_lazienka[3][0])
+
         if  'lazienka_humi' in values:
-            self.wilgotnoscLazienka = values['lazienka_humi']
-            self.humilaz.configure(text="%s %%" % self.wilgotnoscLazienka)
+            self.tih_lazienka[3][2] = 3600
+            self.tih_lazienka[3][1] = float(values['lazienka_humi'])
+            self.tih_lazienka[2].configure(text="%2.1f %%" % self.tih_lazienka[3][1])
 
-    def setPlace(self, init=False):
-        if init:
-            self.ikonawiatru.place(x=0, y=0)
-            self.kierunekWiatru.place(x=32, y=0)
-            self.ikonapogody.place(x=0, y=36)
-            self.opisPogody.place(x=38, y=36)
-            self.deszczsnieg.place(x=0, y=78)
-            self.opisdeszczsnieg.place(x=0, y=105)
-            #self.w_odcztemp = self.font_e_feeltemp.measure("Temperatura odczuwalna")
-            #self.e_feeltemp.place(x=self.wwidth - self.w_odcztemp - 5, y=71)
-            self.frame.place(x=0, y=140)
-            self.frame.configure(height=self.wheight - 140)
-        
-        wtemp = self.font_temperatura.measure(self.temperatura.cget("text"))
-        self.temperatura.place(x=self.wwidth - wtemp - 5, y=95)
-            
-        wdeszcz = self.font_deszczsnieg.measure(self.deszczsnieg.cget("text"))
-        self.etdeszczsnieg.place(x=wdeszcz+3, y=78)
+        if  'kuchnia_temp' in values:
+            self.tih_kuchnia[3][2] = 3600
+            self.tih_kuchnia[3][0] = float(values['kuchnia_temp'])
+            self.tih_kuchnia[1].configure(text="%2.1f\u00B0C" % self.tih_kuchnia[3][0])
 
-        pxf = self.font_wiatru.measure(self.kierunekWiatru.cget("text"))
-        self.opiswiatru.place(x=25 + pxf, y=0)
+        if  'kuchnia_humi' in values:
+            self.tih_kuchnia[3][2] = 3600
+            self.tih_kuchnia[3][1] = float(values['kuchnia_humi'])
+            self.tih_kuchnia[2].configure(text="%2.1f %%" % self.tih_kuchnia[3][1])
 
-        #ftxt = self.font_wiatru.measure(self.kierunekWiatru.cget("text"))
-        #self.opiswiatru.place(x=35 + ftxt, y=0)
+        if  'sypialnia_temp' in values:
+            self.tih_sypialnia[3][2] = 3600
+            self.tih_sypialnia[3][0] = float(values['sypialnia_temp'])
+            self.tih_sypialnia[1].configure(text="%2.1f\u00B0C" % self.tih_sypialnia[3][0])
 
-        
-        
-    
+        if  'sypialnia_humi' in values:
+            self.tih_sypialnia[3][2] = 3600
+            self.tih_sypialnia[3][1] = float(values['sypialnia_humi'])
+            self.tih_sypialnia[2].configure(text="%2.1f %%" % self.tih_sypialnia[3][1])
+
+        if  'pracownia_temp' in values:
+            self.tih_pracownia[3][2] = 3600
+            self.tih_pracownia[3][0] = float(values['pracownia_temp'])
+            self.tih_pracownia[1].configure(text="%2.1f\u00B0C" % self.tih_pracownia[3][0])
+
+        if  'pracownia_humi' in values:
+            self.tih_pracownia[3][2] = 3600
+            self.tih_pracownia[3][1] = float(values['pracownia_humi'])
+            self.tih_pracownia[2].configure(text="%2.1f %%" % self.tih_pracownia[3][1])
+
+        if  'dzieci_temp' in values:
+            self.tih_dzieci[3][2] = 3600
+            self.tih_dzieci[3][0] = float(values['dzieci_temp'])
+            self.tih_dzieci[1].configure(text="%2.1f\u00B0C" % self.tih_dzieci[3][0])
+
+        if  'dzieci_humi' in values:
+            self.tih_dzieci[3][2] = 3600
+            self.tih_dzieci[3][1] = float(values['dzieci_humi'])
+            self.tih_dzieci[2].configure(text="%2.1f %%" % self.tih_dzieci[3][1])
+
+        if 'wc_temp' in values:
+            self.tih_wc[3][2] = 3600
+            self.tih_wc[3][0] = float(values['wc_temp'])
+            self.tih_wc[1].configure(text="%2.1f\u00B0C" % self.tih_wc[3][0])
+
+        if 'wc_humi' in values:
+            self.tih_wc[3][2] = 3600
+            self.tih_wc[3][1] = float(values['wc_humi'])
+            self.tih_wc[2].configure(text="%2.1f %%" % self.tih_wc[3][1])
+
+        if 'salon_temp' in values:
+            self.tih_salon[3][2] = 3600
+            self.tih_salon[3][0] = float(values['salon_temp'])
+            self.tih_salon[1].configure(text="%2.1f\u00B0C" % self.tih_salon[3][0])
+
+        if 'salon_humi' in values:  
+            self.tih_salon[3][2] = 3600
+            self.tih_salon[3][1] = float(values['salon_humi'])
+            self.tih_salon[2].configure(text="%2.1f %%" % self.tih_salon[3][1])
+
+        if 'hol_temp' in values:
+            self.tih_hol[3][2] = 3600
+            self.tih_hol[3][0] = float(values['hol_temp'])
+            self.tih_hol[1].configure(text="%2.1f\u00B0C" % self.tih_hol[3][0])
+
+        if 'hol_humi' in values:
+            self.tih_hol[3][2] = 3600
+            self.tih_hol[3][1] = float(values['hol_humi'])
+            self.tih_hol[2].configure(text="%2.1f %%" % self.tih_hol[3][1])
+
+        if 'outside_temp' in values:
+            self.val_tempOutSide[1] = 3600
+            self.val_tempOutSide[0] = float(values['outside_temp'])
+            self.tempOutSide.configure(text="%2.1f\u00B0C" % self.val_tempOutSide[0])
+
+        if 'outside_humi' in values:
+            self.val_humiOutSide[1] = 3600
+            self.val_humiOutSide[0] = float(values['outside_humi'])
+            self.humiOutSide.configure(text="%2.1f %%" % self.val_humiOutSide[0])
+
     def timeout(self, dt):
         hour = dt.hour
         min = dt.minute
         sec = dt.second
 
-        #self.PogodaUi.frameTemp2.setVisible(sec >= 15)
-        #self.PogodaUi.frameTempLaz.setVisible(sec < 15)
+        for w in [self.tih_lazienka, self.tih_kuchnia, self.tih_wc, self.tih_hol, self.tih_salon, self.tih_sypialnia, self.tih_pracownia, self.tih_dzieci]:
+            if w[3][2] == 0:
+                w[3][0] = None
+                w[3][1] = None
+                w[3][2] = -1
+                w[1].configure(text="-")
+                w[2].configure(text="-")
+            elif w[3][2] > 0:
+                w[3][2] -= 1
 
-        #il_sec = hour*3600 + 60*min + sec
-        #if il_sec < 30:
-        #   self.lastTime = None
-        #   return 
+        for w in [self.val_tempOutSide, self.val_humiOutSide]:
+            if w[1] == 0:
+                w[0] = None
+                w[1] = -1
+                if w == self.val_tempOutSide:
+                    self.tempOutSide.configure(text="-")
+                else:
+                    self.humiOutSide.configure(text="-")
+            elif w[1] > 0:
+                w[1] -= 1
 
         if self.lastTime is None:
             self.lastTime = dt
@@ -301,9 +503,10 @@ class Pogoda(LFrame):
             txtW = self._deg2Cardinal(wind_deg)
             #ftxt = self.font_wiatru.measure(txtW)
             vals["kierunekwiatru"] = txtW
+            self.predkoscWiatru.configure(text="%2.1f m/s" % wind_speed)
 
-            self.kierunekWiatru.configure(text=txtW)
-            self.opiswiatru.configure(text=self._toDescrSilaWiatru(wind_speed))
+            self.kierunekWiatru.configure(text=self._deg2Short(wind_deg))
+            #self.opiswiatru.configure(text=self._toDescrSilaWiatru(wind_speed) + ' ' + txtW)
             vals['opiswiatru'] = self.B2Description(self._ms2Beaufort(wind_speed))
             #self.opiswiatru.place(x=28 + ftxt, y=0)
 
@@ -314,9 +517,80 @@ class Pogoda(LFrame):
             vals["temp"] = temp
             vals["feels_like"] = feels_like
 
-            self.temperatura.configure(text="%.1f\u00B0C" % feels_like)
-            self.tempreal.configure(text="%.1f\u00B0C" % temp)
-            #self.PogodaUi.temperaturaOdczuwalna.setText("%.1f\u00B0C" % feels_like)
+            if feels_like > temp:
+                self.ikonatemperatury.configure(text="\uf058\uf053\uf03c")
+            elif feels_like < temp:
+                self.ikonatemperatury.configure(text="\uf044\uf053\uf03c")
+            else:
+                self.ikonatemperatury.configure(text="\uf053\uf03c")
+
+            self.feeltemperatura.configure(text="%.1f" % feels_like)
+
+            weather_icon = data_json["weather"][0]["icon"]
+            print(weather_icon)
+            print(ord(self.iconMap[weather_icon]))
+            self.ikonapogody.configure(text=self.iconMap[weather_icon])
+
+            snowrain_val = 0
+
+            text_unit = ''
+            if "snow" in data_json:
+                if "1h" in data_json["snow"]:
+                    snowrain_val = float(data_json["snow"]["1h"])
+                    text_val = "%s" % data_json["rain"]["1h"]
+                    text_unit = "mm/1h"
+                    text_opis = self._getSnowName(float(text_val))
+                    mqtt_vals["snow_1h"] = data_json["snow"]["1h"]
+                    vals["snow_1h"] = data_json["snow"]["1h"]
+                elif "3h" in data_json["snow"]:
+                    snowrain_val = float(data_json["snow"]["3h"])
+                    text_val = "%s" % data_json["rain"]["3h"]
+                    text_unit = "mm/3h"
+                    text_opis = self._getSnowName(float(text_val)/3)
+                    mqtt_vals["snow_3h"] = data_json["snow"]["3h"]
+                    vals["snow_3h"] = data_json["snow"]["3h"]
+                else:
+                    text_val = ""
+                    text_unit = ""
+                    text_opis = ""
+            elif "rain" in data_json:
+                if "1h" in data_json["rain"]:
+                    text_val = "%s" % data_json["rain"]["1h"]
+                    snowrain_val = float(data_json["rain"]["1h"])
+                    text_unit = "mm/h"
+                    text_opis = self._getRainName(float(text_val))
+                    mqtt_vals["rain_1h"] = data_json["rain"]["1h"]
+                    vals["rain_1h"] = data_json["rain"]["1h"]
+                elif "3h" in data_json["rain"]:
+                    text_val = "%s" % data_json["rain"]["3h"]
+                    snowrain_val = float(data_json["rain"]["3h"])
+                    text_unit = "mm/3h"
+                    text_opis = self._getRainName(float(text_val)/3)
+                    mqtt_vals["rain_3h"] = data_json["rain"]["3h"]
+                    vals["rain_3h"] = data_json["rain"]["3h"]
+                else:
+                    text_val = ""
+                    text_unit = ""
+                    text_opis = ""
+            else:
+                text_val = ""
+                text_unit = ""
+                text_opis = ""      
+                    
+            vals['deszczsnieg'] = text_val
+            vals['etdeszczsnieg'] = text_unit
+            vals['opisdeszczsnieg'] = text_opis
+
+            if snowrain_val > 0:
+                #self.opisdeszczusniegu.configure(text=text_opis+ " ( " + text_val + " " + text_unit + " )", text_color="white") 
+                self.wielkoscDeszczu.configure(text="%s %s" % (text_val, text_unit), text_color="white")
+            else:
+                #self.opisdeszczusniegu.configure(text="brak deszczu i śniegu", text_color="gray") 
+                self.wielkoscDeszczu.configure(text="0 mm", text_color="gray")
+                text_opis = "brak opadów"
+                    
+            weather_descr = data_json["weather"][0]["description"]
+            self.opisPogody.configure(text=weather_descr + ', ' + text_opis + ', ' + self._toDescrSilaWiatru2(wind_speed))
 
             pressure = data_json["main"]["pressure"]
             huminidity = data_json["main"]["humidity"]
@@ -326,85 +600,26 @@ class Pogoda(LFrame):
             vals["pressure"] = pressure
             vals["huminidity"] = huminidity
 
-            self.wilgotnosc.configure(text="%.0f%%" % huminidity)
+            vals["pressure"] = pressure
             self.cisnienie.configure(text="%.0f hPa" % pressure)
 
-            #weather_main = data_json["weather"][0]["main"]
-            weather_descr = data_json["weather"][0]["description"]
-            weather_icon = data_json["weather"][0]["icon"]
-            self.ikonapogody.configure(text=self.iconMap[weather_icon])
-            self.opisPogody.configure(text=weather_descr)
-            vals['ikonapogody']= self.iconMap[weather_icon]
-            vals['opisPogody']= weather_descr
             vals['widocznosc']= data_json["visibility"]
             self.widocznosc.configure(text="%d m" % data_json["visibility"])
-            #self.clouds.setText("%d%%" % data_json["clouds"]["all"])
-            text_val = ""
-            text_unit = ""
-            text_opis = ""
-            
-            if "snow" in data_json:
-                if "1h" in data_json["snow"]:
-                    text_val = "%s" % data_json["snow"]["1h"]
-                    text_unit = "mm/h"
-                    text_opis = self._getSnowName(float(text_val))
-                    mqtt_vals["snow_1h"] = data_json["snow"]["1h"]
-                    vals["snow_1h"] = data_json["snow"]["1h"]
-                elif "3h" in data_json["snow"]:
-                    text_val = "%s" % data_json["snow"]["3h"]
-                    text_unit = "mm/3h"
-                    text_opis = self._getSnowName(float(text_val)/3)
-                    mqtt_vals["snow_3h"] = data_json["snow"]["3h"]
-                    vals["snow_3h"] = data_json["snow"]["3h"]
-            elif "rain" in data_json:
-                if "1h" in data_json["rain"]:
-                    text_val = "%s" % data_json["rain"]["1h"]
-                    text_unit = "mm/h"
-                    text_opis = self._getRainName(float(text_val))
-                    mqtt_vals["rain_1h"] = data_json["rain"]["1h"]
-                    vals["rain_1h"] = data_json["rain"]["1h"]
-                elif "3h" in data_json["rain"]:
-                    text_val = "%s" % data_json["rain"]["3h"]
-                    text_unit = "mm/h"
-                    text_opis = self._getRainName(float(text_val)/3)
-                    mqtt_vals["rain_3h"] = data_json["rain"]["3h"]
-                    vals["rain_3h"] = data_json["rain"]["3h"]
-            elif "clouds" in data_json:
-                text_val = "%s" % data_json["clouds"]["all"]
-                text_unit = "%"
-                mqtt_vals["clouds"] = data_json["clouds"]["all"]
-                vals["clouds"] = data_json["clouds"]["all"]
-            else:
-                self.deszczsnieg.configure(text="")
-                self.etdeszczsnieg.configure(text="")
-                pass
-            vals['deszczsnieg'] = text_val
-            vals['etdeszczsnieg'] = text_unit
-            vals['opisdeszczsnieg'] = text_opis
-            self.deszczsnieg.configure(text=text_val)
-            self.etdeszczsnieg.configure(text=text_unit)
-            self.opisdeszczsnieg.configure(text=text_opis)
-            #self.w_deszczsnieg = max(self.font_deszczsnieg.measure(text_val), 
-            #                         self.font_e_deszczsnieg.measure(text_unit))
 
-            #self.e_feeltemp.place(x=self.w_deszczsnieg+10, y=75)
-            #self.temperatura.place(x=self.w_deszczsnieg+100, y=75)
-            self.setPlace()
-            self.frame.update()
+            #self.realtemperatura.configure(text="%.1f\u00B0C" % temp)
+            self.realtemperatura.configure(text="%.1f" % temp)
+            self.wilgotnosc.configure(text="%.0f%%" % huminidity)
 
+        
             vals["sunrise"] = self.sunrise.time()
             vals["sunset"] = self.sunset.time() 
-            #vals['minimum-temperature'] = data_json['main']['temp_min']
-            #vals['maximum-temperature'] = data_json['main']['temp_max']
-            #mqtt_vals['minimum-temperature'] = data_json['main']['temp_min']
-            #mqtt_vals['maximum-temperature'] = data_json['main']['temp_max']
-            #print(vals)
+
             self.sendNotification(vals)
-            #self.sendMqtt("lustro/pogoda", mqtt_vals)
+            self.sendMqtt("lustro/pogoda", mqtt_vals)
 
         #except:
         #    pass
-
+        
 
     def _ms2Beaufort(self, ms):
         kmh = ms * 60 * 60 / 1000
@@ -454,6 +669,40 @@ class Pogoda(LFrame):
         else :
             return "N"
 
+    def _deg2Short(self, deg):
+        if deg>11.25 and deg<=33.75 : 
+            return "\uf057" # "\uf05a" #NNE
+        elif deg > 33.75 and deg <= 56.25: 
+            return "\uf057" #"\uf05a" #NE
+        elif deg > 56.25 and deg <= 78.75 :
+            return "\uf057" #"\uf05a" #ENE
+        elif deg > 78.75 and deg <= 101.25 :
+            return "\uf059" #E
+        elif deg > 101.25 and deg <= 123.75 :
+            return "\uf088" #"\uf05d" #ESE
+        elif deg > 123.75 and deg <= 146.25 :
+            return "\uf088" #"\uf05d" #SE
+        elif deg > 146.25 and deg <= 168.75 :
+            return "\uf088" #"\uf05d" #SSE
+        elif deg > 168.75 and deg <= 191.25 :
+            return "\uf044" #"\uf060" #S
+        elif deg > 191.25 and deg <= 213.75 :
+            return "\uf043" #"\uf05e" #SSW
+        elif deg > 213.75 and deg <= 236.25 :
+            return "\uf043" #"\uf05e" #SW
+        elif deg > 236.25 and deg <= 258.75 :
+            return "\uf043" #"\uf05e" #WSW
+        elif deg > 258.75 and deg <= 281.25 :
+            return "\uf048" #"\uf05b" #W
+        elif deg > 281.25 and deg <= 303.75 :
+            return "\uf087" #"\uf05b" #WNW
+        elif deg > 303.75 and deg <= 326.25 :
+            return "\uf087" #"\uf05b" #NW
+        elif deg > 326.25 and deg <= 348.75 :
+            return "\uf087" #"\uf05b" #NNW
+        else :
+            return "\uf058" #"\uf05c" #N
+
     def _toBeaufortChar(self, b):
         if b == 0: return "\uF0B7"
         elif b == 1: return "\uF0B8"
@@ -486,11 +735,31 @@ class Pogoda(LFrame):
         elif b == 12: return "Huragan"
         return ""
 
+    def B2Description2(self, b):
+        if b == 0: return "brak wiatru"
+        elif b == 1: return "powiewy wiatru"
+        elif b == 2: return "słaby wiatr"
+        elif b == 3: return "łagodny wiatr"
+        elif b == 4: return "umiarkowany wiatr"
+        elif b == 5: return "dość silny wiatr"
+        elif b == 6: return "silny wiatr"
+        elif b == 7: return "bardzo silny wiatr"
+        elif b == 8: return "wicher"
+        elif b == 9: return "silny sztorm"
+        elif b == 10: return "bardzo silny sztorm"
+        elif b == 11: return "gwałtowny sztorm"
+        elif b == 12: return "huragan"
+        return ""
+
     def _toDescrSilaWiatru(self, ms):
         b = self._ms2Beaufort(ms)
         ret = "%.1f" % ms
         ret += "m/s (%s)" % self.B2Description(b)
         return ret
+
+    def _toDescrSilaWiatru2(self, ms):
+        return self.B2Description2(self._ms2Beaufort(ms))
+
 
     def _isDayTime(self, h, m):
         now = datetime.datetime.now()

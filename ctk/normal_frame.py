@@ -15,13 +15,13 @@ class TopBanner(CTkFrame):
         self.configure(width = 1080)
         
         pogoda = Pogoda(self, app)
-        pogoda.pack(anchor='nw', expand=True, pady=5, side='left')
+        pogoda.pack(anchor='nw', expand=True, side='left')
 
         calendar = CalendarDay(self, app)
-        calendar.pack(anchor='nw', expand=True, padx=5, side='left')
+        calendar.pack(anchor='nw', expand=True, side='left')
 
         aclock = AnalogClock(self, app)
-        aclock.pack(anchor='nw', expand=True, padx=5, side='left')
+        aclock.pack(anchor='nw', expand=True, side='left')
 
         
 

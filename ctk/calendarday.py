@@ -9,11 +9,11 @@ from customtkinter import CTk, CTkFrame
 from base_app import LustroApp
 #class CalendarDay(LFrame):
 class CalendarDay(LSimpleFrame):
-    _wwidth = 400
+    _wwidth = 330
     def __init__(self, master:CTkFrame, app:LustroApp, *args, **kwargs):
         #super().__init__(320, 5, 500, 600, master, app, *args, **kwargs)
         super().__init__(master, app, *args, **kwargs)
-        
+        self.configure(width=self._wwidth)
         #self.configure(fg_color = "lightgray")
         self.dayCalc = None
         self.days = ["Poniedziałek",
