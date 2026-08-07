@@ -5,6 +5,260 @@ import datetime
 from urllib.request import urlopen
 import json
 
+def ms2Beaufort(ms):
+    kmh = ms * 60 * 60 / 1000
+    speeds = [1, 7, 12, 20, 30, 40, 51, 63, 76, 88, 103, 117]
+    if kmh > 117:
+        return 12
+
+    if kmh < speeds[0]:
+        return 0
+
+    index = 0
+    while kmh > speeds[index]:
+        index += 1
+    return index-1
+
+def deg2Cardinal(deg):
+    if deg>11.25 and deg<=33.75 : 
+        return "NNE"
+    elif deg > 33.75 and deg <= 56.25: 
+        return "NE"
+    elif deg > 56.25 and deg <= 78.75 :
+        return "ENE"
+    elif deg > 78.75 and deg <= 101.25 :
+        return "E"
+    elif deg > 101.25 and deg <= 123.75 :
+        return "ESE"
+    elif deg > 123.75 and deg <= 146.25 :
+        return "SE"
+    elif deg > 146.25 and deg <= 168.75 :
+        return "SSE"
+    elif deg > 168.75 and deg <= 191.25 :
+        return "S"
+    elif deg > 191.25 and deg <= 213.75 :
+        return "SSW"
+    elif deg > 213.75 and deg <= 236.25 :
+        return "SW"
+    elif deg > 236.25 and deg <= 258.75 :
+        return "WSW"
+    elif deg > 258.75 and deg <= 281.25 :
+        return "W"
+    elif deg > 281.25 and deg <= 303.75 :
+        return "WNW"
+    elif deg > 303.75 and deg <= 326.25 :
+        return "NW"
+    elif deg > 326.25 and deg <= 348.75 :
+        return "NNW"
+    else :
+        return "N"
+
+def deg2Short(deg):
+    if deg>11.25 and deg<=33.75 : 
+        return "\uf057" # "\uf05a" #NNE
+    elif deg > 33.75 and deg <= 56.25: 
+        return "\uf057" #"\uf05a" #NE
+    elif deg > 56.25 and deg <= 78.75 :
+        return "\uf057" #"\uf05a" #ENE
+    elif deg > 78.75 and deg <= 101.25 :
+        return "\uf059" #E
+    elif deg > 101.25 and deg <= 123.75 :
+        return "\uf088" #"\uf05d" #ESE
+    elif deg > 123.75 and deg <= 146.25 :
+        return "\uf088" #"\uf05d" #SE
+    elif deg > 146.25 and deg <= 168.75 :
+        return "\uf088" #"\uf05d" #SSE
+    elif deg > 168.75 and deg <= 191.25 :
+        return "\uf044" #"\uf060" #S
+    elif deg > 191.25 and deg <= 213.75 :
+        return "\uf043" #"\uf05e" #SSW
+    elif deg > 213.75 and deg <= 236.25 :
+        return "\uf043" #"\uf05e" #SW
+    elif deg > 236.25 and deg <= 258.75 :
+        return "\uf043" #"\uf05e" #WSW
+    elif deg > 258.75 and deg <= 281.25 :
+        return "\uf048" #"\uf05b" #W
+    elif deg > 281.25 and deg <= 303.75 :
+        return "\uf087" #"\uf05b" #WNW
+    elif deg > 303.75 and deg <= 326.25 :
+        return "\uf087" #"\uf05b" #NW
+    elif deg > 326.25 and deg <= 348.75 :
+        return "\uf087" #"\uf05b" #NNW
+    else :
+        return "\uf058" #"\uf05c" #N
+
+def toBeaufortChar(b):
+    if b == 0: return "\uF0B7"
+    elif b == 1: return "\uF0B8"
+    elif b == 2: return "\uF0B9"
+    elif b == 3: return "\uF0BA"
+    elif b == 4: return "\uF0BB"
+    elif b == 5: return "\uF0BC"
+    elif b == 6: return "\uF0BD"
+    elif b == 7: return "\uF0BE"
+    elif b == 8: return "\uF0BF"
+    elif b == 9: return "\uF0C0"
+    elif b == 10: return "\uF0C1"
+    elif b == 11: return "\uF0C2"
+    elif b == 12: return "\uF0C3"
+    else: return "\uF050"
+
+def B2Description(b):
+    if b == 0: return "Cisza"
+    elif b == 1: return "Powiew"
+    elif b == 2: return "Słaby wiatr"
+    elif b == 3: return "Łagodny wiatr"
+    elif b == 4: return "Umiarkowany wiatr"
+    elif b == 5: return "Dość silny wiatr"
+    elif b == 6: return "Silny wiatr"
+    elif b == 7: return "Bardzo silny wiatr"
+    elif b == 8: return "Wicher"
+    elif b == 9: return "Silny sztorm"
+    elif b == 10: return "Bardzo silny sztorm"
+    elif b == 11: return "Gwałtowny sztorm"
+    elif b == 12: return "Huragan"
+    return ""
+
+def B2Description2(b):
+    if b == 0: return "brak wiatru"
+    elif b == 1: return "powiewy wiatru"
+    elif b == 2: return "słaby wiatr"
+    elif b == 3: return "łagodny wiatr"
+    elif b == 4: return "umiarkowany wiatr"
+    elif b == 5: return "dość silny wiatr"
+    elif b == 6: return "silny wiatr"
+    elif b == 7: return "bardzo silny wiatr"
+    elif b == 8: return "wicher"
+    elif b == 9: return "silny sztorm"
+    elif b == 10: return "bardzo silny sztorm"
+    elif b == 11: return "gwałtowny sztorm"
+    elif b == 12: return "huragan"
+    return ""
+
+def toDescrSilaWiatru(ms):
+    b = ms2Beaufort(ms)
+    ret = "%.1f" % ms
+    ret += "m/s (%s)" % B2Description(b)
+    return ret
+
+def toDescrSilaWiatru2(ms):
+    return B2Description2(ms2Beaufort(ms))
+
+"""
+def _isDayTime(self, h, m):
+    now = datetime.datetime.now()
+    act = datetime.datetime(now.year, now.month, now.day, h, m, 0)
+    if self.sunrise is None or self.sunset is None:
+        return False
+    
+    if act > self.sunrise and act < self.sunset:
+        return True
+    return False
+"""
+
+def getRainName(w:float):
+    if w == 0:
+        return ""
+    elif w <= 0.1:
+        return "mżawka"
+    elif w <= 2.5:
+        return "deszcz"
+    elif w <= 7.5:
+        return "duży deszcz"
+    elif w <= 20:
+        return "ulewa"
+    else:
+        return "nawałnica"
+    
+def getSnowName(w:float):
+    if w == 0:
+        return ""
+    elif w <= 1:
+        return "śnieg słaby"
+    elif w <= 4:
+        return "śnieg umiarkowany"
+    else:
+        return "śnieg silny"
+class TempHumi:
+    def __init__(self, frameTiH, font, title:str, key_th:str):
+
+        self.key_temp = '%s_temp' % key_th
+        self.key_humi = '%s_humi' % key_th
+        self.ltitle = CTkLabel(frameTiH, text=title, bg_color="black", fg_color="black", text_color="white", 
+                              font=font, justify="left", anchor="w")
+
+        self.ltemp = CTkLabel(frameTiH, text="-", bg_color="black", fg_color="black", text_color="white", 
+                              font=font, justify="right", anchor="e")
+
+        self.lhumi = CTkLabel(frameTiH, text="-", bg_color="black", fg_color="black", text_color="white", 
+                              font=font, justify="right", anchor="e")
+
+        self.lastUpdate = 0
+
+        self.temp = None
+        self.humi = None
+
+    def grid(self, row:int, column:int, padx:int, pady:int):
+        self.ltitle.grid(row=row, column=column, padx=padx, pady=pady)
+        self.ltemp.grid(row=row, column=column+1, padx=padx, pady=pady)
+        self.lhumi.grid(row=row, column=column+2, padx=padx, pady=pady)
+
+    def timeout(self):
+        self.lastUpdate -= 1
+        if self.lastUpdate < 0:
+            self.temp = None
+            self.humi = None
+            self.update()
+
+    def update(self):
+        if self.temp is None:
+            self.ltemp.configure(text='-')                
+        else:
+            self.ltemp.configure(text='%2.1f\u00B0C' % self.temp)
+
+        if self.humi is None:
+            self.lhumi.configure(text='-')                
+        else:
+            self.lhumi.configure(text='%2.1f\u00B0C' % self.temp)
+
+    def check_and_set(self, data:dict):
+        if self.key_temp in data or self.key_humi in data:
+            self.lastUpdate = 3600
+            if self.key_temp in data:
+                self.temp = float(data[self.key_temp])
+            if self.key_humi in data:
+                self.humi = float(data[self.key_humi])
+            self.update()
+class TempAll:
+    def __init__(self, frameTiH, font):
+        self.lst = []
+
+        self.lst.append(TempHumi(frameTiH, font, 'Laz.', 'lazienka'))
+        self.lst.append(TempHumi(frameTiH, font, 'Kuch.', 'kuchnia'))
+        self.lst.append(TempHumi(frameTiH, font, 'WC', 'wc'))
+        self.lst.append(TempHumi(frameTiH, font, 'Hol', 'hol'))
+        self.lst.append(TempHumi(frameTiH, font, 'Sal.', 'salon_1'))
+        self.lst.append(TempHumi(frameTiH, font, 'Syp.', 'sypialnia'))
+        self.lst.append(TempHumi(frameTiH, font, 'Prac.', 'pracownia'))
+        self.lst.append(TempHumi(frameTiH, font, 'Dziec.', 'dzieci'))
+
+    def grid(self, padx:int, pady:int):
+        for w in self.lst:
+            if self.lst.index(w) < 4:
+                w.grid(row=self.lst.index(w)+1, column=0, padx=padx, pady=pady)
+            else:
+                w.grid(row=self.lst.index(w)+3, column=4, padx=padx, pady=pady)
+                
+
+    def timeout(self):
+        for w in self.lst:
+            w.timeout()
+
+    def check_and_set(self, data:dict):
+        for w in self.lst:
+            w.check_and_set(data)
+
+
 
 class Pogoda(LSimpleFrame):
     _wwidth = 400
@@ -46,74 +300,88 @@ class Pogoda(LSimpleFrame):
         self.configure(width=self._wwidth)
 
         #Weather Icons
-        self.webfont = CTkFont("Weather Icons", size=48, weight="normal", slant="roman")
-        self.miniwebfont = CTkFont("Weather Icons", size=32, weight="normal", slant="roman")
-        self.ikona_wiatru_font= CTkFont("Weather Icons", size=48, weight="normal", slant="roman")
-        self.font_temperatura = CTkFont("Roboto Slab Regular", size=48, weight="bold", slant="roman")
-        self.font_wielkosci = CTkFont("Roboto Regular", size=20, weight="normal", slant="roman")
+        fwebicons = CTkFont("Weather Icons", size=48, weight="normal", slant="roman")
+        fminiwebicons = CTkFont("Weather Icons", size=32, weight="normal", slant="roman")
+        fhead_tih = CTkFont("Weather Icons", size=20, weight="normal", slant="roman")
+        #self.font_wiatru = CTkFont("Weather Icons", size=32, weight="normal", slant="roman")
 
+        ffeel_temperatura = CTkFont("Roboto Slab Regular", size=48, weight="bold", slant="roman")
+
+        fval_temp_rain_wind = CTkFont("Roboto Regular", size=20, weight="normal", slant="roman")
+        fopisPogody = CTkFont("Roboto Slab", size=32, weight="bold", slant="roman")
+
+        fEtWidocznosc = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
+        
+        f_widocz_cisnienie = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
+        f_tih_all = CTkFont("Roboto Condensed", size=24, weight="normal", slant="roman")
+
+        self.top_banner(fminiwebicons, fval_temp_rain_wind, ffeel_temperatura, fwebicons)
+        self.opis_pogoda_banner(fopisPogody)
+        self.widocznosc_cisnienie_banner(fEtWidocznosc, f_widocz_cisnienie)
+        self.outside_temp_humi_banner(fEtWidocznosc, f_widocz_cisnienie)
+        self.tih_banner(fhead_tih, f_tih_all)
+
+    def top_banner(self, fminiwebicons, fval_temp_rain_wind, ffeel_temperatura, fwebicons):
 
         self.topframe = CTkFrame(master=self, bg_color="black",fg_color="black")
         self.topframe.pack(side='top', fill='x', expand=True) 
 
         self.ikonatemperatury = CTkLabel(self.topframe, text="\uf044\uf053",
                                             bg_color="black",fg_color="black", text_color="white",
-                                            font=self.miniwebfont, justify="left", anchor="w")
+                                            font=fminiwebicons, justify="left", anchor="w")
         self.ikonatemperatury.grid(row=0, column=0, padx=2, pady=0)
 
         self.realtemperatura = CTkLabel(self.topframe, text="-",
                                                     bg_color="black",fg_color="black", text_color="white",
-                                                    font=self.font_wielkosci, justify="left", anchor="w")
+                                                    font=fval_temp_rain_wind, justify="left", anchor="w")
         self.realtemperatura.grid(row=1, column=0, padx=2, pady=0)
 
         self.feeltemperatura = CTkLabel(self.topframe, text="-",
                                             bg_color="black",fg_color="black", text_color="white",
-                                            font=self.font_temperatura, justify="left", anchor="w")
+                                            font=ffeel_temperatura, justify="left", anchor="w")
         self.feeltemperatura.grid(row=0, column=1, rowspan=2, padx=2, pady=0)
 
         self.ikonapogody = CTkLabel(self.topframe, text=self.iconMap["10n"],
-                            bg_color="black", fg_color="black", text_color="white", font=self.webfont,
+                            bg_color="black", fg_color="black", text_color="white", font=fwebicons,
                             justify="left", anchor="w")
         self.ikonapogody.grid(row=0, column=2, padx=5, pady=0)
         
         self.wielkoscDeszczu = CTkLabel(self.topframe, text='0 mm',
-                                            bg_color="black",fg_color="black", text_color="white", font=self.font_wielkosci,
+                                            bg_color="black",fg_color="black", text_color="white", font=fval_temp_rain_wind,
                                             justify="left", anchor="w")
         self.wielkoscDeszczu.grid(row=1, column=2, padx=2, pady=0)
 
-        
-        #self.font_wiatru = CTkFont("Weather Icons", size=32, weight="normal", slant="roman")
-        self.ikonawiatru = CTkLabel(self.topframe, text=self._toBeaufortChar(self._ms2Beaufort(0)),
-                                    bg_color="black",fg_color="black", text_color="white", font=self.webfont,
+        self.ikonawiatru = CTkLabel(self.topframe, text=toBeaufortChar(ms2Beaufort(0)),
+                                    bg_color="black",fg_color="black", text_color="white", font=fwebicons,
                                     justify="right", anchor="se")
         self.ikonawiatru.grid(row=0, column=3, padx=2, sticky='s')
 
-        self.kierunekWiatru = CTkLabel(self.topframe, text=self._deg2Short(0),
-                                    bg_color="black",fg_color="black", text_color="white", font=self.webfont,
+        self.kierunekWiatru = CTkLabel(self.topframe, text=deg2Short(0),
+                                    bg_color="black",fg_color="black", text_color="white", font=fwebicons,
                                     justify="left", anchor="sw")
         self.kierunekWiatru.grid(row=0, column=4, padx=2, sticky='s')
 
     
         self.predkoscWiatru = CTkLabel(self.topframe, text='0',
-                                            bg_color="black",fg_color="black", text_color="white", font=self.font_wielkosci,
+                                            bg_color="black",fg_color="black", text_color="white", font=fval_temp_rain_wind,
                                             justify="left", anchor="nw")
         self.predkoscWiatru.grid(row=1, column=3, columnspan=2, sticky='n')
 
         self.ikonaWilgotnosci = CTkLabel(self.topframe, text="\uf07a",
-                                    bg_color="black",fg_color="black", text_color="white", font=self.miniwebfont,
+                                    bg_color="black",fg_color="black", text_color="white", font=fminiwebicons,
                                     justify="right", anchor="se")
         self.ikonaWilgotnosci.grid(row=0, column=5, padx=5, sticky='s')
 
     
         self.wilgotnosc = CTkLabel(self.topframe, text='0%%',
-                                            bg_color="black",fg_color="black", text_color="white", font=self.font_wielkosci,
+                                            bg_color="black",fg_color="black", text_color="white", font=fval_temp_rain_wind,
                                             justify="right", anchor="ne")
         self.wilgotnosc.grid(row=1, column=5, padx=5, sticky='n')
 
-
-        font_opisPogody = CTkFont("Roboto Slab", size=32, weight="bold", slant="roman")
+    def opis_pogoda_banner(self, fopisPogody):
+        
         self.opisPogody = CTkLabel(self, text="",
-                                bg_color="black",fg_color="black", text_color="white", font=font_opisPogody,
+                                bg_color="black",fg_color="black", text_color="white", font=fopisPogody,
                                 justify="left", anchor="w", wraplength=self._wwidth - 10)
         self.opisPogody.pack(side='top', fill='x', expand=True) 
 
@@ -128,98 +396,99 @@ class Pogoda(LSimpleFrame):
         #                            justify="left", anchor="w", wraplength=self._wwidth - 10)
         #self.opiswiatru.pack(side='top', fill='x', expand=True) 
 
+    def widocznosc_cisnienie_banner(self, fEtWidocznosc, f_widocz_cisnienie):
         self.frame = CTkFrame(master=self, bg_color="black",fg_color="black")
         self.frame.pack(side='top', fill='x', expand=True) 
 
-        font_etWidocznosc = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.etWidocznosc = CTkLabel(self.frame, text="Widoczność: ",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etWidocznosc,
+        
+        etWidocznosc = CTkLabel(self.frame, text="Widoczność: ",
+                                    bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
                                             justify="left", anchor="w")
-        self.etWidocznosc.pack(side='left')
+        etWidocznosc.pack(side='left')
 
-        font_widocznosc = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
         self.widocznosc = CTkLabel(self.frame, text=" 0 km",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_widocznosc,
+                                    bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
                                     justify="left", anchor="w")
         self.widocznosc.pack(side='left')
 
-        font_cisnienie = CTkFont("Roboto Condensed", size=18, weight="bold", slant="roman")
         self.cisnienie = CTkLabel(self.frame, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_cisnienie,
+                                    bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
                                     justify="left", anchor="w")
         self.cisnienie.pack(side='right')
 
-        self.etCisnienie = CTkLabel(self.frame, text="Ciśnienie :",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etWidocznosc,
+        etCisnienie = CTkLabel(self.frame, text="Ciśnienie :",
+                                    bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
                                     justify="left", anchor="w")
-        self.etCisnienie.pack(side='right')
+        etCisnienie.pack(side='right')
 
+    def outside_temp_humi_banner(self, fEtWidocznosc, f_widocz_cisnienie):
         
         self.frame2 = CTkFrame(master=self, bg_color="black",fg_color="black")
         self.frame2.pack(side='top', fill='x', expand=True) 
 
-        self.etTempOutSide = CTkLabel(self.frame2, text="Temperatura: ",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etWidocznosc,
+        etTempOutSide = CTkLabel(self.frame2, text="Temperatura: ",
+                                    bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
                                     justify="left", anchor="w")
-        self.etTempOutSide.pack(side='left')
+        etTempOutSide.pack(side='left')
 
         self.tempOutSide = CTkLabel(self.frame2, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_widocznosc,
+                                    bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
                                     justify="left", anchor="w")
         self.tempOutSide.pack(side='left')
+
         self.val_tempOutSide = [None, 0]
 
         self.humiOutSide = CTkLabel(self.frame2, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_cisnienie,
+                                    bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
                                     justify="left", anchor="w")
         self.humiOutSide.pack(side='right')
         self.val_humiOutSide = [None, 0]
 
-        self.etWilgotnosc = CTkLabel(self.frame2, text="Wilgotność :",
-                                    bg_color="black",fg_color="black", text_color="white", font=font_etWidocznosc,
+        etWilgotnosc = CTkLabel(self.frame2, text="Wilgotność :",
+                                    bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
                                     justify="left", anchor="w")
-        self.etWilgotnosc.pack(side='right')
+        etWilgotnosc.pack(side='right')
 
-        
+    def tih_banner(self, fhead_tih, f_tih_all):        
         self.frameTiH = CTkFrame(master=self, width=self._wwidth, 
                                  bg_color="black", fg_color="black")
         self.frameTiH.pack(side='left', fill='x', expand=True)
 
-        self.et_tih = CTkFont("Weather Icons", size=20, weight="normal", slant="roman")
+        
 
         self.etTemperatura1 = CTkLabel(self.frameTiH, text="\uf055",
-                                       bg_color="black",fg_color="black", text_color="white", font=self.et_tih, 
+                                       bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
                                        justify="center", anchor="w")
         self.etTemperatura1.grid(row=0, column=1, padx=5, pady=5)
 
         self.etWilgotnosc1 = CTkLabel(self.frameTiH, text="\uf078",
-                                               bg_color="black",fg_color="black", text_color="white", font=self.et_tih, 
+                                               bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
                                                justify="center", anchor="w")
         self.etWilgotnosc1.grid(row=0, column=2, padx=5, pady=5)
 
         self.etTemperatura2 = CTkLabel(self.frameTiH, text="\uf055",
-                                               bg_color="black",fg_color="black", text_color="white", font=self.et_tih, 
+                                               bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
                                                justify="center", anchor="w")
         self.etTemperatura2.grid(row=0, column=5, padx=5, pady=5)
         
         self.etWilgotnosc2 = CTkLabel(self.frameTiH, text="\uf078",
-                                                       bg_color="black",fg_color="black", text_color="white", font=self.et_tih, 
+                                                       bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
                                                        justify="center", anchor="w")
         self.etWilgotnosc2.grid(row=0, column=6, padx=5, pady=5)
 
        
-        widget = []
-        font_EtTempHumi = CTkFont("Roboto Condensed", size=24, weight="normal", slant="roman")
+        self.temps = TempAll(self.frameTiH, f_tih_all)
+        
 
         self.tih_lazienka = [
             CTkLabel(self.frameTiH, text="Łaz.",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="left", anchor="w"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             [None, None, 0]
 
@@ -228,13 +497,13 @@ class Pogoda(LSimpleFrame):
 
         self.tih_kuchnia = (
             CTkLabel(self.frameTiH, text="Kuch.",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="left", anchor="w"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             [None, None, 0]
         )
@@ -242,13 +511,13 @@ class Pogoda(LSimpleFrame):
 
         self.tih_wc = (
             CTkLabel(self.frameTiH, text="WC",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="left", anchor="w"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
              [None, None, 0]
         )
@@ -256,13 +525,13 @@ class Pogoda(LSimpleFrame):
         
         self.tih_hol = (
             CTkLabel(self.frameTiH, text="Hol",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="left", anchor="w"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
              [None, None, 0]
         )
@@ -270,27 +539,29 @@ class Pogoda(LSimpleFrame):
 
         self.tih_salon = (
             CTkLabel(self.frameTiH, text="Sal.",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="left", anchor="w"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
-            [None, None, 0]
+            [None, None, 0],
+            [None, None, 0],
+            [None, None, 0],
         )
         widget.append(self.tih_salon)
 
         self.tih_sypialnia = (
             CTkLabel(self.frameTiH, text="Syp.",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="left", anchor="w"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             [None, None, 0]
         )
@@ -298,13 +569,13 @@ class Pogoda(LSimpleFrame):
 
         self.tih_pracownia = (
             CTkLabel(self.frameTiH, text="Prac.",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="left", anchor="w"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             [None, None, 0]
         )
@@ -312,13 +583,13 @@ class Pogoda(LSimpleFrame):
 
         self.tih_dzieci = (
             CTkLabel(self.frameTiH, text="Dziec.",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="left", anchor="w"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=font_EtTempHumi,
+                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
                 justify="right", anchor="e"),
             [None, None, 0]
         )
@@ -397,9 +668,14 @@ class Pogoda(LSimpleFrame):
             self.tih_wc[3][1] = float(values['wc_humi'])
             self.tih_wc[2].configure(text="%2.1f %%" % self.tih_wc[3][1])
 
-        if 'salon_temp' in values:
+        if 'salon_1_temp' in values:
+            self.tih_salon[4][2] = 3600
+            self.tih_salon[4][0] = float(values['salon_temp'])
             self.tih_salon[3][2] = 3600
-            self.tih_salon[3][0] = float(values['salon_temp'])
+            if self.tih_salon[5][0] is None:
+                self.tih_salon[3][0] = self.tih_salon[4][0]
+            else:
+                self.tih_salon[3][0] = (self.tih_salon[4][0]+
             self.tih_salon[1].configure(text="%2.1f\u00B0C" % self.tih_salon[3][0])
 
         if 'salon_humi' in values:  
@@ -621,179 +897,7 @@ class Pogoda(LSimpleFrame):
         #    pass
         
 
-    def _ms2Beaufort(self, ms):
-        kmh = ms * 60 * 60 / 1000
-        speeds = [1, 7, 12, 20, 30, 40, 51, 63, 76, 88, 103, 117]
-        if kmh > 117:
-            return 12
-
-        if kmh < speeds[0]:
-            return 0
-
-        index = 0
-        while kmh > speeds[index]:
-            index += 1
-        return index-1
-
-    def _deg2Cardinal(self, deg):
-        if deg>11.25 and deg<=33.75 : 
-            return "NNE"
-        elif deg > 33.75 and deg <= 56.25: 
-            return "NE"
-        elif deg > 56.25 and deg <= 78.75 :
-            return "ENE"
-        elif deg > 78.75 and deg <= 101.25 :
-            return "E"
-        elif deg > 101.25 and deg <= 123.75 :
-            return "ESE"
-        elif deg > 123.75 and deg <= 146.25 :
-            return "SE"
-        elif deg > 146.25 and deg <= 168.75 :
-            return "SSE"
-        elif deg > 168.75 and deg <= 191.25 :
-            return "S"
-        elif deg > 191.25 and deg <= 213.75 :
-            return "SSW"
-        elif deg > 213.75 and deg <= 236.25 :
-            return "SW"
-        elif deg > 236.25 and deg <= 258.75 :
-            return "WSW"
-        elif deg > 258.75 and deg <= 281.25 :
-            return "W"
-        elif deg > 281.25 and deg <= 303.75 :
-            return "WNW"
-        elif deg > 303.75 and deg <= 326.25 :
-            return "NW"
-        elif deg > 326.25 and deg <= 348.75 :
-            return "NNW"
-        else :
-            return "N"
-
-    def _deg2Short(self, deg):
-        if deg>11.25 and deg<=33.75 : 
-            return "\uf057" # "\uf05a" #NNE
-        elif deg > 33.75 and deg <= 56.25: 
-            return "\uf057" #"\uf05a" #NE
-        elif deg > 56.25 and deg <= 78.75 :
-            return "\uf057" #"\uf05a" #ENE
-        elif deg > 78.75 and deg <= 101.25 :
-            return "\uf059" #E
-        elif deg > 101.25 and deg <= 123.75 :
-            return "\uf088" #"\uf05d" #ESE
-        elif deg > 123.75 and deg <= 146.25 :
-            return "\uf088" #"\uf05d" #SE
-        elif deg > 146.25 and deg <= 168.75 :
-            return "\uf088" #"\uf05d" #SSE
-        elif deg > 168.75 and deg <= 191.25 :
-            return "\uf044" #"\uf060" #S
-        elif deg > 191.25 and deg <= 213.75 :
-            return "\uf043" #"\uf05e" #SSW
-        elif deg > 213.75 and deg <= 236.25 :
-            return "\uf043" #"\uf05e" #SW
-        elif deg > 236.25 and deg <= 258.75 :
-            return "\uf043" #"\uf05e" #WSW
-        elif deg > 258.75 and deg <= 281.25 :
-            return "\uf048" #"\uf05b" #W
-        elif deg > 281.25 and deg <= 303.75 :
-            return "\uf087" #"\uf05b" #WNW
-        elif deg > 303.75 and deg <= 326.25 :
-            return "\uf087" #"\uf05b" #NW
-        elif deg > 326.25 and deg <= 348.75 :
-            return "\uf087" #"\uf05b" #NNW
-        else :
-            return "\uf058" #"\uf05c" #N
-
-    def _toBeaufortChar(self, b):
-        if b == 0: return "\uF0B7"
-        elif b == 1: return "\uF0B8"
-        elif b == 2: return "\uF0B9"
-        elif b == 3: return "\uF0BA"
-        elif b == 4: return "\uF0BB"
-        elif b == 5: return "\uF0BC"
-        elif b == 6: return "\uF0BD"
-        elif b == 7: return "\uF0BE"
-        elif b == 8: return "\uF0BF"
-        elif b == 9: return "\uF0C0"
-        elif b == 10: return "\uF0C1"
-        elif b == 11: return "\uF0C2"
-        elif b == 12: return "\uF0C3"
-        else: return "\uF050"
     
-    def B2Description(self, b):
-        if b == 0: return "Cisza"
-        elif b == 1: return "Powiew"
-        elif b == 2: return "Słaby wiatr"
-        elif b == 3: return "Łagodny wiatr"
-        elif b == 4: return "Umiarkowany wiatr"
-        elif b == 5: return "Dość silny wiatr"
-        elif b == 6: return "Silny wiatr"
-        elif b == 7: return "Bardzo silny wiatr"
-        elif b == 8: return "Wicher"
-        elif b == 9: return "Silny sztorm"
-        elif b == 10: return "Bardzo silny sztorm"
-        elif b == 11: return "Gwałtowny sztorm"
-        elif b == 12: return "Huragan"
-        return ""
-
-    def B2Description2(self, b):
-        if b == 0: return "brak wiatru"
-        elif b == 1: return "powiewy wiatru"
-        elif b == 2: return "słaby wiatr"
-        elif b == 3: return "łagodny wiatr"
-        elif b == 4: return "umiarkowany wiatr"
-        elif b == 5: return "dość silny wiatr"
-        elif b == 6: return "silny wiatr"
-        elif b == 7: return "bardzo silny wiatr"
-        elif b == 8: return "wicher"
-        elif b == 9: return "silny sztorm"
-        elif b == 10: return "bardzo silny sztorm"
-        elif b == 11: return "gwałtowny sztorm"
-        elif b == 12: return "huragan"
-        return ""
-
-    def _toDescrSilaWiatru(self, ms):
-        b = self._ms2Beaufort(ms)
-        ret = "%.1f" % ms
-        ret += "m/s (%s)" % self.B2Description(b)
-        return ret
-
-    def _toDescrSilaWiatru2(self, ms):
-        return self.B2Description2(self._ms2Beaufort(ms))
-
-
-    def _isDayTime(self, h, m):
-        now = datetime.datetime.now()
-        act = datetime.datetime(now.year, now.month, now.day, h, m, 0)
-        if self.sunrise is None or self.sunset is None:
-            return False
-        
-        if act > self.sunrise and act < self.sunset:
-            return True
-        return False
-    
-    def _getRainName(self, w:float):
-        if w == 0:
-            return ""
-        elif w <= 0.1:
-            return "mżawka"
-        elif w <= 2.5:
-            return "deszcz"
-        elif w <= 7.5:
-            return "duży deszcz"
-        elif w <= 20:
-            return "ulewa"
-        else:
-            return "nawałnica"
-        
-    def _getSnowName(self, w:float):
-        if w == 0:
-            return ""
-        elif w <= 1:
-            return "śnieg słaby"
-        elif w <= 4:
-            return "śnieg umiarkowany"
-        else:
-            return "śnieg silny"
 
     def __getTimeRemaing(self, h, m):
         if m < 0:
