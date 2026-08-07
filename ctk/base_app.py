@@ -112,9 +112,11 @@ class LustroApp(CTk):
         return frame
 
     def sendNotification(self, dictValue):
+        print("sendNotification", dictValue)
         self.after(0, self._sendNotification, dictValue)    
     
     def _sendNotification(self, valueDict):
+        print("_sendNotification", valueDict, len(self.plgs))
         for p in self.plgs:
             p.receiveNotfication(valueDict)
 
@@ -154,4 +156,5 @@ class LustroApp(CTk):
             sys.exit(0)
 
     def receiveMqttMsg(self, topic, msg):
-        pass
+        print("receiveMqttMsg", topic, msg)
+        self.sendNotification(msg)
