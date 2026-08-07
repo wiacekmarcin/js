@@ -2,7 +2,7 @@ import threading, time, sys
 import tkinter as tk
 from customtkinter import CTk, CTkFrame
 import datetime
-
+from mqtt_client import PahoMqttWriter
 
 
 class TimeoutClass(threading.Thread):
@@ -88,6 +88,8 @@ class LustroApp(CTk):
         self.bind("<Escape>", lambda e: e.widget.quit())
         self.plgs = []
 
+
+        self.mqtt = PahoMqttWriter(self.receiveMqttMsg)
         self.after(1000, self.startTimer)
 
     def startTimer(self):
@@ -120,9 +122,7 @@ class LustroApp(CTk):
         self.after(0, self._sendMqtt, topic, valueDict)
 
     def _sendMqtt(self, topic, valueDict):
-        #for p in self.plgs:
-        #    p.receiveMqtt(topic, valueDict)
-        pass
+        self.mqtt.sendMqtt(topic, valueDict)
 
     def registerPlugin(self, plg):
         self.plgs.append(plg)
@@ -152,3 +152,6 @@ class LustroApp(CTk):
             print("ctrl-c")
             self.t1sec.stopTimer()
             sys.exit(0)
+
+    def receiveMqttMsg(self, topic, msg):
+        pass
