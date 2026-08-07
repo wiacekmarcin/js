@@ -214,12 +214,12 @@ class TempHumi:
         if self.temp is None:
             self.ltemp.configure(text='-')                
         else:
-            self.ltemp.configure(text='%2.1f\u00B0C' % self.temp)
+            self.ltemp.configure(text='%2.1f' % self.temp)
 
         if self.humi is None:
             self.lhumi.configure(text='-')                
         else:
-            self.lhumi.configure(text='%2.1f\u00B0C' % self.temp)
+            self.lhumi.configure(text='%2.0f' % self.humi)
 
     def check_and_set(self, data:dict):
         if self.key_temp in data or self.key_humi in data:
@@ -247,7 +247,7 @@ class TempAll:
             if self.lst.index(w) < 4:
                 w.grid(row=self.lst.index(w)+1, column=0, padx=padx, pady=pady)
             else:
-                w.grid(row=self.lst.index(w)+3, column=4, padx=padx, pady=pady)
+                w.grid(row=self.lst.index(w)-3, column=4, padx=padx, pady=pady)
                 
 
     def timeout(self):
@@ -367,7 +367,7 @@ class Pogoda(LSimpleFrame):
                                             justify="left", anchor="nw")
         self.predkoscWiatru.grid(row=1, column=3, columnspan=2, sticky='n')
 
-        self.ikonaWilgotnosci = CTkLabel(self.topframe, text="\uf07a",
+        self.ikonaWilgotnosci = CTkLabel(self.topframe, text="\uf078",
                                     bg_color="black",fg_color="black", text_color="white", font=fminiwebicons,
                                     justify="right", anchor="se")
         self.ikonaWilgotnosci.grid(row=0, column=5, padx=5, sticky='s')
@@ -391,7 +391,7 @@ class Pogoda(LSimpleFrame):
         #self.opisdeszczusniegu.pack(side='top', fill='x', expand=True) 
 
         
-        #self.opiswiatru = CTkLabel(self, text=self._toDescrSilaWiatru(0),
+        #self.opiswiatru = CTkLabel(self, text=toDescrSilaWiatru(0),
         #                            bg_color="black",fg_color="black", text_color="white", font=font_opisPogody,
         #                            justify="left", anchor="w", wraplength=self._wwidth - 10)
         #self.opiswiatru.pack(side='top', fill='x', expand=True) 
@@ -456,278 +456,50 @@ class Pogoda(LSimpleFrame):
 
         
 
-        self.etTemperatura1 = CTkLabel(self.frameTiH, text="\uf055",
+        self.etTemperatura1 = CTkLabel(self.frameTiH, text="\uf055\uf03c",
                                        bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
                                        justify="center", anchor="w")
         self.etTemperatura1.grid(row=0, column=1, padx=5, pady=5)
 
-        self.etWilgotnosc1 = CTkLabel(self.frameTiH, text="\uf078",
+        self.etWilgotnosc1 = CTkLabel(self.frameTiH, text="\uf07a",
                                                bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
                                                justify="center", anchor="w")
         self.etWilgotnosc1.grid(row=0, column=2, padx=5, pady=5)
 
-        self.etTemperatura2 = CTkLabel(self.frameTiH, text="\uf055",
+        self.etTemperatura2 = CTkLabel(self.frameTiH, text="\uf055\uf03c",
                                                bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
                                                justify="center", anchor="w")
         self.etTemperatura2.grid(row=0, column=5, padx=5, pady=5)
         
-        self.etWilgotnosc2 = CTkLabel(self.frameTiH, text="\uf078",
+        self.etWilgotnosc2 = CTkLabel(self.frameTiH, text="\uf07a",
                                                        bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
                                                        justify="center", anchor="w")
         self.etWilgotnosc2.grid(row=0, column=6, padx=5, pady=5)
 
        
         self.temps = TempAll(self.frameTiH, f_tih_all)
-        
-
-        self.tih_lazienka = [
-            CTkLabel(self.frameTiH, text="Łaz.",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="left", anchor="w"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            [None, None, 0]
-
-        ]
-        widget.append(self.tih_lazienka)
-
-        self.tih_kuchnia = (
-            CTkLabel(self.frameTiH, text="Kuch.",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="left", anchor="w"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            [None, None, 0]
-        )
-        widget.append(self.tih_kuchnia)
-
-        self.tih_wc = (
-            CTkLabel(self.frameTiH, text="WC",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="left", anchor="w"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-             [None, None, 0]
-        )
-        widget.append(self.tih_wc)
-        
-        self.tih_hol = (
-            CTkLabel(self.frameTiH, text="Hol",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="left", anchor="w"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-             [None, None, 0]
-        )
-        widget.append(self.tih_hol)
-
-        self.tih_salon = (
-            CTkLabel(self.frameTiH, text="Sal.",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="left", anchor="w"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            [None, None, 0],
-            [None, None, 0],
-            [None, None, 0],
-        )
-        widget.append(self.tih_salon)
-
-        self.tih_sypialnia = (
-            CTkLabel(self.frameTiH, text="Syp.",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="left", anchor="w"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            [None, None, 0]
-        )
-        widget.append(self.tih_sypialnia)
-
-        self.tih_pracownia = (
-            CTkLabel(self.frameTiH, text="Prac.",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="left", anchor="w"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            [None, None, 0]
-        )
-        widget.append(self.tih_pracownia)
-
-        self.tih_dzieci = (
-            CTkLabel(self.frameTiH, text="Dziec.",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="left", anchor="w"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            CTkLabel(self.frameTiH, text="-",
-                bg_color="black",fg_color="black", text_color="white", font=f_tih_all,
-                justify="right", anchor="e"),
-            [None, None, 0]
-        )
-        widget.append(self.tih_dzieci)
-
-        for w in widget:
-            if widget.index(w) < 4:
-                w[0].grid(row=widget.index(w)+1, column=0, padx=5, pady=5)
-                w[1].grid(row=widget.index(w)+1, column=1, padx=5, pady=5)
-                w[2].grid(row=widget.index(w)+1, column=2, padx=5, pady=5)
-            else:
-                w[0].grid(row=widget.index(w)-3, column=4, padx=5, pady=5)
-                w[1].grid(row=widget.index(w)-3, column=5, padx=5, pady=5)
-                w[2].grid(row=widget.index(w)-3, column=6, padx=5, pady=5)
-
+        self.temps.grid(5, 0)
         
         
     def receiveNotfication(self, values):
-        if  'lazienka_temp' in values:
-            self.tih_lazienka[3][2] = 3600
-            self.tih_lazienka[3][0] = float(values['lazienka_temp'])
-            self.tih_lazienka[1].configure(text="%2.1f\u00B0C" % self.tih_lazienka[3][0])
+        print("ok, receiveNotfication.pogoda", values)
+        self.temps.check_and_set(values)        
 
-        if  'lazienka_humi' in values:
-            self.tih_lazienka[3][2] = 3600
-            self.tih_lazienka[3][1] = float(values['lazienka_humi'])
-            self.tih_lazienka[2].configure(text="%2.1f %%" % self.tih_lazienka[3][1])
+        if 'outside_2_temp' in values:
+            pass
 
-        if  'kuchnia_temp' in values:
-            self.tih_kuchnia[3][2] = 3600
-            self.tih_kuchnia[3][0] = float(values['kuchnia_temp'])
-            self.tih_kuchnia[1].configure(text="%2.1f\u00B0C" % self.tih_kuchnia[3][0])
+        if 'outside_1_temp' in values:
+            pass
 
-        if  'kuchnia_humi' in values:
-            self.tih_kuchnia[3][2] = 3600
-            self.tih_kuchnia[3][1] = float(values['kuchnia_humi'])
-            self.tih_kuchnia[2].configure(text="%2.1f %%" % self.tih_kuchnia[3][1])
-
-        if  'sypialnia_temp' in values:
-            self.tih_sypialnia[3][2] = 3600
-            self.tih_sypialnia[3][0] = float(values['sypialnia_temp'])
-            self.tih_sypialnia[1].configure(text="%2.1f\u00B0C" % self.tih_sypialnia[3][0])
-
-        if  'sypialnia_humi' in values:
-            self.tih_sypialnia[3][2] = 3600
-            self.tih_sypialnia[3][1] = float(values['sypialnia_humi'])
-            self.tih_sypialnia[2].configure(text="%2.1f %%" % self.tih_sypialnia[3][1])
-
-        if  'pracownia_temp' in values:
-            self.tih_pracownia[3][2] = 3600
-            self.tih_pracownia[3][0] = float(values['pracownia_temp'])
-            self.tih_pracownia[1].configure(text="%2.1f\u00B0C" % self.tih_pracownia[3][0])
-
-        if  'pracownia_humi' in values:
-            self.tih_pracownia[3][2] = 3600
-            self.tih_pracownia[3][1] = float(values['pracownia_humi'])
-            self.tih_pracownia[2].configure(text="%2.1f %%" % self.tih_pracownia[3][1])
-
-        if  'dzieci_temp' in values:
-            self.tih_dzieci[3][2] = 3600
-            self.tih_dzieci[3][0] = float(values['dzieci_temp'])
-            self.tih_dzieci[1].configure(text="%2.1f\u00B0C" % self.tih_dzieci[3][0])
-
-        if  'dzieci_humi' in values:
-            self.tih_dzieci[3][2] = 3600
-            self.tih_dzieci[3][1] = float(values['dzieci_humi'])
-            self.tih_dzieci[2].configure(text="%2.1f %%" % self.tih_dzieci[3][1])
-
-        if 'wc_temp' in values:
-            self.tih_wc[3][2] = 3600
-            self.tih_wc[3][0] = float(values['wc_temp'])
-            self.tih_wc[1].configure(text="%2.1f\u00B0C" % self.tih_wc[3][0])
-
-        if 'wc_humi' in values:
-            self.tih_wc[3][2] = 3600
-            self.tih_wc[3][1] = float(values['wc_humi'])
-            self.tih_wc[2].configure(text="%2.1f %%" % self.tih_wc[3][1])
-
-        if 'salon_1_temp' in values:
-            self.tih_salon[4][2] = 3600
-            self.tih_salon[4][0] = float(values['salon_temp'])
-            self.tih_salon[3][2] = 3600
-            if self.tih_salon[5][0] is None:
-                self.tih_salon[3][0] = self.tih_salon[4][0]
-            else:
-                self.tih_salon[3][0] = (self.tih_salon[4][0]+
-            self.tih_salon[1].configure(text="%2.1f\u00B0C" % self.tih_salon[3][0])
-
-        if 'salon_humi' in values:  
-            self.tih_salon[3][2] = 3600
-            self.tih_salon[3][1] = float(values['salon_humi'])
-            self.tih_salon[2].configure(text="%2.1f %%" % self.tih_salon[3][1])
-
-        if 'hol_temp' in values:
-            self.tih_hol[3][2] = 3600
-            self.tih_hol[3][0] = float(values['hol_temp'])
-            self.tih_hol[1].configure(text="%2.1f\u00B0C" % self.tih_hol[3][0])
-
-        if 'hol_humi' in values:
-            self.tih_hol[3][2] = 3600
-            self.tih_hol[3][1] = float(values['hol_humi'])
-            self.tih_hol[2].configure(text="%2.1f %%" % self.tih_hol[3][1])
-
-        if 'outside_temp' in values:
-            self.val_tempOutSide[1] = 3600
-            self.val_tempOutSide[0] = float(values['outside_temp'])
-            self.tempOutSide.configure(text="%2.1f\u00B0C" % self.val_tempOutSide[0])
-
-        if 'outside_humi' in values:
-            self.val_humiOutSide[1] = 3600
-            self.val_humiOutSide[0] = float(values['outside_humi'])
-            self.humiOutSide.configure(text="%2.1f %%" % self.val_humiOutSide[0])
+        if 'outside_2_humi' in values:
+            pass
 
     def timeout(self, dt):
         hour = dt.hour
         min = dt.minute
         sec = dt.second
 
-        for w in [self.tih_lazienka, self.tih_kuchnia, self.tih_wc, self.tih_hol, self.tih_salon, self.tih_sypialnia, self.tih_pracownia, self.tih_dzieci]:
-            if w[3][2] == 0:
-                w[3][0] = None
-                w[3][1] = None
-                w[3][2] = -1
-                w[1].configure(text="-")
-                w[2].configure(text="-")
-            elif w[3][2] > 0:
-                w[3][2] -= 1
-
-        for w in [self.val_tempOutSide, self.val_humiOutSide]:
-            if w[1] == 0:
-                w[0] = None
-                w[1] = -1
-                if w == self.val_tempOutSide:
-                    self.tempOutSide.configure(text="-")
-                else:
-                    self.humiOutSide.configure(text="-")
-            elif w[1] > 0:
-                w[1] -= 1
+        self.temps.timeout()
 
         if self.lastTime is None:
             self.lastTime = dt
@@ -773,17 +545,17 @@ class Pogoda(LSimpleFrame):
             vals["wind_deg"] = wind_deg
             #print(f"wind_speed = {wind_speed}")
             
-            self.ikonawiatru.configure(text=self._toBeaufortChar(self._ms2Beaufort(wind_speed)))
-            vals["ikonawiatru"] = self._toBeaufortChar(self._ms2Beaufort(wind_speed))
+            self.ikonawiatru.configure(text=toBeaufortChar(ms2Beaufort(wind_speed)))
+            vals["ikonawiatru"] = toBeaufortChar(ms2Beaufort(wind_speed))
 
-            txtW = self._deg2Cardinal(wind_deg)
+            txtW = deg2Cardinal(wind_deg)
             #ftxt = self.font_wiatru.measure(txtW)
             vals["kierunekwiatru"] = txtW
             self.predkoscWiatru.configure(text="%2.1f m/s" % wind_speed)
 
-            self.kierunekWiatru.configure(text=self._deg2Short(wind_deg))
-            #self.opiswiatru.configure(text=self._toDescrSilaWiatru(wind_speed) + ' ' + txtW)
-            vals['opiswiatru'] = self.B2Description(self._ms2Beaufort(wind_speed))
+            self.kierunekWiatru.configure(text=deg2Short(wind_deg))
+            #self.opiswiatru.configure(text=toDescrSilaWiatru(wind_speed) + ' ' + txtW)
+            vals['opiswiatru'] = B2Description(ms2Beaufort(wind_speed))
             #self.opiswiatru.place(x=28 + ftxt, y=0)
 
             temp = data_json["main"]["temp"]
@@ -815,14 +587,14 @@ class Pogoda(LSimpleFrame):
                     snowrain_val = float(data_json["snow"]["1h"])
                     text_val = "%s" % data_json["rain"]["1h"]
                     text_unit = "mm/1h"
-                    text_opis = self._getSnowName(float(text_val))
+                    text_opis = getSnowName(float(text_val))
                     mqtt_vals["snow_1h"] = data_json["snow"]["1h"]
                     vals["snow_1h"] = data_json["snow"]["1h"]
                 elif "3h" in data_json["snow"]:
                     snowrain_val = float(data_json["snow"]["3h"])
                     text_val = "%s" % data_json["rain"]["3h"]
                     text_unit = "mm/3h"
-                    text_opis = self._getSnowName(float(text_val)/3)
+                    text_opis = getSnowName(float(text_val)/3)
                     mqtt_vals["snow_3h"] = data_json["snow"]["3h"]
                     vals["snow_3h"] = data_json["snow"]["3h"]
                 else:
@@ -834,14 +606,14 @@ class Pogoda(LSimpleFrame):
                     text_val = "%s" % data_json["rain"]["1h"]
                     snowrain_val = float(data_json["rain"]["1h"])
                     text_unit = "mm/h"
-                    text_opis = self._getRainName(float(text_val))
+                    text_opis = getRainName(float(text_val))
                     mqtt_vals["rain_1h"] = data_json["rain"]["1h"]
                     vals["rain_1h"] = data_json["rain"]["1h"]
                 elif "3h" in data_json["rain"]:
                     text_val = "%s" % data_json["rain"]["3h"]
                     snowrain_val = float(data_json["rain"]["3h"])
                     text_unit = "mm/3h"
-                    text_opis = self._getRainName(float(text_val)/3)
+                    text_opis = getRainName(float(text_val)/3)
                     mqtt_vals["rain_3h"] = data_json["rain"]["3h"]
                     vals["rain_3h"] = data_json["rain"]["3h"]
                 else:
@@ -866,7 +638,7 @@ class Pogoda(LSimpleFrame):
                 text_opis = "brak opadów"
                     
             weather_descr = data_json["weather"][0]["description"]
-            self.opisPogody.configure(text=weather_descr + ', ' + text_opis + ', ' + self._toDescrSilaWiatru2(wind_speed))
+            self.opisPogody.configure(text=weather_descr + ', ' + text_opis + ', ' + toDescrSilaWiatru2(wind_speed))
 
             pressure = data_json["main"]["pressure"]
             huminidity = data_json["main"]["humidity"]

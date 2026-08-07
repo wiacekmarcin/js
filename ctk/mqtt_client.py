@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import paho.mqtt.enums as mqtte
 import json
 from typing import Callable
 tempConfig = \
@@ -211,6 +212,8 @@ class TempHumi(SensorBase):
                 '%s_temp' % self.prefix : temp,
             }
         except:
+            print("215:error")
+            print(data)
             pass
         return ret
 
@@ -228,6 +231,8 @@ class Temp(SensorBase):
                 '%s_temp' % self.prefix : temp,
             }
         except:
+            print("234:error")
+            print(data)
             pass
         return ret
 
@@ -235,18 +240,18 @@ class TempAll:
     def __init__(self):
     
         self.lst = []
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_children/*", 'dzieci'))
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_salon/*",'salon_1'))
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_kitchen/*", 'kuchnia'))
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_sypialnia/*", 'sypialnia'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_children", 'dzieci'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_salon",'salon_1'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_kitchen", 'kuchnia'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_sypialnia", 'sypialnia'))
 
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_hol_wc/*", 'hol'))
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_salon_hol/*", 'salon_2'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_hol_wc", 'hol'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_salon_hol", 'salon_2'))
         
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_wc/*", 'wc'))
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_outside/*", 'outside_2'))
-        self.lst.append(TempHumi("zigbee2mqtt/tih_z_pracownia/*", 'pracownia'))
-        self.lst.append(Temp("zigbee2mqtt/outside_temperature/*", 'outside_1'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_wc", 'wc'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_outside", 'outside_2'))
+        self.lst.append(TempHumi("zigbee2mqtt/tih_z_pracownia", 'pracownia'))
+        self.lst.append(Temp("zigbee2mqtt/outside_temperature", 'outside_1'))
 
     def parse(self, topic, data):
         for t in self.lst:
@@ -260,10 +265,10 @@ class TempAll:
     
 class PahoMqttWriter:
 
-    def __init__(self, handler:callable):
+    def __init__(self, handler:Callable):
         self._function = handler
         self.clientmqtt = mqtt.Client(client_id="lustroCID", protocol=mqtt.MQTTv5,
-                                       callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+                                       callback_api_version=mqtte.CallbackAPIVersion.VERSION2)
         self.clientmqtt.username_pw_set("mqtt", "mqtt")
         self.clientmqtt.on_connect = self.msg_on_connect
         self.clientmqtt.on_message = self.msg_on_message
@@ -299,8 +304,9 @@ class PahoMqttWriter:
         if msg.topic == "lustro/features/show_kredyty":
             pass
         d = self.temps.parse(msg.topic, msg.payload)
+        print(d)
         if len(d) > 0:
-            self._function(d)
+            self._function(topic, d)
 
     def try_connect(self):
         if self.isconnect:
