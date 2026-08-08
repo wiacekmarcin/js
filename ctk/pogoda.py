@@ -237,7 +237,7 @@ class TempAll:
         self.lst.append(TempHumi(frameTiH, font, 'Kuch.', 'kuchnia'))
         self.lst.append(TempHumi(frameTiH, font, 'WC', 'wc'))
         self.lst.append(TempHumi(frameTiH, font, 'Hol', 'hol'))
-        self.lst.append(TempHumi(frameTiH, font, 'Sal.', 'salon_1'))
+        self.lst.append(TempHumi(frameTiH, font, 'Sal.', 'salon_2'))
         self.lst.append(TempHumi(frameTiH, font, 'Syp.', 'sypialnia'))
         self.lst.append(TempHumi(frameTiH, font, 'Prac.', 'pracownia'))
         self.lst.append(TempHumi(frameTiH, font, 'Dziec.', 'dzieci'))
@@ -259,6 +259,63 @@ class TempAll:
             w.check_and_set(data)
 
 
+
+class TiHOutSide:
+    def __init__(self, ltemp:CTkLabel, lhumi:CTkLabel, key1:str, key2:str):
+        self.lastUpdate1 = 0
+        self.lastUpdate2 = 0
+
+        self.temp1 = 0
+        self.humi2 = 0
+        self.temp2 = 0
+        self.key_temp1 = '%s_temp' % key1
+        self.key_humi2 = '%s_humi' % key2
+        self.key_temp2 = '%s_temp' % key2
+        #outside_1_temp
+        
+        #outside_2_temp
+        #outside_2_humi
+
+        self.ltemp = ltemp
+        self.lhumi = lhumi
+
+    def timeout(self):
+        self.lastUpdate1 -= 1
+        self.lastUpdate2 -= 1
+        if self.lastUpdate1 < 0:
+            self.temp1 = None
+            self.update()
+        if self.lastUpdate2 < 0:
+            self.temp2 = None
+            self.humi2 = None
+            self.update()
+
+    def update(self):
+        if self.temp1 is None:
+            self.ltemp.configure(text='-')                
+        else:
+            self.ltemp.configure(text='%2.1f\u00B0C' % self.temp1)
+
+        if self.humi2 is None:
+            self.lhumi.configure(text='-')                
+        else:
+            self.lhumi.configure(text='%2.0f%%' % self.humi2)
+
+    def check_and_set(self, data:dict):
+        if self.key_temp2 in data or self.key_humi2 in data:
+            self.lastUpdate2 = 3600
+            #if self.key_temp in data:
+            #    self.temp = float(data[self.key_temp])
+            if self.key_humi2 in data:
+                self.humi2 = float(data[self.key_humi2])
+            self.update()
+
+        if self.key_temp1 in data:
+            self.lastUpdate1 = 3600
+            if self.key_temp1 in data:
+                self.temp1 = float(data[self.key_temp1])
+            
+            self.update()
 
 class Pogoda(LSimpleFrame):
     _wwidth = 400
@@ -436,18 +493,17 @@ class Pogoda(LSimpleFrame):
                                     justify="left", anchor="w")
         self.tempOutSide.pack(side='left')
 
-        self.val_tempOutSide = [None, 0]
-
         self.humiOutSide = CTkLabel(self.frame2, text="-",
                                     bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
                                     justify="left", anchor="w")
         self.humiOutSide.pack(side='right')
-        self.val_humiOutSide = [None, 0]
 
         etWilgotnosc = CTkLabel(self.frame2, text="Wilgotność :",
                                     bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
                                     justify="left", anchor="w")
         etWilgotnosc.pack(side='right')
+
+        self.val_tempOutSide = TiHOutSide(self.tempOutSide, self.humiOutSide, 'outside_1', 'outside_2')
 
     def tih_banner(self, fhead_tih, f_tih_all):        
         self.frameTiH = CTkFrame(master=self, width=self._wwidth, 
@@ -485,14 +541,7 @@ class Pogoda(LSimpleFrame):
         print("ok, receiveNotfication.pogoda", values)
         self.temps.check_and_set(values)        
 
-        if 'outside_2_temp' in values:
-            pass
-
-        if 'outside_1_temp' in values:
-            pass
-
-        if 'outside_2_humi' in values:
-            pass
+        self.val_tempOutSide.check_and_set(values)
 
     def timeout(self, dt):
         hour = dt.hour
@@ -500,6 +549,7 @@ class Pogoda(LSimpleFrame):
         sec = dt.second
 
         self.temps.timeout()
+        self.val_tempOutSide.timeout()
 
         if self.lastTime is None:
             self.lastTime = dt

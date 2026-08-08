@@ -26,14 +26,17 @@ class LApp(LustroApp):
         super().__init__(*args, **kwargs)
 
         clock = BigAnalogClock(self.get_frame("zegar"), self)
-
+        print(self._max_width)
         frame2 = self.get_frame("normal")
         if frame2 is not None:
             frame_time_calendar_clock = TopBanner(frame2, self)
-            frame_time_calendar_clock.pack()
-        #clock = AnalogClock(self.get_frame("zegar"), self)
-        #x, y, _, _ = clock.getRect()
-        #clock.place(x=x, y=y, anchor='nw')
+            frame_time_calendar_clock.pack(pady=10)
+
+            pogoda5 = Pogoda5Day(frame2, self)
+            pogoda5.pack()
+
+            rss = RssInfo(frame2, self)
+            rss.pack(pady=10)
         
 
         #for P in plugs:
@@ -41,6 +44,7 @@ class LApp(LustroApp):
 
         self.after(0, lambda: self.state('normal'))
 
+"""
     def setPlugins(self, master, plg):
         #print("geometry", self.geometry())
         self.plgs = []
@@ -59,7 +63,7 @@ class LApp(LustroApp):
 
         #self.plgs[0].setMinimumTemp("-6.2")
         #self.plgs[0].setMaximumTemp("26.2")
-            
+"""            
     
 
     

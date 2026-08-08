@@ -10,7 +10,7 @@ from pogoda import Pogoda
 
 class TopBanner(CTkFrame):
     def __init__(self, master:CTkFrame, app:LustroApp):
-        super().__init__(master, bg_color="brown", fg_color = "brown", width=1080)
+        super().__init__(master, bg_color="black", fg_color = "black", width=1080)
 
         self.configure(width = 1080)
         
