@@ -16,7 +16,7 @@ from wt_check_avg_temp import getWarningTemp, getWarningWind, getWarningRain, ge
 from wt_calendar_events import getCalendarEvents
 from wt_events_utils import organize_warning, sumWarnings, reduce_warning_temp, reduce_warning_rain, reduce_warning_snow, reduce_warning_wind
 class Wykres:
-	def __init__(self):
+	def __init__(self, maxwidth:int):
 		self.daysName = [u'Niedziela',u'Poniedziałek',u'Wtorek',u'Środa',u'Czwartek',u'Piątek',u'Sobota']
 		self.daysName2 = [u'poniedzialek',u'wtorek',u'sroda',u'czwartek',u'piatek',u'sobota',u'niedziela']
 		self.monthName = ['','styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'pażdziernik', 'listopad', 'grudzień']
@@ -26,6 +26,7 @@ class Wykres:
 		self.iconMap = {}
 		self.minDTemp = None
 		self.maxDTemp = None
+		self.maxwidth = maxwidth
 		self._initIconMap()
 
 
@@ -475,7 +476,7 @@ class Wykres:
 		imB.show()
 	
 	def createImage(self) -> Image.Image:
-		width = 1080
+		width = self.maxwidth
 		maxTemp = 40
 		minTemp = -30
 		h1deg = 10

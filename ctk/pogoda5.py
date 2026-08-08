@@ -1,20 +1,29 @@
 from customtkinter import CTkLabel, CTkImage
 
 
-from base_plugin import LFrame
+from base_plugin import LSimpleFrame
 from PIL import Image
 from wykres_temperatury import Wykres
-class Pogoda5Day(LFrame):
+#class Pogoda5Day(LFrame):
+#    def __init__(self, master, app, *args, **kwargs):
+#        super().__init__(0, 350, self._wwidth, 600, master, app, *args, **kwargs)
+
+class Pogoda5Day(LSimpleFrame):
+    
     def __init__(self, master, app, *args, **kwargs):
-        super().__init__(0, 350, 1080, 600, master, app, *args, **kwargs)
-        
-        self.r_img = Image.new("RGB", (1080, 600), "black")
+        super().__init__(master, app, *args, **kwargs)
+        self._wwidth = app._max_width
+        print("rss", self._wwidth)
+        self.configure(width = self._wwidth, height = 100)
+
+        self.r_img = Image.new("RGB", (self._wwidth, 600), "black")
         img = CTkImage(self.r_img, size=self.r_img.size)
 
-        self.photo_label = CTkLabel(self, fg_color="black", image=img, text="")
+        self.photo_label = CTkLabel(self, fg_color="black", image=img, text="",
+                                    width=self._wwidth, height=5)
         self.photo_label.place(x=0, y=0)
         self.dayCalc = None
-        self.wykres = Wykres()
+        self.wykres = Wykres(self._wwidth)
         
     def timeout(self, dt):
         
@@ -29,9 +38,10 @@ class Pogoda5Day(LFrame):
             self.dayCalc = dday
             self.wykres.minDTemp = self.wykres.maxDTemp = None
             self.r_img = self.wykres.createImage()
-            #print("Szie", self.r_img.size)
+            print("Image Szie", self.r_img.size)
             t_img = CTkImage(self.r_img, size=self.r_img.size)
-            self.photo_label.configure(image=t_img)
+            self.photo_label.configure(image=t_img, height=self.r_img.size[1])
+            self.configure(height = self.r_img.size[1])
 
             print(self.wykres.minDTemp, self.wykres.maxDTemp)
             if self.wykres.minDTemp is not None:

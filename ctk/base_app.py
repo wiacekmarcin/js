@@ -38,8 +38,11 @@ class LustroApp(CTk):
         
         # __init__ function for class Tk
         CTk.__init__(self, *args, **kwargs)
+        self._max_width = 1080
+        self._max_height = 1920
         self.config(cursor="none")
         # creating a container
+        print(f"LustroApp, max_w", self._max_width)
         self.container = tk.Frame(self, width=self._max_width, height=self._max_height)  
         self.container.pack(side = "top", fill = "both", expand = True) 
         #self.container.place(x=0, y=0)
