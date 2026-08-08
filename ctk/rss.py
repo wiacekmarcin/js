@@ -13,10 +13,10 @@ class RssInfo(LSimpleFrame):
     def __init__(self, master, app, *args, **kwargs):
         super().__init__(master, app, *args, **kwargs)
         self._wwidth = app._max_width
-        print("rss", self._wwidth)
+        #print("rss", self._wwidth)
 
-        self.font_head = CTkFont("Roboto Regular", size=32, weight="bold", slant="roman")
-        self.font_info = CTkFont("Roboto Regular", size=24, weight="normal", slant="roman")
+        self.font_head = CTkFont("Roboto Regular", size=48, weight="bold", slant="roman")
+        self.font_info = CTkFont("Roboto Regular", size=28, weight="normal", slant="roman")
         
         self.head = CTkLabel(self, fg_color="black", text="", 
                              wraplength=int(0.95*self._wwidth), justify="center",   

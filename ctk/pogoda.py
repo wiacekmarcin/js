@@ -261,10 +261,10 @@ class TempAll:
 
 
 class TiHOutSide:
-    def __init__(self, ltemp:CTkLabel, lhumi:CTkLabel, key1:str, key2:str):
+    def __init__(self, parent, ltemp:CTkLabel, lhumi:CTkLabel, key1:str, key2:str):
         self.lastUpdate1 = 0
         self.lastUpdate2 = 0
-
+        
         self.temp1 = 0
         self.humi2 = 0
         self.temp2 = 0
@@ -276,6 +276,7 @@ class TiHOutSide:
         #outside_2_temp
         #outside_2_humi
 
+        self.parent = parent
         self.ltemp = ltemp
         self.lhumi = lhumi
 
@@ -296,10 +297,14 @@ class TiHOutSide:
         else:
             self.ltemp.configure(text='%2.1f\u00B0C' % self.temp1)
 
+
         if self.humi2 is None:
             self.lhumi.configure(text='-')                
         else:
             self.lhumi.configure(text='%2.0f%%' % self.humi2)
+
+        vals = {'outside_temp' : self.temp1, 'outside_humi' : self.humi2}
+        self.parent.sendNotification(vals)
 
     def check_and_set(self, data:dict):
         if self.key_temp2 in data or self.key_humi2 in data:
@@ -503,7 +508,7 @@ class Pogoda(LSimpleFrame):
                                     justify="left", anchor="w")
         etWilgotnosc.pack(side='right')
 
-        self.val_tempOutSide = TiHOutSide(self.tempOutSide, self.humiOutSide, 'outside_1', 'outside_2')
+        self.val_tempOutSide = TiHOutSide(self, self.tempOutSide, self.humiOutSide, 'outside_1', 'outside_2')
 
     def tih_banner(self, fhead_tih, f_tih_all):        
         self.frameTiH = CTkFrame(master=self, width=self._wwidth, 
@@ -538,7 +543,7 @@ class Pogoda(LSimpleFrame):
         
         
     def receiveNotfication(self, values):
-        print("ok, receiveNotfication.pogoda", values)
+        #print("ok, receiveNotfication.pogoda", values)
         self.temps.check_and_set(values)        
 
         self.val_tempOutSide.check_and_set(values)
@@ -565,7 +570,7 @@ class Pogoda(LSimpleFrame):
 
             response = urlopen(self.url)
             data_json = json.loads(response.read().decode('utf-8'))
-            print(data_json)
+            #print(data_json)
 
             self.citiname = data_json["name"]
             utc = data_json["dt"]
@@ -625,8 +630,8 @@ class Pogoda(LSimpleFrame):
             self.feeltemperatura.configure(text="%.1f" % feels_like)
 
             weather_icon = data_json["weather"][0]["icon"]
-            print(weather_icon)
-            print(ord(self.iconMap[weather_icon]))
+            #print(weather_icon)
+            #print(ord(self.iconMap[weather_icon]))
             self.ikonapogody.configure(text=self.iconMap[weather_icon])
 
             snowrain_val = 0
@@ -688,6 +693,7 @@ class Pogoda(LSimpleFrame):
                 text_opis = "brak opadów"
                     
             weather_descr = data_json["weather"][0]["description"]
+            vals['opisPogody'] = weather_descr
             self.opisPogody.configure(text=weather_descr + ', ' + text_opis + ', ' + toDescrSilaWiatru2(wind_speed))
 
             pressure = data_json["main"]["pressure"]

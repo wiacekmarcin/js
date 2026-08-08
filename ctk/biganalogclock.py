@@ -165,14 +165,24 @@ class BigAnalogClock(LFrame):
         kier = ''
         wind_speed = 0
         if 'lazienka_temp' in dictValue:
-            self.lazienka_tih = ['łazienka %2.1f\u00B0C, %d%%' % (float(dictValue['lazienka_temp']), 
+            self.lazienka_tih = ['łazienka %2.1f\u00B0C, %2.0f%%' % (float(dictValue['lazienka_temp']), 
                                                                       float(dictValue['lazienka_humi']))]
+        if 'outside_temp' in dictValue:
+            if dictValue['outside_temp'] is not None and dictValue['outside_humi'] is not None:
+                self.outside_tih = ['na dworze %2.1f\u00B0C, %2.0f%%' % (float(dictValue['outside_temp']), 
+                                                                                  float(dictValue['outside_humi']))]   
+            elif dictValue['outside_temp'] is not None:
+                self.outside_tih = ['na dworze %2.1f\u00B0C' % float(dictValue['outside_temp'])]
+            elif dictValue['outside_humi'] is not None:
+                self.outside_tih = ['na dworze %2.0f%%' % float(dictValue['outside_humi'])]
+            else:
+                self.outside_tih = []
 
         if 'opisPogody' not in dictValue:
             return 
 
         text = []
-        print(dictValue)
+        #print(dictValue)
         text.append(dictValue['opisPogody'])
 
         rtxt = ''

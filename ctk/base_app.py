@@ -42,7 +42,7 @@ class LustroApp(CTk):
         self._max_height = 1920
         self.config(cursor="none")
         # creating a container
-        print(f"LustroApp, max_w", self._max_width)
+        #print(f"LustroApp, max_w", self._max_width)
         self.container = tk.Frame(self, width=self._max_width, height=self._max_height)  
         self.container.pack(side = "top", fill = "both", expand = True) 
         #self.container.place(x=0, y=0)
@@ -71,7 +71,7 @@ class LustroApp(CTk):
         
         self.title("Lustro")
         w, h = self.winfo_screenwidth(), self.winfo_screenheight()
-        print(w, h)
+        #print(w, h)
         
         self.configure(bg_color = "black")
         self.configure(fg_color = "black")
@@ -115,11 +115,11 @@ class LustroApp(CTk):
         return frame
 
     def sendNotification(self, dictValue):
-        print("sendNotification", dictValue)
+        #print("sendNotification", dictValue)
         self.after(0, self._sendNotification, dictValue)    
     
     def _sendNotification(self, valueDict):
-        print("_sendNotification", valueDict, len(self.plgs))
+        #print("_sendNotification", valueDict, len(self.plgs))
         for p in self.plgs:
             p.receiveNotfication(valueDict)
 
@@ -159,5 +159,12 @@ class LustroApp(CTk):
             sys.exit(0)
 
     def receiveMqttMsg(self, topic, msg):
-        print("receiveMqttMsg", topic, msg)
+        #print("receiveMqttMsg", topic, msg)
+        if 'display' in msg:
+            display = msg['display']
+            mapD = {
+                "Standardowy" : "normal",
+                "Wyświetlacz" : "zegar"
+            }
+            self.show_frame((mapD[display]))
         self.sendNotification(msg)

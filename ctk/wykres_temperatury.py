@@ -65,7 +65,7 @@ class Wykres:
 	
 	def _createBackground(self, width, minTemp, maxTemp, h1deg, w3h, cnth, keys, pogodaPoints, 
 					   events:dict[datetime.date, list[str]]) -> tuple[Image.Image, Image.Image, Image.Image]:
-		print(events)
+		#print(events)
 
 		height = (maxTemp - minTemp) * h1deg + 16
 		margin = int((width-(cnth*w3h)) / 2)
@@ -76,7 +76,7 @@ class Wykres:
 			items = max(items, len(events[e]))
 		#eheight += items * 16 + 10 + 16
 		eheight += items * (3*20) + 10 + 16
-		print(eheight)
+		#print(eheight)
 		height += eheight
 
 		#im = Image.new("RGB", (width, height), color="black")
@@ -275,12 +275,12 @@ class Wykres:
 		
 		cnt_items = int(data_json["cnt"]) or 0
 		if cnt_items == 0:
-			print("Brak danych")
+			#print("Brak danych")
 			return 0, 0, [], {}, {}
 
 		items = data_json["list"]
 		if items is None:
-			print("Brak danych")
+			#print("Brak danych")
 			return 0, 0, [], {}, {}
 
 		minTemp = None

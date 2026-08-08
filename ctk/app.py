@@ -25,8 +25,10 @@ class LApp(LustroApp):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        atmega = SerialReader(None, self)
+
         clock = BigAnalogClock(self.get_frame("zegar"), self)
-        print(self._max_width)
+        #print(self._max_width)
         frame2 = self.get_frame("normal")
         if frame2 is not None:
             frame_time_calendar_clock = TopBanner(frame2, self)
