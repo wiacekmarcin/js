@@ -5,7 +5,7 @@ from typing import Callable
 tempConfig = \
 """{
    "device_class":"temperature",
-   "state_topic":"lustro_new/sensor/data/TiHLazienka1/state",
+   "state_topic":"lustro/sensor/data/TiHLazienka1/state",
    "unit_of_measurement":"°C",
    "value_template":"{{ value_json.temperature}}",
    "unique_id":"temp(Lazienka)",
@@ -21,7 +21,7 @@ humiConfig = \
 """
 {
    "device_class":"humidity",
-   "state_topic":"lustro_new/sensor/data/TiHLazienka1/state",
+   "state_topic":"lustro/sensor/data/TiHLazienka1/state",
    "unit_of_measurement":"%",
    "value_template":"{{ value_json.humidity}}",
    "unique_id":"humi(Lazienka)",
@@ -38,7 +38,7 @@ humiConfig = \
 tempMonConfig = \
 """{
    "device_class":"temperature",
-   "state_topic":"lustro_new/sensor/data/TLustroMon/state",
+   "state_topic":"lustro/sensor/data/TLustroMon/state",
    "unit_of_measurement":"°C",
    "value_template":"{{ value_json.temperature}}",
    "unique_id":"Temp(Monitor)",
@@ -56,7 +56,7 @@ tempMonConfig = \
 tempRasConfig = \
 """{
    "device_class":"temperature",
-   "state_topic":"lustro_new/sensor/data/TLustroRas/state",
+   "state_topic":"lustro/sensor/data/TLustroRas/state",
    "unit_of_measurement":"°C",
    "value_template":"{{ value_json.temperature}}",
    "unique_id":"Temp(Raspberry)",
@@ -74,7 +74,7 @@ tempRasConfig = \
 tempRasCPUConfig = \
 """{
    "device_class":"temperature",
-   "state_topic":"lustro_new/sensor/data/TLustroRasCPU/state",
+   "state_topic":"lustro/sensor/data/TLustroRasCPU/state",
    "unit_of_measurement":"°C",
    "value_template":"{{ value_json.temperature}}",
    "unique_id":"Temp(RaspberryCPU)",
@@ -90,7 +90,7 @@ tempRasCPUConfig = \
 usageRasCPUConfig = \
 """{
    "device_class":"percentage",
-   "state_topic":"lustro_new/sensor/data/CPULustroRas/state",
+   "state_topic":"lustro/sensor/data/CPULustroRas/state",
    "unit_of_measurement":"%",
    "value_template":"{{ value_json.usage }}",
    "unique_id":"Usage(RaspberryCPU)Lustro",
@@ -106,7 +106,7 @@ usageRasCPUConfig = \
 freqRasCPUConfig = \
 """{
    "device_class":"frequency",
-   "state_topic":"lustro_new/sensor/data/CPULustroRas/state",
+   "state_topic":"lustro/sensor/data/CPULustroRas/state",
    "unit_of_measurement":"MHz",
    "value_template":"{{ value_json.freq }}",
    "unique_id":"Freq(RaspberryCPU)Lustro",
@@ -120,7 +120,7 @@ freqRasCPUConfig = \
 voltageRasCPUConfig = \
 """{
    "device_class":"voltage",
-   "state_topic":"lustro_new/sensor/data/Ina219LustroRas/state",
+   "state_topic":"lustro/sensor/data/Ina219LustroRas/state",
    "unit_of_measurement":"V",
    "value_template":"{{ value_json.voltage }}",
    "unique_id":"Voltage(RaspberryCPU)Lustro",
@@ -136,7 +136,7 @@ voltageRasCPUConfig = \
 currentRasCPUConfig = \
 """{
    "device_class":"current",
-   "state_topic":"lustro_new/sensor/data/Ina219LustroRas/state",
+   "state_topic":"lustro/sensor/data/Ina219LustroRas/state",
    "unit_of_measurement":"A",
    "value_template":"{{ value_json.current }}",
    "unique_id":"Current(RaspberryCPU)Lustro",
@@ -152,7 +152,7 @@ currentRasCPUConfig = \
 powerRasCPUConfig = \
 """{
    "device_class":"power",
-   "state_topic":"lustro_new/sensor/data/Ina219LustroRas/state",
+   "state_topic":"lustro/sensor/data/Ina219LustroRas/state",
    "unit_of_measurement":"W",
    "value_template":"{{ value_json.power }}",
    "unique_id":"Power(RaspberryCPU)Lustro",
@@ -168,7 +168,7 @@ powerRasCPUConfig = \
 energyRasCPUConfig = \
 """{
    "device_class":"energy",
-   "state_topic":"lustro_new/sensor/data/Ina219LustroRas/state",
+   "state_topic":"lustro/sensor/data/Ina219LustroRas/state",
    "unit_of_measurement":"kWh",
    "value_template":"{{ value_json.energy }}",
    "unique_id":"Power(RaspberryCPU)Lustro",
@@ -291,11 +291,11 @@ class PahoMqttWriter:
             # Subscribing in on_connect() means that if we lose the connection and
             # reconnect then subscriptions will be renewed.
             self.temps.subscribe(client)
-            
+            client.subscribe("lustro/ekran")
             
 
     def msg_on_message(self, client, userdata, msg):
-        print("receive")
+        #print("receive")
         print(msg.topic+" "+str(msg.payload))
         #print(client)
         #print(userdata)
@@ -303,8 +303,13 @@ class PahoMqttWriter:
         #data = 
         if msg.topic == "lustro/features/show_kredyty":
             pass
-        d = self.temps.parse(msg.topic, msg.payload)
+
+        if msg.topic == "lustro/ekran":
+            d = {'display' : msg.payload.decode('utf-8')}
+        else:
+            d = self.temps.parse(msg.topic, msg.payload)
         print(d)
+        
         if len(d) > 0:
             self._function(topic, d)
 
@@ -312,29 +317,29 @@ class PahoMqttWriter:
         if self.isconnect:
             return
 
-        print("mqtt connect")
+        ##print("mqtt connect")
         try:
             self.clientmqtt.connect("192.168.10.250", 1883, 600)
             self.isconnect = True
             self.clientmqtt.loop_start()
-            print("ok")
+            #print("ok")
         except:
             print("error")
             self.isconnect = False
             return
         try :
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/TiHLazienkaT/config", tempConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/TiHLazienkaH/config", humiConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/TLazienkaMon/config", tempMonConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/TLazienkaRas/config", tempRasConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/TLustroRasCPU/config", tempRasCPUConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/CPULustroRasUsage/config", usageRasCPUConfig)
-            #self.clientmqtt.publish("lustro_new/sensor/sensorConfig/sensorCPULustroRasFreq/config", freqRasCPUConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/VoltRasCPUConfig/config",voltageRasCPUConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/CurrRasCPUConfig/config",currentRasCPUConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/PowerRasCPUConfig/config",powerRasCPUConfig)
-            self.clientmqtt.publish("lustro_new/sensor/sensorConfig/EnergyRasCPUConfig/config", energyRasCPUConfig)
-            print("ok2")
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TiHLazienkaT/config", tempConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TiHLazienkaH/config", humiConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TLazienkaMon/config", tempMonConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TLazienkaRas/config", tempRasConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/TLustroRasCPU/config", tempRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/CPULustroRasUsage/config", usageRasCPUConfig)
+            #self.clientmqtt.publish("lustro/sensor/sensorConfig/sensorCPULustroRasFreq/config", freqRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/VoltRasCPUConfig/config",voltageRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/CurrRasCPUConfig/config",currentRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/PowerRasCPUConfig/config",powerRasCPUConfig)
+            self.clientmqtt.publish("lustro/sensor/sensorConfig/EnergyRasCPUConfig/config", energyRasCPUConfig)
+            #print("ok2")
         except:
             print("Err")
             self.isconect = False
@@ -347,24 +352,24 @@ class PahoMqttWriter:
         try:
             if "lazienka_temp" in dictValue.keys() and "lazienka_humi" in dictValue.keys():
                 payload = '{ "temperature":%s, "humidity":%s }' % (dictValue["lazienka_temp"], dictValue["lazienka_humi"])
-                self.clientmqtt.publish("lustro_new/sensor/data/TiHLazienka1/state", payload)
+                self.clientmqtt.publish("lustro/sensor/data/TiHLazienka1/state", payload)
             if "286cf90f0b0000ae" in dictValue.keys():
                 payload = '{ "temperature":%s}' % (dictValue["286cf90f0b0000ae"])
-                self.clientmqtt.publish("lustro_new/sensor/data/TLustroRas/state", payload)
+                self.clientmqtt.publish("lustro/sensor/data/TLustroRas/state", payload)
             if "28fff708640400a3" in dictValue.keys():
                 payload = '{ "temperature":%s}' % (dictValue["28fff708640400a3"])
-                self.clientmqtt.publish("lustro_new/sensor/data/TLustroMon/state", payload)
+                self.clientmqtt.publish("lustro/sensor/data/TLustroMon/state", payload)
 
             if "tempGPU" in dictValue.keys():
                 payload = '{ "temperature":%s}' % (dictValue["tempGPU"])
-                self.clientmqtt.publish("lustro_new/sensor/data/TLustroRasCPU/state", payload)
+                self.clientmqtt.publish("lustro/sensor/data/TLustroRasCPU/state", payload)
 
             if "cpuFreq" in dictValue.keys() and "cpuUse" in dictValue.keys():
                 payload = '{ "usage":%s, "freq":%s }' % (dictValue["cpuUse"], dictValue["cpuFreq"])
-                self.clientmqtt.publish("lustro_new/sensor/data/CPULustroRas/state", payload)
+                self.clientmqtt.publish("lustro/sensor/data/CPULustroRas/state", payload)
             if "current" in dictValue.keys() and "voltage" in dictValue.keys() and "power" in dictValue.keys() and "energy" in dictValue.keys():
                 payload = '{ "power":%(power)s, "voltage":%(voltage)s, "current" : %(current)s , "energy" : %(energy)s }' % (dictValue)
-                self.clientmqtt.publish("lustro_new/sensor/data/Ina219LustroRas/state", payload)
+                self.clientmqtt.publish("lustro/sensor/data/Ina219LustroRas/state", payload)
         except:
             print("Err publishing")
             self.isconnect = False
