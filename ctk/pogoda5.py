@@ -30,11 +30,11 @@ class Pogoda5Day(LSimpleFrame):
         dday = dt.date().day
         dmonth = dt.date().month
         dyear = dt.date().year
-        second = dt.time().second
+        minute = dt.time().minute
 
-        if self.dayCalc is None or self.dayCalc != dday:
-            if self.dayCalc is not None:
-                return
+        if self.dayCalc is None or (self.dayCalc != dday and minute == 5):
+            #if self.dayCalc is not None:
+            #    return
             self.dayCalc = dday
             self.wykres.minDTemp = self.wykres.maxDTemp = None
             self.r_img = self.wykres.createImage()

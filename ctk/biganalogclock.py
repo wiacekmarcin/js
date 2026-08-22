@@ -103,13 +103,14 @@ class BigAnalogClock(LFrame):
 
     
     def __init__(self, master, app, **kwargs):
-        super().__init__(0, 0, 1000, 1300, master, app, **kwargs)
+        super().__init__(0, 0, 1000, 1700, master, app, **kwargs)
         self.configure(width=self.wwidth)
         self.configure(height=self.wheight)
 
         self.today = ''
         self.infolist = ''
         self.lazienka_tih = []
+        self.outside_tih = []
         self.x = 0
         self.y = 0
         self.dx = 1
@@ -143,7 +144,7 @@ class BigAnalogClock(LFrame):
         self.photo_label = CTkLabel(self, fg_color="black", image=img, text="")
         self.photo_label.place(x=0, y=0)
 
-        bottom_frame = CTkFrame(self, width=self.wwidth, height=200, bg_color="silver")
+        bottom_frame = CTkFrame(self, width=self.wwidth, height=400, bg_color="silver")
         bottom_frame.place(x=0, y=1000)
 
         font_opispogody = CTkFont("Roboto Condensed Regular", size=48, weight="normal", slant="roman")
@@ -152,13 +153,91 @@ class BigAnalogClock(LFrame):
 
         self.opisPogody = CTkLabel(bottom_frame, text="",
                 bg_color="black",fg_color="black", text_color="white", font=font_opispogody,
-                justify="left", anchor="w", wraplength=1000)
+                justify="left", anchor="w", wraplength=self.wwidth-20)
         self.opisPogody.pack()
+
+        self.ostrzezenia= CTkLabel(bottom_frame, text="",
+                bg_color="black",fg_color="black", text_color="white", font=font_opispogody,
+                justify="left", anchor="w", wraplength=self.wwidth-20)
+        self.ostrzezenia.pack()
+
+        top_left_frame = CTkFrame(self, width=150, height=150, bg_color="black", fg_color="black")
+        top_left_frame.place(x=0, y=0)        
+
+        
+        self.webfont = CTkFont(family="Weather Icons Regular", size=48, weight="normal", slant="roman")
+        self.smwebfont = CTkFont(family="Weather Icons Regular", size=40, weight="normal", slant="roman")
+        self.tkfont = CTkFont(family="Roboto Regular", size=48, weight="normal", slant="roman")
+        self.smfont = CTkFont(family="Roboto Regular", size=40, weight="normal", slant="roman")
+
+        self.wschod = ''
+        self.e_wschod = CTkLabel(top_left_frame, text="\uf051", bg_color="black",fg_color="black", text_color="white", 
+                                 font=self.webfont, justify="left", anchor="w")
+        self.e_wschod.grid(row=0, column=0)
+        self.l_wschod = CTkLabel(top_left_frame, text="", bg_color="black",fg_color="black", text_color="white", 
+                                 font=self.tkfont, justify="left", anchor="w")
+        self.l_wschod.grid(row=0, column=1)
+
+        self.zachod = ''
+        self.e_zachod = CTkLabel(top_left_frame, text="\uf052", bg_color="black",fg_color="black", text_color="white", 
+                                font=self.webfont, justify="left", anchor="w")
+        self.e_zachod.grid(row=1, column=0)
+        self.l_zachod = CTkLabel(top_left_frame, text="", bg_color="black",fg_color="black", text_color="white", 
+                                font=self.tkfont, justify="left", anchor="w")
+        self.l_zachod.grid(row=1, column=1)
+
+        self.feeltemp = CTkLabel(top_left_frame, text="", bg_color="black",fg_color="black", text_color="white", 
+                                font=self.smfont, justify="left", anchor="w")
+        self.feeltemp.grid(row=2, column=0, columnspan=2)
+
+        top_right_frame = CTkFrame(self, width=220, height=150, bg_color="black", fg_color="black")
+        top_right_frame.place(x=self.wwidth-220-1, y=0)
+
+        self.et_1 = CTkLabel(top_right_frame, text="\uf053\uf03c", bg_color="black",fg_color="black", text_color="white", 
+                            font=self.webfont, justify="left", anchor="w")
+        self.et_1.grid(row=0, column=0)
+
+        self.et_2 = CTkLabel(top_right_frame, text="\uf07a", bg_color="black",fg_color="black", text_color="white", 
+                                    font=self.webfont, justify="left", anchor="w")
+        self.et_2.grid(row=1, column=0)
+
+        self.z_temp = CTkLabel(top_right_frame, text="", bg_color="black",fg_color="black", text_color="white", 
+                            font=self.smfont, justify="left", anchor="w")
+        self.z_temp.grid(row=0, column=1)
+
+        self.z_humi = CTkLabel(top_right_frame, text="", bg_color="black",fg_color="black", text_color="white", 
+                                    font=self.smfont, justify="right", anchor="w")
+        self.z_humi.grid(row=1, column=1)
+
+        self.outside_temp = ''
+        self.outside_humi = ''
+
+        self.pogoda_temp = ''
+        self.pogoda_humi = ''
+
+
+
+
 
         self.m_names = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 
              'września', 'paździenika', 'listopada', 'grudnia']
         self.t_names = ['poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota', 'niedziela' ]                                
 
+    def setWschod(self, hour, min):
+        self.wschod = "%d:" % hour
+        if min < 10:
+            self.wschod += "0"
+        self.wschod += "%d" % min
+
+        self.l_wschod.configure(text=self.wschod, text_color="white")
+   
+    def setZachod(self, hour, min):
+        self.zachod = "%d:" % hour
+        if min < 10:
+            self.zachod += "0"
+        self.zachod += "%d" % min
+        self.l_zachod.configure(text=self.zachod, text_color="white", )
+        
 
     def receiveNotfication(self, dictValue):
 
@@ -167,16 +246,53 @@ class BigAnalogClock(LFrame):
         if 'lazienka_temp' in dictValue:
             self.lazienka_tih = ['łazienka %2.1f\u00B0C, %2.0f%%' % (float(dictValue['lazienka_temp']), 
                                                                       float(dictValue['lazienka_humi']))]
-        if 'outside_temp' in dictValue:
-            if dictValue['outside_temp'] is not None and dictValue['outside_humi'] is not None:
-                self.outside_tih = ['na dworze %2.1f\u00B0C, %2.0f%%' % (float(dictValue['outside_temp']), 
-                                                                                  float(dictValue['outside_humi']))]   
-            elif dictValue['outside_temp'] is not None:
-                self.outside_tih = ['na dworze %2.1f\u00B0C' % float(dictValue['outside_temp'])]
-            elif dictValue['outside_humi'] is not None:
-                self.outside_tih = ['na dworze %2.0f%%' % float(dictValue['outside_humi'])]
-            else:
-                self.outside_tih = []
+        if "sunrise" in dictValue:
+            self.setWschod(dictValue["sunrise"].hour, dictValue["sunrise"].minute)
+                
+        if "sunset" in dictValue:
+            self.setZachod(dictValue["sunset"].hour, dictValue["sunset"].minute)
+        
+       
+        if 'outside_temp' in dictValue and dictValue['outside_temp'] is not None:
+            self.outside_temp = '%2.1f' % float(dictValue['outside_temp'])
+            self.z_temp.configure(text = '%s (%s)' % (self.pogoda_temp, self.outside_temp)) 
+            
+        if 'outside_humi' in dictValue and dictValue['outside_humi'] is not None:
+            self.outside_humi = '%2.0f' % float(dictValue['outside_humi'])
+            self.z_humi.configure(text = '%s (%s)' % (self.pogoda_humi, self.outside_humi))
+
+        if 'temp' in dictValue:
+            self.pogoda_temp = '%2.1f' % float(dictValue['temp']) 
+            self.z_temp.configure(text = '%s (%s)' % (self.pogoda_temp, self.outside_temp)) 
+            
+        if 'huminidity' in dictValue:
+            self.pogoda_humi = '%2.0f' % float(dictValue['huminidity']) 
+            self.z_humi.configure(text = '%s (%s)' % (self.pogoda_humi, self.outside_humi))
+        
+
+        #if 'lazienka_temp' in dictValue and dictValue['lazienka_temp'] is not None:
+        #    self.l_temp.configure(text = '%2.1f\u00B0C' % float(dictValue['lazienka_temp'])) 
+            
+        #if 'lazienka_humi' in dictValue and dictValue['lazienka_humi'] is not None:
+        #    self.l_humi.configure(text='%2.0f%%' % float(dictValue['laziienka_humi']))
+
+        
+
+        #if 'outside_temp' in dictValue or 'outside_humi' in dictValue:    
+            #if dictValue['outside_temp'] is not None and dictValue['outside_humi'] is not None:
+            #    self.outside_tih = ['na dworze %2.1f\u00B0C, %2.0f%%' % (float(dictValue['outside_temp']), 
+            #                                                                      float(dictValue['outside_humi']))]   
+            #elif dictValue['outside_temp'] is not None:
+            #    self.outside_tih = ['na dworze %2.1f\u00B0C' % float(dictValue['outside_temp'])]
+            #elif dictValue['outside_humi'] is not None:
+            #    self.outside_tih = ['na dworze %2.0f%%' % float(dictValue['outside_humi'])]
+            #else:
+            #    self.outside_tih = []
+            
+                                      
+
+        if 'ostrzezenia' in dictValue:
+            self.ostrzezenia.configure(text=dictValue['ostrzezenia'])
 
         if 'opisPogody' not in dictValue:
             return 
@@ -201,14 +317,15 @@ class BigAnalogClock(LFrame):
         if len(rtxt):
             text.append(rtxt)
 
-        if 'temp' in dictValue:
-            text.append('temperatura %2.1f\u00B0C' % dictValue['temp'])
+        #if 'temp' in dictValue:
+        #    text.append('temperatura %2.1f\u00B0C' % dictValue['temp'])
 
         if 'feels_like' in dictValue:
-            text.append('odczuwalna %2.1f\u00B0C' % dictValue['feels_like'])
+            self.feeltemp.configure(text='%2.1f\u00B0C' % dictValue['feels_like'])
+        #    #text.append('odczuwalna %2.1f\u00B0C' % dictValue['feels_like'])
 
-        if 'huminidity' in dictValue:
-            text.append('wilgotność %d%%' % dictValue['huminidity'])
+        #if 'huminidity' in dictValue:
+        #    text.append('wilgotność %d%%' % dictValue['huminidity'])
 
         if 'pressure' in dictValue:
             text.append('ciśnienie %dhPa' % dictValue['pressure'])
@@ -240,6 +357,9 @@ class BigAnalogClock(LFrame):
 
         if len(self.lazienka_tih) > 0:
             text.extend(self.lazienka_tih)
+
+        if len(self.outside_tih) > 0:
+                text.extend(self.outside_tih)
 
         self.opisPogody.configure(text=', '.join(text))
 

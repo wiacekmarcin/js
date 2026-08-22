@@ -1,9 +1,9 @@
 import customtkinter
 
-from analogclock import AnalogClock
-from calendarday import CalendarDay
-from digtialclock import DigitalClock
-from pogoda import Pogoda
+#from analogclock import AnalogClock
+#from calendarday import CalendarDay
+#from digtialclock import DigitalClock
+#from pogoda import Pogoda
 from pogoda5 import Pogoda5Day
 from rss import RssInfo
 from read_serial import SerialReader
@@ -11,15 +11,16 @@ from biganalogclock import BigAnalogClock
 
 from base_app import LustroApp
 from normal_frame import TopBanner
-plugs = [
-    AnalogClock, 
-    CalendarDay,
-    DigitalClock,
-    Pogoda,
-    Pogoda5Day,
-    RssInfo,
-    SerialReader
-]
+from ostrzezenia_meteo import OstrzeniaMeteo
+#plugs = [
+#    AnalogClock, 
+#    CalendarDay,
+#    DigitalClock,
+#    Pogoda,
+#    Pogoda5Day,
+#    RssInfo,
+#    SerialReader
+#]
 
 class LApp(LustroApp):
     def __init__(self, *args, **kwargs):
@@ -39,7 +40,8 @@ class LApp(LustroApp):
 
             rss = RssInfo(frame2, self)
             rss.pack(pady=10)
-        
+        warning = OstrzeniaMeteo(self)
+        self.show_frame("zegar")
 
         #for P in plugs:
         #    p = P(self.get_frame("normal"), self)
