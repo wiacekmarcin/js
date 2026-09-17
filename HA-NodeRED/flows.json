@@ -1,0 +1,3896 @@
+[
+    {
+        "id": "e507f8120cfc43b1",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "029daacd394af14d",
+        "type": "tab",
+        "label": "LustroDevice",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "36e1d1b1cd33bce2",
+        "type": "tab",
+        "label": "DomoticzDevice",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "94b3ddf69be9d676",
+        "type": "tab",
+        "label": "Sceny",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "170cb8020a3e90f5",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bc61fea4.66f78",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true
+    },
+    {
+        "id": "5fbbec2ae8134c8b",
+        "type": "ha-device-config",
+        "d": true,
+        "name": "calendar_5",
+        "hwVersion": "",
+        "manufacturer": "Node-RED",
+        "model": "",
+        "swVersion": ""
+    },
+    {
+        "id": "3a03e5dd966f6396",
+        "type": "ha-device-config",
+        "name": "TiHLazienka",
+        "hwVersion": "1.0",
+        "manufacturer": "Node-RED",
+        "model": "LustroDHT11",
+        "swVersion": "2.1.13"
+    },
+    {
+        "id": "8d4457c7dd84d2f8",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3a03e5dd966f6396",
+        "name": "Temperatura łazienka",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "lazienka_temperatura"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "temperature"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "58e3d305a259e307",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3a03e5dd966f6396",
+        "name": "Wilgotnosc Lazienka",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "lazienka_humidity"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "humidity"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "%"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "3d97403a41c1e3dd",
+        "type": "ha-device-config",
+        "name": "LustroDevice",
+        "hwVersion": "Raspberry 3B+",
+        "manufacturer": "Node-RED",
+        "model": "Raspbian",
+        "swVersion": "Lustro 2.1.13"
+    },
+    {
+        "id": "4aab34bda00bb2cd",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Temperatura Monitora",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "monitor_temperature"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "temperature"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "74b438832ea37507",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Temperatura Raspberry",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_temperatura"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "temperature"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "ba9a2db996ee9abb",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Prąd",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_current"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "current"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "A"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "5b4befbc2d8dc794",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Napięcie",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_voltage"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "voltage"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "V"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "0fd5826b106d6489",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Moc",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_power"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "W"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "02ada8bcdb5befa5",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Uptime",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_uptime"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "duration"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "h"
+            },
+            {
+                "property": "state_class",
+                "value": "total"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "c7d7bc5655b1fbf8",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry RAM",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_ram_usage"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power_factor"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "%"
+            },
+            {
+                "property": "state_class",
+                "value": "total"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "07765d19dfb4e78a",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry CPU",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_cpu"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power_factor"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "%"
+            },
+            {
+                "property": "state_class",
+                "value": "total"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "44376eb02fede192",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Temp CPU",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_temp_cpu"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "temperature"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "3f1c2c3047665615",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Disk Total",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_total_disk"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "data_size"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "B"
+            },
+            {
+                "property": "state_class",
+                "value": "total"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "7352d9d2d2697a97",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Disk Usage",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_disk_usage"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "data_size"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "B"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "bb7e6d8762b271a6",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Disk Free",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "raspberry_disk_free"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "data_size"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "B"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6c3cf469c82ce39c",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3d97403a41c1e3dd",
+        "name": "Raspberry Screen Select",
+        "version": 6,
+        "entityType": "select",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "selected_screen"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "options",
+                "value": [
+                    "Automatycznie",
+                    "Duży zegar",
+                    "Dane pogodowe"
+                ]
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "183b7ec300bdbd53",
+        "type": "mqtt-broker",
+        "name": "HABrokerMqtt",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "5",
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "5b70b304b07dabfe",
+        "type": "ha-device-config",
+        "name": "Domoticz",
+        "hwVersion": "",
+        "manufacturer": "Node-RED",
+        "model": "Raspberian",
+        "swVersion": "1.23"
+    },
+    {
+        "id": "b3e18fd3c1921867",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 1 Voltage",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_voltage_1"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "voltage"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "V"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "1bf5f11690632301",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 2 Voltage",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_voltage_2"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "voltage"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "V"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "786cd32967802e59",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 3 Energy",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_energy_3"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "Wh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "c5fb1dce971b4dc7",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 4 Energy",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_energy_4"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "Wh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6c7055b2e1ce2fc4",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 1 Energy",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_energy_1"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "Wh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "b0e3ebb881137003",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 2 Energy",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_energy_2"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "Wh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "13bb7766245c1a36",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 3 Voltage",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_voltage_3"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "voltage"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "V"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "a9dae38d3b6ecb2a",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Voltage 4",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_voltage_4"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "voltage"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "V"
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "0eb2d6c0cf8f9b40",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device Current 1",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_current_1"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "current"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "A"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "fda877e6b51c6f12",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 2 Current",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_current_2"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "current"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "A"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "a750c7f5b63e716e",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 3 Current",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_current_3"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "current"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "A"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "3e78ba8e50890226",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 4 Current",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_current_4"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "current"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "A"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6a37d450120a284b",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 1 Power",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_power_1"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "W"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "86dff4d4fd537de9",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 2 Power",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_power_2"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "W"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "de3add8b92d07fc1",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 3 Power",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_power_3"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "W"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "3825b24c8d5dcfee",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "5b70b304b07dabfe",
+        "name": "Domoticz Device 4 Power",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_power_4"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "W"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "3cdc413fcac40fa6",
+        "type": "ha-device-config",
+        "name": "Domoticz Raspberry",
+        "hwVersion": "",
+        "manufacturer": "Node-RED",
+        "model": "",
+        "swVersion": ""
+    },
+    {
+        "id": "d4391a7b2efcb835",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3cdc413fcac40fa6",
+        "name": "Domoticz uptime",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_raspberry_uptime"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "duration"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "h"
+            },
+            {
+                "property": "state_class",
+                "value": "total_increasing"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "8e92b62f28d36ca6",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3cdc413fcac40fa6",
+        "name": "Domoticz CPU Temperature",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_raspberry_cpu_temp"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "temperature"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "95be783349fb2817",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3cdc413fcac40fa6",
+        "name": "Domoticz Raspberry RAM",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_raspberry_ram_used"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power_factor"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "%"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "05c69ddce8f51689",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3cdc413fcac40fa6",
+        "name": "Domoticz CPU",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_raspberry_cpu"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power_factor"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "%"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "d6a62f5b2ebb3c5d",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3cdc413fcac40fa6",
+        "name": "Domoticz Disk Total",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_raspberry_disk_total"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "data_size"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "B"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "04d97a173c4df654",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3cdc413fcac40fa6",
+        "name": "Domoticz Disk Used",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_raspberry_disk_used"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "data_size"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "B"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6ff8ad43eec78399",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "3cdc413fcac40fa6",
+        "name": "Domoticz Disk Free",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "domoticz_raspberry_disk_free"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "data_size"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "B"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "a159c30eb4eec555",
+        "type": "ha-device-config",
+        "name": "Scena",
+        "hwVersion": "",
+        "manufacturer": "Node-RED",
+        "model": "",
+        "swVersion": ""
+    },
+    {
+        "id": "ff53c5afc56f9816",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "a159c30eb4eec555",
+        "name": "Scena Cisza Nocna",
+        "version": 6,
+        "entityType": "binary_sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "scena_cisza_nocna"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "8c945f55d54c3968",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "a159c30eb4eec555",
+        "name": "Scena Słońce",
+        "version": 6,
+        "entityType": "binary_sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "scena_slonce"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "2cf2ddd99ea38266",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "a159c30eb4eec555",
+        "name": "Taryfa 2",
+        "version": 6,
+        "entityType": "binary_sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "scena_taryfa_2"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "8071fbbe7edbe370",
+        "type": "ha-entity-config",
+        "server": "bc61fea4.66f78",
+        "deviceConfig": "a159c30eb4eec555",
+        "name": "Aktualna cena kWh",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "current_price_kwh_nodered"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "monetary"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "PLN"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "c639eff32bc34640",
+        "type": "udp in",
+        "z": "029daacd394af14d",
+        "name": "",
+        "iface": "",
+        "port": "9101",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 80,
+        "y": 40,
+        "wires": [
+            [
+                "2ca9cfc8aeec2197"
+            ]
+        ]
+    },
+    {
+        "id": "0acafdf22aab5552",
+        "type": "switch",
+        "z": "029daacd394af14d",
+        "name": "ValueSwitch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "monitor_temp",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_temp",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberrry_current",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_voltage",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_power",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_uptime",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_ram",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_cpu",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_cpu_temp",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_disk_total",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_disk_used",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "raspberry_disk_free",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "lustro_switch_screen",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 13,
+        "x": 430,
+        "y": 120,
+        "wires": [
+            [
+                "fe457a9a357d6874"
+            ],
+            [
+                "603026e789b0edd2"
+            ],
+            [
+                "6ad1041bfc23f57a"
+            ],
+            [
+                "bfd63da51854e2e4"
+            ],
+            [
+                "ee182dc17e0d522f"
+            ],
+            [
+                "77fd3941938afd83"
+            ],
+            [
+                "52d8be3271dd2445"
+            ],
+            [
+                "93b07f2b86563ec7"
+            ],
+            [
+                "44ef1deba356febc"
+            ],
+            [
+                "33dacb3c69a5d323"
+            ],
+            [
+                "39570dae35b8c451"
+            ],
+            [
+                "78947c056d017f67"
+            ],
+            [
+                "528dcd6aee9e92db"
+            ]
+        ]
+    },
+    {
+        "id": "2ca9cfc8aeec2197",
+        "type": "function",
+        "z": "029daacd394af14d",
+        "name": "Dict2Msg",
+        "func": "let measure=JSON.parse(msg.payload);\nvar keys = Object.keys(measure);\n\nkeys.forEach(function(element) {\n    let nmsg = {'topic' : element,\n                'payload' : measure[element]}\n    node.send(nmsg);\n});\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 120,
+        "wires": [
+            [
+                "0acafdf22aab5552"
+            ]
+        ]
+    },
+    {
+        "id": "fe457a9a357d6874",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Monitor Temperature",
+        "entityConfig": "4aab34bda00bb2cd",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 930,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "603026e789b0edd2",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Board Temperature",
+        "entityConfig": "74b438832ea37507",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 930,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6ad1041bfc23f57a",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Current",
+        "entityConfig": "ba9a2db996ee9abb",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 890,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bfd63da51854e2e4",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Voltage",
+        "entityConfig": "5b4befbc2d8dc794",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 890,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ee182dc17e0d522f",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Power",
+        "entityConfig": "0fd5826b106d6489",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 890,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "77fd3941938afd83",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Uptime",
+        "entityConfig": "02ada8bcdb5befa5",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 890,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "52d8be3271dd2445",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry RAM Usage",
+        "entityConfig": "c7d7bc5655b1fbf8",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 910,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "93b07f2b86563ec7",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry CPU Usage",
+        "entityConfig": "07765d19dfb4e78a",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 900,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "44ef1deba356febc",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry CPU Temperature",
+        "entityConfig": "44376eb02fede192",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 920,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "33dacb3c69a5d323",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Disk Total",
+        "entityConfig": "3f1c2c3047665615",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 900,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "39570dae35b8c451",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Disk Usage",
+        "entityConfig": "7352d9d2d2697a97",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 900,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "78947c056d017f67",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Disk Free",
+        "entityConfig": "bb7e6d8762b271a6",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 900,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9fcf71a3fe078b24",
+        "type": "function",
+        "z": "029daacd394af14d",
+        "name": "ScreenMap",
+        "func": "node.warn(msg);\nlet val = msg.payload\nconst dScreean = [\n    [\"0\", \"Automatycznie\"],\n    [\"1\", \"Duży zegar\"],\n    [\"2\", \"Dane pogodowe\"],\n];\nlet out1 = null\nlet out2 = null\n\nif (msg.topic == \"initial\") {\n    for (let index = 0; index < dScreean.length; index++) {\n        const element = dScreean[index];\n        if (element[0] == val) {\n            out1 = {'payload': element[1]};\n            out2 = {'payload': element[0]};\n        }\n    }\n} else if (msg.topic == \"name2index\") {\n    for (let index = 0; index < dScreean.length; index++) {\n        const element = dScreean[index];\n        if (element[1] == val) {\n            out2 = {'payload': element[0]};\n        }\n    }\n} else if (msg.topic == \"lustro_switch_screen\") {\n    for (let index = 0; index < dScreean.length; index++) {\n        const element = dScreean[index];\n        if (element[0] == val) {\n            out1 = {'payload': element[1]};\n        }\n    }\n}\n\nreturn [out1, out2]",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 600,
+        "wires": [
+            [
+                "7769eda9fb22ac2e"
+            ],
+            [
+                "31433616b782e244"
+            ]
+        ]
+    },
+    {
+        "id": "528dcd6aee9e92db",
+        "type": "link out",
+        "z": "029daacd394af14d",
+        "name": "RaspberrySelectScreenLnk",
+        "mode": "link",
+        "links": [
+            "8ebc15c990441c77"
+        ],
+        "x": 805,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "8ebc15c990441c77",
+        "type": "link in",
+        "z": "029daacd394af14d",
+        "name": "RaspberrySelectScreenLnk",
+        "links": [
+            "528dcd6aee9e92db"
+        ],
+        "x": 25,
+        "y": 600,
+        "wires": [
+            [
+                "9fcf71a3fe078b24"
+            ]
+        ]
+    },
+    {
+        "id": "7769eda9fb22ac2e",
+        "type": "ha-select",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Screen Select",
+        "version": 1,
+        "debugenabled": false,
+        "inputs": 1,
+        "outputs": 1,
+        "entityConfig": "6c3cf469c82ce39c",
+        "exposeAsEntityConfig": "",
+        "mode": "set",
+        "value": "payload",
+        "valueType": "msg",
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "value"
+            },
+            {
+                "property": "previousValue",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "previousValue"
+            }
+        ],
+        "x": 470,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2e049b5dc8897981",
+        "type": "inject",
+        "z": "029daacd394af14d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "initial",
+        "payload": "0",
+        "payloadType": "str",
+        "x": 100,
+        "y": 520,
+        "wires": [
+            [
+                "9fcf71a3fe078b24"
+            ]
+        ]
+    },
+    {
+        "id": "31433616b782e244",
+        "type": "mqtt out",
+        "z": "029daacd394af14d",
+        "name": "",
+        "topic": "/lustro/selected_screen",
+        "qos": "0",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "183b7ec300bdbd53",
+        "x": 470,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "427d25251fcc6af6",
+        "type": "ha-select",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Screen Select Web",
+        "version": 1,
+        "debugenabled": false,
+        "inputs": 0,
+        "outputs": 1,
+        "entityConfig": "6c3cf469c82ce39c",
+        "exposeAsEntityConfig": "",
+        "mode": "listen",
+        "value": "payload",
+        "valueType": "msg",
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "value"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "name2index",
+                "valueType": "str"
+            }
+        ],
+        "x": 140,
+        "y": 680,
+        "wires": [
+            [
+                "9fcf71a3fe078b24"
+            ]
+        ]
+    },
+    {
+        "id": "d860122bebcae9e6",
+        "type": "udp in",
+        "z": "029daacd394af14d",
+        "name": "TempHumiLaz",
+        "iface": "",
+        "port": "9100",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 90,
+        "y": 200,
+        "wires": [
+            [
+                "a886e03ce86b8138"
+            ]
+        ]
+    },
+    {
+        "id": "a886e03ce86b8138",
+        "type": "function",
+        "z": "029daacd394af14d",
+        "name": "MsgTo2Output",
+        "func": "let measure=JSON.parse(msg.payload);\nlet temp = {\"payload\" : measure['temperature'] || \"0\"}\nlet humi = {\"payload\" : measure['humidity'] || \"0\"}\n\nreturn [temp, humi];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 140,
+        "y": 320,
+        "wires": [
+            [
+                "db8b74140f719583"
+            ],
+            [
+                "ee81a9a157b3bb30"
+            ]
+        ]
+    },
+    {
+        "id": "db8b74140f719583",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Łazienka Temperatura",
+        "entityConfig": "8d4457c7dd84d2f8",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 360,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ee81a9a157b3bb30",
+        "type": "ha-sensor",
+        "z": "029daacd394af14d",
+        "name": "Łazienka Wilgotność",
+        "entityConfig": "58e3d305a259e307",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 360,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c6ecb76f658669e2",
+        "type": "tcp in",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Screen Init",
+        "server": "server",
+        "host": "",
+        "port": "9002",
+        "datamode": "stream",
+        "datatype": "utf8",
+        "newline": "",
+        "topic": "",
+        "trim": false,
+        "base64": false,
+        "tls": "",
+        "x": 120,
+        "y": 820,
+        "wires": [
+            [
+                "10e5f2e7bfdce083"
+            ]
+        ]
+    },
+    {
+        "id": "10e5f2e7bfdce083",
+        "type": "ha-select",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Screen Get Selected",
+        "version": 1,
+        "debugenabled": false,
+        "inputs": 1,
+        "outputs": 1,
+        "entityConfig": "6c3cf469c82ce39c",
+        "exposeAsEntityConfig": "",
+        "mode": "get",
+        "value": "payload",
+        "valueType": "msg",
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "value"
+            }
+        ],
+        "x": 390,
+        "y": 820,
+        "wires": [
+            [
+                "d6340f8e471dc1c1"
+            ]
+        ]
+    },
+    {
+        "id": "d6340f8e471dc1c1",
+        "type": "tcp out",
+        "z": "029daacd394af14d",
+        "name": "Raspberry Screen Reply",
+        "host": "",
+        "port": "",
+        "beserver": "reply",
+        "base64": false,
+        "end": false,
+        "tls": "",
+        "x": 710,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "ef16a0999dfe20d1",
+        "type": "udp in",
+        "z": "36e1d1b1cd33bce2",
+        "name": "",
+        "iface": "",
+        "port": "9003",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 80,
+        "y": 40,
+        "wires": [
+            [
+                "e94fe018f0b6155d"
+            ]
+        ]
+    },
+    {
+        "id": "09bd222073da3cd7",
+        "type": "switch",
+        "z": "36e1d1b1cd33bce2",
+        "name": "ValueSwitch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "voltage_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "voltage_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "voltage_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "voltage_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "current_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "current_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "current_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "current_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "power_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "power_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "power_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "power_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "energy_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "energy_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "energy_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "energy_4",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 16,
+        "x": 290,
+        "y": 120,
+        "wires": [
+            [
+                "72fc2d612dba6564"
+            ],
+            [
+                "78a4fc8c5a89f438"
+            ],
+            [
+                "e28041317af65944"
+            ],
+            [
+                "5ea56cf5544ce25a"
+            ],
+            [
+                "fe947cbf85f6103f"
+            ],
+            [
+                "ec8f97e2323cb0a8"
+            ],
+            [
+                "a834da9986b905fa"
+            ],
+            [
+                "4c74c5643a27b749"
+            ],
+            [
+                "803f94da28ef2248"
+            ],
+            [
+                "e30527135ee35640"
+            ],
+            [
+                "571b1c4e7a381cd0"
+            ],
+            [
+                "c773f408b29bd209"
+            ],
+            [
+                "949b32150bd84cca"
+            ],
+            [
+                "1c59b83a17bceabf"
+            ],
+            [
+                "68eaeebcde15fee8"
+            ],
+            [
+                "bb0bc4f5b0f604d8"
+            ]
+        ]
+    },
+    {
+        "id": "e94fe018f0b6155d",
+        "type": "function",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Dict2Msg",
+        "func": "let measure=JSON.parse(msg.payload);\nvar keys = Object.keys(measure);\n\nkeys.forEach(function(element) {\n    let nmsg = {'topic' : element,\n                'payload' : measure[element]}\n    node.send(nmsg);\n});\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "09bd222073da3cd7"
+            ]
+        ]
+    },
+    {
+        "id": "72fc2d612dba6564",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 1 Voltage",
+        "entityConfig": "b3e18fd3c1921867",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "78a4fc8c5a89f438",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 2 Voltage",
+        "entityConfig": "1bf5f11690632301",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e28041317af65944",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 3 Voltage",
+        "entityConfig": "13bb7766245c1a36",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5ea56cf5544ce25a",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 4 Voltage",
+        "entityConfig": "a9dae38d3b6ecb2a",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fe947cbf85f6103f",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 1 Current",
+        "entityConfig": "0eb2d6c0cf8f9b40",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ec8f97e2323cb0a8",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 2 Current",
+        "entityConfig": "fda877e6b51c6f12",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a834da9986b905fa",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 3 Current",
+        "entityConfig": "a750c7f5b63e716e",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4c74c5643a27b749",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 4 Current",
+        "entityConfig": "3e78ba8e50890226",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "803f94da28ef2248",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 1 Power",
+        "entityConfig": "6a37d450120a284b",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e30527135ee35640",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 2 Power",
+        "entityConfig": "86dff4d4fd537de9",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "571b1c4e7a381cd0",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 3 Power",
+        "entityConfig": "de3add8b92d07fc1",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c773f408b29bd209",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 4 Power",
+        "entityConfig": "3825b24c8d5dcfee",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "949b32150bd84cca",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 1 Energy",
+        "entityConfig": "6c7055b2e1ce2fc4",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1c59b83a17bceabf",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 2 Energy",
+        "entityConfig": "b0e3ebb881137003",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "68eaeebcde15fee8",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 3 Energy",
+        "entityConfig": "786cd32967802e59",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 940,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb0bc4f5b0f604d8",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Device 4 Energy",
+        "entityConfig": "c5fb1dce971b4dc7",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 1000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d0a1c6b60b1f92bc",
+        "type": "udp in",
+        "z": "36e1d1b1cd33bce2",
+        "name": "",
+        "iface": "",
+        "port": "9004",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "buffer",
+        "x": 100,
+        "y": 600,
+        "wires": [
+            [
+                "d8fb689dc9c9761a"
+            ]
+        ]
+    },
+    {
+        "id": "d8fb689dc9c9761a",
+        "type": "function",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Dict2Msg",
+        "func": "let measure=JSON.parse(msg.payload);\nvar keys = Object.keys(measure);\n\nkeys.forEach(function(element) {\n    let nmsg = {'topic' : element,\n                'payload' : measure[element]}\n    node.send(nmsg);\n});\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 140,
+        "y": 1180,
+        "wires": [
+            [
+                "5f0f7653745780a4"
+            ]
+        ]
+    },
+    {
+        "id": "5f0f7653745780a4",
+        "type": "switch",
+        "z": "36e1d1b1cd33bce2",
+        "name": "ValueSwitch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "domoticz_uptime",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "domoticz_cpu_temp",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "domoticz_ram",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "domoticz_cpu",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "domoticz_disk_total",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "domoticz_disk_used",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "domoticz_disk_free",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 7,
+        "x": 330,
+        "y": 1180,
+        "wires": [
+            [
+                "4b0b1121478a3bab"
+            ],
+            [
+                "0c413adb6db6e358"
+            ],
+            [
+                "fd5acb30bcd78338"
+            ],
+            [
+                "9ef967e871dbd048"
+            ],
+            [
+                "88fa460c4245f2cc"
+            ],
+            [
+                "0248568887b596a2"
+            ],
+            [
+                "66c35f1f038c410c"
+            ]
+        ]
+    },
+    {
+        "id": "4b0b1121478a3bab",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Domoticz uptime",
+        "entityConfig": "d4391a7b2efcb835",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 1100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0c413adb6db6e358",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Domoticz CPU Temperature",
+        "entityConfig": "8e92b62f28d36ca6",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 800,
+        "y": 1160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fd5acb30bcd78338",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Domoticz RAM",
+        "entityConfig": "95be783349fb2817",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9ef967e871dbd048",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Domoticz CPU",
+        "entityConfig": "05c69ddce8f51689",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 760,
+        "y": 1280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "88fa460c4245f2cc",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Domoticz Disk Total",
+        "entityConfig": "d6a62f5b2ebb3c5d",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 1360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0248568887b596a2",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Domoticz Disk Used",
+        "entityConfig": "04d97a173c4df654",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 780,
+        "y": 1420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "66c35f1f038c410c",
+        "type": "ha-sensor",
+        "z": "36e1d1b1cd33bce2",
+        "name": "Domoticz Disk Free",
+        "entityConfig": "6ff8ad43eec78399",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 1480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "46e660f8fd8e58cd",
+        "type": "inject",
+        "z": "94b3ddf69be9d676",
+        "name": "6:00",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 06 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "57c1dfeb79e1509a"
+            ]
+        ]
+    },
+    {
+        "id": "929be76c1334d979",
+        "type": "inject",
+        "z": "94b3ddf69be9d676",
+        "name": "22:00",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 22 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "57c1dfeb79e1509a"
+            ]
+        ]
+    },
+    {
+        "id": "cf89c20261ca4e8b",
+        "type": "ha-binary-sensor",
+        "z": "94b3ddf69be9d676",
+        "name": "Scena Cisza Nocna",
+        "entityConfig": "ff53c5afc56f9816",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "quiet hours",
+                "valueType": "str"
+            }
+        ],
+        "x": 670,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d2ac85b21ef1f41c",
+        "type": "sunrise",
+        "z": "94b3ddf69be9d676",
+        "name": "Wschod/Zachod Słońca",
+        "lat": "52.18304026546354",
+        "lon": "20.866701006889347",
+        "start": "sunrise",
+        "end": "sunsetStart",
+        "soff": 0,
+        "eoff": 0,
+        "sendAtStartup": true,
+        "x": 140,
+        "y": 600,
+        "wires": [
+            [
+                "030a46cfd810920d",
+                "c85786fd3dcb43bc"
+            ],
+            [
+                "1e3fb4ff19c6eeae",
+                "7150199fe0d0d409"
+            ]
+        ]
+    },
+    {
+        "id": "b8befe37766766d7",
+        "type": "ha-binary-sensor",
+        "z": "94b3ddf69be9d676",
+        "name": "Scena Słońce",
+        "entityConfig": "8c945f55d54c3968",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 660,
+        "y": 560,
+        "wires": [
+            [
+                "60f77eec8192957f"
+            ]
+        ]
+    },
+    {
+        "id": "e0f6a006d0ac07e4",
+        "type": "inject",
+        "z": "94b3ddf69be9d676",
+        "name": "13:00",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 13 * * 1,2,3,4,5",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 320,
+        "wires": [
+            [
+                "57c1dfeb79e1509a"
+            ]
+        ]
+    },
+    {
+        "id": "ba0497709409629c",
+        "type": "inject",
+        "z": "94b3ddf69be9d676",
+        "name": "15:00",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 15 * * 1,2,3,4,5",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 360,
+        "wires": [
+            [
+                "57c1dfeb79e1509a"
+            ]
+        ]
+    },
+    {
+        "id": "d1366bf1f61ee936",
+        "type": "inject",
+        "z": "94b3ddf69be9d676",
+        "name": "17:00",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 17 * * 1,2,3,4,5",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 400,
+        "wires": [
+            [
+                "57c1dfeb79e1509a"
+            ]
+        ]
+    },
+    {
+        "id": "83ae0779e84d3ec7",
+        "type": "api-current-state",
+        "z": "94b3ddf69be9d676",
+        "name": "WorkDay",
+        "server": "bc61fea4.66f78",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is_not",
+        "entity_id": "binary_sensor.workday_sensor",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "workday",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 360,
+        "y": 380,
+        "wires": [
+            [
+                "6f1fd589e19795be",
+                "3884376df0b59274"
+            ]
+        ]
+    },
+    {
+        "id": "0f791d112d71b7a0",
+        "type": "ha-binary-sensor",
+        "z": "94b3ddf69be9d676",
+        "name": "Scena Taryfa 2",
+        "entityConfig": "2cf2ddd99ea38266",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 680,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "030a46cfd810920d",
+        "type": "function",
+        "z": "94b3ddf69be9d676",
+        "name": "Day",
+        "func": "msg.payload = true;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 580,
+        "wires": [
+            [
+                "b8befe37766766d7"
+            ]
+        ]
+    },
+    {
+        "id": "1e3fb4ff19c6eeae",
+        "type": "function",
+        "z": "94b3ddf69be9d676",
+        "name": "Night",
+        "func": "msg.payload = false;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 620,
+        "wires": [
+            [
+                "b8befe37766766d7"
+            ]
+        ]
+    },
+    {
+        "id": "264a0e0beaae5ae4",
+        "type": "comment",
+        "z": "94b3ddf69be9d676",
+        "name": "Godziny ciszy nocnej i 2 taryfy",
+        "info": "Godziny ciszy nocnej \ni godziny \"2\" taryfy ",
+        "x": 160,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "35ae8e0a47993ffd",
+        "type": "comment",
+        "z": "94b3ddf69be9d676",
+        "name": "W okresie letnim [1.04 do 30.09] taryfa 2 występuje w ciągu dnia roboczego od 15 do 17. ",
+        "info": "",
+        "x": 340,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "55177fae40adab57",
+        "type": "inject",
+        "z": "94b3ddf69be9d676",
+        "name": "Cena 1kWh Taryfa dzienna",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "taryfa1",
+        "payload": "1.30",
+        "payloadType": "num",
+        "x": 180,
+        "y": 40,
+        "wires": [
+            [
+                "3a7400212f495e5e"
+            ]
+        ]
+    },
+    {
+        "id": "cc42b93adb3fd0d6",
+        "type": "inject",
+        "z": "94b3ddf69be9d676",
+        "name": "Cena 1kWh Taryfa nocna",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "taryfa2",
+        "payload": "0.69",
+        "payloadType": "num",
+        "x": 170,
+        "y": 80,
+        "wires": [
+            [
+                "3a7400212f495e5e"
+            ]
+        ]
+    },
+    {
+        "id": "13242fa7d13db0e4",
+        "type": "function",
+        "z": "94b3ddf69be9d676",
+        "name": "Wybierz Cena/Taryfa",
+        "func": "var ctariff = flow.get('ctariff');\nif (!ctariff) {\n    ctariff = { false: 0, true: 0 };\n}\n\nif (msg.topic == \"taryfa1\") {\n    ctariff[false] = msg.payload;\n    flow.set('ctariff', ctariff);\n} if (msg.topic == \"taryfa2\") {\n    ctariff[true] = msg.payload;\n} else {\n    return {'payload' : ctariff[msg.payload]};\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 400,
+        "wires": [
+            [
+                "78c62c93d08677da"
+            ]
+        ]
+    },
+    {
+        "id": "78c62c93d08677da",
+        "type": "ha-sensor",
+        "z": "94b3ddf69be9d676",
+        "name": "Aktualna Cena kWh",
+        "entityConfig": "8071fbbe7edbe370",
+        "version": 0,
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 800,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3a7400212f495e5e",
+        "type": "link out",
+        "z": "94b3ddf69be9d676",
+        "name": "WartosciCenykWh",
+        "mode": "link",
+        "links": [
+            "3e87ea4cb28ee5c5"
+        ],
+        "x": 425,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "3e87ea4cb28ee5c5",
+        "type": "link in",
+        "z": "94b3ddf69be9d676",
+        "name": "WartosciCenykWh",
+        "links": [
+            "3a7400212f495e5e"
+        ],
+        "x": 565,
+        "y": 440,
+        "wires": [
+            [
+                "13242fa7d13db0e4"
+            ]
+        ]
+    },
+    {
+        "id": "2894cc7fef093288",
+        "type": "comment",
+        "z": "94b3ddf69be9d676",
+        "name": "Tutaj definiuje się ceny dla taryf",
+        "info": "",
+        "x": 170,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "22b1a27bafbe4b72",
+        "type": "comment",
+        "z": "94b3ddf69be9d676",
+        "name": "Ceny ",
+        "info": "",
+        "x": 490,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "6db59f96b5ab4ae8",
+        "type": "comment",
+        "z": "94b3ddf69be9d676",
+        "name": "W okresie zimowym analogicznie do ale w godzinachod 13 do 15.",
+        "info": "",
+        "x": 270,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "57c1dfeb79e1509a",
+        "type": "function",
+        "z": "94b3ddf69be9d676",
+        "name": "Cisza Nocna && 2 Taryfa",
+        "func": "node.warn(msg);\nif ( !msg.timestamp ) msg.timestamp = Math.round(+new Date());\n\nvar dt = new Date(msg.timestamp);\nlet month = dt.getMonth();\nlet hour = dt.getHours();\n\nlet msg1 = {'payload' : false};\nlet msg2 = {'payload' : false};\n\nif (hour < 6 && hour >= 22) {\n    msg1 = {'payload' : true};\n}\n\nif (month >= 10 && month < 4) {\n    if (hour >= 13 && hour < 15) {\n        msg2 = {'payload' : true};\n    }\n} else {\n    if (hour >= 15 && hour < 17) {\n        msg2 = {'payload' : true};\n    }\n}\nreturn [msg1, msg2];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 300,
+        "wires": [
+            [
+                "cf89c20261ca4e8b",
+                "2bcfe35cabc0b40a"
+            ],
+            [
+                "83ae0779e84d3ec7",
+                "0c94a0ace077ed5a"
+            ]
+        ]
+    },
+    {
+        "id": "cbe707a28e241553",
+        "type": "inject",
+        "z": "94b3ddf69be9d676",
+        "name": "INIT",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "10",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 460,
+        "wires": [
+            [
+                "57c1dfeb79e1509a"
+            ]
+        ]
+    },
+    {
+        "id": "6f1fd589e19795be",
+        "type": "function",
+        "z": "94b3ddf69be9d676",
+        "name": "WorkDay",
+        "func": "\nif (msg.workday == \"off\") {\n    return { 'payload' : true };\n} else {\n    return { 'payload' : msg.payload };\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 380,
+        "wires": [
+            [
+                "0f791d112d71b7a0",
+                "13242fa7d13db0e4",
+                "c6bbc8e6c9bfe28e"
+            ]
+        ]
+    },
+    {
+        "id": "7150199fe0d0d409",
+        "type": "debug",
+        "z": "94b3ddf69be9d676",
+        "name": "Zachód Słońca",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "c85786fd3dcb43bc",
+        "type": "debug",
+        "z": "94b3ddf69be9d676",
+        "name": "Wschód Słońca",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "60f77eec8192957f",
+        "type": "debug",
+        "z": "94b3ddf69be9d676",
+        "name": "Słońce",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "2bcfe35cabc0b40a",
+        "type": "debug",
+        "z": "94b3ddf69be9d676",
+        "name": "Cisza Nocna",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 350,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "0c94a0ace077ed5a",
+        "type": "debug",
+        "z": "94b3ddf69be9d676",
+        "name": "Taryfa 2 allday",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "3884376df0b59274",
+        "type": "debug",
+        "z": "94b3ddf69be9d676",
+        "name": "WorkDay",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "c6bbc8e6c9bfe28e",
+        "type": "debug",
+        "z": "94b3ddf69be9d676",
+        "name": "Taryfa 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "86aa0252f2489a91",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-node-suncalc": "1.2.0"
+        }
+    }
+]

@@ -1,0 +1,2641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SalonSypialniaHol</class>
+ <widget class="QDialog" name="SalonSypialniaHol">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1742</width>
+    <height>978</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_4">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="1" rowspan="2">
+      <widget class="QFrame" name="frame">
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>3</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="frame_5">
+          <property name="maximumSize">
+           <size>
+            <width>1150</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="ltty_ard">
+             <property name="text">
+              <string>?</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>650</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="lttyRs485">
+             <property name="text">
+              <string>?</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGraphicsView" name="plan"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="0" rowspan="3">
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="minimumSize">
+        <size>
+         <width>400</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>400</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="tabPosition">
+        <enum>QTabWidget::West</enum>
+       </property>
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <widget class="QWidget" name="tabWidget_output">
+        <attribute name="title">
+         <string>OUTPUT</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>5</number>
+         </property>
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>5</number>
+         </property>
+         <property name="bottomMargin">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="lo_04">
+           <property name="text">
+            <string>Led 1 salon/łazienka</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_05">
+           <property name="text">
+            <string>Led 2 salon/łazienka</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_06">
+           <property name="text">
+            <string>Led 3.2 hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_07">
+           <property name="text">
+            <string>Led 4.4 hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_08">
+           <property name="text">
+            <string>Led 4.3 hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_09">
+           <property name="text">
+            <string>Led 4.2 hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_10">
+           <property name="text">
+            <string>Led 4.1 hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_11">
+           <property name="text">
+            <string>Led 3.1 hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_12">
+           <property name="text">
+            <string>Led 3.3 hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_13">
+           <property name="text">
+            <string>Zasilacz 12V</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_14">
+           <property name="text">
+            <string>Led 1 salon/jadalnia</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_15">
+           <property name="text">
+            <string>Led 2 salon/jadalnia</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_19">
+           <property name="text">
+            <string>Światło sypialnia</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_20">
+           <property name="text">
+            <string>Czujka ruchu</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_21">
+           <property name="text">
+            <string>Podś. wł.  mix</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_22">
+           <property name="text">
+            <string>Podś wł. hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_23">
+           <property name="text">
+            <string>Podś. wł. salon</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_24">
+           <property name="text">
+            <string>Sypialnia 1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_25">
+           <property name="text">
+            <string>Sypialnia kinkiety</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_26">
+           <property name="text">
+            <string>Led 4.0 hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_27">
+           <property name="text">
+            <string>Sypialnia 2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_28">
+           <property name="text">
+            <string>Salon 2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_29">
+           <property name="text">
+            <string>Gwarantowane N</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_30">
+           <property name="text">
+            <string>Gwarantowane L</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_31">
+           <property name="text">
+            <string>Salon 1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_39">
+           <property name="text">
+            <string>Światło hol</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lo_47">
+           <property name="text">
+            <string> Światło syp.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabWidget_input">
+        <attribute name="title">
+         <string>INPUT</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>5</number>
+         </property>
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>5</number>
+         </property>
+         <property name="bottomMargin">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="li_00">
+           <property name="text">
+            <string>0</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_01">
+           <property name="text">
+            <string>1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_02">
+           <property name="text">
+            <string>2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_03">
+           <property name="text">
+            <string>3</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_16">
+           <property name="text">
+            <string>16</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_17">
+           <property name="text">
+            <string>17</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_18">
+           <property name="text">
+            <string>18</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_32">
+           <property name="text">
+            <string>32</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_33">
+           <property name="text">
+            <string>33</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_34">
+           <property name="text">
+            <string>34</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_35">
+           <property name="text">
+            <string>35</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_36">
+           <property name="text">
+            <string>36</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_37">
+           <property name="text">
+            <string>37</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_38">
+           <property name="text">
+            <string>38</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_40">
+           <property name="text">
+            <string>40</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_41">
+           <property name="text">
+            <string>41</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_42">
+           <property name="text">
+            <string>42</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_43">
+           <property name="text">
+            <string>43</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_44">
+           <property name="text">
+            <string>44</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_45">
+           <property name="text">
+            <string>45</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_46">
+           <property name="text">
+            <string>46</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_48">
+           <property name="text">
+            <string>48</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_49">
+           <property name="text">
+            <string>49</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_50">
+           <property name="text">
+            <string>50</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_51">
+           <property name="text">
+            <string>51</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_52">
+           <property name="text">
+            <string>52</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_53">
+           <property name="text">
+            <string>53</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_54">
+           <property name="text">
+            <string>54</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_56">
+           <property name="text">
+            <string>56</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_57">
+           <property name="text">
+            <string>57</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_58">
+           <property name="text">
+            <string>58</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_59">
+           <property name="text">
+            <string>59</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_60">
+           <property name="text">
+            <string>60</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_61">
+           <property name="text">
+            <string>61</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="li_62">
+           <property name="text">
+            <string>62</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_wykres">
+        <attribute name="title">
+         <string>Wejścia/Wyjścia</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QGraphicsView" name="wykres">
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOn</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOn</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_57_59">
+        <attribute name="title">
+         <string>Złacza 57,58,59</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QScrollArea" name="scrollArea">
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOn</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>380</width>
+              <height>942</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="leftMargin">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>2</number>
+             </property>
+             <property name="rightMargin">
+              <number>2</number>
+             </property>
+             <property name="bottomMargin">
+              <number>2</number>
+             </property>
+             <item>
+              <widget class="QGroupBox" name="gb57">
+               <property name="title">
+                <string>57</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez57_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z57_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez57_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z57_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez57_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z57_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez57_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z57_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez57_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z57_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez57_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z57_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="ez57_07">
+                  <property name="text">
+                   <string>7.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLabel" name="z57_07">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="ez57_08">
+                  <property name="text">
+                   <string>8.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="z57_08">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb58">
+               <property name="title">
+                <string>58</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_2">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez58_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z58_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez58_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez58_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez58_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z58_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z58_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z58_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez58_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z58_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="ez58_07">
+                  <property name="text">
+                   <string>7.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="ez58_08">
+                  <property name="text">
+                   <string>8.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLabel" name="z58_07">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="z58_08">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez58_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z58_6">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb59">
+               <property name="title">
+                <string>59</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_13">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez59_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z59_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez59_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z59_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez59_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z59_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez59_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z59_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez59_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z59_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez59_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z59_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="ez59_07">
+                  <property name="text">
+                   <string>7.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLabel" name="z59_07">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="ez59_08">
+                  <property name="text">
+                   <string>8.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="z59_08">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_209_213">
+        <attribute name="title">
+         <string>Złącza 209-213</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QScrollArea" name="scrollArea_2">
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOn</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents_2">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>380</width>
+              <height>942</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="leftMargin">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>2</number>
+             </property>
+             <property name="rightMargin">
+              <number>2</number>
+             </property>
+             <property name="bottomMargin">
+              <number>2</number>
+             </property>
+             <item>
+              <widget class="QGroupBox" name="gb209">
+               <property name="title">
+                <string>209</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_4">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez209_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z209_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez209_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z209_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez209_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z209_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez209_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z209_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez209_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z209_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez209_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z209_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="ez209_07">
+                  <property name="text">
+                   <string>7.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLabel" name="z209_07">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="ez209_08">
+                  <property name="text">
+                   <string>8.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="z209_08">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QLabel" name="ez209_09">
+                  <property name="text">
+                   <string>9.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="1">
+                 <widget class="QLabel" name="z209_09">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="0">
+                 <widget class="QLabel" name="ez209_10">
+                  <property name="text">
+                   <string>10.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="1">
+                 <widget class="QLabel" name="z209_10">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb210">
+               <property name="title">
+                <string>210</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_5">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez210_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z210_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez210_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z210_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez210_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z210_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez210_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z210_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez210_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z210_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez210_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z210_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb211">
+               <property name="title">
+                <string>211</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_6">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez211_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z211_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez211_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z211_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez211_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z211_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez211_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z211_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb212">
+               <property name="title">
+                <string>212</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_7">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez212_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z212_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez212_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z212_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez212_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z212_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez212_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z212_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb213">
+               <property name="title">
+                <string>213</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_8">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez213_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z213_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez213_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z213_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez213_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z213_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez213_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z213_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez213_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z213_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez213_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z213_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_214_217">
+        <attribute name="title">
+         <string>Złącza 214-217</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_10">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QScrollArea" name="scrollArea_3">
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents_3">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>394</width>
+              <height>942</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_11">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="leftMargin">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>2</number>
+             </property>
+             <property name="rightMargin">
+              <number>2</number>
+             </property>
+             <property name="bottomMargin">
+              <number>2</number>
+             </property>
+             <item>
+              <widget class="QGroupBox" name="gb214">
+               <property name="title">
+                <string>214</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_11">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez214_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z214_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez214_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z214_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez214_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z214_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez214_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z214_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez214_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z214_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez214_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z214_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="ez214_07">
+                  <property name="text">
+                   <string>7.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLabel" name="z214_07">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="ez214_08">
+                  <property name="text">
+                   <string>8.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="z214_08">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QLabel" name="ez214_09">
+                  <property name="text">
+                   <string>9.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="1">
+                 <widget class="QLabel" name="z214_09">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="0">
+                 <widget class="QLabel" name="ez214_10">
+                  <property name="text">
+                   <string>10.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="1">
+                 <widget class="QLabel" name="z214_10">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb215">
+               <property name="title">
+                <string>215</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_9">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez215_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z215_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez215_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z215_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez215_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z215_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez215_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z215_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez215_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z215_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez215_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z215_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="ez215_07">
+                  <property name="text">
+                   <string>7.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLabel" name="z215_07">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="ez215_08">
+                  <property name="text">
+                   <string>8.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="z215_08">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QLabel" name="ez215_09">
+                  <property name="text">
+                   <string>9.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="1">
+                 <widget class="QLabel" name="z215_09">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="0">
+                 <widget class="QLabel" name="ez215_10">
+                  <property name="text">
+                   <string>10.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="1">
+                 <widget class="QLabel" name="z215_10">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb216">
+               <property name="title">
+                <string>216</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_12">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez216_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z216_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez216_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z216_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez216_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z216_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="ez216_04">
+                  <property name="text">
+                   <string>4.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="z216_04">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="ez216_05">
+                  <property name="text">
+                   <string>5.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="z216_05">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="ez216_06">
+                  <property name="text">
+                   <string>6.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="z216_06">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="ez216_07">
+                  <property name="text">
+                   <string>7.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLabel" name="z216_07">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="ez216_08">
+                  <property name="text">
+                   <string>8.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="z216_08">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QLabel" name="ez216_09">
+                  <property name="text">
+                   <string>9.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="1">
+                 <widget class="QLabel" name="z216_09">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="0">
+                 <widget class="QLabel" name="ez216_10">
+                  <property name="text">
+                   <string>10.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="1">
+                 <widget class="QLabel" name="z216_10">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="gb217">
+               <property name="title">
+                <string>217</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_10">
+                <property name="rowWrapPolicy">
+                 <enum>QFormLayout::WrapLongRows</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="ez217_01">
+                  <property name="text">
+                   <string>1.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="z217_01">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="ez217_02">
+                  <property name="text">
+                   <string>2.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="z217_02">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="ez217_03">
+                  <property name="text">
+                   <string>3.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="z217_03">
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item row="0" column="2" rowspan="3">
+      <widget class="QFrame" name="frame_3">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QTextEdit" name="te_acm0"/>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="te_usb0"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QFrame" name="frame_2">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="5">
+         <widget class="QPushButton" name="pb_2taryfa">
+          <property name="text">
+           <string>2 taryfa</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="8">
+         <widget class="QPushButton" name="pb_24V">
+          <property name="text">
+           <string>24V_ON</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="QPushButton" name="pb_czujka1">
+          <property name="text">
+           <string>Czujka 1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="QPushButton" name="pb_czujka2">
+          <property name="text">
+           <string>Czujka 2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="pb_noc">
+          <property name="text">
+           <string>Noc</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="pb_zasawar">
+          <property name="text">
+           <string>Zas. awar.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QPushButton" name="pb_wieczor">
+          <property name="text">
+           <string>Wieczór</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QFrame" name="frame_4">
+          <property name="maximumSize">
+           <size>
+            <width>400</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="2" column="1">
+            <widget class="QPushButton" name="pbacm0">
+             <property name="text">
+              <string>Połącz z ACM</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>369</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="3">
+            <widget class="QPushButton" name="pbusb0">
+             <property name="text">
+              <string>Połącz z USB</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
