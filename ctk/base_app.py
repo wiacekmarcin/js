@@ -3,7 +3,7 @@ import tkinter as tk
 from customtkinter import CTk, CTkFrame
 import datetime
 from mqtt_client import PahoMqttWriter
-
+from udp_client import UdpSend
 
 class TimeoutClass(threading.Thread):
 
@@ -30,7 +30,6 @@ class TimeoutClass(threading.Thread):
         self.trun = False
         self.join()
 
-
 class LustroApp(CTk):
     _max_width = 1080
     _max_height = 1920
@@ -47,8 +46,8 @@ class LustroApp(CTk):
         self.container.pack(side = "top", fill = "both", expand = True) 
         #self.container.place(x=0, y=0)
  
-        self.container.grid_rowconfigure(0, weight = 1)
-        self.container.grid_columnconfigure(0, weight = 1)
+        self.container.grid_rowconfigure(0, weight = self._max_width)
+        self.container.grid_columnconfigure(0, weight = self._max_height)
  
         # initializing frames to an empty array
 
@@ -62,12 +61,9 @@ class LustroApp(CTk):
             frame.configure(bg_color = "black")
             frame.configure(fg_color = "black")
 
-        self.show_frame("normal")
-        self.auto_change = False
+        #self.show_frame("zegar")
+        #self.auto_change = True
         self.cntFrame = 0
-
-        #self.frame = CTkFrame(master=self.container, width=1080, height=1920)
-        #self.frame.grid(row=0, column=0, sticky="nsew")
         
         self.title("Lustro")
         w, h = self.winfo_screenwidth(), self.winfo_screenheight()
@@ -93,10 +89,13 @@ class LustroApp(CTk):
 
 
         self.mqtt = PahoMqttWriter(self.receiveMqttMsg)
+
+        self.udpCl = UdpSend()
         self.after(1000, self.startTimer)
 
     def startTimer(self):
         self.t1sec = TimeoutClass(lambda : self.after(0, self.update1Sec))
+        self.focus_set()
 
     def show_frame(self, page_name:str):
         '''Show a frame for the given page name'''
@@ -106,6 +105,7 @@ class LustroApp(CTk):
             return
         if page_name in self.frames:
             frame = self.frames[page_name]
+            self.auto_change = False
             frame.tkraise()
 
     def get_frame(self, page_name:str) -> CTkFrame | None:
@@ -116,10 +116,12 @@ class LustroApp(CTk):
 
     def sendNotification(self, dictValue):
         #print("sendNotification", dictValue)
-        self.after(0, self._sendNotification, dictValue)    
+        self.after(0, self._sendNotification, dictValue)
+
     
     def _sendNotification(self, valueDict):
         #print("_sendNotification", valueDict, len(self.plgs))
+        self.udpCl.sendUdpNotfication(valueDict)    
         for p in self.plgs:
             p.receiveNotfication(valueDict)
 
@@ -134,25 +136,20 @@ class LustroApp(CTk):
 
     def update1Sec(self):
         dt = datetime.datetime.now()
-        #return
-        #print("--")
-        t = dt.time().hour
-
-        if self.auto_change:
-            zegar = t not in [6, 7, 8, 9, 19, 20, 21, 22, 23]
-            
-            if zegar and self.selected_frame != "zegar":
-                self.show_frame("zegar")
-            elif not zegar and self.selected_frame != "normal":
-                self.show_frame("normal")
-        
         try:
             for p in self.plgs:
-                #try:
-                if 1:
-                    p.timeout(dt)
-                #except :
-                #    pass
+                p.timeout(dt)
+            t = dt.time().hour
+
+            if self.auto_change:
+                zegar = t not in [6, 7, 8, 9, 19, 20, 21, 22, 23]
+            
+                if zegar and self.selected_frame != "zegar":
+                    self.show_frame("zegar")
+                elif not zegar and self.selected_frame != "normal":
+                    self.show_frame("normal")
+        
+
         except KeyboardInterrupt:
             print("ctrl-c")
             self.t1sec.stopTimer()
@@ -163,8 +160,13 @@ class LustroApp(CTk):
         if 'display' in msg:
             display = msg['display']
             mapD = {
-                "Standardowy" : "normal",
-                "Wyświetlacz" : "zegar"
+                0 : "auto",
+                1 : "normal",
+                2 : "zegar"
             }
-            self.show_frame((mapD[display]))
+            if int(display) in mapD:
+                print("Change display")
+                self.show_frame((mapD[display]))
+            else:
+                print("error")
         self.sendNotification(msg)

@@ -12,7 +12,7 @@ from scipy.interpolate import splrep, splev
 from urllib.request import urlopen
 import json
 
-from wt_check_avg_temp import getWarningTemp, getWarningWind, getWarningRain, getWarningSnow
+from wt_check_avg_temp import getWarningTemp, getWarningWind, getWarningRain, getWarningSnow, getAvgMinMax
 from wt_calendar_events import getCalendarEvents
 from wt_events_utils import organize_warning, sumWarnings, reduce_warning_temp, reduce_warning_rain, reduce_warning_snow, reduce_warning_wind
 class Wykres:
@@ -171,8 +171,8 @@ class Wykres:
 			if not k in pogodaPoints or pogodaPoints[k] is None:
 				continue
 			temp = pogodaPoints[k]['temp']
-			#tempmin = pogodaPoints[k]['temp_min']
-			#tempmax = pogodaPoints[k]['temp_max']
+			tempmin = pogodaPoints[k]['avg_mint']
+			tempmax = pogodaPoints[k]['avg_maxt']
 			feelstemp = pogodaPoints[k]['feels_like']
 
 			x0 = margin + w3h*x -1 -3
@@ -180,8 +180,8 @@ class Wykres:
 			x1 = x0 + 3
 			y1 = y0 + 3
 			#draw.ellipse((x0, y0, x1, y1), fill='white', outline='red', width=2)
-			#points1.append((margin + w3h*x , (maxTemp-tempmin) * h1deg))
-			#points2.append((margin + w3h*x , (maxTemp-tempmax) * h1deg))
+			points1.append((margin + w3h*x , (maxTemp-tempmin) * h1deg))
+			points2.append((margin + w3h*x , (maxTemp-tempmax) * h1deg))
 			points3.append((margin + w3h*x , (maxTemp-feelstemp) * h1deg))
 			points4.append((margin + w3h*x , (maxTemp-temp) * h1deg))
 			draw3.text((x0,  y0), "%2.1f" % temp, font=self.fontS, fill="white")
@@ -189,11 +189,11 @@ class Wykres:
 			draw3.text((margin + w3h*x, 0), self.iconMap[pogodaPoints[k]['icon']], font=self.fontW, fill="white")
 			
 		
-		#x1 = np.array([p[0] for p in points1])
-		#y1 = np.array([p[1] for p in points1])
+		x1 = np.array([p[0] for p in points1])
+		y1 = np.array([p[1] for p in points1])
 
-		#x2 = np.array([p[0] for p in points2])
-		#y2 = np.array([p[1] for p in points2])
+		x2 = np.array([p[0] for p in points2])
+		y2 = np.array([p[1] for p in points2])
 
 		x3 = np.array([p[0] for p in points3])
 		y3 = np.array([p[1] for p in points3])
@@ -201,7 +201,7 @@ class Wykres:
 		x4 = np.array([p[0] for p in points4])
 		y4 = np.array([p[1] for p in points4])
 
-		#pl_1 = splrep(x1, y1)
+		#spl_1 = splrep(x1, y1)
 		#f_1 = splev(x1, spl_1)
 
 		#spl_2 = splrep(x2, y2)
@@ -225,12 +225,16 @@ class Wykres:
 		x_new4 = np.linspace(points4[0][0], points4[-1][0], (cnth+1)*w3h)
 		y_new4 = splev(x_new4, spl_4)
 
-		#poly = []
+		poly = []
 		#for i in range(len(x_new1)):
 		#	poly.append((x_new1[i], y_new1[i]))
+		for i in range(len(x1)):
+			poly.append((x1[i], y1[i]))
 
 		#for i in range(len(x_new2)):
 		#	poly.append((x_new2[len(x_new2)-i-1], y_new2[len(x_new2)-i-1]))
+		for i in range(len(x2)):
+			poly.append((x2[len(x2)-i-1], y2[len(x2)-i-1]))
 		
 		points3fix = []
 		for i in range(len(x_new3)):
@@ -240,8 +244,8 @@ class Wykres:
 		for i in range(len(x_new4)):
 			points4fix.append((x_new4[i], y_new4[i]))
 
-		#draw.polygon(poly, fill="green", outline="green", width=3)
-		#draw.polygon(poly, fill="green", outline="green", width=3)
+		draw.polygon(poly, fill="#002200", outline="#002200", width=3)
+		#draw.polygon(poly, fill="navy", outline="navy", width=3)
 		draw.line(points3fix, fill="red", width=3)
 		draw.line(points4fix, fill="green", width=3)
 
@@ -326,7 +330,13 @@ class Wykres:
 				main = w[0]['main']
 				description = w[0]['description']
 				icon = w[0]['icon']
-		
+
+			dt_date, dt_time = dt_txt.split(' ')
+			_, mo, da = dt_date.split('-')
+			ho, _, _ = dt_time.split(':')
+
+			avg_mint, avg_maxt = getAvgMinMax(int(mo), int(da), int(ho))
+			print(avg_mint, avg_maxt)
 			pogodaPoints[dt_txt] = {
 				'temp' : m['temp'],
 				'feels_like' : m['feels_like'],
@@ -337,6 +347,8 @@ class Wykres:
 				'main' : main,
 				'description' : description,
 				'icon' : icon,
+				'avg_mint' : avg_mint, 
+				'avg_maxt' : avg_maxt
 				}
 			
 			
@@ -423,14 +435,15 @@ class Wykres:
 		#print(t_minTemp, t_maxTemp, tf_minTemp, tf_maxTemp)
 		warning_time_0 = organize_warning(rainwarning_time, reduce_warning_rain)
 		warning_time_1 = organize_warning(snowwarning_time, reduce_warning_snow)
-		warning_time_2 = organize_warning(tempwarning_time, reduce_warning_temp)
+		#warning_time_2 = organize_warning(tempwarning_time, reduce_warning_temp)
 		warning_time_3 = organize_warning(windwarning_time, reduce_warning_wind)
 
 		#tempwarning_time_1 = self._organize_tempwarning(upal_warning_time, False)
 		#tempwarning_time_2 = self._organize_tempwarning(mroz_warning_time, True)
 
 		#return_warnings = sumWarnings([warning_time_O, warning_time_1])
-		return_warnings = sumWarnings([warning_time_0, warning_time_1, warning_time_2, warning_time_3])
+		#return_warnings = sumWarnings([warning_time_0, warning_time_1, warning_time_2, warning_time_3])
+		return_warnings = sumWarnings([warning_time_0, warning_time_1, warning_time_3])
 		
 		#print(warning_time_O)
 		#print(tempwarning_time_1)
@@ -501,5 +514,5 @@ class Wykres:
 
 
 
-#w = Wykres()
+#w = Wykres(1200)
 #w.createImage().show()

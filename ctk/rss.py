@@ -1,31 +1,26 @@
-from customtkinter import CTkLabel, CTkFont
+from customtkinter import CTkFont
 
 import feedparser
 import random
 
-from base_plugin import LFrame, LSimpleFrame
+from base_plugin import LSimpleFrame, LCTkLabel
 
-#class RssInfo(LFrame):
-#    def __init__(self, master, app, *args, **kwargs):
-#        super().__init__(0, 1000, 1080, 600, master, app, *args, **kwargs)
 class RssInfo(LSimpleFrame):
     
-    def __init__(self, master, app, *args, **kwargs):
+    def __init__(self, master, app, width, *args, **kwargs):
         super().__init__(master, app, *args, **kwargs)
-        self._wwidth = app._max_width
+        self._wwidth = width
         #print("rss", self._wwidth)
 
         self.font_head = CTkFont("Roboto Regular", size=48, weight="bold", slant="roman")
         self.font_info = CTkFont("Roboto Regular", size=28, weight="normal", slant="roman")
         
-        self.head = CTkLabel(self, fg_color="black", text="", 
-                             wraplength=int(0.95*self._wwidth), justify="center",   
-                             font=self.font_head)
+        self.head = LCTkLabel(master=self, text="", font=self.font_head,
+                             wraplength=int(0.95*self._wwidth), justify="center")
         self.head.pack(pady=20)
 
-        self.info = CTkLabel(self, fg_color="black", text="", 
-                                 wraplength=int(0.95*self._wwidth), justify="left",
-                                 font=self.font_info)
+        self.info = LCTkLabel(master=self, text="", font=self.font_info, 
+                                 wraplength=int(0.95*self._wwidth), justify="left")
         self.info.pack(pady=20)
         
         self.prevH = None

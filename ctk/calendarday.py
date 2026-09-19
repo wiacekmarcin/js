@@ -1,12 +1,14 @@
-from customtkinter import CTkLabel, CTkFont, CTkScrollableFrame, CTkTextbox
+from customtkinter import CTkFont, CTkTextbox
 
 import datetime
 import urllib3
 from bs4  import BeautifulSoup
 
-from base_plugin import LFrame, LSimpleFrame
-from customtkinter import CTk, CTkFrame
+from base_plugin import LSimpleFrame, LCTkLabel
+from customtkinter import CTkFrame
 from base_app import LustroApp
+from threading import Timer
+import time
 #class CalendarDay(LFrame):
 class CalendarDay(LSimpleFrame):
     _wwidth = 330
@@ -38,25 +40,23 @@ class CalendarDay(LSimpleFrame):
                    "grudzień"]
         
         font_mr = CTkFont("Roboto Condensed", size=24, weight="bold", slant="roman")
-        self.miesiac_rok = CTkLabel(self, text="miesiąć", fg_color="black", bg_color="black", text_color="white", font=font_mr)
+        self.miesiac_rok = LCTkLabel(master=self, text="miesiąć", font=font_mr)
         self.miesiac_rok.pack(side='top', anchor='n', pady=5)
         
         font_info = CTkFont("Roboto Condensed", size=14, weight="normal", slant="roman")
-        self.info_day = CTkLabel(self, text="Kolejny dzień w raju", fg_color="black", bg_color="black", text_color="white", font=font_info)
+        self.info_day = LCTkLabel(master=self, text="Kolejny dzień w raju", font=font_info)
         self.info_day.pack(anchor='n', pady=5)
         
         font_dzien = CTkFont("Roboto Condensed Light", size=24, weight="bold", slant="roman")
-        self.dzien = CTkLabel(self, text="Dzień tygodnia", fg_color="black", bg_color="black", text_color="white", font=font_dzien)
+        self.dzien = LCTkLabel(master=self, text="Dzień tygodnia", font=font_dzien)
         self.dzien.pack(anchor='n', pady=5)
 
         font_day = CTkFont("Roboto", size=80, weight="bold", slant="roman")
-        self.day = CTkLabel(self, text="00", fg_color="black", bg_color="black", text_color="white", 
-                            font=font_day)
+        self.day = LCTkLabel(master=self, text="00", font=font_day)
         self.day.pack(anchor='n', pady=5)
 
         font_swieto = CTkFont("Roboto", size=20, weight="bold", slant="roman")
-        self.swieto = CTkLabel(self, text="", fg_color="black", bg_color="black", text_color="white", 
-                            font=font_swieto)
+        self.swieto = LCTkLabel(master=self, text="", font=font_swieto)
         self.swieto.pack(anchor='n', pady=5)
 
     
@@ -69,27 +69,27 @@ class CalendarDay(LSimpleFrame):
         self.txtInfoList = []
 
         
-        #self.swieto = CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
+        #self.swieto = LCTkLabel(master=self, text="??", 
         #                    font=font_swieto)
         #self.swieto.grid(row=4, column=0)
 
         #font_imieniny = CTkFont("Roboto Condensed Light", size=16, weight="normal", slant="roman")
-        #self.imieniny =  CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
+        #self.imieniny =  LCTkLabel(master=self, text="??", 
         #                    font=font_imieniny, wraplength=self._wwidth)
         #self.imieniny.grid(row=5, column=0)
 
         #font_przyslowia = CTkFont("Roboto Condensed Light", size=14, weight="normal", slant="roman")
-        #self.przyslowia =  CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
+        #self.przyslowia =  LCTkLabel(master=self, text="??", 
         #                    font=font_przyslowia, wraplength=self._wwidth-10)
         #self.przyslowia.grid(row=6, column=0)
 
         #font_cytat = CTkFont("Roboto Condensed Light", size=12, weight="normal", slant="roman")
-        #self.cytat =  CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
+        #self.cytat =  LCTkLabel(master=self, text="??", 
         #                    font=font_cytat, wraplength=self._wwidth-10)
         #self.cytat.grid(row=7, column=0)
 
         #font_inneS = CTkFont("Roboto Condensed Light", size=10, weight="normal", slant="roman")
-        #self.inneS =  CTkLabel(self, text="??", fg_color="black", bg_color="black", text_color="white", 
+        #self.inneS =  LCTkLabel(master=self, text="??", 
         #                    font=font_inneS, wraplength=self._wwidth-10)
         #self.inneS.grid(row=8, column=0)
 
@@ -102,8 +102,7 @@ class CalendarDay(LSimpleFrame):
         second = dt.time().second
 
         if self.dayCalc is None or self.dayCalc != dday:
-            if self.dayCalc is not None:
-                return
+            
             self.dayCalc = dday
             yday = (dt - datetime.datetime(dyear, 1, 1, dt.hour, dt.minute, dt.second)).days + 1
             yweek = int(yday / 7) + 1
@@ -117,15 +116,19 @@ class CalendarDay(LSimpleFrame):
             self.miesiac_rok.configure(text="%s %d" % (self.monts[dmonth], dyear))
             self.info_day.configure(text="%d dzień, %d tydzień, %d miesiąc" % (yday, yweek, dmonth))
             #print("w3", self.info_day.cget("width"))
+            timer = Timer(300, self.getData)
+            timer.start()
             
-            self.getData()    
+            
+            #self.getData()    
         
         if second % 10 == 0:
-            idx = int( second / 10) % len(self.txtInfoList)
-            text, font = self.txtInfoList[idx]
-            self.textbox.delete("0.0", "end") 
-            self.textbox.insert("0.0", text)
-            self.textbox.configure(font=font)
+            if len(self.txtInfoList) > 0:
+                idx = int( second / 10) % len(self.txtInfoList)
+                text, font = self.txtInfoList[idx]
+                self.textbox.delete("0.0", "end") 
+                self.textbox.insert("0.0", text)
+                self.textbox.configure(font=font)
 
         #secs = int((24 * hour + 60 * min + sec) / 30) % 4
         #self.CalendarDayUi.imieniny.setVisible(secs == 0)
@@ -135,7 +138,7 @@ class CalendarDay(LSimpleFrame):
            
         
     def getData(self):
-
+        
         http = urllib3.PoolManager()
         r = http.request('GET', 'https://www.kalbi.pl/')
         if r.status != 200:
@@ -181,10 +184,12 @@ class CalendarDay(LSimpleFrame):
             font_imieniny = CTkFont("Roboto Condensed Light", size=18, weight="normal", slant="roman")
             imieniny = self.convertString(div_imieniny.text, self._wwidth-40, font_imieniny)                                      
             self.txtInfoList.append((imieniny, font_imieniny))
-        
+
+        attrs = {'class':'calCard_proverb-content'}
         if divPrzyslowia is not None:
             font_przyslowia = CTkFont("Roboto Condensed Light", size=18, weight="normal", slant="roman")
-            div_przyslowia = divPrzyslowia.find('div', attrs={'class':'calCard_proverb-content'})                
+            div_przyslowia = divPrzyslowia.find('div', attrs)
+                           
             if div_przyslowia is not None:
                 przyslowia = self.convertString(div_przyslowia.text,
                                         self._wwidth-40, font_przyslowia)
@@ -192,14 +197,14 @@ class CalendarDay(LSimpleFrame):
         
         if divCytat is not None:
             font_cytat = CTkFont("Roboto Condensed Light", size=16, weight="normal", slant="roman")
-            div_cytat = divCytat.find('div', attrs={'class':'calCard_proverb-content'})
+            div_cytat = divCytat.find('div', attrs)
             if div_cytat is not None:
                 cytat = self.convertString(div_cytat.text,
                                    self._wwidth-40, font_cytat)
                 self.txtInfoList.append((cytat, font_cytat))
 
         font_inneS = CTkFont("Roboto Condensed Light", size=16, weight="bold", slant="roman")
-        inneS_div = parsed_html.body.find('section', attrs={'class':'calCard-ententa'})
+        inneS_div = parsed_html.body.find('section', attrs)
         if inneS_div is not None:
             inneS = self.convertString(inneS_div.text,
                                     self._wwidth-45, font_inneS)

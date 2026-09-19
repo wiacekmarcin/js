@@ -1,5 +1,5 @@
 import customtkinter
-
+import version as ver
 #from analogclock import AnalogClock
 #from calendarday import CalendarDay
 #from digtialclock import DigitalClock
@@ -10,8 +10,12 @@ from read_serial import SerialReader
 from biganalogclock import BigAnalogClock
 
 from base_app import LustroApp
+from base_plugin import LCTkLabel, LCTkFrame
 from normal_frame import TopBanner
 from ostrzezenia_meteo import OstrzeniaMeteo
+from opis_pgody import OpisPogodyDnia
+from energy import EnergyRaspberry
+
 #plugs = [
 #    AnalogClock, 
 #    CalendarDay,
@@ -38,37 +42,26 @@ class LApp(LustroApp):
             pogoda5 = Pogoda5Day(frame2, self)
             pogoda5.pack()
 
-            rss = RssInfo(frame2, self)
+            rss = RssInfo(frame2, self, self._max_width)
             rss.pack(pady=10)
-        warning = OstrzeniaMeteo(self)
-        self.show_frame("zegar")
 
-        #for P in plugs:
-        #    p = P(self.get_frame("normal"), self)
+            version = LCTkLabel(master=frame2, text="Wersja %d.%d.%d" % (ver.MAJOR, ver.MINOR, ver.NUMBER))
+            version.place(x=0, y=1890)
+
+        warning = OstrzeniaMeteo(self)
+        pogoda = OpisPogodyDnia(self)
+        stats = EnergyRaspberry(self)
+
+        version2 = LCTkLabel(master=self.get_frame("zegar"), text="Wersja %d.%d.%d" % (ver.MAJOR, ver.MINOR, ver.NUMBER))
+        version2.place(x=0, y=1890)
+
+        self.auto_change = True
+        #self.show_frame("zegar")
+
 
         self.after(0, lambda: self.state('normal'))
 
-"""
-    def setPlugins(self, master, plg):
-        #print("geometry", self.geometry())
-        self.plgs = []
-        for p in plg:
-            fr = p(master, self)
-            if fr.frame:
-                x, y, w, h = fr.getRect()
-                #print("xywh", x, y, w, h)
-                fr.place(x=x, y=y, anchor='nw')
-            self.plgs.append(fr)
-            #print("rect", fr.cget('width'), fr.cget('height'),)
-            #print("-----")
-
-        #self.plgs[0].setWschod(6, 45)
-        #self.plgs[0].setZachod(21, 25)
-
-        #self.plgs[0].setMinimumTemp("-6.2")
-        #self.plgs[0].setMaximumTemp("26.2")
-"""            
-    
+   
 
     
 

@@ -1,6 +1,6 @@
-from customtkinter import CTkLabel, CTkFont, CTkFrame
+from customtkinter import CTkFont
 
-from base_plugin import LSimpleFrame
+from base_plugin import LSimpleFrame, LCTkFrame, LCTkLabel
 import datetime 
 from urllib.request import urlopen
 import json
@@ -184,14 +184,9 @@ class TempHumi:
 
         self.key_temp = '%s_temp' % key_th
         self.key_humi = '%s_humi' % key_th
-        self.ltitle = CTkLabel(frameTiH, text=title, bg_color="black", fg_color="black", text_color="white", 
-                              font=font, justify="left", anchor="w")
-
-        self.ltemp = CTkLabel(frameTiH, text="-", bg_color="black", fg_color="black", text_color="white", 
-                              font=font, justify="right", anchor="e")
-
-        self.lhumi = CTkLabel(frameTiH, text="-", bg_color="black", fg_color="black", text_color="white", 
-                              font=font, justify="right", anchor="e")
+        self.ltitle = LCTkLabel(master=frameTiH, text=title, font=font, justify="left", anchor="w")
+        self.ltemp = LCTkLabel(master=frameTiH, text="-", font=font, justify="right", anchor="e")
+        self.lhumi = LCTkLabel(master=frameTiH, text="-", font=font, justify="right", anchor="e")
 
         self.lastUpdate = 0
 
@@ -261,7 +256,7 @@ class TempAll:
 
 
 class TiHOutSide:
-    def __init__(self, parent, ltemp:CTkLabel, lhumi:CTkLabel, key1:str, key2:str):
+    def __init__(self, parent, ltemp:LCTkLabel, lhumi:LCTkLabel, key1:str, key2:str):
         self.lastUpdate1 = 0
         self.lastUpdate2 = 0
         
@@ -342,23 +337,51 @@ class Pogoda(LSimpleFrame):
 
         self.iconMap = {}
         self.iconMap["01d"]="\uf00d" #"wi-day-sunny",
-        self.iconMap["02d"]="\uf002" #"wi-day-cloudy",
-        self.iconMap["03d"]="\uf013" #"wi-cloudy",
-        self.iconMap["04d"]="\uf012" #"wi-cloudy-windy",
-        self.iconMap["09d"]="\uf01a" #"wi-showers",
-        self.iconMap["10d"]="\uf019" #"wi-rain",
-        self.iconMap["11d"]="\uf01e" #"wi-thunderstorm",
-        self.iconMap["13d"]="\uf01b" #"wi-snow",
-        self.iconMap["50d"]="\uf014" #"wi-fog",
+        #self.iconMap["02d"]="\uf002" #"wi-day-cloudy",
+
         self.iconMap["01n"]="\uf02e" #"wi-night-clear",
-        self.iconMap["02n"]="\uf031" #"wi-night-cloudy",
-        self.iconMap["03n"]="\uf031" #"wi-night-cloudy",
-        self.iconMap["04n"]="\uf031" #"wi-night-cloudy",
-        self.iconMap["09n"]="\uf037" #"wi-night-showers",
-        self.iconMap["10n"]="\uf036" #"wi-night-rain",
-        self.iconMap["11n"]="\uf03b" #"wi-night-thunderstorm",
-        self.iconMap["13n"]="\uf038" #"wi-night-snow",
-        self.iconMap["50n"]="\uf023" #"wi-night-alt-cloudy-windy"
+        #self.iconMap["02n"]="\uf031" #"wi-night-cloudy",
+
+        self.iconMap["02d"]="\uf07d" #"wi-day-cloudy",
+        #self.iconMap["02n"]="\uf080" #"wi-night-cloudy",
+        self.iconMap["02n"]="\uf081" #"wi-night-cloudy",
+
+        self.iconMap["03d"]="\uf013" #"wi-cloudy",
+        #self.iconMap["03n"]="\uf031" #"wi-night-cloudy",
+        #self.iconMap["03n"]="\uf080" #"wi-night-cloudy",
+        self.iconMap["03n"]="\uf07e" #"wi-night-cloudy",
+
+        self.iconMap["04d"]="\uf012" #"wi-cloudy-windy",
+        #self.iconMap["04n"]="\uf031" #"wi-night-cloudy",
+        self.iconMap["04n"]="\uf023" #"wi-night-cloudy-windy",
+
+        #self.iconMap["09d"]="\uf01a" #"wi-showers",
+        self.iconMap["09d"]="\uf009" #"wi-showers",
+        #self.iconMap["09n"]="\uf037" #"wi-night-showers",
+        #self.iconMap["09n"]="\uf066" #"wi-night-showers",
+        self.iconMap["09n"]="\uf024" #"wi-night-showers",
+
+        self.iconMap["10d"]="\uf007" #"wi-rain",
+        #self.iconMap["10d"]="\uf019" #"wi-rain",
+        #self.iconMap["10n"]="\uf036" #"wi-night-rain",
+        #self.iconMap["10n"]="\uf0b3" #"wi-night-rain",
+        self.iconMap["10n"]="\uf024" #"wi-night-rain",
+
+        self.iconMap["11d"]="\uf010" #"wi-thunderstorm",
+        #self.iconMap["11d"]="\uf01e" #"wi-thunderstorm",
+        #self.iconMap["11n"]="\uf03b" #"wi-night-thunderstorm",
+        #self.iconMap["11n"]="\uf02d" #"wi-night-thunderstorm",
+        self.iconMap["11n"]="\uf02d" #"wi-night-thunderstorm",
+
+        self.iconMap["13d"]="\uf00a" #"wi-snow",
+        #self.iconMap["13d"]="\uf01b" #"wi-snow",
+        self.iconMap["13n"]="\uf02a" #"wi-night-snow",
+        #self.iconMap["13n"]="\uf038" #"wi-night-snow",
+
+        self.iconMap["50d"]="\uf0b6" #"wi-fog",
+        #self.iconMap["50d"]="\uf014" #"wi-fog",
+        self.iconMap["50n"]="\uf04a" #"wi-night-alt-cloudy-windy"
+
         self.configure(width=self._wwidth)
 
         #Weather Icons
@@ -380,160 +403,119 @@ class Pogoda(LSimpleFrame):
         self.top_banner(fminiwebicons, fval_temp_rain_wind, ffeel_temperatura, fwebicons)
         self.opis_pogoda_banner(fopisPogody)
         self.widocznosc_cisnienie_banner(fEtWidocznosc, f_widocz_cisnienie)
-        self.outside_temp_humi_banner(fEtWidocznosc, f_widocz_cisnienie)
-        self.tih_banner(fhead_tih, f_tih_all)
+        #self.tih_banner(fhead_tih, f_tih_all)
 
     def top_banner(self, fminiwebicons, fval_temp_rain_wind, ffeel_temperatura, fwebicons):
 
-        self.topframe = CTkFrame(master=self, bg_color="black",fg_color="black")
-        self.topframe.pack(side='top', fill='x', expand=True) 
+        self.topframe1 = LCTkFrame(master=self)
+        self.topframe1.pack(side='top', fill='x', expand=True) 
 
-        self.ikonatemperatury = CTkLabel(self.topframe, text="\uf044\uf053",
-                                            bg_color="black",fg_color="black", text_color="white",
+        self.ikonatemperatury = LCTkLabel(master=self.topframe1, text="\uf044\uf053",
                                             font=fminiwebicons, justify="left", anchor="w")
-        self.ikonatemperatury.grid(row=0, column=0, padx=2, pady=0)
+        self.ikonatemperatury.pack(side='left', padx=(0, 5))
 
-        self.realtemperatura = CTkLabel(self.topframe, text="-",
-                                                    bg_color="black",fg_color="black", text_color="white",
-                                                    font=fval_temp_rain_wind, justify="left", anchor="w")
-        self.realtemperatura.grid(row=1, column=0, padx=2, pady=0)
-
-        self.feeltemperatura = CTkLabel(self.topframe, text="-",
-                                            bg_color="black",fg_color="black", text_color="white",
+        self.feeltemperatura = LCTkLabel(master=self.topframe1, text="-",
                                             font=ffeel_temperatura, justify="left", anchor="w")
-        self.feeltemperatura.grid(row=0, column=1, rowspan=2, padx=2, pady=0)
+        self.feeltemperatura.pack(side='left', padx=(0, 15))
 
-        self.ikonapogody = CTkLabel(self.topframe, text=self.iconMap["10n"],
-                            bg_color="black", fg_color="black", text_color="white", font=fwebicons,
+        self.ikonapogody = LCTkLabel(master=self.topframe1, text=self.iconMap["10n"],
+                             font=fwebicons,
                             justify="left", anchor="w")
-        self.ikonapogody.grid(row=0, column=2, padx=5, pady=0)
+        self.ikonapogody.pack(side='left', padx=(0, 15))
         
-        self.wielkoscDeszczu = CTkLabel(self.topframe, text='0 mm',
-                                            bg_color="black",fg_color="black", text_color="white", font=fval_temp_rain_wind,
+        self.ikonawiatru = LCTkLabel(master=self.topframe1, text=toBeaufortChar(ms2Beaufort(0)),
+                                             font=fwebicons, justify="right", anchor="se")
+        self.ikonawiatru.pack(side='left', padx=(0, 10))
+        
+        self.kierunekWiatru = LCTkLabel(master=self.topframe1, text=deg2Short(0),
+                                     font=fwebicons, justify="left", anchor="sw")
+        self.kierunekWiatru.pack(side='left')
+
+        self.topframe2 = LCTkFrame(master=self)
+        self.topframe2.pack(side='top', fill='x', expand=True) 
+
+        self.wilgotnosc = LCTkLabel(master=self.topframe2, text='0%%',
+                                        font=fval_temp_rain_wind,
+                                        justify="right", anchor="ne")
+        self.wilgotnosc.pack(side='left', padx=(0, 20))
+
+        self.realtemperatura = LCTkLabel(master=self.topframe2, text="-",
+                                            font=fval_temp_rain_wind, justify="left", anchor="w")
+        self.realtemperatura.pack(side='left', padx=(0, 10))
+
+        
+
+        self.wielkoscDeszczu = LCTkLabel(master=self.topframe2, text='0 mm', font=fval_temp_rain_wind,
                                             justify="left", anchor="w")
-        self.wielkoscDeszczu.grid(row=1, column=2, padx=2, pady=0)
+        self.wielkoscDeszczu.pack(side='left', padx=(80, 10))
 
-        self.ikonawiatru = CTkLabel(self.topframe, text=toBeaufortChar(ms2Beaufort(0)),
-                                    bg_color="black",fg_color="black", text_color="white", font=fwebicons,
-                                    justify="right", anchor="se")
-        self.ikonawiatru.grid(row=0, column=3, padx=2, sticky='s')
-
-        self.kierunekWiatru = CTkLabel(self.topframe, text=deg2Short(0),
-                                    bg_color="black",fg_color="black", text_color="white", font=fwebicons,
-                                    justify="left", anchor="sw")
-        self.kierunekWiatru.grid(row=0, column=4, padx=2, sticky='s')
-
-    
-        self.predkoscWiatru = CTkLabel(self.topframe, text='0',
-                                            bg_color="black",fg_color="black", text_color="white", font=fval_temp_rain_wind,
+        
+        self.predkoscWiatru = LCTkLabel(master=self.topframe2, text='0', font=fval_temp_rain_wind,
                                             justify="left", anchor="nw")
-        self.predkoscWiatru.grid(row=1, column=3, columnspan=2, sticky='n')
+        self.predkoscWiatru.pack(side='left')
 
-        self.ikonaWilgotnosci = CTkLabel(self.topframe, text="\uf078",
-                                    bg_color="black",fg_color="black", text_color="white", font=fminiwebicons,
-                                    justify="right", anchor="se")
-        self.ikonaWilgotnosci.grid(row=0, column=5, padx=5, sticky='s')
+        #self.ikonaWilgotnosci = LCTkLabel(master=self.topframe, text="\uf078", font=fminiwebicons,
+        #                            justify="right", anchor="se")
+        #self.ikonaWilgotnosci.grid(row=0, column=5, padx=5, sticky='s')
 
-    
-        self.wilgotnosc = CTkLabel(self.topframe, text='0%%',
-                                            bg_color="black",fg_color="black", text_color="white", font=fval_temp_rain_wind,
-                                            justify="right", anchor="ne")
-        self.wilgotnosc.grid(row=1, column=5, padx=5, sticky='n')
 
     def opis_pogoda_banner(self, fopisPogody):
         
-        self.opisPogody = CTkLabel(self, text="",
-                                bg_color="black",fg_color="black", text_color="white", font=fopisPogody,
+        self.opisPogody = LCTkLabel(master=self, text="",
+                                 font=fopisPogody,
                                 justify="left", anchor="w", wraplength=self._wwidth - 10)
         self.opisPogody.pack(side='top', fill='x', expand=True) 
 
-        #self.opisdeszczusniegu = CTkLabel(self, text="Brak deszczu i śniegu",
-        #                        bg_color="black",fg_color="black", text_color="silver", font=font_opisPogody,
-        #                        justify="left", anchor="w", wraplength=self._wwidth - 10)
-        #self.opisdeszczusniegu.pack(side='top', fill='x', expand=True) 
-
-        
-        #self.opiswiatru = CTkLabel(self, text=toDescrSilaWiatru(0),
-        #                            bg_color="black",fg_color="black", text_color="white", font=font_opisPogody,
-        #                            justify="left", anchor="w", wraplength=self._wwidth - 10)
-        #self.opiswiatru.pack(side='top', fill='x', expand=True) 
 
     def widocznosc_cisnienie_banner(self, fEtWidocznosc, f_widocz_cisnienie):
-        self.frame = CTkFrame(master=self, bg_color="black",fg_color="black")
+        self.frame = LCTkFrame(master=self)
         self.frame.pack(side='top', fill='x', expand=True) 
-
         
-        etWidocznosc = CTkLabel(self.frame, text="Widoczność: ",
-                                    bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
-                                            justify="left", anchor="w")
-        etWidocznosc.pack(side='left')
-
-        self.widocznosc = CTkLabel(self.frame, text=" 0 km",
-                                    bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
-                                    justify="left", anchor="w")
-        self.widocznosc.pack(side='left')
-
-        self.cisnienie = CTkLabel(self.frame, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
-                                    justify="left", anchor="w")
-        self.cisnienie.pack(side='right')
-
-        etCisnienie = CTkLabel(self.frame, text="Ciśnienie :",
-                                    bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
-                                    justify="left", anchor="w")
-        etCisnienie.pack(side='right')
-
-    def outside_temp_humi_banner(self, fEtWidocznosc, f_widocz_cisnienie):
+        etWidocznosc = LCTkLabel(master=self.frame, text="Widoczność: ", font=fEtWidocznosc,
+                                justify="left", anchor="w")
+        etWidocznosc.grid(row=0, column=0) 
         
-        self.frame2 = CTkFrame(master=self, bg_color="black",fg_color="black")
-        self.frame2.pack(side='top', fill='x', expand=True) 
-
-        etTempOutSide = CTkLabel(self.frame2, text="Temperatura: ",
-                                    bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
+        self.widocznosc = LCTkLabel(master=self.frame, text=" 0 km", font=f_widocz_cisnienie,
                                     justify="left", anchor="w")
-        etTempOutSide.pack(side='left')
-
-        self.tempOutSide = CTkLabel(self.frame2, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
+        self.widocznosc.grid(row = 0, column=1)
+        space = LCTkLabel(master=self.frame, text="", font=fEtWidocznosc,
                                     justify="left", anchor="w")
-        self.tempOutSide.pack(side='left')
-
-        self.humiOutSide = CTkLabel(self.frame2, text="-",
-                                    bg_color="black",fg_color="black", text_color="white", font=f_widocz_cisnienie,
+        space.grid(row = 0, column=2, padx=10)
+        etCisnienie = LCTkLabel(master=self.frame, text="Ciśnienie :", font=fEtWidocznosc,
                                     justify="left", anchor="w")
-        self.humiOutSide.pack(side='right')
-
-        etWilgotnosc = CTkLabel(self.frame2, text="Wilgotność :",
-                                    bg_color="black",fg_color="black", text_color="white", font=fEtWidocznosc,
+        etCisnienie.grid(row = 0, column=3)
+        self.cisnienie = LCTkLabel(master=self.frame, text="-", font=f_widocz_cisnienie,
                                     justify="left", anchor="w")
-        etWilgotnosc.pack(side='right')
+        self.cisnienie.grid(row = 0, column=4)
+        etTempOutSide = LCTkLabel(master=self.frame, text="Temperatura: ", font=fEtWidocznosc,
+                                    justify="left", anchor="w")
+        etTempOutSide.grid(row = 1, column=0)
+        self.tempOutSide = LCTkLabel(master=self.frame, text="-", font=f_widocz_cisnienie,
+                                    justify="left", anchor="w")
+        self.tempOutSide.grid(row = 1, column=1)
+        etWilgotnosc = LCTkLabel(master=self.frame, text="Wilgotność :", font=fEtWidocznosc,
+                                    justify="left", anchor="w")
+        etWilgotnosc.grid(row = 1, column=3)
+        self.humiOutSide = LCTkLabel(master=self.frame, text="-", font=f_widocz_cisnienie,
+                                    justify="left", anchor="w")
+        self.humiOutSide.grid(row = 1, column=4)
 
         self.val_tempOutSide = TiHOutSide(self, self.tempOutSide, self.humiOutSide, 'outside_1', 'outside_2')
 
     def tih_banner(self, fhead_tih, f_tih_all):        
-        self.frameTiH = CTkFrame(master=self, width=self._wwidth, 
-                                 bg_color="black", fg_color="black")
+        self.frameTiH = LCTkFrame(master=self, width=self._wwidth)
         self.frameTiH.pack(side='left', fill='x', expand=True)
 
-        
-
-        self.etTemperatura1 = CTkLabel(self.frameTiH, text="\uf055\uf03c",
-                                       bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
+        self.etTemperatura1 = LCTkLabel(master=self.frameTiH, text="\uf055\uf03c", font=fhead_tih, 
                                        justify="center", anchor="w")
         self.etTemperatura1.grid(row=0, column=1, padx=5, pady=5)
-
-        self.etWilgotnosc1 = CTkLabel(self.frameTiH, text="\uf07a",
-                                               bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
+        self.etWilgotnosc1 = LCTkLabel(master=self.frameTiH, text="\uf07a", font=fhead_tih, 
                                                justify="center", anchor="w")
         self.etWilgotnosc1.grid(row=0, column=2, padx=5, pady=5)
-
-        self.etTemperatura2 = CTkLabel(self.frameTiH, text="\uf055\uf03c",
-                                               bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
+        self.etTemperatura2 = LCTkLabel(master=self.frameTiH, text="\uf055\uf03c", font=fhead_tih, 
                                                justify="center", anchor="w")
         self.etTemperatura2.grid(row=0, column=5, padx=5, pady=5)
-        
-        self.etWilgotnosc2 = CTkLabel(self.frameTiH, text="\uf07a",
-                                                       bg_color="black",fg_color="black", text_color="white", font=fhead_tih, 
+        self.etWilgotnosc2 = LCTkLabel(master=self.frameTiH, text="\uf07a", font=fhead_tih, 
                                                        justify="center", anchor="w")
         self.etWilgotnosc2.grid(row=0, column=6, padx=5, pady=5)
 
@@ -544,7 +526,7 @@ class Pogoda(LSimpleFrame):
         
     def receiveNotfication(self, values):
         #print("ok, receiveNotfication.pogoda", values)
-        self.temps.check_and_set(values)        
+        #self.temps.check_and_set(values)        
 
         self.val_tempOutSide.check_and_set(values)
 
@@ -553,7 +535,7 @@ class Pogoda(LSimpleFrame):
         min = dt.minute
         sec = dt.second
 
-        self.temps.timeout()
+        #self.temps.timeout()
         self.val_tempOutSide.timeout()
 
         if self.lastTime is None:
@@ -627,62 +609,64 @@ class Pogoda(LSimpleFrame):
             else:
                 self.ikonatemperatury.configure(text="\uf053\uf03c")
 
-            self.feeltemperatura.configure(text="%.1f" % feels_like)
+            self.feeltemperatura.configure(text="%.1f\u00B0C" % feels_like)
 
             weather_icon = data_json["weather"][0]["icon"]
             #print(weather_icon)
             #print(ord(self.iconMap[weather_icon]))
             self.ikonapogody.configure(text=self.iconMap[weather_icon])
+            vals["ikona_pogody"] = self.iconMap[weather_icon]
 
             snowrain_val = 0
 
             text_unit = ''
+            text_opis = []
             if "snow" in data_json:
                 if "1h" in data_json["snow"]:
                     snowrain_val = float(data_json["snow"]["1h"])
                     text_val = "%s" % data_json["rain"]["1h"]
                     text_unit = "mm/1h"
-                    text_opis = getSnowName(float(text_val))
+                    text_opis = [getSnowName(float(text_val))]
                     mqtt_vals["snow_1h"] = data_json["snow"]["1h"]
                     vals["snow_1h"] = data_json["snow"]["1h"]
                 elif "3h" in data_json["snow"]:
                     snowrain_val = float(data_json["snow"]["3h"])
                     text_val = "%s" % data_json["rain"]["3h"]
                     text_unit = "mm/3h"
-                    text_opis = getSnowName(float(text_val)/3)
+                    text_opis = [getSnowName(float(text_val)/3)]
                     mqtt_vals["snow_3h"] = data_json["snow"]["3h"]
                     vals["snow_3h"] = data_json["snow"]["3h"]
                 else:
                     text_val = ""
                     text_unit = ""
-                    text_opis = ""
+                    text_opis = []
             elif "rain" in data_json:
                 if "1h" in data_json["rain"]:
                     text_val = "%s" % data_json["rain"]["1h"]
                     snowrain_val = float(data_json["rain"]["1h"])
                     text_unit = "mm/h"
-                    text_opis = getRainName(float(text_val))
+                    text_opis = [getRainName(float(text_val))]
                     mqtt_vals["rain_1h"] = data_json["rain"]["1h"]
                     vals["rain_1h"] = data_json["rain"]["1h"]
                 elif "3h" in data_json["rain"]:
                     text_val = "%s" % data_json["rain"]["3h"]
                     snowrain_val = float(data_json["rain"]["3h"])
                     text_unit = "mm/3h"
-                    text_opis = getRainName(float(text_val)/3)
+                    text_opis = [getRainName(float(text_val)/3)]
                     mqtt_vals["rain_3h"] = data_json["rain"]["3h"]
                     vals["rain_3h"] = data_json["rain"]["3h"]
                 else:
                     text_val = ""
                     text_unit = ""
-                    text_opis = ""
+                    text_opis = []
             else:
                 text_val = ""
                 text_unit = ""
-                text_opis = ""      
+                text_opis = []      
                     
             vals['deszczsnieg'] = text_val
             vals['etdeszczsnieg'] = text_unit
-            vals['opisdeszczsnieg'] = text_opis
+            vals['opisdeszczsnieg'] = text_opis[0] if len(text_opis) > 0 else ""
 
             if snowrain_val > 0:
                 #self.opisdeszczusniegu.configure(text=text_opis+ " ( " + text_val + " " + text_unit + " )", text_color="white") 
@@ -690,11 +674,19 @@ class Pogoda(LSimpleFrame):
             else:
                 #self.opisdeszczusniegu.configure(text="brak deszczu i śniegu", text_color="gray") 
                 self.wielkoscDeszczu.configure(text="0 mm", text_color="gray")
-                text_opis = "brak opadów"
+
                     
             weather_descr = data_json["weather"][0]["description"]
             vals['opisPogody'] = weather_descr
-            self.opisPogody.configure(text=weather_descr + ', ' + text_opis + ', ' + toDescrSilaWiatru2(wind_speed))
+
+            opis_pogody = [weather_descr]
+            if len(text_opis) > 0:
+                opis_pogody.append(text_opis[0])
+            if ms2Beaufort(wind_speed) > 0:
+                wiatr = toDescrSilaWiatru2(wind_speed)
+                opis_pogody.append(wiatr)
+
+            self.opisPogody.configure(text=', '.join(opis_pogody))
 
             pressure = data_json["main"]["pressure"]
             huminidity = data_json["main"]["humidity"]
@@ -711,7 +703,7 @@ class Pogoda(LSimpleFrame):
             self.widocznosc.configure(text="%d m" % data_json["visibility"])
 
             #self.realtemperatura.configure(text="%.1f\u00B0C" % temp)
-            self.realtemperatura.configure(text="%.1f" % temp)
+            self.realtemperatura.configure(text="%.1f\u00B0C" % temp)
             self.wilgotnosc.configure(text="%.0f%%" % huminidity)
 
         

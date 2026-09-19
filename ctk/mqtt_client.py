@@ -296,7 +296,7 @@ class PahoMqttWriter:
 
     def msg_on_message(self, client, userdata, msg):
         #print("receive")
-        print(msg.topic+" "+str(msg.payload))
+        #print(msg.topic+" "+str(msg.payload))
         #print(client)
         #print(userdata)
         topic = msg.topic
@@ -308,7 +308,7 @@ class PahoMqttWriter:
             d = {'display' : msg.payload.decode('utf-8')}
         else:
             d = self.temps.parse(msg.topic, msg.payload)
-        print(d)
+        #print(d)
         
         if len(d) > 0:
             self._function(topic, d)
@@ -317,12 +317,15 @@ class PahoMqttWriter:
         if self.isconnect:
             return
 
-        ##print("mqtt connect")
+        print("mqtt connect")
         try:
-            self.clientmqtt.connect("192.168.10.250", 1883, 600)
-            self.isconnect = True
-            self.clientmqtt.loop_start()
-            #print("ok")
+            err = self.clientmqtt.connect(host="192.168.10.250", port=1883, keepalive=60, clean_start=mqtt.MQTT_CLEAN_START_FIRST_ONLY)
+            if err == mqtte.MQTTErrorCode.MQTT_ERR_SUCCESS:
+                self.isconnect = True
+                self.clientmqtt.loop_start()
+                print("ok")
+            else:
+                print("Error connected", err)
         except:
             print("error")
             self.isconnect = False

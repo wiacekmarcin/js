@@ -2,7 +2,7 @@ from base_plugin import LPlugin
 from base_app import TimeoutClass 
 import serial
 import re
-
+import time
 
 class SerialReader(LPlugin):
     def __init__(self, master, app, *args, **kwargs):
@@ -20,11 +20,16 @@ class SerialReader(LPlugin):
             timeout=0)
         except:
             return
-
-        self.thread = TimeoutClass(self.readValues)
+        
+        app.after(5000, self.delay_start)
 
     def timeout(self, dt):
         pass
+
+    def delay_start(self):
+        print("Delay function")
+        time.sleep(30)
+        self.thread = TimeoutClass(self.readValues)
 
     def __delete__(self, instance):
         self.ser.close()
@@ -42,7 +47,7 @@ class SerialReader(LPlugin):
         #print(line)
         obj = self.regexp.match(line)
         if obj is not None:
-            #print(obj)
+
             valg = obj.groupdict()
             vals = {}
             vals['lazienka_temp'] = valg['ltemp']

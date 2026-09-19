@@ -1,10 +1,10 @@
-from customtkinter import CTkFrame, CTkLabel, CTkImage, CTkFont
+from customtkinter import CTkImage, CTkFont
 from PIL import Image, ImageDraw, ImageFont
 
 import numpy as np
-import os, math, datetime
+import math
 
-from base_plugin import LSimpleFrame
+from base_plugin import LSimpleFrame, LCTkLabel
 
 def R(angle):
     cos_a = np.cos(angle)
@@ -31,7 +31,7 @@ def deaorganize(P):
 
 class AnalogClock(LSimpleFrame):
     _wwidth = 350
-    _wheight = 450
+    _wheight = 350
     #def __init__(self, master, app, **kwargs):
     #    super().__init__(800, 0, 300, 300, master, app, **kwargs)
     def __init__(self, master, app, **kwargs):
@@ -112,42 +112,23 @@ class AnalogClock(LSimpleFrame):
         # Convert the PIL Image to Tkinter PhotoImage
         img = CTkImage(self.r_img, size=self.r_img.size)
 
-        self.photo_label = CTkLabel(self, fg_color="black", image=img, text="")
+        self.photo_label = LCTkLabel(self, image=img, text="")
         self.photo_label.place(x=cx, y=cy)
         
-        self.l_wschod_s = CTkLabel(self, text="-", fg_color="black", bg_color="black", text_color="#71706E", font=self.tkfont)
+        self.l_wschod_s = LCTkLabel(self, text="-", text_color="#71706E", font=self.tkfont)
         self.l_wschod_s.place(x=cx, y=cy)
 
-        self.l_zachod_s = CTkLabel(self, text="-", fg_color="black", bg_color="black", text_color="#71706E", font=self.tkfont)
+        self.l_zachod_s = LCTkLabel(self, text="-", text_color="#71706E", font=self.tkfont)
         self.l_zachod_s.place(x=cx + clockW - 80, y=cy)
 
 
-        self.l_temp_min = CTkLabel(self, text="-", fg_color="black", bg_color="black", text_color="#71706E", font=self.tkfont)
+        self.l_temp_min = LCTkLabel(self, text="-", text_color="#71706E", font=self.tkfont)
         self.l_temp_min.place(x=cx, y=cy + clockW  - 35)
 
-        self.l_temp_max = CTkLabel(self, text="-", fg_color="black", bg_color="black", text_color="#71706E", font=self.tkfont)
+        self.l_temp_max = LCTkLabel(self, text="-", text_color="#71706E", font=self.tkfont)
         self.l_temp_max.place(x=cx + clockW - 75, y=cy + clockW - 35)
 
-        
-        
-        #imgd.text((0, self._wheight - 30 - 30),                  text="\uf053", fill="white", font=self.webfont)
-        #imgd.text((self._wwidth - 20, self._wheight - 30 - 30),   text="\uf055", fill="white", font=self.webfont)
-
-        #imgd.text((0, self._wheight - 30),                text="\uf07b \uf03c", fill="white", font=self.webfont)
-        #imgd.text((self._wwidth - 50, self._wheight - 30), text="\uf07b \uf03c", fill="white", font=self.webfont)
-
-        #self.drawClock()
-
-        self.font_hour_min = CTkFont("Roboto Condensed", size=96, weight="bold", slant="roman")
-        self.lhour_min = CTkLabel(self, text="00:00", fg_color="black", bg_color="black", text_color="white", 
-                                    font=self.font_hour_min, anchor="nw")
-        self.lhour_min.place(x=0, y=clockW)
-        whour= self.font_hour_min.measure("00:00")
-
-        font_sec = CTkFont("Roboto Condensed", size=48, weight="normal", slant="roman")
-        self.lsecond = CTkLabel(self, text="00", fg_color="black", bg_color="black", text_color="silver", font=font_sec)
-        self.lsecond.place(x=whour, y=clockW+25)
-   
+ 
     def receiveNotfication(self, dictValue):
         
         if "sunrise" in dictValue:
@@ -196,16 +177,7 @@ class AnalogClock(LSimpleFrame):
         self.m_m = dt.time().minute
         self.m_s = dt.time().second
 
-        shour = ''
-        if self.m_h < 10:
-            shour+='0'
-        shour+='%d:' % self.m_h
-        if self.m_m < 10:
-            shour+='0'
-        shour+='%d' % self.m_m
-        self.lhour_min.configure(text=shour)
-        self.lsecond.configure(text="%02d" % self.m_s)
-        
+      
         self.act_img = self.r_img.copy()
         cx, cy, clockW = self.clockXYR
         R = clockW / 2
@@ -213,7 +185,7 @@ class AnalogClock(LSimpleFrame):
         c_x = int(cx+R)
         c_y = int(cy+R)
 
-        rot_secsH = 2 * math.pi * ((self.m_h % 12)*3600.0 + self.m_h * 60.0 + self.m_s) / (12.0*3600.0)
+        rot_secsH = 2 * math.pi * ((self.m_h % 12)*3600.0 + self.m_m * 60.0 + self.m_s) / (12.0*3600.0)
         rot_secsM = 2 * math.pi * (self.m_m * 60.0 + self.m_s) / (3600.0)
         rot_secsS = 2 * math.pi * (self.m_s) / (60.0)
 

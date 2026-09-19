@@ -1,7 +1,7 @@
-from customtkinter import CTkLabel, CTkImage
+from customtkinter import CTkImage
 
 
-from base_plugin import LSimpleFrame
+from base_plugin import LSimpleFrame, LCTkLabel
 from PIL import Image
 from wykres_temperatury import Wykres
 #class Pogoda5Day(LFrame):
@@ -19,7 +19,7 @@ class Pogoda5Day(LSimpleFrame):
         self.r_img = Image.new("RGB", (self._wwidth, 600), "black")
         img = CTkImage(self.r_img, size=self.r_img.size)
 
-        self.photo_label = CTkLabel(self, fg_color="black", image=img, text="",
+        self.photo_label = LCTkLabel(master=self, image=img, text="",
                                     width=self._wwidth, height=5)
         self.photo_label.place(x=0, y=0)
         self.dayCalc = None
