@@ -69,10 +69,22 @@ class LustroApp(CTk):
         w, h = self.winfo_screenwidth(), self.winfo_screenheight()
         #print(w, h)
         
+        #print(w, h)
+        
         self.configure(bg_color = "black")
         self.configure(fg_color = "black")
 
         #self.geometry("%dx%d+0+0" % (w, h))
+        #self.geometry("400x400")
+        if w==3000 and h==1920:
+            self.geometry("1080x1920+1920+0")
+            self.attributes('-fullscreen', True)
+            pass
+        elif w == 7680:
+            self.geometry("1080x1920+3840+0")
+        else:
+            self.geometry("%dx%d+0+0" % (w, h))
+            self.attributes('-fullscreen', True)
         #self.geometry("400x400")
         if w==3000 and h==1920:
             self.geometry("1080x1920+1920+0")

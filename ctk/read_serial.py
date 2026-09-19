@@ -47,7 +47,6 @@ class SerialReader(LPlugin):
         #print(line)
         obj = self.regexp.match(line)
         if obj is not None:
-
             valg = obj.groupdict()
             vals = {}
             vals['lazienka_temp'] = valg['ltemp']

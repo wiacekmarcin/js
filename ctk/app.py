@@ -9,6 +9,9 @@ from rss import RssInfo
 from read_serial import SerialReader
 from biganalogclock import BigAnalogClock
 
+from read_serial import SerialReader
+from biganalogclock import BigAnalogClock
+
 from base_app import LustroApp
 from base_plugin import LCTkLabel, LCTkFrame
 from normal_frame import TopBanner

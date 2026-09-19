@@ -102,6 +102,10 @@ class LFrame(LSimpleFrame):
     def __init__(self, x, y, w, h, master:CTkFrame, app:LustroApp, *args, **kwargs):
         LSimpleFrame.__init__(self, master, app, *args, **kwargs)
 
+
+    def __init__(self, x, y, w, h, master:CTkFrame, app:LustroApp, *args, **kwargs):
+        LSimpleFrame.__init__(self, master, app, *args, **kwargs)
+
         self.wx = x
         self.wy = y
         self.wwidth = w
