@@ -1,0 +1,138 @@
+:root {
+    color-scheme: light;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: #1f2937;
+    background: #f3f6fa;
+}
+
+body {
+    margin: 0;
+    background: #f3f6fa;
+    color: #1f2937;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.container {
+    width: min(100% - 2rem, 1600px);
+    margin: 1.25rem auto;
+}
+
+a {
+    color: #0759a5;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus {
+    color: #063d72;
+    text-decoration: underline;
+}
+
+button,
+input[type="button"],
+input[type="submit"] {
+    border: 1px solid #b8c7d8;
+    border-radius: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    background: #fff;
+    color: #17324d;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    border-color: #3979b9;
+    background: #edf5fc;
+}
+
+input,
+select,
+textarea {
+    max-width: 100%;
+    border: 1px solid #b8c7d8;
+    border-radius: 0.35rem;
+    padding: 0.4rem 0.55rem;
+    background: #fff;
+    color: inherit;
+    font: inherit;
+}
+
+table.table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+    border: 1px solid #d6e0eb;
+    border-radius: 0.65rem;
+    border-spacing: 0;
+    border-collapse: separate;
+    background: #fff;
+    box-shadow: 0 3px 12px rgb(25 50 75 / 7%);
+    font-size: 0.92rem;
+}
+
+table.table caption {
+    padding: 0.7rem 0.9rem;
+    color: #233b55;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+table.table th,
+table.table td {
+    min-width: 3rem;
+    padding: 0.65rem 0.8rem;
+    border-right: 1px solid #e4eaf1;
+    border-bottom: 1px solid #e4eaf1;
+    text-align: left;
+    vertical-align: top;
+}
+
+table.table th {
+    position: sticky;
+    top: 0;
+    background: #eaf1f8;
+    color: #183653;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+table.table tr:last-child > td {
+    border-bottom: 0;
+}
+
+table.table tr > :last-child {
+    border-right: 0;
+}
+
+table.table tbody tr:nth-child(even) > td {
+    background-color: #f8fafc;
+}
+
+table.table tbody tr:hover > td {
+    background-color: #edf5fc !important;
+}
+
+table.table table.table {
+    margin: 0.25rem 0;
+    border-radius: 0.4rem;
+    box-shadow: none;
+    font-size: 0.88rem;
+}
+
+@media (max-width: 700px) {
+    .container {
+        width: min(100% - 1rem, 1600px);
+        margin: 0.5rem auto;
+    }
+
+    table.table th,
+    table.table td {
+        padding: 0.5rem 0.6rem;
+    }
+}
