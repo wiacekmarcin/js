@@ -39,6 +39,10 @@ app.controller('przewody-ctrl', ['$scope', '$http', function($scope, $http) {
 
     get();
 
+    $scope.isZbiorcze = function(zb) {
+        return zb.zbior == 1 || zb.polac == 1;
+    };
+
     $scope.choose = function(id, name) {
         $scope.selectZbiorcze = id;
         $scope.chooseName = name;
