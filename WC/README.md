@@ -1,2 +1,0 @@
-# WC
-Sterownik WC oświetlenia.

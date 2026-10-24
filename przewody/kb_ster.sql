@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Paź 27, 2025 at 05:04 AM
+-- Generation Time: Paź 12, 2025 at 09:09 PM
 -- Wersja serwera: 10.11.6-MariaDB-0+deb12u1
 -- Wersja PHP: 8.2.7
 
@@ -3535,8 +3535,7 @@ INSERT INTO `przewod` (`id`, `opis`, `ilosc_zyl`) VALUES
 (214, 'Do włączników 0-9', 10),
 (215, 'Do włączników 10-19', 10),
 (216, 'Do włączników 20-29', 10),
-(217, 'Do włączika w kuchni', 3),
-(218, 'Łącznik z RS konwerterem', 8);
+(217, 'Do włączika w kuchni', 3);
 
 -- --------------------------------------------------------
 
@@ -4008,9 +4007,7 @@ INSERT INTO `przewod_miejsce` (`id`, `przewod_id`, `miejsce_id`) VALUES
 (437, 216, 28),
 (438, 216, 28),
 (439, 217, 28),
-(440, 217, 28),
-(441, 218, 1),
-(442, 218, 1);
+(440, 217, 28);
 
 -- --------------------------------------------------------
 
@@ -4361,14 +4358,7 @@ INSERT INTO `zakonczenie` (`id`, `etykieta`, `przewod_miejsce_id`, `rodzaj_zakon
 (262, '4xINA219', 416, 3, 14),
 (263, 'RASP206', 417, 1, 4),
 (264, 'IN207', 419, 1, 3),
-(265, 'Czujnik temperatury i wilgotności drzwi wejściowe', 420, 3, 3),
-(266, 'K', 118, 1, 8),
-(267, 'Brak', 114, 6, 10),
-(268, 'Q', 113, 1, 10),
-(269, 'F', 116, 1, 8),
-(270, 'K', 120, 1, 8),
-(271, 'RS', 441, 4, 8),
-(272, 'undefined', 442, 1, 8);
+(265, 'Czujnik temperatury i wilgotności drzwi wejściowe', 420, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -4913,14 +4903,14 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (494, 95, 570, 8, '8'),
 (495, 96, 52, 1, '1'),
 (496, 96, 51, 2, '2'),
-(497, 96, 49, 3, '3'),
-(498, 96, 50, 4, '4'),
+(497, 96, 50, 3, '3'),
+(498, 96, 49, 4, '4'),
 (499, 96, 53, 5, '5'),
 (500, 96, 54, 6, '6'),
 (501, 96, 55, 7, '7'),
 (502, 96, 56, 8, '8'),
-(503, 97, 572, 1, '1'),
-(504, 97, 571, 2, '2'),
+(503, 97, 571, 1, '1'),
+(504, 97, 572, 2, '2'),
 (505, 97, 573, 3, '3'),
 (506, 97, 574, 4, '4'),
 (507, 97, 575, 5, '5'),
@@ -4935,13 +4925,13 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (516, 98, 584, 6, '6'),
 (517, 98, 585, 7, '7'),
 (518, 98, 586, 8, '8'),
-(519, 99, 593, 1, '1'),
+(519, 99, 587, 1, '1'),
 (520, 99, 588, 2, '2'),
 (521, 99, 589, 3, '3'),
 (522, 99, 590, 4, '4'),
 (523, 99, 591, 5, '5'),
 (524, 99, 592, 6, '6'),
-(525, 99, 587, 7, '7'),
+(525, 99, 593, 7, '7'),
 (526, 99, 594, 8, '8'),
 (527, 100, 595, 1, '1'),
 (528, 100, 596, 2, '2'),
@@ -5857,67 +5847,7 @@ INSERT INTO `zakonczenie_zyly` (`id`, `zakonczenie_id`, `zyla_id`, `pos`, `opis`
 (1438, 264, 1090, 3, '3'),
 (1439, 265, 1088, 1, 'GND'),
 (1440, 265, 1090, 2, 'Zasilanie'),
-(1441, 265, 1089, 3, 'Sygnał'),
-(1442, 266, 588, 1, '1'),
-(1443, 266, 589, 2, '2'),
-(1444, 266, 590, 3, '3'),
-(1445, 266, 591, 4, '4'),
-(1446, 266, 592, 5, '5'),
-(1447, 266, 593, 6, '6'),
-(1448, 266, 587, 7, '7'),
-(1449, 266, 594, 8, '8'),
-(1450, 267, 1124, 1, '1'),
-(1451, 267, 1126, 2, '2'),
-(1452, 267, 1122, 3, '3'),
-(1453, 267, 1121, 4, '4'),
-(1454, 267, 1128, 5, '5'),
-(1455, 267, 1123, 6, '6'),
-(1456, 267, 1129, 7, '7'),
-(1457, 267, 1130, 8, '8'),
-(1458, 267, 1127, 9, '9'),
-(1459, 267, 1125, 10, '10'),
-(1460, 268, 1121, 1, '1'),
-(1461, 268, 1122, 2, '2'),
-(1462, 268, 1123, 3, '3'),
-(1463, 268, 1124, 4, '4'),
-(1464, 268, 1125, 5, '5'),
-(1465, 268, 1126, 6, '6'),
-(1466, 268, 1127, 7, '7'),
-(1467, 268, 1128, 8, '8'),
-(1468, 268, 1129, 9, '9'),
-(1469, 268, 1130, 10, '10'),
-(1470, 269, 580, 1, '1'),
-(1471, 269, 583, 2, '2'),
-(1472, 269, 581, 3, '3'),
-(1473, 269, 584, 4, '4'),
-(1474, 269, 582, 5, '5'),
-(1475, 269, 585, 6, '6'),
-(1476, 269, 579, 7, '7'),
-(1477, 269, 586, 8, '8'),
-(1478, 270, 572, 1, '1'),
-(1479, 270, 571, 2, '2'),
-(1480, 270, 575, 3, '3'),
-(1481, 270, 577, 4, '4'),
-(1482, 270, 576, 5, '5'),
-(1483, 270, 578, 6, '6'),
-(1484, 270, 573, 7, '7'),
-(1485, 270, 574, 8, '8'),
-(1486, 271, 1131, 1, 'GND'),
-(1487, 271, 1138, 2, 'GND'),
-(1488, 271, 1132, 3, '53.6'),
-(1489, 271, 1133, 4, '53.1'),
-(1490, 271, 1136, 5, '59.3'),
-(1491, 271, 1137, 6, '59.4'),
-(1492, 271, 1134, 7, '35.4'),
-(1493, 271, 1135, 8, '35.8'),
-(1494, 272, 1138, 1, '1'),
-(1495, 272, 1137, 2, '2'),
-(1496, 272, 1136, 3, '3'),
-(1497, 272, 1135, 4, '4'),
-(1498, 272, 1134, 5, '5'),
-(1499, 272, 1133, 6, '6'),
-(1500, 272, 1132, 7, '7'),
-(1501, 272, 1131, 8, '8');
+(1441, 265, 1089, 3, 'Sygnał');
 
 -- --------------------------------------------------------
 
@@ -6418,13 +6348,13 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (47, 1, 34, 'noc'),
 (48, 8, 34, 'wieczór'),
 (49, 8, 35, 'Zapalone światło w WC (główne lub lustro)'),
-(50, 1, 35, 'RS485-A'),
+(50, 1, 35, 'Żądanie uruchomienie wentylatora w WC'),
 (51, 6, 35, 'Sygnał dla przekaźnika 5'),
 (52, 5, 35, 'Sygnał dla przekaźnika 6'),
 (53, 4, 35, 'Podświetlenie włączników'),
 (54, 9, 35, 'Sygnał klawisza 1 włącznika '),
 (55, 3, 35, 'Sygnał klawisza 2 włącznika '),
-(56, 7, 35, 'RS485-B'),
+(56, 7, 35, 'GND'),
 (57, 4, 36, '+5V dla przekaźników/czujników temperatur'),
 (58, 9, 36, 'Przekaźnik ogrzewanie Hol'),
 (59, 8, 36, 'Przekaźnik ogrzewanie WC'),
@@ -6688,8 +6618,8 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (325, 0, 151, 'Kanał 1'),
 (326, 0, 151, 'Kanał 2'),
 (327, 0, 151, 'GND'),
-(328, 6, 53, 'RS485-B'),
-(329, 4, 53, 'RS485-A'),
+(328, 6, 53, 'GND'),
+(329, 4, 53, '+5V'),
 (330, 3, 53, 'Kanał 1 - wiatrak 1 (kuchnia)'),
 (331, 1, 53, 'Podświetlenie klawiszy'),
 (332, 9, 53, 'Kanał 2 - wiatrak 2 (łazienka)'),
@@ -6904,13 +6834,13 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (546, 3, 191, '2 taryfa'),
 (547, 11, 191, 'noc'),
 (548, 4, 191, 'wieczór'),
-(549, 2, 190, 'GND'),
-(550, 11, 190, '35.5 Sygnalizacja światło w WC'),
+(549, 2, 190, '35.5 Sygnalizacja światło w WC'),
+(550, 11, 190, '35.6 Żadanie uruchomienie wiatraka w WC (in)'),
 (551, 4, 190, '35.7 Przekażnik 5 WC (out)'),
 (552, 7, 190, '35.8 Przekaźnik 6 WC (out)'),
 (553, 8, 190, '53.4 Przekaźnik wiatrak 1 przedpokoj'),
 (554, 10, 190, '53.5 Przekaźnik wiatrak 2'),
-(555, 1, 190, '59.8 - czujka ruchu'),
+(555, 1, 190, '59.8 -'),
 (556, 5, 190, '59.7 Światło sypialnia'),
 (557, 3, 190, '59.6 Światło salon'),
 (558, 6, 190, '59.5 Światło Hol/Przedpokój'),
@@ -6926,30 +6856,30 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (568, 8, 86, 'wieczór'),
 (569, 4, 86, '+24V sterowalne'),
 (570, 7, 86, 'GND'),
-(571, 4, 59, 'Podświetlenie klawiszy salon'),
-(572, 5, 59, 'Podświetlenie klawiszy hol'),
-(573, 1, 59, 'RS485-A'),
-(574, 8, 59, 'RS485-B'),
-(575, 3, 59, 'Zapalone Światło Hol/Przedpokój (ison)'),
-(576, 9, 59, 'Zapalone Światło Sypialnia (ison)'),
-(577, 6, 59, 'Zapalone Światło Salon (ison)'),
-(578, 7, 59, 'Czujka ruchu'),
-(579, 9, 57, '24V_OFF'),
-(580, 3, 57, 'GND'),
+(571, 4, 59, 'Podświetlenie klawiszy'),
+(572, 5, 59, 'Podświetlenie klawiszy'),
+(573, 1, 59, 'Klawisz lewy Hol'),
+(574, 8, 59, 'Klawisz prawy Hol'),
+(575, 3, 59, 'Światło Hol/Przedpokój (ison)'),
+(576, 9, 59, 'Światło Sypialnia (ison)'),
+(577, 6, 59, 'Światło Salon (ison)'),
+(578, 7, 59, '-'),
+(579, 9, 57, 'RX'),
+(580, 3, 57, 'TX'),
 (581, 7, 57, 'GND'),
 (582, 4, 57, '+24V'),
 (583, 8, 57, 'wieczór'),
 (584, 1, 57, 'noc'),
 (585, 6, 57, '2 taryfa'),
 (586, 5, 57, 'zasilanie awaryjne'),
-(587, 5, 58, 'wlacznik lewy hol/wc'),
+(587, 5, 58, 'GND'),
 (588, 9, 58, 'włacznik salon lewy klawisz lewy'),
 (589, 3, 58, 'włącznik salon lewy klawisz prawy'),
 (590, 1, 58, 'włącznik salon prawy klawisz lewy'),
 (591, 8, 58, 'włącznik salon prawy klawisz prawy'),
 (592, 6, 58, 'włącznik kuchnia klawisz lewy'),
 (593, 7, 58, 'włącznik kuchnia klawisz prawy'),
-(594, 4, 58, 'wlacznik prawy hol/wc'),
+(594, 4, 58, 'podświetlenie klawiszy'),
 (595, 7, 188, '83.6 czujnik ruchu 1'),
 (596, 15, 188, '83.5 czujnik ruchu 2'),
 (597, 6, 188, '83.4'),
@@ -7475,25 +7405,7 @@ INSERT INTO `zyla` (`id`, `kolor_id`, `przewod_id`, `opis`) VALUES
 (1117, 1, 213, 'CH1'),
 (1118, 8, 213, 'CH2'),
 (1119, 3, 213, 'CH3'),
-(1120, 9, 213, 'CH4'),
-(1121, 4, 56, ''),
-(1122, 7, 56, ''),
-(1123, 3, 56, ''),
-(1124, 1, 56, ''),
-(1125, 8, 56, ''),
-(1126, 6, 56, ''),
-(1127, 9, 56, ''),
-(1128, 5, 56, ''),
-(1129, 2, 56, ''),
-(1130, 10, 56, ''),
-(1131, 6, 218, 'GND'),
-(1132, 1, 218, 'RS485-A Pokoj'),
-(1133, 8, 218, 'RS485-B Pokoj'),
-(1134, 9, 218, 'RS485-A WC'),
-(1135, 3, 218, 'RS485-B WC'),
-(1136, 5, 218, 'RS485-A sypialnia'),
-(1137, 4, 218, 'RS485-B sypialnia'),
-(1138, 7, 218, 'GND');
+(1120, 9, 213, 'CH4');
 
 -- --------------------------------------------------------
 
@@ -7887,7 +7799,7 @@ ALTER TABLE `pomieszczenie`
 -- AUTO_INCREMENT for table `przewod_miejsce`
 --
 ALTER TABLE `przewod_miejsce`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=443;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=441;
 
 --
 -- AUTO_INCREMENT for table `rodzaj_zakonczenia`
@@ -7899,13 +7811,13 @@ ALTER TABLE `rodzaj_zakonczenia`
 -- AUTO_INCREMENT for table `zakonczenie`
 --
 ALTER TABLE `zakonczenie`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=273;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=266;
 
 --
 -- AUTO_INCREMENT for table `zakonczenie_zyly`
 --
 ALTER TABLE `zakonczenie_zyly`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1502;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1442;
 
 --
 -- AUTO_INCREMENT for table `zlacze_wtyczka`
@@ -7917,7 +7829,7 @@ ALTER TABLE `zlacze_wtyczka`
 -- AUTO_INCREMENT for table `zyla`
 --
 ALTER TABLE `zyla`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1139;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1121;
 
 --
 -- Constraints for dumped tables
