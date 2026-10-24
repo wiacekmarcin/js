@@ -1,0 +1,59 @@
+
+<div ng-if="miejsce.zakid !== undefined && miejsce.zakid !== null">
+    <table class="table table-condensed" >
+        <tr ng-repeat="zak1 in zakonczenie[miejsce.pmid] track by $index">
+            <td>{{zak1.pos}}</td>
+            <td>{{zak1.id}}</td> 
+            <td ng-style='{"background-color": "{{zyla[zak1.zyla_id].html}}"}'>&nbsp;</td>
+            <td>{{zyla[zak1.zyla_id].kolor}}</td>
+            <td>{{zak1.opis}}</td>
+            <td ng-if="miejsce.r_kod == 'K'">
+                <div ng-repeat="zylapol in polaczenia[zak1.id]" ng-if="zylapol != zak1.zyla_id">
+                    {{zylapol}} 
+                    <span style="font-weight: bold;">{{zyla[zylapol].pid}}</span> 
+                    <span ng-style='{"background-color": "{{zyla[zylapol].html}}"}'>&nbsp;</span>
+                    {{zyla[zylapol].kolor}}
+                    </div>
+            </td>
+        </tr>
+    </table>
+<!--
+    <table class="table table-condensed"  ng-if="miejsce.r_kod == 'P'" >
+        <tr ng-repeat="(key, value) in zakonczenie2[miejsce.zakid]">
+            <td ng-style='{"background-color": "{{zyla[key].html}}"}'>&nbsp;</td>
+    
+            <td>{{zyla[key].kolor}}</td>
+            <td>{{zyla[key].opis}}</td>
+    
+            <td>-</td>
+            <td ng-if="value.length == 1">{{zyla[value[0]].pid}}</td>
+            <td ng-if="value.length == 1" ng-style='{"background-color": "{{zyla[value[0]].html}}"}'>&nbsp;</td>
+            <td ng-if="value.length == 1">{{zyla[value[0]].kolor}}</td> 
+            <td ng-if="value.length == 1">{{zyla[value[0]].opis}}</td>            
+            
+            <td ng-if="value.length > 1" colspan="4">
+                <table class="table table-bordered" >
+                    <tr ng-repeat="zyla3 in value">
+                        <td>{{zyla[zyla3].pid}}</td>
+                        <td ng-style='{"background-color": "{{zyla[zyla3].html}}"}'>&nbsp;</td>
+                        <td>{{zyla[zyla3].kolor}}</td> 
+                        <td>{{zyla[zyla3].opis}}</td>            
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-condensed" ng-if="miejsce.r_kod == 'U'">
+        <tr ng-repeat="zak3 in zakonczenie3[miejsce.zakid]">
+            <td>{{$index+1}}</td>
+            <td>{{zak3.id}}</td>
+            <td ng-style='{"background-color": "{{zyla[zak3.id].html}}"}'>&nbsp;</td>
+            <td>{{zyla[zak3.id].kolor}}</td>
+            <td>{{zak3.opis}}</td>
+            <td ng-style='{"background-color": "{{zak3.html}}"}'>&nbsp;</td>
+            <td>{{zak3.kolor}}</td>
+        </tr>
+    </table>
+    -->
+</div>

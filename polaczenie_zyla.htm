@@ -1,0 +1,23 @@
+<div class="w3-constainer" ng-controller="polaczeniezyla-ctrl">
+    <table class="table-bordered">
+        <tr ng-repeat="przewod in przewody" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
+            <td>{{przewod}}</td>
+            <td>
+                <table class="table-bordered">
+                    <tr ng-repeat="zyla in zyly[przewod] track by $index" style="text-align: left;">
+                        <td>{{$index+1}}.</td>
+                        <td ng-style='{"background-color": "{{zyla.html1}}"}'>&nbsp;</td>
+                        <td style="text-align: left;">{{zyla.cname1}}</td>
+                        <td style="text-align: left;">{{zyla.opis1}}</td>
+                        <td>&lt--&gt</td>
+                        <td>{{$index+1}}.</td>
+                        <td>{{zyla.pid2}}</td>
+                        <td ng-style='{"background-color": "{{zyla.html2}}"}'>&nbsp;</td>
+                        <td style="text-align: left;">{{zyla.cname2}}</td>
+                        <td style="text-align: left;">{{zyla.opis2}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
