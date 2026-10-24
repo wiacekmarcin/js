@@ -13,18 +13,18 @@
             <th> Ilość żył </th>
             <th> Akcje </th>
         </tr>
-        <tr ng-repeat-start="zl in k_zlacza" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.przewod_id}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.opis}} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
-            <td>{{zl.ilosc_zyl}}</td>
+        <tr ng-repeat-start="zl in ::k_zlacza track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.przewod_id}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.opis}} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
+            <td>{{::zl.ilosc_zyl}}</td>
             <td></td>
         </tr>
         <tr ng-show="false"></tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -39,14 +39,14 @@
             <th> Ilość żył</th>
             <th> Akcje</th>
         </tr>
-        <tr ng-repeat-start="zl in k_urzadzenia" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.przewod_id}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.opis}} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
-            <td>{{zl.ilosc_zyl}}</td>
+        <tr ng-repeat-start="zl in ::k_urzadzenia track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.przewod_id}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.opis}} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
+            <td>{{::zl.ilosc_zyl}}</td>
             <td></td>
         </tr>
         <tr>
@@ -58,18 +58,18 @@
                         <th colspan="2"> Kolor </th>
                         <th> Opis </th>
                     </tr>
-                    <tr ng-repeat="zylaid in zakonId[zl.zid]">
-                        <td>{{zylaid.pos}}</td>
-                        <td>{{zylaid.id}}</td>
-                        <td ng-style='{"background-color": "{{zyly[zylaid.id].html}}"}'>&nbsp;</td>
-                        <td>{{zyly[zylaid.id].kolor}}</td>
-                        <td>{{zyly[zylaid.id].opis}}</td>
+                    <tr ng-repeat="zylaid in ::zakonId[zl.zid] track by $index">
+                        <td>{{::zylaid.pos}}</td>
+                        <td>{{::zylaid.id}}</td>
+                        <td ng-style='::{"background-color": zyly[zylaid.id].html}'>&nbsp;</td>
+                        <td>{{::zyly[zylaid.id].kolor}}</td>
+                        <td>{{::zyly[zylaid.id].opis}}</td>
                     </tr>
                 </table>
             </td>
             <td></td>
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -84,14 +84,14 @@
             <th> Ilość żył </th>
             <td></td>
         </tr>
-        <tr ng-repeat-start="zl in k_polaczenia_kablowe" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.przewod_id}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.opis}} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
-            <td>{{zl.ilosc_zyl}}</td>
+        <tr ng-repeat-start="zl in ::k_polaczenia_kablowe track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.przewod_id}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.opis}} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
+            <td>{{::zl.ilosc_zyl}}</td>
             <td></td>
         </tr>
         <tr>
@@ -103,18 +103,18 @@
                         <th colspan="2"> Kolor </th>
                         <th> Opis </th>
                     </tr>
-                    <tr ng-repeat="zylaid in zakonId[zl.zid]">
-                        <td>{{zylaid.pos}}</td>
-                        <td>{{zylaid.id}}</td>
-                        <td ng-style='{"background-color": "{{zyly[zylaid.id].html}}"}'>&nbsp;</td>
-                        <td>{{zyly[zylaid.id].kolor}}</td>
-                        <td>{{zyly[zylaid.id].opis}}</td>
+                    <tr ng-repeat="zylaid in ::zakonId[zl.zid] track by $index">
+                        <td>{{::zylaid.pos}}</td>
+                        <td>{{::zylaid.id}}</td>
+                        <td ng-style='::{"background-color": zyly[zylaid.id].html}'>&nbsp;</td>
+                        <td>{{::zyly[zylaid.id].kolor}}</td>
+                        <td>{{::zyly[zylaid.id].opis}}</td>
                     </tr>
                 </table>
             </td>
             <td></td>
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -129,14 +129,14 @@
             <th> Ilość żył </th>
             <th>Akcje </th>
         </tr>
-        <tr ng-repeat-start="zl in k_polaczenia_plytkowe" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.przewod_id}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.opis}} </td>
-            <td>{{zl.urzadzenie}} </td>
-            <td>{{zl.ilosc_pin}}</td>
-            <td>{{zl.ilosc_zyl}}</td>
+        <tr ng-repeat-start="zl in ::k_polaczenia_plytkowe track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.przewod_id}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.opis}} </td>
+            <td>{{::zl.urzadzenie}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
+            <td>{{::zl.ilosc_zyl}}</td>
             <td></td>
         </tr>
         <tr>
@@ -148,18 +148,18 @@
                         <th colspan="2"> Kolor </th>
                         <th> Opis </th>
                     </tr>
-                    <tr ng-repeat="zylaid in zakonId[zl.zid]">
-                        <td>{{zylaid.pos}}</td>
-                        <td>{{zylaid.id}}</td>
-                        <td ng-style='{"background-color": "{{zyly[zylaid.id].html}}"}'>&nbsp;</td>
-                        <td>{{zyly[zylaid.id].kolor}}</td>
-                        <td>{{zyly[zylaid.id].opis}}</td>
+                    <tr ng-repeat="zylaid in ::zakonId[zl.zid] track by $index">
+                        <td>{{::zylaid.pos}}</td>
+                        <td>{{::zylaid.id}}</td>
+                        <td ng-style='::{"background-color": zyly[zylaid.id].html}'>&nbsp;</td>
+                        <td>{{::zyly[zylaid.id].kolor}}</td>
+                        <td>{{::zyly[zylaid.id].opis}}</td>
                     </tr>
                 </table>
             </td>
             <td></td>
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -176,16 +176,16 @@
             <th> Etykieta </th>
             <th> Akce </th>
         </tr>
-        <tr ng-repeat-start="zl in k_wtyczki" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.przewod_id}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.opis}} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
-            <td>{{zl.ilosc_zyl}}</td>
-            <td>{{wtyczka_zlacze[zl.zid].plytka_opis}}</td>
-            <td>{{wtyczka_zlacze[zl.zid].etykieta}}</td>
+        <tr ng-repeat-start="zl in ::k_wtyczki track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.przewod_id}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.opis}} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
+            <td>{{::zl.ilosc_zyl}}</td>
+            <td>{{::wtyczka_zlacze[zl.zid].plytka_opis}}</td>
+            <td>{{::wtyczka_zlacze[zl.zid].etykieta}}</td>
             <td></td>
         </tr>
         <tr>
@@ -197,12 +197,12 @@
                         <th colspan="2"> Kolor </th>
                         <th> Opis </th>
                     </tr>
-                    <tr ng-repeat="zylaid in zakonId[zl.zid]">
-                        <td>{{zylaid.pos}}</td>
-                        <td>{{zylaid.id}}</td>
-                        <td ng-style='{"background-color": "{{zyly[zylaid.id].html}}"}'>&nbsp;</td>
-                        <td>{{zyly[zylaid.id].kolor}}</td>
-                        <td>{{zyly[zylaid.id].opis}}</td>
+                    <tr ng-repeat="zylaid in ::zakonId[zl.zid] track by $index">
+                        <td>{{::zylaid.pos}}</td>
+                        <td>{{::zylaid.id}}</td>
+                        <td ng-style='::{"background-color": zyly[zylaid.id].html}'>&nbsp;</td>
+                        <td>{{::zyly[zylaid.id].kolor}}</td>
+                        <td>{{::zyly[zylaid.id].opis}}</td>
                     </tr>
                 </table>
             </td>
@@ -214,17 +214,17 @@
                         <th> Nazwa </th>
                         <th> Połączenie </th>
                     </tr>
-                    <tr ng-repeat="pinyid in plytkaId[wtyczka_zlacze[zl.zid].zlacze_id]">
-                        <td>{{pinyid.pos}}</td>
-                        <td>{{pinyid.id}}</td>
-                        <td>{{piny[pinyid.id].pinnazwa}}</td>
-                        <td>{{pnazwa[pinyid.id].nazwa}}</td>
+                    <tr ng-repeat="pinyid in ::plytkaId[wtyczka_zlacze[zl.zid].zlacze_id] track by $index">
+                        <td>{{::pinyid.pos}}</td>
+                        <td>{{::pinyid.id}}</td>
+                        <td>{{::piny[pinyid.id].pinnazwa}}</td>
+                        <td>{{::pnazwa[pinyid.id].nazwa}}</td>
                     </tr>
                 </table>
             </td>
             <td></td>
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -240,19 +240,19 @@
             <th> Ilość żył</th>
             <th> Akce </th>
         </tr>
-        <tr ng-repeat-start="zl in k_inne" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.przewod_id}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.opis}} </td>
-            <td>{{zl.urzadzenie}} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
-            <td>{{zl.ilosc_zyl}}</td>
+        <tr ng-repeat-start="zl in ::k_inne track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.przewod_id}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.opis}} </td>
+            <td>{{::zl.urzadzenie}} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
+            <td>{{::zl.ilosc_zyl}}</td>
             <td></td>
         </tr>
         <tr ng-show="false"></tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <hr>
 
@@ -271,23 +271,23 @@
             <th> Ilość żył </th>
             <th> Akcje</th>
         </tr>
-        <tr ng-repeat-start="zl in p_zlacza" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.pid}}</td>
-            <td>{{zl.plytka_id}}. {{zl.pnazwa}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
-            <td colspan="3" ng-if="!zlacze_wtyczka[zl.pid]">
+        <tr ng-repeat-start="zl in ::p_zlacza track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.pid}}</td>
+            <td>{{::zl.plytka_id}}. {{::zl.pnazwa}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
+            <td colspan="3" ng-if="::!zlacze_wtyczka[zl.pid]">
                 <select ng-options="item.id as (item.etykieta + ':' + item.przewod_id) for item in wtyczki" 
                 ng-model = "wtyczka_add[zl.pid]" ></select>
             </td>
-            <td ng-if="!zlacze_wtyczka[zl.pid]">
+            <td ng-if="::!zlacze_wtyczka[zl.pid]">
                 <button ng-click="saveZlaczeWtyczka(zl.pid)">Dodaj Wtyczke</button>&nbsp;
             </td>
-            <td ng-if="zlacze_wtyczka[zl.pid]">{{zlacze_wtyczka[zl.pid].etykieta}}</td>
-            <td ng-if="zlacze_wtyczka[zl.pid]">{{zlacze_wtyczka[zl.pid].przewod_id}}</td>
-            <td ng-if="zlacze_wtyczka[zl.pid]">{{zlacze_wtyczka[zl.pid].opis}}</td>
-            <td ng-if="zlacze_wtyczka[zl.pid]">{{zlacze_wtyczka[zl.pid].ilosc_zyl}}</td>
+            <td ng-if="::zlacze_wtyczka[zl.pid]">{{::zlacze_wtyczka[zl.pid].etykieta}}</td>
+            <td ng-if="::zlacze_wtyczka[zl.pid]">{{::zlacze_wtyczka[zl.pid].przewod_id}}</td>
+            <td ng-if="::zlacze_wtyczka[zl.pid]">{{::zlacze_wtyczka[zl.pid].opis}}</td>
+            <td ng-if="::zlacze_wtyczka[zl.pid]">{{::zlacze_wtyczka[zl.pid].ilosc_zyl}}</td>
             <td></td>
             <!--
             <td><div class="btn-group">
@@ -306,13 +306,13 @@
                         <th> Połączenie </th>
                         <th> Inne piny </th>
                     </tr>
-                    <tr ng-repeat="pinyid in plytkaId[zl.pid]">
-                        <td>{{pinyid.pos}}</td>
-                        <td>{{pinyid.id}}</td>
-                        <td>{{piny[pinyid.id].pinnazwa}}</td>
-                        <td>{{pnazwa[pinyid.id].nazwa}}</td>
-                        <td><span ng-repeat="item in polaczenia_plytkowe[pnazwa[pinyid.id].id]">
-                            [{{piny[item].enazwa}}].{{piny[item].pos}} ({{piny[item].pinnazwa}}), </span></td>
+                    <tr ng-repeat="pinyid in ::plytkaId[zl.pid] track by $index">
+                        <td>{{::pinyid.pos}}</td>
+                        <td>{{::pinyid.id}}</td>
+                        <td>{{::piny[pinyid.id].pinnazwa}}</td>
+                        <td>{{::pnazwa[pinyid.id].nazwa}}</td>
+                        <td><span ng-repeat="item in ::polaczenia_plytkowe[pnazwa[pinyid.id].id]">
+                            [{{::piny[item].enazwa}}].{{::piny[item].pos}} ({{::piny[item].pinnazwa}}), </span></td>
                     </tr>
                 </table>
             </td>
@@ -324,18 +324,18 @@
                         <th colspan="2"> Kolor </th>
                         <th> Opis </th>
                     </tr>
-                    <tr ng-repeat="zylaid in zakonId[zlacze_wtyczka[zl.pid].wtyczka_id]">
-                        <td>{{zylaid.pos}}</td>
-                        <td>{{zylaid.id}}</td>
-                        <td ng-style='{"background-color": "{{zyly[zylaid.id].html}}"}'>&nbsp;</td>
-                        <td>{{zyly[zylaid.id].kolor}}</td>
-                        <td>{{zyly[zylaid.id].opis}}</td>
+                    <tr ng-repeat="zylaid in ::zakonId[zlacze_wtyczka[zl.pid].wtyczka_id] track by $index">
+                        <td>{{::zylaid.pos}}</td>
+                        <td>{{::zylaid.id}}</td>
+                        <td ng-style='::{"background-color": zyly[zylaid.id].html}'>&nbsp;</td>
+                        <td>{{::zyly[zylaid.id].kolor}}</td>
+                        <td>{{::zyly[zylaid.id].opis}}</td>
                     </tr>
                 </table>
             </td>
             <td></td>
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -348,12 +348,12 @@
             <th> Ilość pinów </th>
             <th> Akcje </th>
         </tr>
-        <tr ng-repeat-start="zl in p_urzadzenia" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.plytka_id}}. {{zl.pnazwa}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
+        <tr ng-repeat-start="zl in ::p_urzadzenia track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.plytka_id}}. {{::zl.pnazwa}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
             <td></td>
         </tr>
         <tr>
@@ -364,16 +364,16 @@
                         <th> Id </th>
                         <th> Nazwa </th>
                     </tr>
-                    <tr ng-repeat="pinyid in plytkaId[zl.pid]">
-                        <td>{{pinyid.pos}}</td>
-                        <td>{{pinyid.id}}</td>
-                        <td>{{piny[pinyid.id].pinnazwa}}</td>
+                    <tr ng-repeat="pinyid in ::plytkaId[zl.pid] track by $index">
+                        <td>{{::pinyid.pos}}</td>
+                        <td>{{::pinyid.id}}</td>
+                        <td>{{::piny[pinyid.id].pinnazwa}}</td>
                     </tr>
                 </table>
             </td>
             <td></td>
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -385,17 +385,17 @@
             <th> Nazwa</th>
             <th> Ilość pinów</th>
         </tr>
-        <tr ng-repeat-start="zl in polaczenia_kablowe" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.plytka_id}}. {{zl.pnazwa}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
+        <tr ng-repeat-start="zl in ::polaczenia_kablowe track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.plytka_id}}. {{::zl.pnazwa}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
         </tr>
         <tr ng-show="false">
 
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -407,17 +407,17 @@
             <th> Nazwa</th>
             <th> Ilość pinów</th>
         </tr>
-        <tr ng-repeat-start="zl in p_polaczenia_plytkowe" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.plytka_id}}. {{zl.pnazwa}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
+        <tr ng-repeat-start="zl in ::p_polaczenia_plytkowe track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.plytka_id}}. {{::zl.pnazwa}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
         </tr>
         <tr ng-show="false">
 
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -429,17 +429,17 @@
             <th> Nazwa</th>
             <th> Ilość pinów</th>
         </tr>
-        <tr ng-repeat-start="zl in p_wtyczki" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.plytka_id}}. {{zl.pnazwa}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
+        <tr ng-repeat-start="zl in ::p_wtyczki track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.plytka_id}}. {{::zl.pnazwa}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
         </tr>
         <tr ng-show="false">
 
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <br>
     <table class="table">
@@ -451,17 +451,17 @@
             <th> Nazwa</th>
             <th> Ilość pinów</th>
         </tr>
-        <tr ng-repeat-start="zl in p_inne" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
-            <td>{{zl.zid}}</td>
-            <td>{{zl.plytka_id}}. {{zl.pnazwa}}</td>
-            <td>{{zl.pomieszczenie}} :: {{ zl.miejsce }} </td>
-            <td>{{zl.etykieta}} </td>
-            <td>{{zl.ilosc_pin}}</td>
+        <tr ng-repeat-start="zl in ::p_inne track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'">
+            <td>{{::zl.zid}}</td>
+            <td>{{::zl.plytka_id}}. {{::zl.pnazwa}}</td>
+            <td>{{::zl.pomieszczenie}} :: {{::zl.miejsce }} </td>
+            <td>{{::zl.etykieta}} </td>
+            <td>{{::zl.ilosc_pin}}</td>
         </tr>
         <tr ng-show="false">
 
         </tr>
-        <tr ng-repeat-end ng-show="false"></tr>
+        <tr ng-repeat-end ng-if="false"></tr>
     </table>
     <hr>
     

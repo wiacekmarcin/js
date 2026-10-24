@@ -1,60 +1,47 @@
 <?php
-require_once "database.php";
+require_once "db.php";
+require_post();
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
-mysqli_set_charset($con,"utf8");
+$edit = post_str('edit') === 'true';
+$id = post_int('id', -1);
+$nazwa = post_str('nazwa');
+$ilosc_pinow = post_int('ilosc_pinow');
+$plyta_id = post_int('plyta_id');
+$rodzaj_id = post_int('rodzaj_id');
 
-$params = array();
-
-$edit = $_POST["edit"];
-$id = $_POST["id"];
-$nazwa = $_POST["nazwa"];
-$ilosc_pinow = $_POST["ilosc_pinow"];
-$remove_pin = $_POST["remove_pin"];
-$plyta_id = $_POST["plyta_id"];
-$rodzaj_id = $_POST["rodzaj_id"];
-
-
-$queries = array();
-
-if ($edit == "true") {
-    array_push($queries, "UPDATE `elementy_plytkowe` SET `nazwa`='$nazwa', `plytka_id`=$plyta_id, `rodzaj_urzadzenia`=$rodzaj_id, `ilosc_pin` = $ilosc_pinow WHERE `id` = $id");
-    if ($remove_pin) {
-        array_push($queries,"DELETE FROM `elementy_plytkowe_pin` WHERE `element_plytkowy_id` = $id");
-    }
-} else {
-    array_push($queries, "INSERT INTO `elementy_plytkowe`(`id`, `nazwa`, `ilosc_pin`, `plytka_id`, `rodzaj_urzadzenia`) VALUES (NULL,'$nazwa', $ilosc_pinow, $plyta_id, $rodzaj_id)");
-
+if ($ilosc_pinow < 0 || $ilosc_pinow > 1000) {
+    fail("Niepoprawna ilość pinów");
 }
 
-$count = count($queries);
-print_r($queries);
-$err = 0;
-for ($i = 0; $i < $count; $i++) {
-    if (!mysqli_query($con, $queries[$i])) {
-        print ("ERR : " . $queries[$i]);
-        $err = 1;
+$id = tx(function () use ($edit, $id, $nazwa, $ilosc_pinow, $plyta_id, $rodzaj_id) {
+    $recreate = true;
+    if ($edit) {
+        $old = q_one("SELECT `ilosc_pin` FROM `elementy_plytkowe` WHERE `id` = ? FOR UPDATE", [$id]);
+        if (!$old) {
+            fail("Nie znaleziono elementu", 404);
+        }
+        // Piny (z nazwami) odtwarzamy tylko, gdy zmieniła się ich liczba.
+        $recreate = (int)$old['ilosc_pin'] !== $ilosc_pinow;
+        q("UPDATE `elementy_plytkowe` SET `nazwa` = ?, `plytka_id` = ?, `rodzaj_urzadzenia` = ?, `ilosc_pin` = ? WHERE `id` = ?",
+            [$nazwa, $plyta_id, $rodzaj_id, $ilosc_pinow, $id]);
+        if ($recreate) {
+            q("DELETE FROM `elementy_plytkowe_pin` WHERE `element_plytkowy_id` = ?", [$id]);
+        }
+    } else {
+        q("INSERT INTO `elementy_plytkowe` (`nazwa`, `ilosc_pin`, `plytka_id`, `rodzaj_urzadzenia`) VALUES (?, ?, ?, ?)",
+            [$nazwa, $ilosc_pinow, $plyta_id, $rodzaj_id]);
+        $id = db()->insert_id;
     }
-    if ($edit != "true") {
-        $id = $con->insert_id;
+
+    if ($recreate) {
+        $stmt = db()->prepare("INSERT INTO `elementy_plytkowe_pin` (`nazwa`, `pos`, `element_plytkowy_id`) VALUES ('-', ?, ?)");
+        $pos = 0;
+        $stmt->bind_param("ii", $pos, $id);
+        for ($pos = 1; $pos <= $ilosc_pinow; $pos++) {
+            $stmt->execute();
+        }
     }
-}
+    return $id;
+});
 
-$queries = [];
-for ($i = 0 ; $i < $ilosc_pinow; $i++) {
-    array_push($queries, "INSERT INTO `elementy_plytkowe_pin`(`id`, `nazwa`, `pos`, `element_plytkowy_id`) VALUES (NULL,'-',". ($i+1) . ",$id)");
-}
-print_r($queries);
-$count = count($queries);
-for ($i = 0; $i < $count; $i++) {
-    if (!mysqli_query($con, $queries[$i])) {
-        print ("ERR : " . $queries[$i]);
-        $err = 1;
-    }
-}
-
-if ($err == 0)
-    print ("OK");
-mysqli_close($con);
-
-?>
+json_out(["status" => "OK", "id" => $id]);

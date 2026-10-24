@@ -1,9 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-error_reporting( E_ALL );
-ini_set('display_errors', 1);
-require_once "database.php";
+require_once "db.php";
 
 $con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con, "utf8");
@@ -12,7 +8,7 @@ mysqli_set_charset($con, "utf8");
 $pid = -1;
 
 if (isset($_GET['pid'])) {
-    $pid = $_GET['pid'];
+    $pid = (int)$_GET['pid'];
 }
 
 $query = "SELECT `id`, `kolor_id`, `przewod_id`, `opis`, `kolor`, `html` FROM `ZylaWidok` WHERE `przewod_id` = $pid ORDER by `id`";
@@ -31,6 +27,6 @@ while($row = mysqli_fetch_array($result)) {
 $opt = array(
     "zyly" => $zyly
 );
-echo json_encode ($opt);
+echo json_encode($opt, JSON_UNESCAPED_UNICODE);
 mysqli_close($con);
 ?>

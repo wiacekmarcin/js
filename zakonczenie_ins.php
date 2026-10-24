@@ -1,30 +1,15 @@
 <?php
-require_once "database.php";
+require_once "db.php";
+require_post();
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
-mysqli_set_charset($con,"utf8");
-
-$zid=$_POST["zid"];
-$etykieta = $_POST["etykieta"];
-$pmid = $_POST["pmid"];
-$rodzaj = $_POST["rodzaj_zakonczenia"];
-$ilosc_pinow = $_POST["ilosc_pin"];
+$zid = post_int('zid', -1);
+$p = [post_str('etykieta'), post_int('pmid'), post_int('rodzaj_zakonczenia'), post_int('ilosc_pin')];
 
 if ($zid == -1) {
-    $query = "INSERT INTO `zakonczenie`(`id`, `etykieta`, `przewod_miejsce_id`, ";
-    $query .= "`rodzaj_zakonczenia`, `ilosc_pin`) VALUES (NULL, '$etykieta',";
-    $query .= "$pmid, $rodzaj, $ilosc_pinow);";
+    q("INSERT INTO `zakonczenie` (`etykieta`, `przewod_miejsce_id`, `rodzaj_zakonczenia`, `ilosc_pin`) VALUES (?, ?, ?, ?)", $p);
+    $zid = db()->insert_id;
 } else {
-
+    q("UPDATE `zakonczenie` SET `etykieta` = ?, `przewod_miejsce_id` = ?, `rodzaj_zakonczenia` = ?, `ilosc_pin` = ? WHERE `id` = ?", [...$p, $zid]);
 }
 
-$result = mysqli_query($con, $query);
-if ($zid == -1)
-    $zid = $con->insert_id;
-$opt = array(
-    'zid' => $zid
-);
-echo json_encode($opt);
-mysqli_close($con);
-
-?>
+json_out(["status" => "OK", "zid" => $zid]);

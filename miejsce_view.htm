@@ -18,15 +18,15 @@
     <h4>Zewnetrzne</h4>
     <fieldset class="panel" ng-repeat="zew in zewnetrzne">
         <legend >{{zew}}</legend>
-        <label >Numer</label>{{zew}}</span><br>
-        <label >Opis : </label><span></span>{{przewody[zew].opis}}</span><br>
+        <label >Numer</label><span>{{zew}}</span><br>
+        <label >Opis : </label><span>{{przewody[zew].opis}}</span><br>
         <label >Ilość żył : </label><span>{{przewody[zew].ilosc_zyl}}</span><br>
         <label >Zakończenie</label> <span>{{zakonczenia[zew][0].kod}} - {{zakonczenia[zew][0].etykieta}}</span><br>
         <table class="table table-bordered ">
             <tr><th>Lp.</th><th colspan="2">Kolor</th><th>Opis</th></tr>
-            <tr ng-repeat="zyla in zyly[zew]">
+            <tr ng-repeat="zyla in zyly[zew] track by $index">
                 <td>{{$index + 1}}</td>
-                <td ng-style='{"background-color": "{{zyla.html}}"}'>&nbsp;</td>
+                <td ng-style='{"background-color": zyla.html}'>&nbsp;</td>
                 <td>{{zyla.kolor}}</td>
                 <td>{{zyla.opis}}</td>
             </tr>
@@ -42,9 +42,9 @@
         <label>Zakończenie 1</label> <span>{{zakonczenia[wew][0].kod}} - {{zakonczenia[wew][0].etykieta}}</span><br>
         <label>Zakończenie 2</label> <span>{{zakonczenia[wew][1].kod}} - {{zakonczenia[wew][1].etykieta}}</span><br>
         <table class="table table-bordered ">
-            <tr ng-repeat="zyla in zyly[wew]">
+            <tr ng-repeat="zyla in zyly[wew] track by $index">
                 <td>{{$index+1}}</td>
-                <td ng-style='{"background-color": "{{zyla.html}}"}'>&nbsp;</td>
+                <td ng-style='{"background-color": zyla.html}'>&nbsp;</td>
                 <td>{{zyla.kolor}}</td>
                 <td>{{zyla.opis}}</td>
             </tr>

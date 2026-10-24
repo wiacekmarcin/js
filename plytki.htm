@@ -7,7 +7,7 @@
             <th>Urządzenia</th>
             <th> Akcje </th>
         </tr>
-        <tr ng-repeat-start="pl in plytki" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'
+        <tr ng-repeat-start="pl in plytki track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'"
         >
             <td>
                 {{pl.nazwa}}
@@ -22,7 +22,7 @@
                 <div style="display: flex;"><button ng-click="setEdit(pl)">Edytuj</button></div>
             </td>
         </tr>
-        <tr ng-repeat-end ng-show="editRow.id == pl.id">
+        <tr ng-repeat-end ng-if="editRow.id == pl.id">
             <td>
                 <input type="text" ng-model="editRow.nazwa">
             </td>
@@ -56,5 +56,6 @@
                 <div style="display: flex;"><button ng-click="saveAdd()">Zachowaj</button>&nbsp;<button ng-click="cancelAdd()">Anuluj</button></div>
             </td>
         </tr>
+    </table>
 </div>
 

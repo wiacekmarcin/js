@@ -1,8 +1,6 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
 
-require_once "database.php";
+require_once "db.php";
 $con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con, "utf8");
 
@@ -61,19 +59,18 @@ while($row = $result->fetch_array()) {
     ));
 }
 
-$outp = "{";
-$outp .= '"przewod":"'  . $cntPrz . '",';
-$outp .= '"zyla":"'      . $cntZyla        . '",';
-$outp .= '"zlacze":"'    . $cntZlacze     . '",';
-$outp .= '"zewn_przew":"'    . $cntPzew     . '",';
-$outp .= '"wewn_przew":"'    . $cntPwew     . '",';
-$outp .= '"zyla_all":"'     . $cntAllZyl .  '",';
-$outp .= '"przewod_opis":"'     . $cntDescrPrzew .  '",';
-$outp .= '"zakonczenia":' . json_encode($zakoarray) . ",";
-$outp .= '"kolory":' . json_encode($kolory);
-$outp .= "}";
 $con->close();
 
-echo($outp);
+echo json_encode([
+    "przewod" => (string)$cntPrz,
+    "zyla" => (string)$cntZyla,
+    "zlacze" => (string)$cntZlacze,
+    "zewn_przew" => (string)$cntPzew,
+    "wewn_przew" => (string)$cntPwew,
+    "zyla_all" => (string)$cntAllZyl,
+    "przewod_opis" => (string)$cntDescrPrzew,
+    "zakonczenia" => $zakoarray,
+    "kolory" => $kolory,
+], JSON_UNESCAPED_UNICODE);
 ?>
 

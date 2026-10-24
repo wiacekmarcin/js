@@ -7,7 +7,7 @@
                 {{zb.nazwa}}</button> </span>
     </p>
     <h4>{{selectZbiorcze == -1 ? "Wszystkie" : chooseName}} </h4>
-    <button ng-click="setDetailsAll()">{{ detailsAll ? "Ukryj " : "Pokaż "}} szczegóły</button> </span>
+    <button ng-click="setDetailsAll()">{{ detailsAll ? "Ukryj " : "Pokaż "}} szczegóły</button>
 
     <table class="table">
         <tr>
@@ -18,7 +18,7 @@
             <th> Miejsce końcowe </th>
             <th> Akcje </th>
         </tr>
-        <tr ng-repeat-start="pid in przewody" ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'
+        <tr ng-repeat-start="pid in przewody track by $index" ng-class-odd="'row-alt'" ng-class-even="'row-base'"
                 ng-show = "isShowWire(pid)"
         >
             <td style="text-align: center; font-size: x-large;">{{ pid }}</td>
@@ -82,7 +82,7 @@
                     {{zlaczewtyczka[prze[pid].miejsca[1].zakid].zlacze_id}}. {{zlaczewtyczka[prze[pid].miejsca[1].zakid].plytka}} : {{zlaczewtyczka[prze[pid].miejsca[1].zakid].zlacze}}
             </span> 
             </td>
-            <td style="text-align: center;"> <div class="btn-group">
+            <td style="text-align: center;">
                 <div style="display: flex;"><button ng-click="seteditPlace(pid)">Edytuj</button>&nbsp;<button ng-click="setDetails(pid)">Szczegóły</button></div>
             </td>
         </tr>
@@ -107,9 +107,9 @@
             <td colspan="3">
 
                 <table class="table table-condensed" ng-if="prze[pid].zyly.length > 0">
-                    <tr ng-repeat="zid in prze[pid].zyly">
+                    <tr ng-repeat="zid in prze[pid].zyly track by $index">
                         <td>{{zid}}</td>
-                        <td ng-style='{"background-color": "{{zyla[zid].html}}"}'>&nbsp;</td>
+                        <td ng-style='{"background-color": zyla[zid].html}'>&nbsp;</td>
                         <td ng-show="editzyla == -1">{{zyla[zid].kolor}}</td>
                         <td ng-if="editzyla == pid">
                             <select ng-options="item.id as item.kolor for item in kolory" ng-model="zylaedit[zid].kolor_id"></select>
@@ -120,7 +120,7 @@
                 </table>
                 <a href="#!/zyla_add/{{pid}}" ng-if="prze[pid].zyly.length == 0 && addzylypid == -1">Dodaj żyly do przewodu</a>
                 <table class="table table-condensed" ng-if="prze[pid].zyly.length == 0 && addzylypid == pid" >
-                    <tr ng-repeat="zadd in zylyaddID">
+                    <tr ng-repeat="zadd in zylyaddID track by $index">
                         <td>
                             <select ng-options="item.id as item.kolor for item in kolory" ng-model="zylyadd[zadd].kolor_id"></select>
                         </td>

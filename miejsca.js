@@ -100,8 +100,9 @@ app.controller('miejsca-ctrl', ['$scope','$routeParams', '$http', function($scop
             data: toparams(params),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then( function success(response) {
-            $scope.addRpw = {'id' : 0 };
-            $scope.editRpw = {'id' : -1 };
+            $scope.addRow = {'id' : 0 };
+            $scope.editRow = {'id' : -1 };
+            get();
         }, function error(response) {
             alert("Nie Udało się") ;
         });

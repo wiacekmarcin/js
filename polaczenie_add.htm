@@ -33,8 +33,8 @@
                             <th>Żyła 2</th>
                             <th></th>
                         </tr>
-                        <tr ng-repeat="zyla in zyly1">
-                            <td style="text-align: left;"><span ng-style='{"background-color": "{{zyla.chtml}}"}' style="width: 5px;">&nbsp;</span>
+                        <tr ng-repeat="zyla in zyly1 track by $index">
+                            <td style="text-align: left;"><span ng-style='{"background-color": zyla.chtml}' style="width: 5px;">&nbsp;</span>
                                 {{zyla.cname}} - {{zyla.opis}}
                             </td>
                             <td>

@@ -31,8 +31,8 @@
                     style="background-color: #D3D3D3">
                     <td colspan="4">{{miejsce}}</td>
                 </tr>
-                <tr ng-repeat="pid in plytki_id" 
-                    ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'  >
+                <tr ng-repeat="pid in plytki_id track by $index" 
+                    ng-class-odd="'row-alt'" ng-class-even="'row-base'"  >
                     <td>{{pid}}</td>
                     <td>{{plytki[pid].nazwa}}</td>
                     <td>{{ilosc_pin[pid] || 0}}</td>
@@ -59,8 +59,8 @@
                 <th>Lista połączeń</th>
                 <th>Akcje</th>
             </tr>
-            <tr ng-repeat-start=" pol in polaczenia[plyta_id.$key]"
-            ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
+            <tr ng-repeat-start="pol in polaczenia[plyta_id.$key] track by $index"
+            ng-class-odd="'row-alt'" ng-class-even="'row-base'">
                 <td>
                     {{pol.id}}
                 </td>
@@ -75,8 +75,8 @@
                             <th>Rodzaj złącza</th>
                             <th>Pozycja pinu</th>
                         </tr>
-                        <tr ng-repeat="pin in polaczenienazwane[pol.id]" style="font:small"
-                        ng-style='$odd ? {"background-color": "#f1f1f1" } : { "background-color" : "#ffffff"}'>
+                        <tr ng-repeat="pin in polaczenienazwane[pol.id] track by $index" style="font:small"
+                        ng-class-odd="'row-alt'" ng-class-even="'row-base'">
                             <td>{{pin.elemnazwa}}</td>
                             <td>{{pin.pinnazwa}}</td>
                             <td>{{pin.rodznazwa}}</td>
@@ -89,7 +89,7 @@
                     <input ng-show="editRow.id != pol.id && polRow.id != pol.id" type="button" ng-click="addPolaczenie(pol.id)" value="Dodaj połączenie"></input>
                 </td>
             </tr>
-            <tr ng-show="polRow.id == pol.id" >
+            <tr ng-if="polRow.id == pol.id" >
                 <td></td>
                 <td></td>
                 <td>
@@ -104,7 +104,7 @@
                     <input type="button" ng-click="addPolaczenie(-1)" value="Anuluj"></input>
                 </td>
             </tr>
-            <tr ng-repeat-end ng-show="editRow.id == pol.id">
+            <tr ng-repeat-end ng-if="editRow.id == pol.id">
                 <td></td>
                 <td><input type="text" ng-model="editRow.nazwa"></td>
                 <td></td>

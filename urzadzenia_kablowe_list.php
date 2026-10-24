@@ -1,7 +1,5 @@
 <?php
-require_once "database.php";
-error_reporting( E_ALL );
-ini_set('display_errors', 1);
+require_once "db.php";
 
 $con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con, "utf8");
@@ -95,6 +93,6 @@ $opt = array(
 
 );
 
-echo json_encode($opt);
+echo json_encode($opt, JSON_UNESCAPED_UNICODE);
 mysqli_close($con);
 ?>

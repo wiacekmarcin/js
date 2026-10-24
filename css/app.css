@@ -114,8 +114,19 @@ table.table tbody tr:nth-child(even) > td {
     background-color: #f8fafc;
 }
 
-table.table tbody tr:hover > td {
-    background-color: #edf5fc !important;
+/* Paski dla tabel z ng-repeat-start/end (wiersze szczegółów psują nth-child). */
+table.table tbody tr.row-base > td {
+    background-color: #ffffff;
+}
+
+table.table tbody tr.row-alt > td {
+    background-color: #f1f5f9;
+}
+
+table.table tbody tr:hover > td,
+table.table tbody tr.row-base:hover > td,
+table.table tbody tr.row-alt:hover > td {
+    background-color: #edf5fc;
 }
 
 table.table table.table {

@@ -27,7 +27,7 @@
         </thead>
         <tbody>
             <tr ng-repeat-start="miejsce in miejsca track by miejsce.id" 
-                ng-style='$odd ? {"background-color": "#f1f1f1"} : {"background-color": "#ffffff"}'>
+                ng-class-odd="'row-alt'" ng-class-even="'row-base'">
                 <td>{{miejsce.id}}<br><span style="font-size: x-small;">{{miejsce.kod}}</span></td>
                 <td>{{miejsce.nazwa}}</td>
                 <td ng-if="pid == 0">{{miejsce.pomieszczenie}}</td>

@@ -1,33 +1,25 @@
 <?php
-require_once "database.php";
+require_once "db.php";
+require_post();
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
-mysqli_set_charset($con,"utf8");
+$count = post_int('count', 0);
+$przewod_id = $count > 0 ? post_int('przewod') : 0;
 
-$params = array();
-$count = 0;
-if (isset($_POST['count']))
-	$count = $_POST['count'];
-
-for ($i = 0 ; $i < $count; $i++) {
-	array_push($params , array('kolor_id' => $_POST['kolor_' . $i],
-								'opis' => $_POST['opis_' . $i],
-								'id' => $_POST['id_' . $i],
-								'przewod_id' => $_POST['przewod'],
-	));
-}
-
-$query = '';
-for ($i = 0 ; $i < $count; $i++) {
-	if ($params[$i]['id'] == -1) {
-		$query = "INSERT INTO `zyla`(`id`, `kolor_id`, `przewod_id`, `opis`) VALUES (NULL, " . $params[$i]['kolor_id'] . ", " . $params[$i]['przewod_id'] . ", \"" . $params[$i]['opis'] . "\");";
-	} else {
-		$query = "UPDATE `zyla` SET `kolor_id`=" . $params[$i]['kolor_id'] . ", `opis`= \"" . $params[$i]['opis'] . "\" WHERE `id` = " . $params[$i]['id']. ";";
+$ids = tx(function () use ($count, $przewod_id) {
+    $ids = [];
+    for ($i = 0; $i < $count; $i++) {
+        $id = post_int("id_$i", -1);
+        $kolor = post_int("kolor_$i");
+        $opis = post_str("opis_$i");
+        if ($id == -1) {
+            q("INSERT INTO `zyla` (`kolor_id`, `przewod_id`, `opis`) VALUES (?, ?, ?)", [$kolor, $przewod_id, $opis]);
+            $id = db()->insert_id;
+        } else {
+            q("UPDATE `zyla` SET `kolor_id` = ?, `opis` = ? WHERE `id` = ?", [$kolor, $opis, $id]);
+        }
+        $ids[] = $id;
     }
-    $result = mysqli_query($con, $query);
-    echo $i . ($result ? '-OK ' : '-ERR ');
-}
+    return $ids;
+});
 
-mysqli_close($con);
-
-?>
+json_out(["status" => "OK", "ids" => $ids]);

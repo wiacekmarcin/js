@@ -17,14 +17,14 @@
     <label>Ilość zył</label> {{ zakonczenie.ilosc_zyl }} <br>
 </p>    
 <table>
-    <tr ng-repeat="z in zyly">
+    <tr ng-repeat="z in zyly track by $index">
         <td>{{z.id}}</td>
-        <td ng-style="{'background-color': '{{z.html}}'}" >&nbsp;</td>
+        <td ng-style="{'background-color': z.html}" >&nbsp;</td>
         <td>{{z.kolor}}</td>
         <td>{{z.opis}}</td>
         <td>-</td>
         <td><select ng-options="kol as kol.nazwa for kol in kolory" ng-model="urzadzenie[z.id].kolor"></select></td>
-        <td><input type="text" ng-model="urzadzenie[z.id].opis"></select></td>
+        <td><input type="text" ng-model="urzadzenie[z.id].opis"></td>
     </tr>
 
 </table>

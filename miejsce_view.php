@@ -1,9 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-error_reporting( E_ALL );
-ini_set('display_errors', 1);
-require_once "database.php";
+require_once "db.php";
 
 $con = mysqli_connect("127.0.0.1",$username,$password,$database);
 mysqli_set_charset($con, "utf8");
@@ -11,7 +7,7 @@ mysqli_set_charset($con, "utf8");
 $mid = -1;
 
 if (isset($_GET['mid'])) {
-    $mid = $_GET['mid'];
+    $mid = (int)$_GET['mid'];
 }
 $query = "SELECT `id`, `nazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, `pomieszczenie` ";
 $query .=" FROM `MiejsceView` WHERE `id` = " . $mid;
@@ -105,7 +101,7 @@ $opt = array(
     'zakonczenia' => $zakonczenie
 );
 
-echo json_encode($opt);
+echo json_encode($opt, JSON_UNESCAPED_UNICODE);
 mysqli_close($con);
 
 
