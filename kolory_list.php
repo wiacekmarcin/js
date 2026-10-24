@@ -1,7 +1,7 @@
 <?php
 
 require_once "db.php";
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
+$con = db();
 mysqli_set_charset($con, "utf8");
 
 $query = "SELECT `kolor_id`, count(`kolor_id`) as `cnt` FROM `zyla` Group by `kolor_id`";

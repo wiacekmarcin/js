@@ -15,9 +15,14 @@ function db(): mysqli
 {
     static $con = null;
     if ($con === null) {
-        global $username, $password, $database;
-        $con = new mysqli("127.0.0.1", $username, $password, $database);
-        $con->set_charset("utf8mb4");
+        global $username, $password, $database, $host;
+        $con = new mysqli($host ?? "127.0.0.1", $username, $password, $database);
+        try {
+            $con->set_charset("utf8mb4");
+        } catch (mysqli_sql_exception $e) {
+            // Starsze serwery MySQL/MariaDB nie znają utf8mb4.
+            $con->set_charset("utf8");
+        }
     }
     return $con;
 }
@@ -37,7 +42,11 @@ function fail(string $msg, int $code = 400): void
 
 set_exception_handler(function (Throwable $e) {
     error_log("[przewody] " . $e->getMessage() . " @ " . $e->getFile() . ":" . $e->getLine());
-    fail($e instanceof mysqli_sql_exception ? "Błąd bazy danych" : $e->getMessage(), 500);
+    if ($e instanceof mysqli_sql_exception) {
+        // Sam kod MySQL (np. 1045 = złe hasło, 2002 = brak serwera, 1146 = brak tabeli) nie ujawnia danych.
+        json_out(["status" => "ERR", "error" => "Błąd bazy danych", "code" => $e->getCode()], 500);
+    }
+    fail($e->getMessage(), 500);
 });
 
 function q(string $sql, array $params = []): mysqli_stmt

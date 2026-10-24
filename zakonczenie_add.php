@@ -3,7 +3,7 @@ require_once "db.php";
 
 $pmid = get_int("pmid");
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
+$con = db();
 mysqli_set_charset($con, "utf8");
 
 $query = "SELECT `id`, `nazwa`, `kod` FROM `rodzaj_zakonczenia` WHERE 1";

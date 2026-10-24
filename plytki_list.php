@@ -1,7 +1,7 @@
 <?php
 require_once "db.php";
 
-$con = mysqli_connect("127.0.0.1",$username,$password,$database);
+$con = db();
 mysqli_set_charset($con, "utf8");
 
 $query = "SELECT `id`, `nazwa`, `mnazwa`, `opis`, `zbiorcze`, `id_pomieszczenie`, `kod`, `polaczenie`, ";
